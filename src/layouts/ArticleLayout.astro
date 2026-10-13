@@ -1,0 +1,76 @@
+---
+import type { MarkdownHeading } from 'astro';
+import BaseLayout from './BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import Toc from '../components/Toc.astro';
+import Faq from '../components/Faq.astro';
+import AuthorBox from '../components/AuthorBox.astro';
+import Related from '../components/Related.astro';
+import { SILOS, SITE } from '../data/site';
+import { getSoftware } from '../data/software';
+import { article, breadcrumbs, faqPage, graph, itemList, review } from '../lib/schema';
+import { articlePath, getArticles, siloOf, toTile, type Article } from '../lib/articles';
+
+interface Props { entry: Article; headings: MarkdownHeading[] }
+const { entry, headings } = Astro.props;
+const d = entry.data;
+const path = articlePath(entry);
+const silo = siloOf(entry);
+
+const crumbs = [
+  { name: 'Accueil', path: '/' },
+  { name: SILOS[silo].label, path: `/${silo}/` },
+  { name: d.title, path },
+];
+
+// Maillage interne : liens explicites d'abord, complétés par les pages du même silo.
+const all = await getArticles();
+const explicit = d.related
+  .map((id) => all.find((a) => a.id === id))
+  .filter((a): a is Article => {
+    return Boolean(a);
+  });
+const sameSilo = all.filter((a) => siloOf(a) === silo && a.id !== entry.id && !explicit.includes(a));
+const related = [...explicit, ...sameSilo].slice(0, 4).map(toTile);
+
+const nodes: object[] = [
+  article({ path, title: d.title, description: d.description, published: d.published, updated: d.updated, image: '/og-default.png' }),
+  breadcrumbs(crumbs),
+];
+if (d.products.length) nodes.push(itemList(path, d.products.map(getSoftware)));
+if (d.review) nodes.push(review(path, getSoftware(d.review.product), d.review.rating, d.description));
+if (d.faq.length) nodes.push(faqPage(d.faq));
+
+const fmt = (x: Date) => x.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+const showDisclosure = true; // Mention obligatoire dès qu'une page peut contenir un lien affilié.
+---
+<BaseLayout
+  title={d.seoTitle}
+  description={d.description}
+  jsonLd={graph(...nodes)}
+  ogType="article"
+  published={d.published}
+  updated={d.updated}
+>
+  <article class="container">
+    <div class="prose">
+      <Breadcrumbs items={crumbs} />
+      <h1>{d.title}</h1>
+      <div class="meta">
+        <span>Par <a href={SITE.author.url} rel="author">{SITE.author.name}</a>, ancien cuisinier pro</span>
+        <span>Mis à jour le <time datetime={d.updated.toISOString()}>{fmt(d.updated)}</time></span>
+      </div>
+      {showDisclosure && (
+        <p class="disclosure">Transparence : certains liens de cette page sont affiliés. Si tu t’abonnes via ces liens, nous touchons parfois une commission, sans surcoût pour toi. Les classements restent indépendants. <a href="/transparence-affiliation/">En savoir plus</a>.</p>
+      )}
+      {d.tldr.length > 0 && (
+        <div class="tldr"><strong>L’essentiel en 30 secondes</strong><ul>{d.tldr.map((t) => <li set:html={t} />)}</ul></div>
+      )}
+      <Toc headings={headings} />
+      <slot />
+      <Faq items={d.faq} />
+      <AuthorBox />
+      <Related items={related} />
+    </div>
+  </article>
+</BaseLayout>

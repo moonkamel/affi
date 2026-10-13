@@ -1,0 +1,19 @@
+---
+// Pages institutionnelles (à propos, mentions…) : texte simple + fil d'Ariane.
+import BaseLayout from './BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { abs, breadcrumbs, graph, person } from '../lib/schema';
+interface Props { title: string; seoTitle?: string; description: string; noindex?: boolean; schemaType?: 'AboutPage' | 'WebPage' }
+const { title, seoTitle, description, noindex = false, schemaType = 'WebPage' } = Astro.props;
+const path = Astro.url.pathname;
+const crumbs = [{ name: 'Accueil', path: '/' }, { name: title, path }];
+const page: Record<string, unknown> = { '@type': schemaType, '@id': abs(path) + '#page', name: title, url: abs(path), inLanguage: 'fr-FR' };
+if (schemaType === 'AboutPage') page.mainEntity = person();
+---
+<BaseLayout title={seoTitle ?? title} description={description} noindex={noindex} jsonLd={graph(page, breadcrumbs(crumbs))}>
+  <div class="container"><div class="prose">
+    <Breadcrumbs items={crumbs} />
+    <h1>{title}</h1>
+    <slot />
+  </div></div>
+</BaseLayout>

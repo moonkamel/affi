@@ -1,0 +1,19 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+import { SITE } from '../data/site';
+---
+<PageLayout
+  title="Mentions légales"
+  description="Mentions légales du site Coup de Feu : éditeur, directeur de publication, hébergeur, données personnelles et cookies."
+  noindex
+>
+  <h2>Éditeur du site</h2>
+  <p>{SITE.publisher.legalName}<br />{SITE.publisher.address}<br />Contact : <a href={`mailto:${SITE.publisher.email}`}>{SITE.publisher.email}</a></p>
+  <p>Directeur de la publication : {SITE.author.name}</p>
+  <h2>Hébergement</h2>
+  <p>{SITE.publisher.host}</p>
+  <h2>Données personnelles</h2>
+  <p>Le site ne dépose aucun cookie publicitaire et ne collecte pas de données personnelles en dehors des messages que tu nous envoies par e-mail. Si une mesure d’audience est ajoutée, elle sera configurée sans cookie ou soumise à ton consentement. Pour exercer tes droits (accès, rectification, suppression), écris à l’adresse ci-dessus.</p>
+  <h2>Liens affiliés</h2>
+  <p>Certains liens sont affiliés. Voir la page <a href="/transparence-affiliation/">transparence</a>.</p>
+</PageLayout>

@@ -1,0 +1,22 @@
+---
+// Page de redirection affiliée. Non indexée (noindex + Disallow dans robots.txt).
+// Si ton hébergeur gère les redirections (Netlify/Cloudflare `_redirects`), elles sont aussi générées
+// dans dist/_redirects (voir astro.config.mjs) pour une redirection 302 côté serveur.
+import { SOFTWARE } from '../../data/software';
+export function getStaticPaths() {
+  return SOFTWARE.map((s) => ({ params: { slug: s.slug }, props: { target: s.affiliateUrl ?? s.website, name: s.name } }));
+}
+const { target, name } = Astro.props;
+---
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="referrer" content="no-referrer-when-downgrade" />
+    <meta http-equiv="refresh" content={`0;url=${target}`} />
+    <title>Redirection vers {name}</title>
+    <script is:inline define:vars={{ target }}>location.replace(target);</script>
+  </head>
+  <body><p>Redirection vers <a href={target} rel="sponsored nofollow">{name}</a>…</p></body>
+</html>

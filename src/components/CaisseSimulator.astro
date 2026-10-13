@@ -1,0 +1,82 @@
+---
+// Simulateur de coût total d'une caisse. Fonctionne sans framework : quelques lignes de JS inline.
+---
+<form class="sim" id="sim-caisse" aria-labelledby="sim-titre" onsubmit="return false">
+  <strong id="sim-titre">Calcule le coût réel de ta caisse</strong>
+  <div class="row">
+    <div>
+      <label for="postes">Nombre de postes de caisse</label>
+      <input id="postes" type="number" min="1" value="1" inputmode="numeric" />
+    </div>
+    <div>
+      <label for="abo">Abonnement logiciel par poste (€ HT/mois)</label>
+      <input id="abo" type="number" min="0" value="89" inputmode="decimal" />
+    </div>
+    <div>
+      <label for="modules">Modules en option (€ HT/mois au total)</label>
+      <input id="modules" type="number" min="0" value="40" inputmode="decimal" />
+    </div>
+    <div>
+      <label for="duree">Durée d’engagement (mois)</label>
+      <input id="duree" type="number" min="1" value="36" inputmode="numeric" />
+    </div>
+    <div>
+      <label for="materiel-mode">Matériel</label>
+      <select id="materiel-mode">
+        <option value="achat">Acheté</option>
+        <option value="location">Loué</option>
+      </select>
+    </div>
+    <div>
+      <label for="materiel">Prix d’achat total ou loyer mensuel (€ HT)</label>
+      <input id="materiel" type="number" min="0" value="1800" inputmode="decimal" />
+    </div>
+    <div>
+      <label for="ca-carte">Chiffre d’affaires encaissé par carte (€/mois)</label>
+      <input id="ca-carte" type="number" min="0" value="30000" inputmode="decimal" />
+    </div>
+    <div>
+      <label for="taux">Commission bancaire carte (%)</label>
+      <input id="taux" type="number" min="0" step="0.05" value="1.2" inputmode="decimal" />
+    </div>
+    <div>
+      <label for="couverts">Couverts par mois (optionnel)</label>
+      <input id="couverts" type="number" min="0" value="1500" inputmode="numeric" />
+    </div>
+    <div>
+      <label for="install">Installation et formation (€ HT, une fois)</label>
+      <input id="install" type="number" min="0" value="300" inputmode="decimal" />
+    </div>
+  </div>
+  <output class="sim-out" for="postes abo modules duree materiel-mode materiel ca-carte taux couverts install" aria-live="polite">
+    <div>Coût moyen mensuel tout compris</div>
+    <div class="big" id="r-mensuel">–</div>
+    <div id="r-detail" class="small"></div>
+  </output>
+</form>
+
+<script is:inline>
+  (() => {
+    const f = document.getElementById('sim-caisse');
+    if (!f) return;
+    const v = (id) => Math.max(0, parseFloat(document.getElementById(id).value.replace(',', '.')) || 0);
+    const eur = (n) => n.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 });
+    const calc = () => {
+      const duree = Math.max(1, v('duree'));
+      const logiciel = v('postes') * v('abo') + v('modules');
+      const materiel = document.getElementById('materiel-mode').value === 'achat' ? v('materiel') / duree : v('materiel');
+      const install = v('install') / duree;
+      const paiement = (v('ca-carte') * v('taux')) / 100;
+      const mensuel = logiciel + materiel + install + paiement;
+      document.getElementById('r-mensuel').textContent = eur(mensuel) + ' HT';
+      const couverts = v('couverts');
+      document.getElementById('r-detail').innerHTML =
+        `Logiciel et modules : <strong>${eur(logiciel)}</strong> · Matériel : <strong>${eur(materiel)}</strong> · ` +
+        `Frais de carte : <strong>${eur(paiement)}</strong> · Installation lissée : <strong>${eur(install)}</strong><br>` +
+        `Coût total sur ${duree} mois : <strong>${eur(mensuel * duree)}</strong>` +
+        (couverts ? ` · soit <strong>${(mensuel / couverts).toLocaleString('fr-FR', { maximumFractionDigits: 2 })} €</strong> par couvert` : '');
+    };
+    f.addEventListener('input', calc);
+    calc();
+  })();
+</script>

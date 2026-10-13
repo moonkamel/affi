@@ -1,0 +1,40 @@
+---
+import { SITE } from '../data/site';
+const year = new Date().getFullYear();
+---
+<footer class="site-footer">
+  <div class="container">
+    <div>
+      <strong>{SITE.name}</strong>
+      <p>{SITE.tagline}.</p>
+      <p class="small">Certains liens sont affiliés : si tu t’abonnes via ces liens, nous pouvons toucher une commission, sans surcoût pour toi. Cela n’influence pas nos classements.</p>
+    </div>
+    <div>
+      <strong>Restaurant</strong>
+      <ul>
+        <li><a href="/restaurant/logiciel-caisse-restaurant/">Logiciel de caisse restaurant</a></li>
+        <li><a href="/restaurant/logiciel-reservation-restaurant/">Logiciel de réservation</a></li>
+        <li><a href="/restaurant/logiciel-planning-restaurant/">Logiciel de planning</a></li>
+        <li><a href="/outils/simulateur-cout-caisse-enregistreuse/">Simulateur coût caisse</a></li>
+      </ul>
+    </div>
+    <div>
+      <strong>Facturation</strong>
+      <ul>
+        <li><a href="/facturation/facture-electronique-2026/">Facture électronique 2026</a></li>
+        <li><a href="/facturation/logiciel-facturation-auto-entrepreneur/">Facturation auto-entrepreneur</a></li>
+        <li><a href="/restaurant/facture-electronique-restaurant/">Facture électronique restaurant</a></li>
+      </ul>
+    </div>
+    <div>
+      <strong>Le site</strong>
+      <ul>
+        <li><a href="/a-propos/">À propos</a></li>
+        <li><a href="/methodologie/">Méthodologie</a></li>
+        <li><a href="/transparence-affiliation/">Transparence affiliation</a></li>
+        <li><a href="/mentions-legales/">Mentions légales</a></li>
+      </ul>
+      <p class="small">© {year} {SITE.name}</p>
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,11 @@
+---
+import { SITE } from '../data/site';
+---
+<aside class="author" aria-label="À propos de l’auteur">
+  <div class="avatar" aria-hidden="true">{SITE.author.name.charAt(0)}</div>
+  <div>
+    <strong>Écrit par <a href={SITE.author.url} rel="author">{SITE.author.name}</a></strong>
+    <div class="muted">{SITE.author.role}</div>
+    <p style="margin:.4em 0 0">Des années en cuisine professionnelle avant de passer au développement web : je compare les logiciels avec les questions qu’on se pose vraiment en plein service. <a href="/methodologie/">Notre méthode de test</a>.</p>
+  </div>
+</aside>

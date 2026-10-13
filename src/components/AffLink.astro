@@ -1,0 +1,11 @@
+---
+// Lien affilié : passe par /go/<slug>/, rel="sponsored" exigé par Google pour les liens rémunérés.
+import { getSoftware, goUrl } from '../data/software';
+interface Props { slug: string; variant?: 'btn' | 'ghost' | 'text'; size?: 'sm' | 'md'; label?: string }
+const { slug, variant = 'btn', size = 'md', label } = Astro.props;
+const s = getSoftware(slug);
+const cls = variant === 'text' ? undefined : ['btn', variant === 'ghost' && 'btn-ghost', size === 'sm' && 'btn-sm'].filter(Boolean).join(' ');
+---
+<a href={goUrl(slug)} class={cls} rel="sponsored nofollow noopener" target="_blank" data-aff={slug}>
+  <slot>{label ?? `Voir ${s.name}`}</slot>
+</a>

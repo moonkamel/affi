@@ -1,0 +1,31 @@
+---
+import { getSoftware } from '../data/software';
+import { SITE } from '../data/site';
+import AffLink from './AffLink.astro';
+interface Props { products: string[]; caption?: string }
+const { products, caption } = Astro.props;
+const list = products.map(getSoftware);
+const yesNo = (v: boolean | null) => (v === null ? 'À vérifier' : v ? 'Oui' : 'Non');
+---
+<div class="table-wrap">
+  <table>
+    <caption class="small muted" style="caption-side:bottom;padding:8px 12px;text-align:left">
+      {caption ?? `Tarifs indicatifs relevés en ${SITE.pricesChecked}, hors taxes. Vérifie toujours le prix final auprès de l’éditeur.`}
+    </caption>
+    <thead>
+      <tr><th scope="col">Logiciel</th><th scope="col">Note</th><th scope="col">Idéal pour</th><th scope="col">Prix</th><th scope="col">Essai</th><th scope="col"><span class="skip">Lien</span></th></tr>
+    </thead>
+    <tbody>
+      {list.map((s, i) => (
+        <tr>
+          <th scope="row"><a href={`#logiciel-${s.slug}`}>{i + 1}. {s.name}</a></th>
+          <td><strong>{s.score.toFixed(1).replace('.', ',')}</strong>/10</td>
+          <td>{s.bestFor}</td>
+          <td>{s.price.label}</td>
+          <td>{yesNo(s.freeTrial)}</td>
+          <td><AffLink slug={s.slug} size="sm" label="Voir l’offre" /></td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>

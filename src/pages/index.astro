@@ -1,0 +1,67 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { SITE, SILOS } from '../data/site';
+import { graph, organization, website, person } from '../lib/schema';
+import { articlePath, getArticles, siloOf } from '../lib/articles';
+
+const articles = await getArticles();
+const featured = [
+  'restaurant/logiciel-caisse-restaurant',
+  'facturation/facture-electronique-2026',
+  'restaurant/logiciel-reservation-restaurant',
+  'facturation/logiciel-facturation-auto-entrepreneur',
+]
+  .map((id) => articles.find((a) => a.id === id))
+  .filter((a) => a !== undefined);
+const silos = (Object.keys(SILOS) as (keyof typeof SILOS)[]).filter((s) => articles.some((a) => siloOf(a) === s));
+---
+<BaseLayout
+  title="Coup de Feu : logiciels pour restaurants et indépendants comparés"
+  description="Caisse, réservation, planning, facturation électronique : les meilleurs logiciels pour restaurants et TPE comparés par un ancien cuisinier. Prix 2026 vérifiés."
+  jsonLd={graph(organization(), website(), person())}
+>
+  <section class="hero container">
+    <span class="kicker">Comparatifs indépendants · prix vérifiés en {SITE.pricesChecked}</span>
+    <h1>Les logiciels des restaurateurs et indépendants, choisis par un ancien cuisinier</h1>
+    <p>Caisse enregistreuse, réservation, planning, facture électronique : on compare les outils avec les vraies questions du terrain. Combien ça coûte vraiment, est-ce que ça tient un samedi soir, et pour qui c’est fait.</p>
+    <p style="display:flex;gap:10px;flex-wrap:wrap">
+      <a class="btn" href="/restaurant/logiciel-caisse-restaurant/">Choisir ma caisse</a>
+      <a class="btn btn-ghost" href="/facturation/facture-electronique-2026/">Facture électronique : ce qui change</a>
+    </p>
+  </section>
+
+  <section class="container" aria-labelledby="populaires">
+    <h2 id="populaires">Les guides les plus consultés</h2>
+    <div class="grid">
+      {featured.map((a) => (
+        <a class="tile" href={articlePath(a)}>
+          <span class="kicker">{SILOS[siloOf(a)].label}</span>
+          <strong>{a.data.title}</strong>
+          <span>{a.data.description}</span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section class="container" aria-labelledby="rubriques">
+    <h2 id="rubriques">Par rubrique</h2>
+    <div class="grid">
+      {silos.map((s) => (
+        <a class="tile" href={`/${s}/`}>
+          <strong>{SILOS[s].title}</strong>
+          <span>{SILOS[s].description}</span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section class="container prose" style="margin-left:auto" aria-labelledby="pourquoi">
+    <h2 id="pourquoi">Pourquoi nous faire confiance ?</h2>
+    <ul>
+      <li><strong>L’expérience du terrain</strong> : des années en cuisine professionnelle avant le développement web. <a href="/a-propos/">Qui sommes-nous</a></li>
+      <li><strong>Une méthode publique</strong> : critères et pondérations expliqués. <a href="/methodologie/">Notre méthodologie</a></li>
+      <li><strong>Des prix datés</strong> : chaque page affiche sa date de mise à jour.</li>
+      <li><strong>La transparence</strong> : les liens affiliés sont signalés et n’achètent pas les classements. <a href="/transparence-affiliation/">En savoir plus</a></li>
+    </ul>
+  </section>
+</BaseLayout>

@@ -1,0 +1,30 @@
+---
+import { getSoftware } from '../data/software';
+import AffLink from './AffLink.astro';
+interface Props { slug: string; rank?: number; reviewHref?: string }
+const { slug, rank, reviewHref } = Astro.props;
+const s = getSoftware(slug);
+---
+<section class="card" id={`logiciel-${s.slug}`}>
+  <div class="card-head">
+    <div>
+      <h3>{rank && <span class="rank">{rank}</span>}{s.name}</h3>
+      <div class="muted small">Idéal pour : {s.bestFor}</div>
+      {s.badges && <div class="badges">{s.badges.map((b) => <span class="badge">{b}</span>)}</div>}
+    </div>
+    <div class="score" aria-label={`Note ${s.score} sur 10`}>{s.score.toFixed(1).replace('.', ',')}<small>/10</small></div>
+  </div>
+  <p>{s.short}</p>
+  <slot />
+  <div class="proscons">
+    <div class="pros"><strong>Points forts</strong><ul>{s.pros.map((p) => <li>{p}</li>)}</ul></div>
+    <div class="cons"><strong>Limites</strong><ul>{s.cons.map((p) => <li>{p}</li>)}</ul></div>
+  </div>
+  <div class="card-foot">
+    <div class="small"><strong>Prix :</strong> {s.price.label}{s.price.note && <span class="muted"> ({s.price.note})</span>}</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      {reviewHref && <a class="btn btn-ghost btn-sm" href={reviewHref}>Lire l’avis</a>}
+      <AffLink slug={s.slug} size="sm" />
+    </div>
+  </div>
+</section>

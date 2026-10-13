@@ -1,0 +1,66 @@
+---
+// Pages hub de chaque silo : elles concentrent les liens internes vers les articles du silo.
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import { SILOS, type Silo } from '../../data/site';
+import { abs, breadcrumbs, graph } from '../../lib/schema';
+import { articlePath, getArticles, siloOf } from '../../lib/articles';
+
+export async function getStaticPaths() {
+  // Pas de page hub vide (contenu mince = mauvais signal pour Google).
+  const all = await getArticles();
+  return Object.keys(SILOS)
+    .filter((silo) => all.some((a) => siloOf(a) === silo))
+    .map((silo) => ({ params: { silo } }));
+}
+
+const silo = Astro.params.silo as Silo;
+const info = SILOS[silo];
+const articles = (await getArticles()).filter((a) => siloOf(a) === silo);
+const path = `/${silo}/`;
+const crumbs = [{ name: 'Accueil', path: '/' }, { name: info.label, path }];
+
+const intros: Record<Silo, string> = {
+  restaurant:
+    'Caisse enregistreuse, réservation en ligne, planning des équipes, facture électronique : un restaurant tourne aujourd’hui avec quatre ou cinq logiciels. Mal choisis, ils coûtent cher et ralentissent le service. Ici, chaque outil est jugé avec les critères de quelqu’un qui a fait des coups de feu : rapidité en plein rush, fiabilité quand le wifi lâche, coût réel une fois tous les modules ajoutés.',
+  facturation:
+    'Depuis le 1er septembre 2026, toutes les entreprises doivent pouvoir recevoir des factures électroniques, et les TPE et micro-entrepreneurs devront les émettre à partir du 1er septembre 2027. C’est le moment de choisir un logiciel de facturation connecté à une plateforme agréée. Nos guides expliquent le calendrier simplement, nos comparatifs t’aident à choisir selon ton statut et ton métier.',
+  comparatifs:
+    'Tu hésites entre deux logiciels ? Nos duels comparent les tarifs, les fonctions qui comptent vraiment au quotidien et le profil d’établissement pour lequel chacun est fait, avec un verdict clair à la fin.',
+  alternatives:
+    'Abonnement qui grimpe, engagement trop long, commission par couvert, support absent : quand un logiciel ne convient plus, voici les alternatives sérieuses, classées selon ce que tu cherches à corriger.',
+  avis:
+    'Nos avis détaillés passent chaque logiciel au crible : tarifs, points forts, limites, profil idéal et pièges à éviter avant de signer.',
+  outils:
+    'Des simulateurs gratuits pour chiffrer le coût réel de tes outils avant de signer : abonnement, matériel, frais de paiement, tout compris.',
+};
+
+const jsonLd = graph(
+  {
+    '@type': 'CollectionPage',
+    '@id': abs(path) + '#page',
+    name: info.title,
+    description: info.description,
+    url: abs(path),
+    inLanguage: 'fr-FR',
+    hasPart: articles.map((a) => ({ '@type': 'Article', headline: a.data.title, url: abs(articlePath(a)) })),
+  },
+  breadcrumbs(crumbs),
+);
+---
+<BaseLayout title={info.seoTitle} description={info.description} jsonLd={jsonLd}>
+  <div class="container">
+    <Breadcrumbs items={crumbs} />
+    <h1>{info.title}</h1>
+    <p class="prose" style="margin-left:0">{intros[silo]}</p>
+    <div class="grid">
+        {articles.map((a) => (
+          <a class="tile" href={articlePath(a)}>
+            <span class="kicker">{a.data.type}</span>
+            <strong>{a.data.title}</strong>
+            <span>{a.data.description}</span>
+          </a>
+        ))}
+    </div>
+  </div>
+</BaseLayout>
