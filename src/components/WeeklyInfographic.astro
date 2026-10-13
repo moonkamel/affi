@@ -1,0 +1,41 @@
+---
+// « L'infographie de la semaine » (page d'accueil). Choisie au build, puis recalculée dans le navigateur :
+// elle change chaque lundi (heure de Paris) même sans nouveau déploiement.
+import { INFOGRAPHICS, infographicOfWeek, hostPath, webp, png, WIDTH, HEIGHT, WEEK_EPOCH } from '../data/infographics';
+const g = infographicOfWeek();
+const list = INFOGRAPHICS.map((x) => ({ slug: x.slug, title: x.title, teaser: x.teaser, alt: x.alt, href: hostPath(x) + '#infographie', img: webp(x), png: png(x) }));
+---
+<section class="weekly" aria-labelledby="infographie-semaine" data-weekly={JSON.stringify({ list, epoch: WEEK_EPOCH })}>
+  <a class="weekly-img" href={hostPath(g) + '#infographie'} data-w="link">
+    <img src={webp(g)} alt={g.alt} width={WIDTH} height={HEIGHT} loading="lazy" decoding="async" data-w="img" />
+  </a>
+  <div class="weekly-text">
+    <span class="sticker">L’infographie de la semaine</span>
+    <h2 id="infographie-semaine" data-w="title">{g.title}</h2>
+    <p data-w="teaser">{g.teaser}</p>
+    <p class="small muted">Une nouvelle infographie chaque lundi, libre de réutilisation avec mention de la source.</p>
+    <div class="actions">
+      <a class="btn" href={hostPath(g) + '#infographie'} data-w="link2">Voir l’infographie et l’article</a>
+      <a class="btn btn-ghost" href={png(g)} download data-w="png">Télécharger</a>
+    </div>
+    <a class="weekly-all" href="/infographies/">Toutes nos infographies ({INFOGRAPHICS.length}) →</a>
+  </div>
+</section>
+<script is:inline>
+  (() => {
+    const box = document.querySelector('[data-weekly]');
+    if (!box) return;
+    const { list, epoch } = JSON.parse(box.dataset.weekly);
+    const paris = new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Paris', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date());
+    const week = Math.floor(Math.floor((Date.parse(paris) - Date.parse(epoch)) / 86400000) / 7);
+    const g = list[((week % list.length) + list.length) % list.length];
+    const $ = (k) => box.querySelector(`[data-w="${k}"]`);
+    if ($('title').textContent === g.title) return;
+    $('title').textContent = g.title;
+    $('teaser').textContent = g.teaser;
+    $('img').src = g.img;
+    $('img').alt = g.alt;
+    $('link').href = $('link2').href = g.href;
+    $('png').href = g.png;
+  })();
+</script>

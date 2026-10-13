@@ -11,6 +11,8 @@ import { SILOS, SITE } from '../data/site';
 import { getSoftware } from '../data/software';
 import Avatar from '../components/Avatar.astro';
 import TestedBox from '../components/TestedBox.astro';
+import Infographic from '../components/Infographic.astro';
+import { autoForPage } from '../data/infographics';
 import { article, breadcrumbs, faqPage, graph, itemList, review } from '../lib/schema';
 import { articlePath, getArticles, siloOf, toTile, type Article } from '../lib/articles';
 import { existsSync } from 'node:fs';
@@ -82,6 +84,7 @@ const showDisclosure = true; // Mention obligatoire dès qu'une page peut conten
       )}
       <Toc headings={headings} />
       <slot />
+      {autoForPage(entry.id).map((g) => <Infographic slug={g.slug} heading="L’infographie à retenir" />)}
       <Faq items={d.faq} />
       <AuthorBox />
       <Related items={related} />

@@ -1,0 +1,27 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import { INFOGRAPHICS, hostPath, webp, png, WIDTH, HEIGHT, infographicOfWeek } from '../../data/infographics';
+const week = infographicOfWeek();
+---
+<PageLayout
+  title="Infographies pour TPE et indépendants"
+  seoTitle="Infographies TPE : TVA, facture, cotisations 2026"
+  description="Facture électronique, seuils de TVA, cotisations, barème kilométrique : nos infographies 2026 à télécharger et à partager librement avec la source."
+>
+  <p>Les règles qui comptent pour une petite entreprise, résumées en une image. Chaque infographie est datée, renvoie vers un guide complet, et peut être reprise gratuitement sur ton site, ton blog, LinkedIn ou dans une présentation, en citant la source. <strong>Une infographie est mise en avant chaque lundi</strong> sur la page d’accueil.</p>
+  <div class="ig-grid">
+    {INFOGRAPHICS.map((g) => (
+      <article class="ig-card">
+        <a href={hostPath(g) + '#infographie'}>
+          <img src={webp(g)} alt={g.alt} width={WIDTH} height={HEIGHT} loading="lazy" decoding="async" />
+        </a>
+        {g.slug === week.slug && <span class="sticker ig-week">Cette semaine</span>}
+        <h2><a href={hostPath(g) + '#infographie'}>{g.title}</a></h2>
+        <p>{g.teaser}</p>
+        <p class="small"><a href={png(g)} download>Télécharger l’image</a></p>
+      </article>
+    ))}
+  </div>
+  <h2>Conditions de réutilisation</h2>
+  <p>Tu peux publier ces infographies gratuitement, sans les modifier, en ajoutant un lien vers la page source. Chaque page propose un code prêt à copier. Les informations sont datées : vérifie la date indiquée en bas de l’image.</p>
+</PageLayout>

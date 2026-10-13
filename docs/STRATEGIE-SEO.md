@@ -243,6 +243,13 @@ Objectif : 15 à 30 domaines référents de qualité les 6 premiers mois.
 - ⚠ Les codes d'intégration utilisent `SITE_URL` : ne les diffuser qu'une fois le domaine définitif en place, sinon les liens pointeront vers l'ancienne adresse.
 - Diffusion : envoyer les codes aux CCI, CMA, BGE, experts-comptables blogueurs, formations à la création d'entreprise ; publier l'infographie sur LinkedIn et Pinterest avec le lien.
 
+### Infographies (fait)
+- 13 infographies au même style, décrites dans `src/data/infographics.json` et générées par `npm run infographie` (PNG à partager + WebP affiché ; `npm run infographie -- <slug>` pour une seule). La taille du contenu s'ajuste automatiquement à la hauteur.
+- Chacune s'affiche automatiquement en fin de son article hôte (champ `page`, `placement: "auto"`) avec un code de partage qui crédite l'article.
+- Galerie : `/infographies/`. Accueil : « L'infographie de la semaine », qui change chaque lundi à minuit (heure de Paris), au build et dans le navigateur, sans redéploiement.
+- Ajouter une infographie : une entrée dans le JSON, `npm run infographie -- <slug>`, puis build. Elle entre automatiquement dans la rotation.
+- Mettre à jour les chiffres datés (taux, barème) en même temps que les pages, puis régénérer.
+
 ### À mettre à jour chaque semestre
 - 1er janvier et 1er juillet : taux des pénalités de retard (`PenalitesCalculator.astro` + page).
 - Chaque année : barème kilométrique (`IkCalculator.astro` + page), taux URSSAF (`ChargesSimulator.astro`, `TjmCalculator.astro`).

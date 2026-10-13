@@ -1,0 +1,750 @@
+[
+  {
+    "slug": "calendrier-facture-electronique-2026-2027",
+    "title": "Calendrier de la facture électronique 2026-2027",
+    "page": "facturation/facture-electronique-2026",
+    "placement": "manual",
+    "teaser": "Réception, émission, e-reporting : les dates qui comptent pour ta TPE.",
+    "alt": "Calendrier de la facture électronique 2026-2027 : réception obligatoire pour toutes les entreprises au 1er septembre 2026, émission et e-reporting pour les grandes entreprises et ETI au 1er septembre 2026, puis pour les PME, TPE et micro-entreprises au 1er septembre 2027",
+    "pill": "Réforme 2026-2027",
+    "h1": "Facture électronique :<br>le calendrier à retenir",
+    "sub": "Ce qui change, et quand, pour les TPE, PME et micro-entreprises",
+    "blocks": [
+      {
+        "type": "timeline",
+        "steps": [
+          {
+            "date": "Dès maintenant",
+            "tag": "Toutes les entreprises",
+            "title": "Choisir sa plateforme agréée",
+            "text": "Vérifier que son logiciel de facturation est plateforme agréée (PA) ou connecté à l’une d’elles.",
+            "color": "blue"
+          },
+          {
+            "date": "1er septembre 2026",
+            "tag": "Toutes les entreprises",
+            "title": "Réception obligatoire",
+            "text": "Toutes les entreprises assujetties à la TVA, micro-entreprises comprises, doivent pouvoir recevoir des factures électroniques.",
+            "color": "sun"
+          },
+          {
+            "date": "1er septembre 2026",
+            "tag": "Grandes entreprises et ETI",
+            "title": "Émission + e-reporting",
+            "text": "Les grandes entreprises et les ETI émettent leurs factures B2B en électronique et transmettent leurs données de vente.",
+            "color": "sun"
+          },
+          {
+            "date": "1er septembre 2027",
+            "tag": "PME, TPE, micro-entreprises",
+            "title": "Émission + e-reporting",
+            "text": "Factures B2B émises via une plateforme agréée. Ventes aux particuliers et à l’international déclarées en e-reporting.",
+            "color": "green"
+          }
+        ]
+      }
+    ],
+    "note": "<b>Formats acceptés :</b> Factur-X, UBL, CII. <b>Un PDF envoyé par e-mail n’est pas une facture électronique.</b> Le portail public sert d’annuaire, pas à facturer.",
+    "asOf": "Calendrier en vigueur en octobre 2026"
+  },
+  {
+    "slug": "seuils-tva-auto-entrepreneur-2026",
+    "title": "Les seuils de TVA de l’auto-entrepreneur en 2026",
+    "page": "facturation/tva-auto-entrepreneur",
+    "placement": "auto",
+    "teaser": "37 500 €, 85 000 € et les seuils majorés : quand facturer la TVA.",
+    "alt": "Seuils de la franchise en base de TVA 2026 : 37 500 euros pour les services (seuil majoré 41 250 euros), 85 000 euros pour la vente (seuil majoré 93 500 euros), et ce qui se passe en cas de dépassement",
+    "pill": "Micro-entreprise 2026",
+    "h1": "TVA : les seuils<br>de la franchise en 2026",
+    "sub": "Sous ces montants, tu ne factures pas la TVA à tes clients",
+    "blocks": [
+      {
+        "type": "stats",
+        "items": [
+          {
+            "value": "37 500 €",
+            "label": "Seuil services",
+            "sub": "Prestations de services, professions libérales",
+            "color": "blue"
+          },
+          {
+            "value": "41 250 €",
+            "label": "Seuil majoré services",
+            "sub": "Au-delà : TVA dès le jour du dépassement",
+            "color": "sun"
+          },
+          {
+            "value": "85 000 €",
+            "label": "Seuil vente",
+            "sub": "Marchandises, restauration, hébergement",
+            "color": "blue"
+          },
+          {
+            "value": "93 500 €",
+            "label": "Seuil majoré vente",
+            "sub": "Au-delà : TVA dès le jour du dépassement",
+            "color": "sun"
+          }
+        ]
+      },
+      {
+        "type": "table",
+        "head": [
+          "Ta situation",
+          "Conséquence"
+        ],
+        "rows": [
+          [
+            "Sous le seuil de base",
+            "Franchise : « TVA non applicable, art. 293 B du CGI »"
+          ],
+          [
+            "Seuil de base dépassé",
+            "TVA à partir du 1er janvier suivant"
+          ],
+          [
+            "Seuil majoré dépassé",
+            "TVA dès la facture qui fait franchir le seuil"
+          ]
+        ]
+      }
+    ],
+    "note": "<b>Seuil de TVA ≠ plafond de la micro-entreprise</b> (203 100 € en vente, 83 600 € en services) : tu peux facturer la TVA et rester micro-entrepreneur.",
+    "asOf": "Seuils en vigueur en octobre 2026"
+  },
+  {
+    "slug": "cotisations-auto-entrepreneur-2026",
+    "title": "Les cotisations de l’auto-entrepreneur en 2026",
+    "page": "outils/simulateur-charges-auto-entrepreneur",
+    "placement": "auto",
+    "teaser": "12,3 %, 21,2 %, 25,6 % : le taux qui s’applique à ton activité.",
+    "alt": "Taux de cotisations sociales des micro-entrepreneurs en 2026 : 12,3 % pour la vente, 21,2 % pour les services BIC, 25,6 % pour les professions libérales non réglementées et 23,2 % pour la CIPAV, avec le versement libératoire et la formation professionnelle",
+    "pill": "URSSAF 2026",
+    "h1": "Auto-entrepreneur :<br>tes cotisations en 2026",
+    "sub": "Un pourcentage de ton chiffre d’affaires encaissé, dès le premier euro",
+    "blocks": [
+      {
+        "type": "stats",
+        "items": [
+          {
+            "value": "12,3 %",
+            "label": "Vente de marchandises",
+            "sub": "Restauration, hébergement",
+            "color": "green"
+          },
+          {
+            "value": "21,2 %",
+            "label": "Services BIC",
+            "sub": "Prestations commerciales ou artisanales",
+            "color": "blue"
+          },
+          {
+            "value": "25,6 %",
+            "label": "Libéral non réglementé",
+            "sub": "Professions libérales SSI",
+            "color": "sun"
+          },
+          {
+            "value": "23,2 %",
+            "label": "Libéral CIPAV",
+            "sub": "Professions relevant de la CIPAV",
+            "color": "sun"
+          }
+        ]
+      },
+      {
+        "type": "table",
+        "head": [
+          "Activité",
+          "Versement libératoire",
+          "Formation pro."
+        ],
+        "rows": [
+          [
+            "Vente",
+            "1 %",
+            "0,1 %"
+          ],
+          [
+            "Services BIC",
+            "1,7 %",
+            "0,1 % (0,3 % artisan)"
+          ],
+          [
+            "Libéral",
+            "2,2 %",
+            "0,2 %"
+          ]
+        ]
+      }
+    ],
+    "note": "<b>Exemple :</b> 3 000 € encaissés en services BIC = 636 € de cotisations. Les frais professionnels ne sont pas déductibles en micro-entreprise.",
+    "asOf": "Taux 2026, à vérifier sur urssaf.fr"
+  },
+  {
+    "slug": "plafond-micro-vs-seuil-tva-2026",
+    "title": "Plafond de la micro-entreprise et seuil de TVA : la différence",
+    "page": "comptabilite/comptabilite-auto-entrepreneur",
+    "placement": "auto",
+    "teaser": "Deux limites, deux conséquences : ne les confonds plus.",
+    "alt": "Différence entre le plafond de la micro-entreprise (203 100 euros en vente, 83 600 euros en services pour 2026 à 2028) et le seuil de franchise de TVA (85 000 euros en vente, 37 500 euros en services)",
+    "pill": "Micro-entreprise 2026-2028",
+    "h1": "Plafond micro et seuil<br>de TVA : ne confonds plus",
+    "sub": "Deux limites différentes, qui ne décident pas de la même chose",
+    "blocks": [
+      {
+        "type": "stats",
+        "items": [
+          {
+            "value": "203 100 €",
+            "label": "Plafond micro, vente",
+            "sub": "Pour rester au régime micro",
+            "color": "green"
+          },
+          {
+            "value": "83 600 €",
+            "label": "Plafond micro, services",
+            "sub": "Pour rester au régime micro",
+            "color": "green"
+          },
+          {
+            "value": "85 000 €",
+            "label": "Seuil TVA, vente",
+            "sub": "Pour rester en franchise de TVA",
+            "color": "sun"
+          },
+          {
+            "value": "37 500 €",
+            "label": "Seuil TVA, services",
+            "sub": "Pour rester en franchise de TVA",
+            "color": "sun"
+          }
+        ]
+      },
+      {
+        "type": "table",
+        "head": [
+          "Limite",
+          "Ce qu’elle décide"
+        ],
+        "rows": [
+          [
+            "Plafond de la micro",
+            "Garder les cotisations et l’impôt simplifiés du régime micro"
+          ],
+          [
+            "Seuil de TVA",
+            "Facturer, ou non, la TVA à tes clients"
+          ]
+        ]
+      }
+    ],
+    "note": "<b>Tu peux dépasser le seuil de TVA et rester micro-entrepreneur</b> : tu factures simplement la TVA. Le régime micro cesse si le plafond est dépassé deux années civiles de suite.",
+    "asOf": "Plafonds 2026-2028, loi de finances 2026"
+  },
+  {
+    "slug": "mentions-obligatoires-facture-2026",
+    "title": "Les mentions obligatoires d’une facture en 2026",
+    "page": "facturation/mentions-obligatoires-facture",
+    "placement": "auto",
+    "teaser": "La checklist complète, avec les 4 nouvelles mentions de la réforme.",
+    "alt": "Checklist des mentions obligatoires d’une facture en 2026 : numéro, date, identité du vendeur et du client, désignation, prix, TVA, totaux, échéance, pénalités, indemnité de 40 euros et les quatre nouvelles mentions de la facture électronique",
+    "pill": "Checklist 2026",
+    "h1": "Les mentions obligatoires<br>d’une facture",
+    "sub": "Tout ce qui doit figurer sur chaque facture, réforme comprise",
+    "blocks": [
+      {
+        "type": "check",
+        "items": [
+          {
+            "t": "Numéro unique",
+            "s": "chronologique, sans trou"
+          },
+          {
+            "t": "Date d’émission",
+            "s": "et date de la vente ou prestation"
+          },
+          {
+            "t": "Ton identité",
+            "s": "nom + « EI », adresse, SIREN"
+          },
+          {
+            "t": "Le client",
+            "s": "nom et adresse de facturation"
+          },
+          {
+            "t": "Le détail",
+            "s": "désignation, quantité, prix unitaire HT"
+          },
+          {
+            "t": "La TVA",
+            "s": "taux et montant, ou mention 293 B"
+          },
+          {
+            "t": "Les totaux",
+            "s": "HT, TVA par taux, TTC"
+          },
+          {
+            "t": "L’échéance",
+            "s": "date limite de paiement"
+          },
+          {
+            "t": "Pénalités de retard",
+            "s": "taux applicable"
+          },
+          {
+            "t": "Indemnité de 40 €",
+            "s": "entre professionnels"
+          }
+        ]
+      },
+      {
+        "type": "check",
+        "title": "Nouveau avec la facture électronique",
+        "color": "green",
+        "items": [
+          {
+            "t": "SIREN du client",
+            "s": "s’il est professionnel"
+          },
+          {
+            "t": "Adresse de livraison",
+            "s": "si différente"
+          },
+          {
+            "t": "Nature de l’opération",
+            "s": "biens, services ou les deux"
+          },
+          {
+            "t": "Option TVA sur les débits",
+            "s": "si tu l’as choisie"
+          }
+        ]
+      }
+    ],
+    "note": "<b>Une mention manquante :</b> 15 € d’amende, plafonnée au quart du montant de la facture. Une facture erronée s’annule par un avoir, jamais par une suppression.",
+    "asOf": "Règles en vigueur en octobre 2026"
+  },
+  {
+    "slug": "calendrier-relance-facture-impayee",
+    "title": "Le calendrier de relance d’une facture impayée",
+    "page": "facturation/relance-facture-impayee",
+    "placement": "auto",
+    "teaser": "De J+1 à la mise en demeure : quand et comment relancer.",
+    "alt": "Calendrier de relance d’une facture impayée : rappel à J-3, premier rappel à J+1, relance ferme à J+15, mise en demeure à J+30 et injonction de payer à J+45",
+    "pill": "Impayés",
+    "h1": "Facture impayée :<br>le calendrier de relance",
+    "sub": "Relancer tôt, poliment, puis fermement, en gardant une trace écrite",
+    "blocks": [
+      {
+        "type": "timeline",
+        "compact": true,
+        "steps": [
+          {
+            "date": "J-3",
+            "tag": "Optionnel",
+            "title": "Rappel avant échéance",
+            "text": "Un message informatif évite la plupart des oublis.",
+            "color": "blue"
+          },
+          {
+            "date": "J+1",
+            "tag": "Cordial",
+            "title": "Premier rappel par e-mail",
+            "text": "Facture en pièce jointe et moyen de paiement rappelé.",
+            "color": "blue"
+          },
+          {
+            "date": "J+15",
+            "tag": "Ferme",
+            "title": "Deuxième relance, e-mail + téléphone",
+            "text": "Délai de 8 jours, rappel des pénalités et de l’indemnité.",
+            "color": "sun"
+          },
+          {
+            "date": "J+30",
+            "tag": "Formel",
+            "title": "Mise en demeure",
+            "text": "Lettre recommandée avec accusé de réception.",
+            "color": "red"
+          },
+          {
+            "date": "J+45",
+            "tag": "Judiciaire",
+            "title": "Injonction de payer",
+            "text": "Procédure simple au tribunal, sans avocat obligatoire.",
+            "color": "red"
+          }
+        ]
+      }
+    ],
+    "note": "<b>Entre pros :</b> pénalités d’au moins 8,25 % (2nd semestre 2026) + indemnité de 40 € par facture. Délai maximal : 60 jours, ou 45 jours fin de mois.",
+    "asOf": "Taux du 2nd semestre 2026"
+  },
+  {
+    "slug": "bareme-kilometrique-2026",
+    "title": "Le barème kilométrique 2026",
+    "page": "outils/indemnites-kilometriques",
+    "placement": "auto",
+    "teaser": "Le tableau officiel pour calculer tes indemnités kilométriques.",
+    "alt": "Barème kilométrique 2026 des voitures selon la puissance fiscale de 3 à 7 CV et plus, pour moins de 5 000 km, de 5 001 à 20 000 km et plus de 20 000 km",
+    "pill": "Barème 2026",
+    "h1": "Indemnités kilométriques :<br>le barème 2026",
+    "sub": "Voitures, selon la puissance fiscale et les kilomètres professionnels de l’année",
+    "blocks": [
+      {
+        "type": "table",
+        "big": true,
+        "head": [
+          "Puissance",
+          "≤ 5 000 km",
+          "5 001 à 20 000 km",
+          "> 20 000 km"
+        ],
+        "rows": [
+          [
+            "≤ 3 CV",
+            "d × 0,529",
+            "(d × 0,316) + 1 065",
+            "d × 0,370"
+          ],
+          [
+            "4 CV",
+            "d × 0,606",
+            "(d × 0,340) + 1 330",
+            "d × 0,407"
+          ],
+          [
+            "5 CV",
+            "d × 0,636",
+            "(d × 0,357) + 1 395",
+            "d × 0,427"
+          ],
+          [
+            "6 CV",
+            "d × 0,665",
+            "(d × 0,374) + 1 457",
+            "d × 0,447"
+          ],
+          [
+            "≥ 7 CV",
+            "d × 0,697",
+            "(d × 0,394) + 1 515",
+            "d × 0,470"
+          ]
+        ],
+        "nowrap": true
+      },
+      {
+        "type": "formula",
+        "label": "Exemple : 8 000 km en 5 CV",
+        "expr": "(8 000 × 0,357) + 1 395 = <span>4 251 €</span>"
+      }
+    ],
+    "note": "<b>d</b> = distance professionnelle sur l’année. <b>+20 %</b> pour les véhicules 100 % électriques. Barème inchangé depuis 2023.",
+    "asOf": "Barème publié en octobre 2026"
+  },
+  {
+    "slug": "penalites-de-retard-2026",
+    "title": "Pénalités de retard : les taux du 2nd semestre 2026",
+    "page": "outils/calcul-penalites-de-retard",
+    "placement": "auto",
+    "teaser": "Taux minimum, taux par défaut, indemnité de 40 € : ce qu’un client en retard te doit.",
+    "alt": "Pénalités de retard au second semestre 2026 : taux minimum de 8,25 %, taux par défaut de 12,40 %, indemnité forfaitaire de 40 euros et formule de calcul",
+    "pill": "2nd semestre 2026",
+    "h1": "Retard de paiement :<br>ce que ton client te doit",
+    "sub": "Entre professionnels, en plus du montant de la facture",
+    "blocks": [
+      {
+        "type": "stats",
+        "items": [
+          {
+            "value": "8,25 %",
+            "label": "Taux minimum",
+            "sub": "3 × le taux d’intérêt légal (2,75 %)",
+            "color": "blue"
+          },
+          {
+            "value": "12,40 %",
+            "label": "Taux par défaut",
+            "sub": "BCE + 10 points, si tes CGV ne disent rien",
+            "color": "sun"
+          },
+          {
+            "value": "40 €",
+            "label": "Indemnité forfaitaire",
+            "sub": "Par facture payée en retard",
+            "color": "green"
+          },
+          {
+            "value": "60 j",
+            "label": "Délai maximal",
+            "sub": "Ou 45 jours fin de mois",
+            "color": "red"
+          }
+        ]
+      },
+      {
+        "type": "formula",
+        "label": "Formule des pénalités",
+        "expr": "Montant TTC × taux × jours de retard ÷ 365",
+        "example": "2 400 € × 12,40 % × 45 j ÷ 365 = <span>36,69 €</span> + 40 €"
+      }
+    ],
+    "note": "<b>Client particulier :</b> intérêts au taux légal de 6,84 %, sans indemnité de 40 €. Le taux est révisé chaque semestre.",
+    "asOf": "Taux du 2nd semestre 2026"
+  },
+  {
+    "slug": "calcul-tjm-freelance",
+    "title": "Calculer son TJM de freelance en 3 étapes",
+    "page": "outils/calcul-tjm-freelance",
+    "placement": "auto",
+    "teaser": "Jours facturables, chiffre d’affaires nécessaire, tarif : la méthode.",
+    "alt": "Méthode de calcul du TJM d’un freelance en trois étapes : jours facturables, chiffre d’affaires nécessaire et taux journalier, avec un exemple chiffré",
+    "pill": "Freelance",
+    "h1": "Ton TJM de freelance<br>en 3 étapes",
+    "sub": "Part de ce que tu veux gagner, pas de ce que fait la concurrence",
+    "blocks": [
+      {
+        "type": "steps",
+        "items": [
+          {
+            "t": "Compte tes jours facturables",
+            "s": "253 jours ouvrés, moins tes congés et le temps non facturé (prospection, admin) : en général <b>180 à 210 jours</b>."
+          },
+          {
+            "t": "Calcule le chiffre d’affaires nécessaire",
+            "s": "En micro-entreprise : <b>(revenu net + frais) ÷ (1 – taux de cotisations)</b>."
+          },
+          {
+            "t": "Divise par tes jours facturables",
+            "s": "Le résultat est ton <b>TJM minimum</b>, hors taxe. Ajoute une marge pour les mois creux."
+          }
+        ]
+      },
+      {
+        "type": "formula",
+        "label": "Exemple : libéral en micro (25,6 %), 40 000 € nets visés, 4 000 € de frais, 196 jours",
+        "expr": "44 000 € ÷ 0,744 ÷ 196 j ≈ <span>300 €/jour</span>"
+      }
+    ],
+    "note": "<b>Avant impôt sur le revenu.</b> Au-delà de 37 500 € de prestations, la TVA s’ajoute à ton TJM.",
+    "asOf": "Taux de cotisations 2026"
+  },
+  {
+    "slug": "formats-facture-electronique",
+    "title": "Les formats de la facture électronique",
+    "page": "facturation/factur-x",
+    "placement": "auto",
+    "teaser": "Factur-X, UBL, CII : ce qui est une facture électronique, et ce qui n’en est pas.",
+    "alt": "Les trois formats acceptés de facture électronique, Factur-X, UBL et CII, et pourquoi un simple PDF envoyé par e-mail n’est pas une facture électronique",
+    "pill": "Facture électronique",
+    "h1": "Facture électronique :<br>les 3 formats acceptés",
+    "sub": "Un fichier structuré, transmis par une plateforme agréée",
+    "blocks": [
+      {
+        "type": "cards",
+        "items": [
+          {
+            "t": "Factur-X",
+            "s": "Un PDF lisible par l’humain, avec un fichier XML embarqué lisible par la machine. Le plus simple pour une TPE.",
+            "color": "green",
+            "icon": "ok"
+          },
+          {
+            "t": "UBL",
+            "s": "Format XML international, utilisé par de nombreux logiciels et plateformes.",
+            "color": "blue",
+            "icon": "ok"
+          },
+          {
+            "t": "CII",
+            "s": "Cross Industry Invoice : format XML européen, proche de UBL.",
+            "color": "blue",
+            "icon": "ok"
+          },
+          {
+            "t": "PDF simple par e-mail",
+            "s": "Ce n’est pas une facture électronique : plus valable entre entreprises dès que l’émission devient obligatoire.",
+            "color": "red",
+            "icon": "ko"
+          }
+        ]
+      }
+    ],
+    "note": "<b>Transmission obligatoire via une plateforme agréée (PA)</b>, anciennement appelée PDP. Le portail public sert d’annuaire, il ne permet pas de facturer.",
+    "asOf": "Règles en vigueur en octobre 2026"
+  },
+  {
+    "slug": "e-reporting-2027",
+    "title": "L’e-reporting expliqué simplement",
+    "page": "facturation/e-reporting",
+    "placement": "auto",
+    "teaser": "Ventes aux particuliers, international, paiements : ce que tu devras transmettre.",
+    "alt": "E-reporting : les trois types de données à transmettre (ventes aux particuliers, opérations internationales, données de paiement) et le calendrier 2026-2027",
+    "pill": "Réforme 2026-2027",
+    "h1": "E-reporting :<br>ce que tu devras transmettre",
+    "sub": "Le second volet de la réforme, pour tout ce qui n’est pas une facture B2B",
+    "blocks": [
+      {
+        "type": "cards",
+        "items": [
+          {
+            "t": "Ventes aux particuliers",
+            "s": "Le total de tes ventes B2C, par taux de TVA. Ton client reçoit toujours un ticket ou une facture classique.",
+            "color": "sun",
+            "icon": "1"
+          },
+          {
+            "t": "Opérations internationales",
+            "s": "Ventes à des clients étrangers et achats auprès de fournisseurs étrangers.",
+            "color": "blue",
+            "icon": "2"
+          },
+          {
+            "t": "Données de paiement",
+            "s": "Pour les prestations de services : date et montant des encaissements.",
+            "color": "green",
+            "icon": "3"
+          }
+        ]
+      },
+      {
+        "type": "table",
+        "head": [
+          "Qui",
+          "À partir du"
+        ],
+        "rows": [
+          [
+            "Grandes entreprises et ETI",
+            "1er septembre 2026"
+          ],
+          [
+            "PME, TPE, micro-entreprises",
+            "1er septembre 2027"
+          ]
+        ]
+      }
+    ],
+    "note": "<b>Pas de déclaration à remplir à la main</b> : ta caisse ou ton logiciel relié à une plateforme agréée transmet les données automatiquement.",
+    "asOf": "Calendrier en vigueur en octobre 2026"
+  },
+  {
+    "slug": "cout-caisse-enregistreuse",
+    "title": "Le vrai coût d’une caisse enregistreuse",
+    "page": "outils/simulateur-cout-caisse-enregistreuse",
+    "placement": "auto",
+    "teaser": "Abonnement, modules, matériel, frais de carte : les fourchettes réelles.",
+    "alt": "Coût réel d’une caisse enregistreuse en 2026 : abonnement logiciel, modules, matériel à l’achat ou en location, commission carte bancaire et installation",
+    "pill": "Commerce",
+    "h1": "Le vrai coût<br>d’une caisse enregistreuse",
+    "sub": "Le prix d’appel ne dit qu’une partie de l’histoire",
+    "blocks": [
+      {
+        "type": "table",
+        "big": true,
+        "head": [
+          "Poste",
+          "Fourchette constatée (HT)"
+        ],
+        "rows": [
+          [
+            "Abonnement logiciel",
+            "50 à 150 €/mois par poste"
+          ],
+          [
+            "Module (KDS, stocks, commande en ligne)",
+            "15 à 60 €/mois chacun"
+          ],
+          [
+            "Matériel à l’achat",
+            "1 000 à 3 000 € par poste"
+          ],
+          [
+            "Matériel en location",
+            "40 à 120 €/mois"
+          ],
+          [
+            "Commission carte bancaire",
+            "0,8 à 1,75 % des paiements"
+          ],
+          [
+            "Installation et formation",
+            "0 à 500 €"
+          ]
+        ]
+      },
+      {
+        "type": "formula",
+        "label": "Le poste qu’on oublie",
+        "expr": "1,2 % × 30 000 € encaissés = <span>360 €/mois</span>",
+        "example": "Les frais de carte pèsent souvent plus que l’abonnement."
+      }
+    ],
+    "note": "<b>Budget courant :</b> 80 à 250 € HT par mois pour un commerce ou un restaurant, matériel lissé. Compare toujours le coût total sur la durée d’engagement.",
+    "asOf": "Fourchettes constatées en octobre 2026"
+  },
+  {
+    "slug": "prix-site-internet-tpe",
+    "title": "Combien coûte un site internet pour une TPE",
+    "page": "site-internet/site-internet-pas-cher",
+    "placement": "auto",
+    "teaser": "Le faire soi-même, passer par un freelance ou une agence : les vrais prix.",
+    "alt": "Prix d’un site internet pour une TPE la première année : fait soi-même, avec un freelance ou avec une agence, et les quatre pages indispensables",
+    "pill": "Site internet",
+    "h1": "Combien coûte un site<br>internet pour une TPE ?",
+    "sub": "Ce que coûte vraiment la première année",
+    "blocks": [
+      {
+        "type": "stats",
+        "three": true,
+        "items": [
+          {
+            "value": "50–250 €",
+            "label": "Fait soi-même",
+            "sub": "par an, avec un créateur de site",
+            "color": "green"
+          },
+          {
+            "value": "800–2 500 €",
+            "label": "Freelance",
+            "sub": "pour un site vitrine",
+            "color": "sun"
+          },
+          {
+            "value": "1 500–5 000 €",
+            "label": "Agence",
+            "sub": "et plus, hors maintenance",
+            "color": "red"
+          }
+        ]
+      },
+      {
+        "type": "check",
+        "title": "Les 4 pages indispensables",
+        "color": "blue",
+        "items": [
+          {
+            "t": "Accueil",
+            "s": "ce que tu fais, pour qui, où"
+          },
+          {
+            "t": "Services et prix",
+            "s": "ou une fourchette claire"
+          },
+          {
+            "t": "Avis clients",
+            "s": "la preuve qui rassure"
+          },
+          {
+            "t": "Contact",
+            "s": "formulaire et téléphone"
+          }
+        ]
+      }
+    ],
+    "note": "<b>Attention au renouvellement :</b> les prix d’appel augmentent souvent après la première période. Ajoute les mentions légales et relie ta fiche Google.",
+    "asOf": "Prix constatés en octobre 2026"
+  }
+]

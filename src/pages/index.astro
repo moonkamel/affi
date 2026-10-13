@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SiloIcon from '../components/SiloIcon.astro';
+import WeeklyInfographic from '../components/WeeklyInfographic.astro';
 import { SITE, SILOS, type Silo } from '../data/site';
 import { graph, organization, website, person } from '../lib/schema';
 import { articlePath, getArticles, siloOf } from '../lib/articles';
@@ -84,6 +85,8 @@ const count = articles.length;
         </a>
       ))}
     </div>
+
+    <WeeklyInfographic />
 
     <div class="section-head"><h2 id="metiers">Le kit complet de ton métier</h2><p>Les outils indispensables et le budget mensuel.</p></div>
     <div class="grid">
