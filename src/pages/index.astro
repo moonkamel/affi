@@ -6,28 +6,57 @@ import { articlePath, getArticles, siloOf } from '../lib/articles';
 
 const articles = await getArticles();
 const featured = [
-  'restaurant/logiciel-caisse-restaurant',
   'facturation/facture-electronique-2026',
-  'restaurant/logiciel-reservation-restaurant',
   'facturation/logiciel-facturation-auto-entrepreneur',
+  'site-internet/creer-site-internet-entreprise',
+  'encaissement/terminal-paiement-sans-abonnement',
+  'comptabilite/logiciel-comptabilite-tpe',
+  'crm/logiciel-crm-tpe',
 ]
   .map((id) => articles.find((a) => a.id === id))
   .filter((a) => a !== undefined);
-const silos = (Object.keys(SILOS) as (keyof typeof SILOS)[]).filter((s) => articles.some((a) => siloOf(a) === s));
+const needs = (['facturation', 'comptabilite', 'encaissement', 'site-internet', 'crm', 'equipe'] as const).filter((s) =>
+  articles.some((a) => siloOf(a) === s),
+);
+const metiers = articles.filter((a) => siloOf(a) === 'metiers' && a.id.includes('/logiciels-'));
 ---
 <BaseLayout
-  title="Coup de Feu : logiciels pour restaurants et indépendants comparés"
-  description="Caisse, réservation, planning, facturation électronique : les meilleurs logiciels pour restaurants et TPE comparés par un ancien cuisinier. Prix 2026 vérifiés."
+  title="Bon Outil Pro : logiciels pour TPE et indépendants comparés"
+  description="Facturation, comptabilité, site internet, terminal de paiement, CRM : les meilleurs logiciels pour TPE et indépendants comparés, avec les prix 2026."
   jsonLd={graph(organization(), website(), person())}
 >
   <section class="hero container">
     <span class="kicker">Comparatifs indépendants · prix vérifiés en {SITE.pricesChecked}</span>
-    <h1>Les logiciels des restaurateurs et indépendants, choisis par un ancien cuisinier</h1>
-    <p>Caisse enregistreuse, réservation, planning, facture électronique : on compare les outils avec les vraies questions du terrain. Combien ça coûte vraiment, est-ce que ça tient un samedi soir, et pour qui c’est fait.</p>
+    <h1>Les bons logiciels pour faire tourner ta TPE, comparés par un entrepreneur</h1>
+    <p>Facturer, encaisser, tenir ta compta, trouver des clients, avoir un site : on compare les outils avec les vraies questions d’un dirigeant de petite entreprise. Combien ça coûte vraiment, combien de temps ça fait gagner, et pour qui c’est fait.</p>
     <p style="display:flex;gap:10px;flex-wrap:wrap">
-      <a class="btn" href="/restaurant/logiciel-caisse-restaurant/">Choisir ma caisse</a>
-      <a class="btn btn-ghost" href="/facturation/facture-electronique-2026/">Facture électronique : ce qui change</a>
+      <a class="btn" href="/facturation/facture-electronique-2026/">Facture électronique : ce qui change</a>
+      <a class="btn btn-ghost" href="/metiers/">Le kit de mon métier</a>
     </p>
+  </section>
+
+  <section class="container" aria-labelledby="besoins">
+    <h2 id="besoins">De quoi as-tu besoin ?</h2>
+    <div class="grid">
+      {needs.map((s) => (
+        <a class="tile" href={`/${s}/`}>
+          <strong>{SILOS[s].title}</strong>
+          <span>{SILOS[s].description}</span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section class="container" aria-labelledby="metiers">
+    <h2 id="metiers">Le kit complet par métier</h2>
+    <div class="grid">
+      {metiers.map((a) => (
+        <a class="tile" href={articlePath(a)}>
+          <strong>{a.data.title}</strong>
+          <span>{a.data.description}</span>
+        </a>
+      ))}
+    </div>
   </section>
 
   <section class="container" aria-labelledby="populaires">
@@ -43,22 +72,10 @@ const silos = (Object.keys(SILOS) as (keyof typeof SILOS)[]).filter((s) => artic
     </div>
   </section>
 
-  <section class="container" aria-labelledby="rubriques">
-    <h2 id="rubriques">Par rubrique</h2>
-    <div class="grid">
-      {silos.map((s) => (
-        <a class="tile" href={`/${s}/`}>
-          <strong>{SILOS[s].title}</strong>
-          <span>{SILOS[s].description}</span>
-        </a>
-      ))}
-    </div>
-  </section>
-
   <section class="container" aria-labelledby="pourquoi">
     <h2 id="pourquoi">Pourquoi nous faire confiance ?</h2>
     <ul>
-      <li><strong>L’expérience du terrain</strong> : des années en cuisine professionnelle avant le développement web. <a href="/a-propos/">Qui sommes-nous</a></li>
+      <li><strong>Un regard d’entrepreneur</strong> : on juge les outils sur le temps gagné et le coût réel, pas sur la liste des fonctions. <a href="/a-propos/">Qui sommes-nous</a></li>
       <li><strong>Une méthode publique</strong> : critères et pondérations expliqués. <a href="/methodologie/">Notre méthodologie</a></li>
       <li><strong>Des prix datés</strong> : chaque page affiche sa date de mise à jour.</li>
       <li><strong>La transparence</strong> : les liens affiliés sont signalés et n’achètent pas les classements. <a href="/transparence-affiliation/">En savoir plus</a></li>

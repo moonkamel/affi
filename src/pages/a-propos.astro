@@ -3,18 +3,19 @@ import PageLayout from '../layouts/PageLayout.astro';
 import { SITE } from '../data/site';
 ---
 <PageLayout
-  title="À propos : qui compare les logiciels sur Coup de Feu ?"
-  seoTitle="À propos de Coup de Feu et de son auteur"
-  description="Ancien cuisinier professionnel devenu développeur web, je compare les logiciels de restaurant et de facturation avec les critères du terrain."
+  title="À propos : qui compare les logiciels sur Bon Outil Pro ?"
+  seoTitle="À propos de Bon Outil Pro et de son auteur"
+  description="Entrepreneur, je compare les logiciels de facturation, comptabilité, encaissement et marketing pour TPE avec les critères d’un dirigeant."
   schemaType="AboutPage"
 >
-  <!-- Ajoute ici ta photo (src/assets ou public/) : un vrai visage renforce la confiance des lecteurs et de Google. -->
-  <p id="auteur">Je m’appelle <strong>{SITE.author.name}</strong>. J’ai passé plusieurs années en cuisine professionnelle avant de devenir développeur web. Les coups de feu du samedi soir, la caisse qui plante en plein service, les bons perdus entre la salle et la cuisine, les plannings refaits le dimanche soir : je connais.</p>
-  <p>J’ai créé <strong>{SITE.name}</strong> parce que la plupart des comparatifs de logiciels pour restaurants sont écrits par des gens qui n’ont jamais travaillé dans un restaurant. Ils listent des fonctionnalités. Moi, je me demande ce qui se passe à 20 h 45 quand trois tables commandent en même temps.</p>
+  <!-- Ajoute ici ta photo (public/) et ton parcours : un vrai visage et des projets concrets renforcent la confiance des lecteurs et de Google. -->
+  <p id="auteur">Je m’appelle <strong>{SITE.author.name}</strong>, je suis entrepreneur. Comme tous les dirigeants de petites structures, je passe une partie de mon temps sur ce qui n’est pas mon métier : facturer, relancer, tenir les comptes, choisir des outils.</p>
+  <p>J’ai créé <strong>{SITE.name}</strong> parce que la plupart des comparatifs de logiciels sont écrits par les éditeurs eux-mêmes ou listent des fonctionnalités sans dire l’essentiel : combien ça coûte une fois toutes les options ajoutées, combien de temps ça fait vraiment gagner, et pour quel type d’entreprise c’est fait.</p>
   <h2>Ce que tu trouveras ici</h2>
   <ul>
-    <li>Des <a href="/restaurant/">comparatifs de logiciels pour restaurant</a> : caisse, réservation, planning.</li>
-    <li>Des <a href="/facturation/">guides sur la facturation et la facture électronique</a> pour les TPE et indépendants.</li>
+    <li>Des <a href="/facturation/">guides sur la facturation et la facture électronique</a>, la réforme qui concerne toutes les entreprises d’ici 2027.</li>
+    <li>Des comparatifs de <a href="/comptabilite/">logiciels de comptabilité</a>, de <a href="/encaissement/">terminaux de paiement et caisses</a>, de <a href="/site-internet/">créateurs de sites</a> et de <a href="/crm/">CRM</a>.</li>
+    <li>Le <a href="/metiers/">kit de logiciels complet par métier</a> : artisan, freelance, restaurant, commerçant…</li>
     <li>Des <a href="/outils/">outils gratuits</a> pour chiffrer le coût réel avant de signer.</li>
   </ul>
   <h2>Comment le site est financé</h2>

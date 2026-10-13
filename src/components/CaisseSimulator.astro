@@ -40,7 +40,7 @@
       <input id="taux" type="number" min="0" step="0.05" value="1.2" inputmode="decimal" />
     </div>
     <div>
-      <label for="couverts">Couverts par mois (optionnel)</label>
+      <label for="couverts">Couverts ou clients par mois (optionnel)</label>
       <input id="couverts" type="number" min="0" value="1500" inputmode="numeric" />
     </div>
     <div>
@@ -74,7 +74,7 @@
         `Logiciel et modules : <strong>${eur(logiciel)}</strong> · Matériel : <strong>${eur(materiel)}</strong> · ` +
         `Frais de carte : <strong>${eur(paiement)}</strong> · Installation lissée : <strong>${eur(install)}</strong><br>` +
         `Coût total sur ${duree} mois : <strong>${eur(mensuel * duree)}</strong>` +
-        (couverts ? ` · soit <strong>${(mensuel / couverts).toLocaleString('fr-FR', { maximumFractionDigits: 2 })} €</strong> par couvert` : '');
+        (couverts ? ` · soit <strong>${(mensuel / couverts).toLocaleString('fr-FR', { maximumFractionDigits: 2 })} €</strong> par couvert ou client` : '');
     };
     f.addEventListener('input', calc);
     calc();

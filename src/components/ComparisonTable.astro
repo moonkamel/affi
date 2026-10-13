@@ -2,8 +2,9 @@
 import { getSoftware } from '../data/software';
 import { SITE } from '../data/site';
 import AffLink from './AffLink.astro';
-interface Props { products: string[]; caption?: string }
-const { products, caption } = Astro.props;
+// `ranked={false}` pour les pages « par projet » où les logiciels ne sont pas classés entre eux.
+interface Props { products: string[]; caption?: string; ranked?: boolean }
+const { products, caption, ranked = true } = Astro.props;
 const list = products.map(getSoftware);
 const yesNo = (v: boolean | null) => (v === null ? 'À vérifier' : v ? 'Oui' : 'Non');
 ---
@@ -18,7 +19,7 @@ const yesNo = (v: boolean | null) => (v === null ? 'À vérifier' : v ? 'Oui' : 
     <tbody>
       {list.map((s, i) => (
         <tr>
-          <th scope="row"><a href={`#logiciel-${s.slug}`}>{i + 1}. {s.name}</a></th>
+          <th scope="row"><a href={`#logiciel-${s.slug}`}>{ranked && `${i + 1}. `}{s.name}</a></th>
           <td><strong>{s.score.toFixed(1).replace('.', ',')}</strong>/10</td>
           <td>{s.bestFor}</td>
           <td>{s.price.label}</td>

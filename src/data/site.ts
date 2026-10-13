@@ -1,16 +1,16 @@
 // Configuration globale du site. Remplace `url` par ton vrai domaine avant la mise en ligne :
 // il sert aux URLs canoniques, au sitemap et aux données structurées.
 export const SITE = {
-  name: 'Coup de Feu',
-  tagline: 'Les logiciels des restaurateurs et indépendants, choisis par un ancien cuisinier',
-  url: process.env.SITE_URL ?? 'https://www.coupdefeu.fr',
+  name: 'Bon Outil Pro',
+  tagline: 'Les meilleurs logiciels pour TPE et indépendants, comparés par un entrepreneur',
+  url: process.env.SITE_URL ?? 'https://www.bonoutilpro.fr',
   locale: 'fr_FR',
   lang: 'fr',
   // Mois de la dernière vérification globale des tarifs affichés.
   pricesChecked: 'octobre 2026',
   author: {
     name: 'Tarik',
-    role: 'Ancien cuisinier professionnel, développeur web',
+    role: 'Entrepreneur',
     url: '/a-propos/',
     // Ajoute ici tes profils publics (LinkedIn, etc.) : Google s'en sert pour relier l'auteur à une vraie personne.
     sameAs: [] as string[],
@@ -19,23 +19,57 @@ export const SITE = {
   publisher: {
     legalName: 'À compléter',
     address: 'À compléter',
-    email: 'contact@coupdefeu.fr',
+    email: 'contact@bonoutilpro.fr',
     host: 'À compléter (ex. Cloudflare, Inc.)',
   },
 } as const;
 
+// Silos thématiques : le premier segment de l'URL d'un article (/facturation/…) désigne son silo.
+// Les silos « besoin » captent les requêtes génériques, le silo « métiers » la longue traîne
+// (« logiciel devis artisan », « logiciels restaurant »…), et les silos comparatifs / alternatives / avis
+// les requêtes de décision finale, celles qui convertissent le mieux.
 export const SILOS = {
-  restaurant: {
-    label: 'Restaurant',
-    title: 'Logiciels pour restaurant',
-    seoTitle: 'Logiciels pour restaurant : comparatifs et prix 2026',
-    description: 'Caisse enregistreuse, réservation, planning, stocks : tous les logiciels de restaurant comparés par un ancien cuisinier, avec les prix 2026.',
-  },
   facturation: {
     label: 'Facturation',
     title: 'Facturation et facture électronique',
     seoTitle: 'Facturation et facture électronique : guides 2026',
     description: 'Facture électronique 2026-2027 et logiciels de facturation : calendrier, obligations et comparatifs pour TPE, artisans et auto-entrepreneurs.',
+  },
+  comptabilite: {
+    label: 'Comptabilité',
+    title: 'Logiciels de comptabilité',
+    seoTitle: 'Logiciels de comptabilité pour TPE : comparatifs 2026',
+    description: 'Comptabilité en ligne pour TPE, indépendants et sociétés : comparatifs, prix et conseils pour choisir avec ou sans expert-comptable.',
+  },
+  encaissement: {
+    label: 'Encaissement',
+    title: 'Caisse et terminal de paiement',
+    seoTitle: 'Caisse et terminal de paiement : comparatifs 2026',
+    description: 'Terminaux de paiement, caisses enregistreuses et logiciels de caisse pour commerçants : frais réels, NF525 et comparatifs détaillés.',
+  },
+  'site-internet': {
+    label: 'Site internet',
+    title: 'Créer son site internet',
+    seoTitle: 'Créer un site internet pour son entreprise : guides',
+    description: 'Créateurs de sites, e-commerce et hébergement : comment créer le site de ton entreprise au bon prix, sans être développeur.',
+  },
+  crm: {
+    label: 'CRM & marketing',
+    title: 'CRM, prospection et marketing',
+    seoTitle: 'CRM et emailing pour TPE : comparatifs 2026',
+    description: 'CRM, emailing et outils de prospection pour TPE : trouver des clients, suivre ses devis et fidéliser sans y passer ses soirées.',
+  },
+  equipe: {
+    label: 'Équipe',
+    title: 'Gestion d’équipe et planning',
+    seoTitle: 'Logiciels de planning et gestion d’équipe pour TPE',
+    description: 'Planning, badgeuse, paie et RH pour les TPE qui emploient : comparatifs des logiciels pour gérer ton équipe simplement.',
+  },
+  metiers: {
+    label: 'Par métier',
+    title: 'Les logiciels par métier',
+    seoTitle: 'Logiciels par métier : le kit complet de chaque activité',
+    description: 'Artisan, freelance, restaurant, commerçant : le kit de logiciels complet pour chaque métier, avec les outils indispensables et leur prix.',
   },
   comparatifs: {
     label: 'Comparatifs',
@@ -46,20 +80,20 @@ export const SILOS = {
   alternatives: {
     label: 'Alternatives',
     title: 'Alternatives aux logiciels populaires',
-    seoTitle: 'Alternatives aux logiciels de restaurant et facturation',
-    description: 'Trop cher, trop rigide, engagement trop long ? Les meilleures alternatives aux grands logiciels de caisse, réservation et facturation.',
+    seoTitle: 'Alternatives aux logiciels populaires pour TPE',
+    description: 'Trop cher, trop rigide, engagement trop long ? Les meilleures alternatives aux logiciels de gestion les plus utilisés par les TPE.',
   },
   avis: {
     label: 'Avis',
     title: 'Avis et tests de logiciels',
-    seoTitle: 'Avis logiciels restaurant et facturation 2026',
-    description: 'Avis détaillés sur les logiciels pour restaurants et indépendants : tarifs, points forts, limites et profil idéal de chaque solution.',
+    seoTitle: 'Avis sur les logiciels pour TPE et indépendants',
+    description: 'Avis détaillés sur les logiciels pour TPE et indépendants : tarifs, points forts, limites et profil idéal de chaque solution.',
   },
   outils: {
     label: 'Outils',
     title: 'Outils et simulateurs gratuits',
-    seoTitle: 'Simulateurs gratuits pour restaurateurs',
-    description: 'Simulateurs et calculateurs gratuits pour chiffrer le coût réel de ta caisse et de tes logiciels avant de signer un contrat.',
+    seoTitle: 'Simulateurs gratuits pour TPE et indépendants',
+    description: 'Simulateurs et calculateurs gratuits pour chiffrer le coût réel de tes logiciels et de ton encaissement avant de signer un contrat.',
   },
 } as const;
 

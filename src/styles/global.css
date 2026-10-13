@@ -1,14 +1,14 @@
 /* Design volontairement léger : polices système, pas de framework, tout inline au build. */
 :root {
-  --bg: #fffdf9;
+  --bg: #fbfcfe;
   --surface: #ffffff;
-  --surface-2: #f6f1e9;
-  --text: #1d1a16;
-  --muted: #5f574d;
-  --border: #e6ddd0;
-  --accent: #c2410c;
+  --surface-2: #f1f4f9;
+  --text: #111827;
+  --muted: #4b5563;
+  --border: #dfe5ee;
+  --accent: #1d4ed8;
   --accent-ink: #ffffff;
-  --accent-soft: #fff1e6;
+  --accent-soft: #eef3ff;
   --good: #15803d;
   --bad: #b91c1c;
   --radius: 10px;

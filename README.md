@@ -1,6 +1,6 @@
-# Coup de Feu
+# Bon Outil Pro
 
-Site d'affiliation SEO : logiciels pour restaurants (caisse, réservation, planning) et facturation / facture électronique pour TPE et indépendants.
+Site d'affiliation SEO : les logiciels pour TPE et indépendants (facturation, comptabilité, encaissement, site internet, CRM, équipe), avec des kits par métier.
 
 Stack : [Astro](https://astro.build) statique + MDX. Zéro framework JS côté client.
 
