@@ -169,7 +169,7 @@ Accueil
 
 ## 7. Check-list de lancement
 
-1. [ ] Acheter le domaine et le mettre dans `src/data/site.ts` (ou `SITE_URL`). Vérifier d’abord la disponibilité de logimalin.fr (et .com) et l’absence de marque déposée sur data.inpi.fr.
+1. [ ] Acheter le domaine et le mettre dans `src/data/site.ts` (ou `SITE_URL`). Domaine acheté : logi-malin.fr (IONOS, DNS sur Cloudflare). Vérifier l’absence de marque déposée sur data.inpi.fr.
 2. [ ] Compléter les mentions légales (`SITE.publisher`).
 3. [ ] Ajouter ta photo, ton parcours et tes profils sur `/a-propos/`.
 4. [ ] S'inscrire aux programmes d'affiliation, coller les liens dans `src/data/software.ts` (`affiliateUrl`). Priorités : Systeme.io, Hostinger, Shopify, SumUp, Axonaut, Pipedrive, HubSpot, Abby, Indy, Tolteck, Obat.

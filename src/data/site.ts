@@ -3,7 +3,7 @@
 export const SITE = {
   name: 'Logimalin',
   tagline: 'Les bons logiciels pour TPE et indépendants, comparés par un entrepreneur',
-  url: process.env.SITE_URL ?? 'https://www.logimalin.fr',
+  url: process.env.SITE_URL ?? 'https://www.logi-malin.fr',
   locale: 'fr_FR',
   lang: 'fr',
   // Mois de la dernière vérification globale des tarifs affichés.
@@ -22,7 +22,7 @@ export const SITE = {
   publisher: {
     legalName: 'À compléter',
     address: 'À compléter',
-    email: 'contact@logimalin.fr',
+    email: 'contact@logi-malin.fr',
     host: 'À compléter (ex. Cloudflare, Inc.)',
   },
 } as const;

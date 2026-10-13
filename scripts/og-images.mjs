@@ -45,7 +45,7 @@ for (const p of pages) {
   </style></head><body><div class="halo"></div><div class="wrap">
     <div class="pill">${esc(LABELS[p.silo] ?? 'Guide')}</div>
     <h1>${esc(p.title)}</h1>
-    <div class="foot"><svg viewBox="0 0 32 32"><rect width="32" height="32" rx="8" fill="#2747d8"/><path d="M10.5 8v15h11" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M22.5 6.5l1.1 2.6 2.6 1.1-2.6 1.1-1.1 2.6-1.1-2.6-2.6-1.1 2.6-1.1z" fill="#f4ad1f"/></svg>Logimalin<span>logimalin.fr</span></div>
+    <div class="foot"><svg viewBox="0 0 32 32"><rect width="32" height="32" rx="8" fill="#2747d8"/><path d="M10.5 8v15h11" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M22.5 6.5l1.1 2.6 2.6 1.1-2.6 1.1-1.1 2.6-1.1-2.6-2.6-1.1 2.6-1.1z" fill="#f4ad1f"/></svg>Logimalin<span>logi-malin.fr</span></div>
   </div></body></html>`);
   await page.evaluate(() => document.fonts.ready);
   const file = join(OUT, p.id.replace(/\//g, '--') + '.jpg');

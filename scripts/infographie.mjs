@@ -44,7 +44,7 @@ h1{font:800 64px/1.04 B;letter-spacing:-.03em;margin:26px 0 12px}
 <p class="sub">Ce qui change, et quand, pour les TPE, PME et micro-entreprises</p>
 <div class="tl">${steps.map((s) => `<div class="step"><span class="dot" style="color:${s.color};background:${s.color}"></span><div><span class="date" style="color:${s.color}">${s.date}</span><span class="tag">${s.tag}</span></div><div class="title">${s.title}</div><div class="text">${s.text}</div></div>`).join('')}</div>
 <div class="note"><b>Formats acceptés :</b> Factur-X, UBL, CII. <b>Un PDF envoyé par e-mail n’est pas une facture électronique.</b> Le portail public sert d’annuaire, pas à facturer.</div>
-<div class="foot"><span class="brand"><span class="logo">L</span>Logimalin</span><span>logimalin.fr · Calendrier en vigueur en octobre 2026</span></div>
+<div class="foot"><span class="brand"><span class="logo">L</span>Logimalin</span><span>logi-malin.fr · Calendrier en vigueur en octobre 2026</span></div>
 </div></body></html>`;
 
 mkdirSync(OUT, { recursive: true });
