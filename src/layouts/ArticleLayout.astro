@@ -9,6 +9,8 @@ import Related from '../components/Related.astro';
 import SiloIcon from '../components/SiloIcon.astro';
 import { SILOS, SITE } from '../data/site';
 import { getSoftware } from '../data/software';
+import Avatar from '../components/Avatar.astro';
+import TestedBox from '../components/TestedBox.astro';
 import { article, breadcrumbs, faqPage, graph, itemList, review } from '../lib/schema';
 import { articlePath, getArticles, siloOf, toTile, type Article } from '../lib/articles';
 import { existsSync } from 'node:fs';
@@ -67,13 +69,14 @@ const showDisclosure = true; // Mention obligatoire dès qu'une page peut conten
         <a class="silo-pill" href={`/${silo}/`}><SiloIcon silo={silo} />{SILOS[silo].label}</a>
         <h1>{d.title}</h1>
         <div class="meta">
-          <span class="who"><span class="avatar" aria-hidden="true">{SITE.author.name.charAt(0)}</span><span>Par <a href={SITE.author.url} rel="author">{SITE.author.name}</a>, {SITE.author.role.toLowerCase()}</span></span>
+          <span class="who"><Avatar size={30} /><span>Par <a href={SITE.author.url} rel="author">{SITE.author.name}</a>, {SITE.author.role.toLowerCase()}</span></span>
           <span>Mis à jour le <time datetime={d.updated.toISOString()}>{fmt(d.updated)}</time></span>
         </div>
       </header>
       {showDisclosure && (
         <p class="disclosure">Transparence : certains liens de cette page sont affiliés. Si tu t’abonnes via ces liens, nous touchons parfois une commission, sans surcoût pour toi. Les classements restent indépendants. <a href="/transparence-affiliation/">En savoir plus</a>.</p>
       )}
+      {d.tested && <TestedBox tested={d.tested} product={d.review?.product} />}
       {d.tldr.length > 0 && (
         <div class="tldr"><strong>L’essentiel en 30 secondes</strong><ul>{d.tldr.map((t) => <li set:html={t} />)}</ul></div>
       )}

@@ -1,0 +1,66 @@
+---
+title: "Calcul des indemnités kilométriques 2026 : simulateur et barème officiel"
+seoTitle: "Indemnités kilométriques 2026 : calcul et barème"
+description: "Calcule tes indemnités kilométriques 2026 avec le barème fiscal officiel : puissance du véhicule, kilomètres, majoration électrique. Simulateur gratuit."
+keyword: "indemnités kilométriques"
+secondaryKeywords:
+  - "barème kilométrique 2026"
+  - "calcul indemnités kilométriques"
+  - "frais kilométriques"
+  - "simulateur indemnités kilométriques"
+  - "ik note de frais"
+type: outil
+published: 2026-10-13
+updated: 2026-10-13
+related:
+  - comptabilite/note-de-frais
+  - comptabilite/logiciel-comptabilite
+  - equipe/badgeuse
+  - metiers/logiciels-artisan-btp
+tldr:
+  - "Le <strong>barème kilométrique 2026</strong> est identique à celui de 2023 : il n’a pas été revalorisé depuis trois ans."
+  - "Le montant dépend de la <strong>puissance fiscale</strong> et du <strong>nombre de kilomètres professionnels</strong> sur l’année."
+  - "Les véhicules <strong>100 % électriques</strong> bénéficient d’une majoration de 20 %."
+faq:
+  - q: "Comment calculer ses indemnités kilométriques ?"
+    a: "Applique le barème fiscal à tes kilomètres professionnels de l’année selon la puissance fiscale de ton véhicule. Par exemple, pour une 5 CV et 8 000 km : (8 000 × 0,357) + 1 395 = 4 251 €. Le simulateur fait le calcul pour toi."
+  - q: "Le barème kilométrique 2026 a-t-il changé ?"
+    a: "Selon les informations disponibles en octobre 2026, le barème est le même qu’en 2023, 2024 et 2025. Un amendement visant à le relever de 10 % pour les revenus 2026 a été adopté en commission en octobre 2026, mais il n’est pas définitif. Vérifie le barème publié sur impots.gouv.fr."
+  - q: "Qui peut se faire rembourser des indemnités kilométriques ?"
+    a: "Un salarié ou un dirigeant qui utilise son véhicule personnel pour des déplacements professionnels, via une note de frais. Un indépendant au régime réel peut aussi les déduire. En micro-entreprise, les frais ne sont pas déductibles."
+  - q: "Les trajets domicile-travail comptent-ils ?"
+    a: "Pour une note de frais, seuls les déplacements professionnels sont remboursés, pas les trajets habituels domicile-travail. Pour la déclaration de revenus aux frais réels, les trajets domicile-travail sont déductibles, en principe dans la limite de 40 km par trajet sauf circonstances particulières."
+---
+import IkCalculator from '../../../components/IkCalculator.astro';
+import Callout from '../../../components/Callout.astro';
+import AffLink from '../../../components/AffLink.astro';
+
+Tu utilises ta voiture personnelle pour ton activité ? Les **indemnités kilométriques** remboursent ce coût selon un barème fiscal officiel, qui couvre le carburant, l’usure, l’entretien et l’assurance. Renseigne tes kilomètres et ta puissance fiscale : le calcul est immédiat.
+
+<IkCalculator />
+
+## Le barème kilométrique 2026 (voitures)
+
+| Puissance fiscale | Jusqu’à 5 000 km | De 5 001 à 20 000 km | Au-delà de 20 000 km |
+|---|---|---|---|
+| 3 CV et moins | d × 0,529 | (d × 0,316) + 1 065 | d × 0,370 |
+| 4 CV | d × 0,606 | (d × 0,340) + 1 330 | d × 0,407 |
+| 5 CV | d × 0,636 | (d × 0,357) + 1 395 | d × 0,427 |
+| 6 CV | d × 0,665 | (d × 0,374) + 1 457 | d × 0,447 |
+| 7 CV et plus | d × 0,697 | (d × 0,394) + 1 515 | d × 0,470 |
+
+*d* = distance parcourue à titre professionnel sur l’année. Majoration de 20 % pour les véhicules 100 % électriques. Barème inchangé depuis 2023 ; un relèvement de 10 % pour les revenus 2026 est en discussion au Parlement en octobre 2026 : vérifie le barème définitif sur impots.gouv.fr.
+
+<Callout title="Garde une trace de chaque trajet">
+  <p>Date, lieu, motif et kilomètres : c’est ce que l’administration peut te demander. Une application de <a href="/comptabilite/note-de-frais/">notes de frais</a> comme N2F (voir notre <a href="/avis/n2f/">avis N2F</a>) enregistre les trajets et applique le barème automatiquement.</p>
+</Callout>
+
+## Qui est concerné ?
+
+- **Salariés et dirigeants** : remboursement via une note de frais, exonéré de cotisations dans la limite du barème.
+- **Indépendants au régime réel** : déduction des frais de véhicule personnel. Voir notre comparatif des [logiciels de comptabilité](/comptabilite/logiciel-comptabilite/).
+- **Micro-entrepreneurs** : pas de déduction possible, les cotisations portant sur le chiffre d’affaires. Utilise plutôt le [simulateur de charges auto-entrepreneur](/outils/simulateur-charges-auto-entrepreneur/).
+
+Les artisans qui enchaînent les chantiers trouveront aussi des outils adaptés dans [logiciels pour artisans du BTP](/metiers/logiciels-artisan-btp/).
+
+<p style="display:flex;gap:8px;flex-wrap:wrap"><AffLink slug="n2f" label="Automatiser mes IK avec N2F" /> <AffLink slug="indy" variant="ghost" label="Indy (indépendants)" /></p>

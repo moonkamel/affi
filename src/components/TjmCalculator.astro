@@ -11,7 +11,7 @@
     <div>
       <label for="tjm-statut">Statut</label>
       <select id="tjm-statut">
-        <option value="26.1">Micro-entreprise, profession libérale (26,1 %)</option>
+        <option value="25.6">Micro-entreprise, profession libérale (25,6 %)</option>
         <option value="23.2">Micro-entreprise, libéral CIPAV (23,2 %)</option>
         <option value="21.2">Micro-entreprise, prestations BIC (21,2 %)</option>
         <option value="45">Société (EURL, SASU) : environ 45 % de prélèvements</option>
@@ -62,7 +62,7 @@
       document.getElementById('tjm-d').innerHTML =
         `Jours facturables : <strong>${jours}</strong> par an · Chiffre d’affaires à réaliser : <strong>${eur(ca)}</strong><br>` +
         `Soit environ <strong>${eur(ca / 12)}</strong> de facturation par mois` +
-        (!societe && ca > 77700 ? '<br>⚠ Ce chiffre d’affaires dépasse probablement le plafond de la micro-entreprise pour les services : vérifie sur urssaf.fr.' : '') +
+        (!societe && ca > 83600 ? "<br>⚠ Ce chiffre d’affaires dépasse le plafond 2026 de la micro-entreprise pour les services (83 600 €) : il faudra passer au réel ou en société." : "") +
         (!societe && ca > 37500 ? '<br>Au-delà de 37 500 € de prestations, tu factures la TVA en plus de ce TJM.' : '');
     };
     f.addEventListener('input', calc);

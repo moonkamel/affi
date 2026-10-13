@@ -1,6 +1,7 @@
 ---
 import PageLayout from '../layouts/PageLayout.astro';
 import { SITE } from '../data/site';
+import Avatar from '../components/Avatar.astro';
 ---
 <PageLayout
   title="À propos : qui compare les logiciels sur Logimalin ?"
@@ -8,7 +9,10 @@ import { SITE } from '../data/site';
   description="Entrepreneur, je compare les logiciels de facturation, comptabilité, encaissement et marketing pour TPE avec les critères d’un dirigeant."
   schemaType="AboutPage"
 >
-  <!-- Ajoute ici ta photo (public/) et ton parcours : un vrai visage et des projets concrets renforcent la confiance des lecteurs et de Google. -->
+  <!-- Ta photo s'affiche ici dès que SITE.author.photo est renseigné (src/data/site.ts). Ajoute aussi ton parcours :
+       entreprises créées, années d'expérience, outils utilisés au quotidien. Un vrai visage et des faits vérifiables
+       renforcent la confiance des lecteurs et de Google. -->
+  <div class="author" style="margin-top:0"><Avatar size={96} /><div><strong>{SITE.author.name}</strong><div class="muted">{SITE.author.role}, fondateur de {SITE.name}</div>{SITE.author.sameAs.length > 0 && <p style="margin:.4em 0 0">{SITE.author.sameAs.map((u) => <a href={u} rel="me">{new URL(u).hostname.replace('www.', '')}</a>)}</p>}</div></div>
   <p id="auteur">Je m’appelle <strong>{SITE.author.name}</strong>, je suis entrepreneur. Comme tous les dirigeants de petites structures, je passe une partie de mon temps sur ce qui n’est pas mon métier : facturer, relancer, tenir les comptes, choisir des outils.</p>
   <p>J’ai créé <strong>{SITE.name}</strong> parce que la plupart des comparatifs de logiciels sont écrits par les éditeurs eux-mêmes ou listent des fonctionnalités sans dire l’essentiel : combien ça coûte une fois toutes les options ajoutées, combien de temps ça fait vraiment gagner, et pour quel type d’entreprise c’est fait.</p>
   <h2>Ce que tu trouveras ici</h2>

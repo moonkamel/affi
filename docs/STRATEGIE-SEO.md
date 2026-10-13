@@ -231,10 +231,18 @@ Objectif : 15 à 30 domaines référents de qualité les 6 premiers mois.
 - Maillage : chaque fiche produit renvoie automatiquement vers notre avis du logiciel ; un paragraphe de liens contextuels (`<p data-maillage>`) dans 63 pages. Chaque article reçoit au moins 5 liens internes dans le corps de texte (hors menus et « À lire aussi »).
 - Nouveaux logiciels dans `software.ts` : Zoho Inventory, Odoo, N2F, Planity, Kiute, Salonkee.
 
+### Vague 5 (faite)
+- Avis Planity, Zoho Inventory, N2F.
+- Calculateurs : indemnités kilométriques (barème 2026), pénalités de retard (taux du 2nd semestre 2026).
+- Correction : taux BNC micro 2026 = 25,6 % (et non 26,1 %), plafonds micro 2026-2028 = 203 100 € / 83 600 €.
+- Crédibilité : photo d'auteur (`SITE.author.photo`), bloc « Notre test » (champ `tested` des articles, à remplir seulement après un vrai test), composant `<Capture>` pour les captures d'écran (`public/captures/<logiciel>/`).
+
+### À mettre à jour chaque semestre
+- 1er janvier et 1er juillet : taux des pénalités de retard (`PenalitesCalculator.astro` + page).
+- Chaque année : barème kilométrique (`IkCalculator.astro` + page), taux URSSAF (`ChargesSimulator.astro`, `TjmCalculator.astro`).
+
 ### Pistes suivantes
-- Avis Planity, Avis Zoho Inventory, Avis N2F (requêtes de marque).
 - Logiciel pour esthéticienne à domicile, logiciel pour boulangerie, logiciel pour commerce de détail.
-- Calculateur d’indemnités kilométriques, calculateur de pénalités de retard.
 
 ### Indexation
 - Google Search Console + sitemap, Bing Webmaster Tools (import depuis GSC), IndexNow à chaque publication.

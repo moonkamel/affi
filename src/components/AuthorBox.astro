@@ -1,8 +1,9 @@
 ---
 import { SITE } from '../data/site';
+import Avatar from './Avatar.astro';
 ---
 <aside class="author" aria-label="À propos de l’auteur">
-  <div class="avatar" aria-hidden="true">{SITE.author.name.charAt(0)}</div>
+  <Avatar />
   <div>
     <strong>Écrit par <a href={SITE.author.url} rel="author">{SITE.author.name}</a></strong>
     <div class="muted">{SITE.author.role}</div>

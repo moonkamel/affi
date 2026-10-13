@@ -33,6 +33,7 @@ export const person = () => ({
   jobTitle: SITE.author.role,
   url: abs(SITE.author.url),
   ...(SITE.author.sameAs.length ? { sameAs: SITE.author.sameAs } : {}),
+  ...(SITE.author.photo ? { image: abs(SITE.author.photo) } : {}),
 });
 
 export const breadcrumbs = (items: { name: string; path: string }[]) => ({

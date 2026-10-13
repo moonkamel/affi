@@ -14,6 +14,9 @@ export const SITE = {
     url: '/a-propos/',
     // Ajoute ici tes profils publics (LinkedIn, etc.) : Google s'en sert pour relier l'auteur à une vraie personne.
     sameAs: [] as string[],
+    // Photo de l'auteur : dépose un JPEG carré (au moins 400 × 400 px) dans public/ puis indique son chemin,
+    // par exemple '/auteur.jpg'. Tant que la valeur est null, l'initiale est affichée.
+    photo: null as string | null,
   },
   // Éditeur légal du site (mentions légales). À compléter.
   publisher: {

@@ -1,0 +1,13 @@
+---
+// Bloc « Notre test » : preuve d'usage réel, affiché seulement si le champ `tested` est rempli.
+import { getSoftware } from '../data/software';
+interface Props { tested: { date: Date; duration?: string; steps: string[] }; product?: string }
+const { tested, product } = Astro.props;
+const name = product ? getSoftware(product).name : null;
+const fmt = (d: Date) => d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }).replace(/^1 /, '1er ');
+---
+<aside class="tested" aria-label="Notre test">
+  <strong>Testé par l’auteur{name && <> : {name}</>}</strong>
+  <div class="small muted">Test réalisé le <time datetime={tested.date.toISOString()}>{fmt(tested.date)}</time>{tested.duration && <>, pendant {tested.duration}</>}</div>
+  <ul>{tested.steps.map((s) => <li set:html={s} />)}</ul>
+</aside>

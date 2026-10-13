@@ -1,0 +1,57 @@
+---
+// Calcul des pénalités de retard et de l'indemnité forfaitaire de recouvrement (factures entre professionnels).
+---
+<form class="sim" id="sim-pen" aria-labelledby="pen-titre" onsubmit="return false">
+  <strong id="pen-titre">Calcule ce que ton client te doit</strong>
+  <div class="row">
+    <div>
+      <label for="pen-montant">Montant TTC de la facture impayée (€)</label>
+      <input id="pen-montant" type="number" min="0" value="2400" inputmode="decimal" />
+    </div>
+    <div>
+      <label for="pen-jours">Jours de retard après l’échéance</label>
+      <input id="pen-jours" type="number" min="0" value="45" inputmode="numeric" />
+    </div>
+    <div>
+      <label for="pen-taux">Taux annuel des pénalités (%)</label>
+      <input id="pen-taux" type="number" min="0" step="0.01" value="12.40" inputmode="decimal" />
+    </div>
+    <div>
+      <label for="pen-pro">Ton client est</label>
+      <select id="pen-pro">
+        <option value="1">Un professionnel</option>
+        <option value="0">Un particulier</option>
+      </select>
+    </div>
+  </div>
+  <output class="sim-out" for="pen-montant pen-jours pen-taux pen-pro" aria-live="polite">
+    <div>Montant à réclamer en plus de la facture</div>
+    <div class="big" id="pen-r">–</div>
+    <div id="pen-d" class="small"></div>
+  </output>
+</form>
+
+<script is:inline>
+  (() => {
+    const f = document.getElementById('sim-pen');
+    if (!f) return;
+    const v = (id) => Math.max(0, parseFloat(String(document.getElementById(id).value).replace(',', '.')) || 0);
+    const eur = (n) => n.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR', minimumFractionDigits: 2 });
+    const calc = () => {
+      const pro = document.getElementById('pen-pro').value === '1';
+      const pen = (v('pen-montant') * v('pen-taux') * v('pen-jours')) / 36500;
+      const forfait = pro && v('pen-jours') > 0 ? 40 : 0;
+      document.getElementById('pen-r').textContent = eur(pen + forfait);
+      document.getElementById('pen-d').innerHTML =
+        `Pénalités de retard : <strong>${eur(pen)}</strong> (${v('pen-montant')} × ${v('pen-taux').toLocaleString('fr-FR')} % × ${v('pen-jours')} j ÷ 365)` +
+        (pro ? ` · Indemnité forfaitaire de recouvrement : <strong>${eur(forfait)}</strong>` : '<br>Avec un particulier : intérêts au taux légal (6,84 % au 2nd semestre 2026), sans indemnité de 40 €.') +
+        `<br>Total dû : <strong>${eur(v('pen-montant') + pen + forfait)}</strong>`;
+    };
+    // Taux par défaut du 2nd semestre 2026 : BCE + 10 points entre pros, intérêt légal pour un particulier.
+    document.getElementById('pen-pro').addEventListener('change', (e) => {
+      document.getElementById('pen-taux').value = e.target.value === '1' ? '12.40' : '6.84';
+    });
+    f.addEventListener('input', calc);
+    calc();
+  })();
+</script>

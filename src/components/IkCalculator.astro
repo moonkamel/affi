@@ -1,0 +1,64 @@
+---
+// Calculateur d'indemnités kilométriques (barème fiscal voitures, inchangé depuis 2023).
+---
+<form class="sim" id="sim-ik" aria-labelledby="ik-titre" onsubmit="return false">
+  <strong id="ik-titre">Calcule tes indemnités kilométriques</strong>
+  <div class="row">
+    <div>
+      <label for="ik-km">Kilomètres professionnels sur l’année</label>
+      <input id="ik-km" type="number" min="0" value="8000" inputmode="numeric" />
+    </div>
+    <div>
+      <label for="ik-cv">Puissance fiscale du véhicule</label>
+      <select id="ik-cv">
+        <option value="3">3 CV et moins</option>
+        <option value="4">4 CV</option>
+        <option value="5" selected>5 CV</option>
+        <option value="6">6 CV</option>
+        <option value="7">7 CV et plus</option>
+      </select>
+    </div>
+    <div>
+      <label for="ik-elec">Véhicule 100 % électrique</label>
+      <select id="ik-elec">
+        <option value="0">Non</option>
+        <option value="1">Oui (+20 %)</option>
+      </select>
+    </div>
+  </div>
+  <output class="sim-out" for="ik-km ik-cv ik-elec" aria-live="polite">
+    <div>Indemnités kilométriques sur l’année</div>
+    <div class="big" id="ik-r">–</div>
+    <div id="ik-d" class="small"></div>
+  </output>
+</form>
+
+<script is:inline>
+  (() => {
+    const f = document.getElementById('sim-ik');
+    if (!f) return;
+    // [jusqu'à 5 000 km : d × a] [5 001 à 20 000 km : d × b + c] [plus de 20 000 km : d × e]
+    const B = {
+      3: [0.529, 0.316, 1065, 0.370],
+      4: [0.606, 0.340, 1330, 0.407],
+      5: [0.636, 0.357, 1395, 0.427],
+      6: [0.665, 0.374, 1457, 0.447],
+      7: [0.697, 0.394, 1515, 0.470],
+    };
+    const eur = (n) => n.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 });
+    const calc = () => {
+      const d = Math.max(0, parseFloat(document.getElementById('ik-km').value) || 0);
+      const [a, b, c, e] = B[document.getElementById('ik-cv').value];
+      let ik = d <= 5000 ? d * a : d <= 20000 ? d * b + c : d * e;
+      const formule = d <= 5000 ? `${d} × ${a}` : d <= 20000 ? `(${d} × ${b}) + ${c}` : `${d} × ${e}`;
+      const elec = document.getElementById('ik-elec').value === '1';
+      if (elec) ik *= 1.2;
+      document.getElementById('ik-r').textContent = eur(ik);
+      document.getElementById('ik-d').innerHTML =
+        `Formule appliquée : <strong>${formule}</strong>${elec ? ' × 1,2' : ''}` +
+        (d ? ` · soit <strong>${(ik / d).toLocaleString('fr-FR', { maximumFractionDigits: 3 })} €</strong> par kilomètre` : '');
+    };
+    f.addEventListener('input', calc);
+    calc();
+  })();
+</script>

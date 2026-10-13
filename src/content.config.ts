@@ -22,6 +22,13 @@ const articles = defineCollection({
     products: z.array(z.string()).default([]),
     /** Pour les pages avis : logiciel évalué + note /10 → Review JSON-LD. */
     review: z.object({ product: z.string(), rating: z.number().min(0).max(10) }).optional(),
+    /**
+     * Test réel du logiciel (pages avis surtout). À remplir UNIQUEMENT après un vrai test :
+     * date du test, durée, et ce qui a été fait. Affiche le bloc « Notre test » en haut de page.
+     */
+    tested: z
+      .object({ date: z.coerce.date(), duration: z.string().optional(), steps: z.array(z.string()).min(1) })
+      .optional(),
     faq: z.array(z.object({ q: z.string(), a: z.string() })).default([]),
     /** Maillage interne explicite : slugs complets ("facturation/facture-electronique-2026"). */
     related: z.array(z.string()).default([]),

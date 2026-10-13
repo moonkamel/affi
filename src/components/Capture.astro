@@ -1,0 +1,9 @@
+---
+// Capture d'écran d'un logiciel testé. Dépose l'image dans public/captures/<logiciel>/ (WebP ou JPEG, 1200 px de large max).
+interface Props { src: string; alt: string; caption?: string; width?: number; height?: number }
+const { src, alt, caption, width = 1200, height = 750 } = Astro.props;
+---
+<figure class="capture">
+  <img src={src} alt={alt} width={width} height={height} loading="lazy" decoding="async" />
+  {caption && <figcaption>{caption}</figcaption>}
+</figure>

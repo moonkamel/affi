@@ -1,0 +1,70 @@
+---
+title: "Calcul des pénalités de retard 2026 : simulateur gratuit et taux en vigueur"
+seoTitle: "Pénalités de retard 2026 : calcul et taux en vigueur"
+description: "Calcule les pénalités de retard d’une facture impayée et l’indemnité de 40 € : taux 2026, formule, mentions obligatoires. Simulateur gratuit pour TPE."
+keyword: "pénalités de retard"
+secondaryKeywords:
+  - "calcul pénalités de retard"
+  - "taux pénalités de retard 2026"
+  - "indemnité forfaitaire 40 euros"
+  - "intérêts de retard facture"
+  - "pénalité de retard facture"
+type: outil
+published: 2026-10-13
+updated: 2026-10-13
+related:
+  - facturation/relance-facture-impayee
+  - facturation/mentions-obligatoires-facture
+  - facturation/facture-acompte
+  - encaissement/lien-de-paiement
+tldr:
+  - "Entre professionnels, sans taux prévu au contrat : <strong>taux BCE + 10 points</strong>, soit 12,40 % au 2nd semestre 2026 selon le taux BCE retenu au 1er juillet."
+  - "Le taux contractuel ne peut pas être inférieur à <strong>3 fois le taux d’intérêt légal</strong> : 8,25 % au 2nd semestre 2026."
+  - "S’y ajoute une <strong>indemnité forfaitaire de 40 €</strong> par facture payée en retard."
+  - "Formule : montant TTC × taux × jours de retard ÷ 365."
+faq:
+  - q: "Comment calculer des pénalités de retard ?"
+    a: "Multiplie le montant TTC de la facture par le taux annuel des pénalités et par le nombre de jours de retard, puis divise par 365. Par exemple, 2 400 € à 12,40 % pendant 45 jours : 2 400 × 12,40 % × 45 ÷ 365 = 36,69 €, plus l’indemnité forfaitaire de 40 € entre professionnels."
+  - q: "Quel est le taux des pénalités de retard en 2026 ?"
+    a: "À défaut de taux fixé dans tes conditions générales, c’est le taux de refinancement de la BCE majoré de 10 points, celui en vigueur au 1er juillet pour le second semestre. Le taux contractuel minimum est de 3 fois le taux d’intérêt légal, soit 8,25 % au second semestre 2026 (taux légal de 2,75 % pour les créances entre professionnels)."
+  - q: "L’indemnité de 40 € est-elle obligatoire ?"
+    a: "Oui, entre professionnels : elle est due de plein droit dès le premier jour de retard, pour chaque facture, et doit figurer sur tes factures. Elle ne s’applique pas aux clients particuliers."
+  - q: "Faut-il réclamer les pénalités pour qu’elles soient dues ?"
+    a: "Elles sont exigibles sans rappel, mais tu choisis de les réclamer ou non. Les mentionner dans une relance est souvent un levier efficace pour être payé, même si tu y renonces ensuite."
+---
+import PenalitesCalculator from '../../../components/PenalitesCalculator.astro';
+import Callout from '../../../components/Callout.astro';
+import Verdict from '../../../components/Verdict.astro';
+import AffLink from '../../../components/AffLink.astro';
+
+Un client qui paie en retard te doit plus que le montant de la facture : des **pénalités de retard** et, entre professionnels, une **indemnité forfaitaire de 40 €**. Encore faut-il connaître le bon taux et savoir les calculer. Ce simulateur te donne le montant exact à réclamer.
+
+<PenalitesCalculator />
+
+## Les taux à connaître (2nd semestre 2026)
+
+| Taux | Valeur | Usage |
+|---|---|---|
+| Taux d’intérêt légal, créances entre professionnels | 2,75 % | base du minimum légal |
+| Taux minimum des pénalités (3 × taux légal) | 8,25 % | plancher si tu fixes ton propre taux |
+| Taux par défaut (BCE + 10 points) | 12,40 % selon le taux BCE retenu au 1er juillet | s’applique si tes CGV ne prévoient rien |
+| Taux d’intérêt légal, créances dues par des particuliers | 6,84 % | clients particuliers |
+
+Taux publiés pour le second semestre 2026 (arrêté du 26 juin 2026 pour le taux légal). Le taux BCE de référence est révisé chaque semestre : vérifie-le sur banque-france.fr.
+
+<Callout title="Les mentions à porter sur tes factures">
+  <p>Entre professionnels, ta facture doit indiquer la date d’échéance, le taux des pénalités de retard et l’indemnité forfaitaire de 40 €. Sans ces mentions, tu t’exposes à une amende. La liste complète est dans <a href="/facturation/mentions-obligatoires-facture/">mentions obligatoires d’une facture</a>.</p>
+</Callout>
+
+## Réclamer sans perdre le client
+
+1. **Relance amiable** à J+1 puis J+8, en rappelant l’échéance.
+2. **Relance ferme** à J+15, en chiffrant les pénalités et l’indemnité avec ce simulateur.
+3. **Mise en demeure** à J+30.
+
+Notre méthode complète et des modèles d’e-mail sont dans [relance de facture impayée](/facturation/relance-facture-impayee/). Pour éviter le problème, demande une [facture d’acompte](/facturation/facture-acompte/) sur les grosses prestations et ajoute un [lien de paiement](/encaissement/lien-de-paiement/) à chaque facture.
+
+<Verdict>
+  <p>Le plus efficace reste l’automatisation : un logiciel qui envoie les relances à ta place et calcule les pénalités. <strong>Axonaut</strong> le fait très bien pour une TPE, <strong>Abby</strong> pour un micro-entrepreneur.</p>
+  <p style="display:flex;gap:8px;flex-wrap:wrap"><AffLink slug="axonaut" label="Automatiser mes relances avec Axonaut" /> <AffLink slug="abby" variant="ghost" label="Abby" /></p>
+</Verdict>

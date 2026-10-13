@@ -1,0 +1,10 @@
+---
+import { SITE } from '../data/site';
+interface Props { size?: number }
+const { size = 52 } = Astro.props;
+---
+{SITE.author.photo ? (
+  <img class="avatar" src={SITE.author.photo} alt={SITE.author.name} width={size} height={size} loading="lazy" decoding="async" />
+) : (
+  <span class="avatar" aria-hidden="true">{SITE.author.name.charAt(0)}</span>
+)}

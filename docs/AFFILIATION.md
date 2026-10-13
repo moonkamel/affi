@@ -40,6 +40,12 @@ Légende : ✅ programme public confirmé · 🔎 programme à demander / à vé
 | Zettle | 🔎 | https://www.zettle.com/fr (programme partenaires PayPal) | |
 | myPOS | 🔎 | https://www.mypos.com/fr-fr (partenaires / affiliés) | |
 | Eat App | 🔎 | https://restaurant.eatapp.co (partenaires) | |
+| Zoho Inventory | ✅ | https://www.zoho.com/affiliate.html | programme public Zoho (commission à vérifier) |
+| Odoo | 🔎 | https://www.odoo.com/fr_FR/partners (programme partenaires) | |
+| N2F | 🔎 | https://www.n2f.com (contact partenaires) | |
+| Planity | 🔎 | https://pro.planity.com (contact) | page avis + comparatif coiffure |
+| Kiute | 🔎 | https://www.kiute.com (contact) | |
+| Salonkee | 🔎 | https://www.salonkee.fr (contact) | |
 | Tolteck | ❌ | parrainage client uniquement | garder en lien direct |
 | TheFork Manager | ❌ | — | garder en lien direct |
 
