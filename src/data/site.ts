@@ -1,9 +1,9 @@
 // Configuration globale du site. Remplace `url` par ton vrai domaine avant la mise en ligne :
 // il sert aux URLs canoniques, au sitemap et aux données structurées.
 export const SITE = {
-  name: 'Bon Outil Pro',
-  tagline: 'Les meilleurs logiciels pour TPE et indépendants, comparés par un entrepreneur',
-  url: process.env.SITE_URL ?? 'https://www.bonoutilpro.fr',
+  name: 'Logimalin',
+  tagline: 'Les bons logiciels pour TPE et indépendants, comparés par un entrepreneur',
+  url: process.env.SITE_URL ?? 'https://www.logimalin.fr',
   locale: 'fr_FR',
   lang: 'fr',
   // Mois de la dernière vérification globale des tarifs affichés.
@@ -19,7 +19,7 @@ export const SITE = {
   publisher: {
     legalName: 'À compléter',
     address: 'À compléter',
-    email: 'contact@bonoutilpro.fr',
+    email: 'contact@logimalin.fr',
     host: 'À compléter (ex. Cloudflare, Inc.)',
   },
 } as const;

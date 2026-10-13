@@ -1,10 +1,10 @@
-# Stratégie SEO : Bon Outil Pro (toutes les TPE et indépendants)
+# Stratégie SEO : Logimalin (toutes les TPE et indépendants)
 
 Document de travail : positionnement, architecture, mots-clés **avec données réelles**, plan de contenu, liens, Google Ads.
 
 > **Source des données** : OpenSEO (données DataForSEO / Google Ads), marché France, langue française, octobre 2026.
 > **Volume** = recherches mensuelles moyennes en France. **KD** = difficulté de classement (0 à 100) : sous 20, un site neuf avec un bon contenu peut viser la première page ; au-dessus de 50, il faut de l'autorité (liens).
-> Les mots-clés et le contexte sont enregistrés dans le projet OpenSEO « Bon Outil Pro (France) ».
+> Les mots-clés et le contexte sont enregistrés dans le projet OpenSEO « Logimalin (France) ».
 
 ---
 
@@ -18,7 +18,15 @@ Sur « logiciel facturation », « logiciel comptabilité TPE », « CRM TPE »,
 
 Leur faiblesse commune : **ils raisonnent par logiciel, pas par entreprise**. Personne ne répond bien à « je suis plombier, de quoi ai-je besoin et combien ça coûte au total ? ». C'est notre angle.
 
-## 2. Le positionnement
+## 2. Le nom : Logimalin
+
+Choisi à partir des données OpenSEO (octobre 2026) : environ 70 noms testés sur le volume de recherche, puis la page de résultats Google des 13 finalistes.
+
+- **Volume de recherche nul et page Google vierge** : aucune marque ni aucun autre sens à combattre, le site peut se classer premier sur son propre nom très vite.
+- **« logi » + « malin »** : le sujet (les logiciels) et la promesse (le bon choix, le bon plan), sans enfermer le site dans une seule thématique.
+- **Écartés** : Bon Outil Pro (Google l’associe au bricolage), Kit Indé et Bureau des Indés (confondus avec l’Inde), Pilote TPE (pilotes de terminaux), Logiciel Futé (Bison Futé), Logiciel Malin (Programme Malin de la CAF), Bonne Facture (marque existante), Choisir mon logiciel (concurrents mon-logiciel.net et monlogiciel.fr), Les bons logiciels (requête générique), Logipro, Gestio, Lebonlogiciel (déjà utilisés).
+
+## 2 bis. Le positionnement
 
 **« Le bon outil pour chaque TPE, choisi par un entrepreneur. »** Trois promesses visibles sur chaque page :
 
@@ -115,6 +123,7 @@ Accueil
 | Page à créer | Mot-clé | Volume | KD |
 |---|---|---|---|
 | /facturation/tva-auto-entrepreneur/ | tva auto entrepreneur | 12 100 | 17 |
+| /facturation/logiciel-auto-entrepreneur/ (ou enrichir la page facturation AE) | logiciel auto entrepreneur | 590 | 2 |
 | /facturation/facture-electronique-gratuite/ | facture électronique gratuit | 9 900 | 43 |
 | /facturation/relance-facture-impayee/ (+ modèle de lettre) | relance facture impayée | 1 000 | 0 |
 | /facturation/facture-acompte/ | facture acompte | 1 300 | 0 |
@@ -160,7 +169,7 @@ Accueil
 
 ## 7. Check-list de lancement
 
-1. [ ] Acheter le domaine et le mettre dans `src/data/site.ts` (ou `SITE_URL`). Le nom « Bon Outil Pro » est provisoire.
+1. [ ] Acheter le domaine et le mettre dans `src/data/site.ts` (ou `SITE_URL`). Vérifier d’abord la disponibilité de logimalin.fr (et .com) et l’absence de marque déposée sur data.inpi.fr.
 2. [ ] Compléter les mentions légales (`SITE.publisher`).
 3. [ ] Ajouter ta photo, ton parcours et tes profils sur `/a-propos/`.
 4. [ ] S'inscrire aux programmes d'affiliation, coller les liens dans `src/data/software.ts` (`affiliateUrl`). Priorités : Systeme.io, Hostinger, Shopify, SumUp, Axonaut, Pipedrive, HubSpot, Abby, Indy, Tolteck, Obat.

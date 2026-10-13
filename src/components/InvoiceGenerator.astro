@@ -94,7 +94,7 @@ const today = new Date().toISOString().slice(0, 10);
     const $ = (id) => document.getElementById(id);
     const form = $('gen-form');
     if (!form) return;
-    const KEY = 'bop-generateur-emetteur';
+    const KEY = 'logimalin-generateur-emetteur';
     const eur = (n) => n.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' });
     const num = (v) => Math.max(0, parseFloat(String(v).replace(',', '.')) || 0);
     const fmtDate = (s) => (s ? new Date(s + 'T12:00:00').toLocaleDateString('fr-FR') : '');

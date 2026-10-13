@@ -1,4 +1,4 @@
-# Bon Outil Pro
+# Logimalin
 
 Site d'affiliation SEO : les logiciels pour TPE et indépendants (facturation, comptabilité, encaissement, site internet, CRM, équipe), avec des kits par métier.
 
