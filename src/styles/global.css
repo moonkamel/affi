@@ -475,3 +475,44 @@ body.embed::before, body.embed::after { display: none; }
 .ig-card p { margin: 0 0 4px; font-size: .9rem; color: var(--muted); }
 .ig-week { position: absolute; top: -10px; right: -6px; transform: rotate(4deg); }
 .infographic-block { margin: 34px 0; }
+
+/* Étude / baromètre */
+:root { --chart: #6d85f2; --grid: #2c3245; }
+.stat-tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 150px), 1fr)); gap: 14px; margin: 18px 0 8px; }
+.stat-tile { display: flex; flex-direction: column; gap: 6px; padding: 16px 16px 14px; border: 1.5px solid var(--line); border-radius: var(--radius); background: var(--card); box-shadow: 6px 7px 0 -2px var(--sky); }
+.stat-tile .v { font-family: var(--display); font-size: 2.1rem; font-weight: 800; line-height: 1; letter-spacing: -.03em; color: var(--ink); font-variant-numeric: tabular-nums; }
+.stat-tile .l { font-size: .88rem; color: var(--muted); line-height: 1.4; }
+.bar-chart { margin: 18px 0 8px; padding: 16px 12px 10px; border: 1.5px solid var(--line); border-radius: var(--radius); background: var(--card); }
+.bar-chart svg { width: 100%; height: auto; display: block; font-family: var(--font); }
+.bar-chart .axis { stroke: var(--grid); stroke-width: 1; }
+.bar-chart .bar { fill: var(--chart); }
+.bar-chart .hit { fill: transparent; }
+.bar-chart .bar-row:hover .hit { fill: color-mix(in srgb, var(--ink) 5%, transparent); }
+.bar-chart .lab { fill: var(--ink); font-size: 14px; }
+.bar-chart .val { fill: var(--muted); font-size: 14px; font-variant-numeric: tabular-nums; }
+.bar-chart figcaption { margin: 8px 4px 0; font-size: .82rem; color: var(--muted); }
+.table-wrap table { width: 100%; border-collapse: collapse; font-size: .92rem; }
+.table-wrap th, .table-wrap td { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--line); vertical-align: top; }
+.table-wrap th { font-size: .78rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
+.table-wrap td:not(:first-child) { font-variant-numeric: tabular-nums; }
+.budget ul { list-style: none; padding: 0; margin: 8px 0; display: flex; flex-direction: column; gap: 6px; }
+.budget li { display: flex; justify-content: space-between; gap: 10px; font-size: .9rem; color: var(--muted); }
+.budget li span:last-child { color: var(--ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.budget-total { font-family: var(--display); font-weight: 800; color: var(--ink) !important; font-size: 1.1rem !important; }
+.press-box { margin: 30px 0; padding: 18px 20px; border: 1.5px dashed var(--sun); border-radius: var(--radius); background: var(--sun-soft); }
+.press-box blockquote { margin: 10px 0; padding: 10px 14px; border-left: 4px solid var(--sun); background: var(--paper); border-radius: 0 10px 10px 0; font-size: .95rem; }
+
+/* Check-list + newsletter */
+.news-box { display: grid; grid-template-columns: 150px 1fr; gap: 22px; align-items: center; margin: 34px 0; padding: 20px; border: 1.5px solid var(--line); border-radius: var(--radius); background: var(--card); box-shadow: 8px 9px 0 -2px var(--mint); }
+.news-box img { width: 100%; height: auto; border-radius: 6px; transform: rotate(-3deg); box-shadow: 4px 5px 0 -1px var(--sun); background: #fff; }
+.news-box h2 { font-size: 1.25rem; margin: 0 0 6px; }
+.news-box p { margin: 0 0 10px; }
+.news-form { display: flex; flex-wrap: wrap; gap: 8px; }
+.news-form input[type=email] { flex: 1 1 200px; font: inherit; padding: 10px 12px; border: 1.5px solid var(--line); border-radius: 10px; background: var(--paper); color: var(--ink); }
+.news-form input[type=email]:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.news-consent { flex-basis: 100%; display: flex; gap: 8px; align-items: flex-start; font-size: .8rem; color: var(--muted); line-height: 1.45; }
+.news-consent input { margin-top: 3px; }
+.hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+@media (max-width: 560px) { .news-box { grid-template-columns: 1fr; } .news-box img { max-width: 150px; } }
+.news-form[hidden], .news-ok[hidden] { display: none; }

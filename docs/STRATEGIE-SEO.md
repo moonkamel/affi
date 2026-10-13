@@ -250,6 +250,11 @@ Objectif : 15 à 30 domaines référents de qualité les 6 premiers mois.
 - Ajouter une infographie : une entrée dans le JSON, `npm run infographie -- <slug>`, puis build. Elle entre automatiquement dans la rotation.
 - Mettre à jour les chiffres datés (taux, barème) en même temps que les pages, puis régénérer.
 
+### Vague 6 (faite)
+- **Baromètre des prix des logiciels pour TPE (édition 2027)** : `/comparatifs/barometre-prix-logiciels-tpe-2027/`, chiffres calculés à chaque build depuis `software.ts` (`src/lib/barometre.ts`), données brutes en CSV (`/etudes/barometre-prix-logiciels-tpe-2027.csv`), encadré presse avec citation. À envoyer aux journalistes et blogueurs.
+- Pages : avis Odoo (odoo avis 720 + odoo prix 390, KD 0), avis Kiute (kiute 5 400), caisse boulangerie (≈ 510 cumulés), caisse enregistreuse commerce (320 + 90), plateforme de formation en ligne (260, Systeme.io 40 % récurrent). Esthéticienne abandonnée (volume < 30).
+- **Check-list PDF facture électronique 2027** (`npm run checklist`), page `/ressources/checklist-facture-electronique-2027/`, encart sur les pages facture électronique. Formulaire Brevo activé dès que `SITE.newsletter.brevoFormAction` est renseigné (sinon téléchargement direct). Mentions légales complétées (RGPD newsletter).
+
 ### À mettre à jour chaque semestre
 - 1er janvier et 1er juillet : taux des pénalités de retard (`PenalitesCalculator.astro` + page).
 - Chaque année : barème kilométrique (`IkCalculator.astro` + page), taux URSSAF (`ChargesSimulator.astro`, `TjmCalculator.astro`).

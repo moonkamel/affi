@@ -1,0 +1,81 @@
+---
+// Corps de l'étude « Baromètre des prix des logiciels pour TPE » (données : software.ts, via lib/barometre).
+import { families, totals, share, opacity, budgets, eur } from '../lib/barometre';
+import { SITE } from '../data/site';
+const shown = opacity.filter((o) => o.value > 0);
+const transparent = opacity.filter((o) => o.value === 0).map((o) => o.label.charAt(0).toLowerCase() + o.label.slice(1));
+const max = Math.max(...shown.map((o) => o.value), 1);
+const W = 640, rowH = 38, labelW = 230, barMax = W - labelW - 70;
+const H = shown.length * rowH + 8;
+---
+<section aria-labelledby="chiffres-cles">
+  <h2 id="chiffres-cles">Les chiffres clés</h2>
+  <div class="stat-tiles">
+    <div class="stat-tile"><span class="v">{totals.count}</span><span class="l">logiciels analysés, dans {totals.families} familles d’outils</span></div>
+    <div class="stat-tile"><span class="v">{share.noPrice} %</span><span class="l">n’affichent aucun prix public : il faut demander un devis</span></div>
+    <div class="stat-tile"><span class="v">{share.free} %</span><span class="l">proposent une offre gratuite sans limite de durée</span></div>
+    <div class="stat-tile"><span class="v">{share.french} %</span><span class="l">sont édités par une entreprise française</span></div>
+  </div>
+</section>
+
+<section aria-labelledby="opacite">
+  <h2 id="opacite">Où les prix sont-ils les moins transparents ?</h2>
+  <p>Part des logiciels qui n’affichent aucun prix public, par famille d’outils.</p>
+  <figure class="bar-chart">
+    <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-labelledby="opacite-titre opacite-desc">
+      <title id="opacite-titre">Part des logiciels sans prix public, par famille</title>
+      <desc id="opacite-desc">{shown.map((o) => `${o.label} : ${o.value} %`).join(' ; ')}</desc>
+      <line x1={labelW} y1="0" x2={labelW} y2={H} class="axis" />
+      {shown.map((o, i) => {
+        const w = Math.max(o.value ? (o.value / max) * barMax : 0, o.value ? 6 : 0);
+        const y = i * rowH + 8;
+        return (
+          <g class="bar-row">
+            <title>{`${o.label} : ${o.value} % (${o.n} sur ${o.of})`}</title>
+            <rect class="hit" x="0" y={y - 4} width={W} height={rowH} />
+            <text x={labelW - 10} y={y + 15} text-anchor="end" class="lab">{o.label}</text>
+            {w > 0 && <path class="bar" d={`M${labelW} ${y + 4} h${w - 4} a4 4 0 0 1 4 4 v12 a4 4 0 0 1 -4 4 h-${w - 4} z`} />}
+            <text x={labelW + w + 8} y={y + 15} class="val">{o.value} %</text>
+          </g>
+        );
+      })}
+    </svg>
+    <figcaption>Les {transparent.length} autres familles ({transparent.join(', ')}) ne comptent aucun logiciel « sur devis » dans notre relevé. Source : {SITE.name}, relevé des tarifs publics de {totals.count} logiciels, {SITE.pricesChecked}.</figcaption>
+  </figure>
+</section>
+
+<section aria-labelledby="familles">
+  <h2 id="familles">Le détail par famille d’outils</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Famille</th><th>Logiciels</th><th>Offre gratuite</th><th>Sur devis</th><th>Prix d’entrée affichés</th></tr></thead>
+      <tbody>
+        {families.map((f) => (
+          <tr>
+            <td><strong>{f.label}</strong></td>
+            <td>{f.count}</td>
+            <td>{f.free}</td>
+            <td>{f.noPrice}</td>
+            <td>{f.minPrice === null ? '–' : f.minPrice === f.maxPrice ? (f.minPrice ? `${eur(f.minPrice)}/mois` : f.category === 'paiement' ? 'sans abonnement' : 'gratuit') : `${f.minPrice ? eur(f.minPrice) : (f.category === 'paiement' ? 'sans abonnement' : 'gratuit')} à ${eur(f.maxPrice!)}/mois`}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+  <p class="small muted">Prix d’entrée : formule la moins chère affichée par chaque éditeur (gratuite ou payante), par mois, hors matériel, commissions et options. « – » : tarif non relevé ou facturé à l’année. Les terminaux de paiement fonctionnent sans abonnement : leur coût réel tient aux commissions sur les paiements.</p>
+</section>
+
+<section aria-labelledby="budgets">
+  <h2 id="budgets">Le budget logiciel type, par profil</h2>
+  <p>Ce que coûte chaque mois l’équipement de base, avec les outils les mieux notés dans nos comparatifs, au prix d’entrée public.</p>
+  <div class="grid">
+    {budgets.map((b) => (
+      <div class="tile budget">
+        <strong>{b.profile}</strong>
+        <ul>{b.rows.map((r) => <li><span>{r.need} : {r.name}</span><span>{r.price ? `${eur(r.price)}` : r.paiement ? 'sans abonnement' : 'gratuit'}</span></li>)}</ul>
+        <span class="budget-total">{b.total ? `≈ ${eur(b.total)} par mois` : 'Gratuit pour démarrer'}</span>
+      </div>
+    ))}
+  </div>
+  <p class="small muted">Hors matériel, commissions bancaires, expert-comptable et options. Les offres d’appel (hébergement web notamment) augmentent souvent au renouvellement.</p>
+</section>

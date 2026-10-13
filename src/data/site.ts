@@ -18,12 +18,18 @@ export const SITE = {
     // par exemple '/auteur.jpg'. Tant que la valeur est null, l'initiale est affichée.
     photo: null as string | null,
   },
+  // Newsletter Brevo. Colle ici l'URL « action » de ton formulaire Brevo (Contacts → Formulaires → Partager →
+  // code HTML : l'attribut action="https://….sibforms.com/serve/…"). Tant qu'elle vaut null, la check-list
+  // se télécharge directement, sans formulaire.
+  newsletter: {
+    brevoFormAction: null as string | null,
+  },
   // Éditeur légal du site (mentions légales). À compléter.
   publisher: {
     legalName: 'À compléter',
     address: 'À compléter',
     email: 'contact@logi-malin.fr',
-    host: 'À compléter (ex. Cloudflare, Inc.)',
+    host: 'Cloudflare, Inc., 101 Townsend St, San Francisco, CA 94107, États-Unis (Cloudflare Pages)',
   },
 } as const;
 

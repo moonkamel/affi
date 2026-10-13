@@ -46,6 +46,9 @@ Légende : ✅ programme public confirmé · 🔎 programme à demander / à vé
 | Planity | 🔎 | https://pro.planity.com (contact) | page avis + comparatif coiffure |
 | Kiute | 🔎 | https://www.kiute.com (contact) | |
 | Salonkee | 🔎 | https://www.salonkee.fr (contact) | |
+| LearnyBox | 🔎 | https://learnybox.com (programme d’affiliation) | page plateforme de formation |
+| Podia | 🔎 | https://www.podia.com (programme d’affiliation) | |
+| Teachable | 🔎 | https://teachable.com (programme d’affiliation) | |
 | Tolteck | ❌ | parrainage client uniquement | garder en lien direct |
 | TheFork Manager | ❌ | — | garder en lien direct |
 

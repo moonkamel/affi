@@ -1,0 +1,41 @@
+---
+// Encart « check-list facture électronique 2027 » + inscription newsletter Brevo.
+// Si SITE.newsletter.brevoFormAction est vide, la check-list se télécharge directement (pas de formulaire).
+import { SITE } from '../data/site';
+interface Props { heading?: string; compact?: boolean }
+const { heading = 'Reçois la check-list « Facture électronique 2027 »', compact = false } = Astro.props;
+const action = SITE.newsletter.brevoFormAction;
+const pdf = '/ressources/checklist-facture-electronique-2027.pdf';
+---
+<aside class={`news-box${compact ? ' compact' : ''}`} aria-labelledby="news-titre">
+  <img src="/ressources/checklist-facture-electronique-2027.webp" alt="Aperçu de la check-list facture électronique 2027" width="600" height="849" loading="lazy" decoding="async" />
+  <div>
+    <h2 id="news-titre">{heading}</h2>
+    <p>18 actions à cocher pour être prêt au 1er septembre 2027, sur une page A4 à imprimer. Gratuit.</p>
+    {action ? (
+      <>
+        <form class="news-form" method="post" action={action} target="news-frame" data-news>
+          <label for="news-email" class="sr-only">Ton adresse e-mail</label>
+          <input id="news-email" type="email" name="EMAIL" required placeholder="ton@email.fr" autocomplete="email" />
+          <input type="text" name="email_address_check" value="" tabindex="-1" autocomplete="off" class="hp" aria-hidden="true" />
+          <input type="hidden" name="locale" value="fr" />
+          <button type="submit" class="btn">Recevoir la check-list</button>
+          <label class="news-consent"><input type="checkbox" required /> J’accepte de recevoir les guides de {SITE.name} par e-mail (1 à 2 par mois). Désinscription en un clic. <a href="/mentions-legales/">Données personnelles</a></label>
+        </form>
+        <p class="news-ok" hidden>Merci ! Confirme ton inscription depuis l’e-mail que tu vas recevoir. En attendant, <a href={pdf} download>télécharge la check-list ici</a>.</p>
+        <iframe name="news-frame" title="Envoi du formulaire" hidden></iframe>
+      </>
+    ) : (
+      <p><a class="btn" href={pdf} download>Télécharger la check-list (PDF)</a></p>
+    )}
+  </div>
+</aside>
+<script is:inline>
+  document.querySelectorAll('[data-news]').forEach((f) => {
+    if (f.dataset.ready) return;
+    f.dataset.ready = '1';
+    f.addEventListener('submit', () => {
+      setTimeout(() => { f.hidden = true; f.parentElement.querySelector('.news-ok').hidden = false; }, 300);
+    });
+  });
+</script>
