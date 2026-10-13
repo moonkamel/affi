@@ -7,11 +7,16 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "check": "node scripts/seo-check.mjs"
+    "check": "node scripts/seo-check.mjs",
+    "og": "node scripts/og-images.mjs",
+    "indexnow": "node scripts/indexnow.mjs"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.14",
     "@astrojs/sitemap": "^3.7.4",
     "astro": "^5.18.2"
+  },
+  "devDependencies": {
+    "playwright-core": "1.56"
   }
 }

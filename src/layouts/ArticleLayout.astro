@@ -11,6 +11,8 @@ import { SILOS, SITE } from '../data/site';
 import { getSoftware } from '../data/software';
 import { article, breadcrumbs, faqPage, graph, itemList, review } from '../lib/schema';
 import { articlePath, getArticles, siloOf, toTile, type Article } from '../lib/articles';
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
 
 interface Props { entry: Article; headings: MarkdownHeading[] }
 const { entry, headings } = Astro.props;
@@ -34,8 +36,12 @@ const explicit = d.related
 const sameSilo = all.filter((a) => siloOf(a) === silo && a.id !== entry.id && !explicit.includes(a));
 const related = [...explicit, ...sameSilo].slice(0, 4).map(toTile);
 
+// Image de partage propre à l'article si elle a été générée (npm run og), sinon l'image par défaut.
+const ogFile = `/og/${entry.id.replace(/\//g, '--')}.jpg`;
+const ogImage = existsSync(join(process.cwd(), 'public', ogFile)) ? ogFile : '/og-default.png';
+
 const nodes: object[] = [
-  article({ path, title: d.title, description: d.description, published: d.published, updated: d.updated, image: '/og-default.png' }),
+  article({ path, title: d.title, description: d.description, published: d.published, updated: d.updated, image: ogImage }),
   breadcrumbs(crumbs),
 ];
 if (d.products.length) nodes.push(itemList(path, d.products.map(getSoftware)));
@@ -52,6 +58,7 @@ const showDisclosure = true; // Mention obligatoire dès qu'une page peut conten
   ogType="article"
   published={d.published}
   updated={d.updated}
+  image={ogImage}
 >
   <article class="container">
     <div class="prose">

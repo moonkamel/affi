@@ -1,0 +1,71 @@
+---
+title: "Lien de paiement : se faire payer par carte à distance, sans site ni terminal"
+seoTitle: "Lien de paiement : se faire payer à distance (comparatif)"
+description: "Envoyer un lien de paiement par SMS, e-mail ou WhatsApp : comment ça marche, frais réels, sécurité et meilleures solutions pour indépendants et TPE en 2026."
+keyword: "lien de paiement"
+secondaryKeywords:
+  - "lien de paiement carte bancaire"
+  - "envoyer un lien de paiement"
+  - "lien de paiement sumup"
+  - "paiement à distance carte bancaire"
+  - "lien de paiement gratuit"
+type: comparatif
+published: 2026-10-13
+updated: 2026-10-13
+products: [sumup-terminal, zettle]
+related:
+  - encaissement/terminal-de-paiement
+  - facturation/relance-facture-impayee
+  - avis/sumup
+tldr:
+  - "Un <strong>lien de paiement</strong> permet d’encaisser une carte bancaire à distance : tu l’envoies, le client paie sur une page sécurisée."
+  - "<strong>Aucun site ni terminal</strong> nécessaire : parfait pour les acomptes, les devis acceptés et les factures en retard."
+  - "Frais : une <strong>commission par transaction</strong>, sans abonnement chez la plupart des prestataires."
+  - "Nos choix : <strong>SumUp</strong> (inclus avec le compte) et <strong>Zettle</strong> (PayPal)."
+faq:
+  - q: "Comment créer un lien de paiement ?"
+    a: "Depuis l’application ou l’espace en ligne de ton prestataire (SumUp, PayPal, Stripe…), tu saisis le montant et une description, puis tu envoies le lien généré par SMS, e-mail ou messagerie. Le client paie par carte sur une page sécurisée et tu reçois une notification."
+  - q: "Un lien de paiement est-il sécurisé ?"
+    a: "Oui, avec un prestataire reconnu : le paiement se fait sur une page sécurisée avec authentification forte (3D Secure). Tu ne vois jamais les données de carte du client."
+  - q: "Combien coûte un lien de paiement ?"
+    a: "La plupart des prestataires ne facturent pas d’abonnement mais une commission sur chaque paiement, généralement un peu plus élevée que pour un paiement en face à face avec un terminal. Vérifie la grille de ton prestataire."
+---
+import ComparisonTable from '../../../components/ComparisonTable.astro';
+import ProductCard from '../../../components/ProductCard.astro';
+import Verdict from '../../../components/Verdict.astro';
+import AffLink from '../../../components/AffLink.astro';
+
+Un client qui ne passe pas en boutique, un acompte à encaisser avant un chantier, une facture qui traîne : le **lien de paiement** règle tout ça. Tu envoies un lien par SMS ou e-mail, ton client paie par carte en trente secondes, l’argent arrive sur ton compte. Pas de site, pas de terminal.
+
+## À quoi ça sert, concrètement
+
+- **Encaisser un acompte** dès qu’un devis est accepté.
+- **Se faire payer une facture** en retard : un lien dans la relance multiplie les paiements rapides (voir notre méthode de [relance de facture impayée](/facturation/relance-facture-impayee/)).
+- **Vendre à distance** sans boutique en ligne : coachs, artisans, vente sur Instagram.
+- **Prendre une réservation** avec paiement d’avance.
+
+## Les solutions comparées
+
+<ComparisonTable products={['sumup-terminal', 'zettle']} ranked={false} caption="Les liens de paiement sont inclus dans le compte marchand de ces prestataires. Tarifs relevés en octobre 2026, à vérifier selon ton offre." />
+
+<ProductCard slug="sumup-terminal" reviewHref="/avis/sumup/">
+  <p>Les liens de paiement SumUp sont inclus dans le compte marchand : création depuis l’application, envoi par SMS ou e-mail, suivi des paiements au même endroit que ton terminal. Le meilleur choix si tu encaisses aussi en face à face.</p>
+</ProductCard>
+
+<ProductCard slug="zettle">
+  <p>Avec l’écosystème PayPal, tu peux envoyer des demandes de paiement et des factures payables en ligne. Pratique si tes clients utilisent déjà PayPal.</p>
+</ProductCard>
+
+D’autres acteurs comme Stripe proposent aussi des liens de paiement, plus orientés vers les entreprises qui vendent en ligne.
+
+## Les bonnes pratiques
+
+1. **Indique clairement l’objet** du paiement (numéro de facture ou de devis).
+2. **Fixe une date limite** de validité du lien.
+3. **Ajoute le lien directement sur tes factures** : la plupart des logiciels de facturation le font.
+4. **Vérifie les frais** : la commission à distance est souvent un peu plus élevée qu’au terminal.
+
+<Verdict>
+  <p>Pour un indépendant ou une TPE, le lien de paiement est l’outil le plus simple pour être payé plus vite. <strong>SumUp</strong> est le plus complet si tu encaisses aussi au terminal ; <strong>Zettle</strong> si tu vis déjà dans l’écosystème PayPal.</p>
+  <p style="display:flex;gap:8px;flex-wrap:wrap"><AffLink slug="sumup-terminal" label="Ouvrir un compte SumUp" /> <AffLink slug="zettle" variant="ghost" label="Zettle" /></p>
+</Verdict>

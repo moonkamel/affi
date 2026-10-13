@@ -216,3 +216,37 @@ Objectif : 15 à 30 domaines référents de qualité les 6 premiers mois.
 - **Chaque mois** : vérifier les prix (`priceChecked`), mettre à jour `updated` dans les articles modifiés et `SITE.pricesChecked`.
 - **Chaque trimestre** : dans Search Console, repérer les requêtes en position 8 à 20 et enrichir la page (nouvelle section + FAQ).
 - **Septembre 2027** : basculer les pages facture électronique vers « mise en conformité » et « changer de logiciel ».
+
+---
+
+## 11. Plan de croissance complet (octobre 2026)
+
+### Fait dans cette série
+- 17 nouvelles pages : TVA auto-entrepreneur, facture électronique gratuite, relance facture impayée, facture d'acompte, facture électronique association, badgeuse, logiciel de planning (généraliste), lien de paiement, comptabilité auto-entrepreneur, emailing gratuit, avis Systeme.io / Hostinger / Axonaut / Obat / Tolteck, Abby vs Indy, Indy vs Tiime.
+- Image Open Graph propre à chaque page (`npm run og`), flux RSS (`/rss.xml`), IndexNow (`npm run indexnow` après chaque mise en ligne), en-têtes de cache.
+
+### Prochaines pages (volumes OpenSEO)
+1. Logiciel gestion de stock (≈ 1 300/mois)
+2. Note de frais / application note de frais (≈ 880)
+3. Site internet pas cher (≈ 590)
+4. Logiciel coiffure / institut (≈ 390)
+5. Pages « alternatives » : alternative à Excel facture, alternative à Henrri, alternative à Sumeria Pro
+6. Calculateurs : TJM freelance, charges auto-entrepreneur, seuils TVA (aimants à liens)
+
+### Indexation
+- Google Search Console + sitemap, Bing Webmaster Tools (import depuis GSC), IndexNow à chaque publication.
+
+### Liens
+- Outils gratuits (générateur de facture, simulateur caisse) proposés aux CCI, CMA, BGE, écoles et blogs.
+- Étude annuelle « prix des logiciels TPE 2027 » pour la presse (données déjà dans `software.ts`).
+- Témoignages podcasts, tribunes Maddyness / Le Blog du Dirigeant.
+
+### Audience propre
+- Newsletter Brevo « 1 astuce TPE par semaine » + lead magnet (check-list facture électronique 2027).
+- LinkedIn (3 posts/semaine) et vidéos courtes « 60 s pour comprendre la facture électronique ».
+
+### Visibilité dans les IA
+- `llms.txt`, FAQ structurées, résumés en tête d'article, données datées : ce que ChatGPT, Perplexity et Gemini citent. Bing Webmaster est indispensable (ChatGPT Search s'appuie dessus).
+
+### Calendrier
+- Pic septembre 2026 → septembre 2027 sur la facture électronique : publier et mettre à jour en priorité ces pages.
