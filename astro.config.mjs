@@ -2,7 +2,8 @@
 import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
-import { writeFileSync } from 'node:fs';
+import { writeFileSync, readFileSync, readdirSync, statSync } from 'node:fs';
+import { join, relative } from 'node:path';
 import { SITE } from './src/data/site.ts';
 import { SOFTWARE } from './src/data/software.ts';
 
@@ -17,6 +18,26 @@ const affiliateRedirects = {
     },
   },
 };
+
+// Sitemap enrichi : date de mise à jour (frontmatter `updated`) et infographies (Google Images).
+const ARTICLES = new URL('./src/content/articles/', import.meta.url).pathname;
+const walk = (d) => readdirSync(d).flatMap((f) => (statSync(join(d, f)).isDirectory() ? walk(join(d, f)) : [join(d, f)]));
+const lastmods = new Map(
+  walk(ARTICLES)
+    .filter((f) => f.endsWith('.mdx'))
+    .map((f) => {
+      const updated = readFileSync(f, 'utf8').match(/^updated:\s*(\S+)/m)?.[1];
+      return [`/${relative(ARTICLES, f).replace(/\.mdx$/, '')}/`, updated ? new Date(updated) : undefined];
+    }),
+);
+const siteUpdated = new Date(Math.max(...[...lastmods.values()].filter(Boolean).map((d) => d.getTime())));
+const INFOGRAPHICS = JSON.parse(readFileSync(new URL('./src/data/infographics.json', import.meta.url), 'utf8'));
+const imagesFor = (path) =>
+  INFOGRAPHICS.filter((g) => path === '/infographies/' || `/${g.page}/` === path).map((g) => ({
+    url: new URL(`/infographies/${g.slug}.png`, SITE.url).href,
+    caption: g.alt,
+    title: g.title,
+  }));
 
 export default defineConfig({
   site: SITE.url,
@@ -34,7 +55,16 @@ export default defineConfig({
     sitemap({
       // Les pages de redirection affiliées, les simulateurs intégrables et la 404 ne doivent jamais être indexées.
       filter: (page) => !/\/(go|embed|404|mentions-legales)\//.test(page),
-      changefreq: 'weekly',
+      serialize(item) {
+        const path = new URL(item.url).pathname;
+        const img = imagesFor(path);
+        return {
+          ...item,
+          changefreq: undefined,
+          lastmod: lastmods.get(path) ?? siteUpdated,
+          ...(img.length ? { img } : {}),
+        };
+      },
       i18n: { defaultLocale: 'fr', locales: { fr: 'fr-FR' } },
     }),
   ],
