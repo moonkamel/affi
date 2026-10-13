@@ -126,7 +126,7 @@ tbody tr:last-child td { border-bottom: 0; }
 .tile span { color: var(--muted); font-size: .92rem; }
 .kicker { font-size: .78rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--accent); }
 
-.hero { padding: 48px 0 24px; }
+.hero { padding-top: 48px; padding-bottom: 24px; }
 .hero p { font-size: 1.15rem; color: var(--muted); max-width: 680px; }
 
 /* Footer */
@@ -142,5 +142,5 @@ tbody tr:last-child td { border-bottom: 0; }
 .sim input, .sim select { width: 100%; font: inherit; padding: 8px 10px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); }
 .sim .row { display: grid; grid-template-columns: 1fr 1fr; gap: 0 16px; }
 @media (max-width: 600px) { .sim .row { grid-template-columns: 1fr; } }
-.sim-out { margin-top: 18px; background: var(--accent-soft); border-radius: var(--radius); padding: 14px 18px; }
+.sim-out { display: block; margin-top: 18px; background: var(--accent-soft); border-radius: var(--radius); padding: 14px 18px; }
 .sim-out .big { font-size: 1.8rem; font-weight: 800; color: var(--accent); }
