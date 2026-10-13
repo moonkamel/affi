@@ -37,7 +37,7 @@ let checked = 0;
 
 for (const file of htmlFiles) {
   const route = routeOf(file);
-  if (route.startsWith('/go/')) continue;
+  if (route.startsWith('/go/') || route.startsWith('/embed/')) continue;
   const html = readFileSync(file, 'utf8');
   const err = (m) => errors.push(`${route} → ${m}`);
   const warn = (m) => warnings.push(`${route} → ${m}`);
@@ -79,7 +79,7 @@ for (const file of htmlFiles) {
     if (!href) continue;
     if (href.startsWith('/go/') && !/rel="[^"]*sponsored/.test(attrs)) err(`lien affilié ${href} sans rel="sponsored"`);
     if (href.startsWith('/') && !exists(href)) err(`lien interne cassé : ${href}`);
-    if (href.startsWith('/') && !href.startsWith('/go/') && !/\/$|#|\.[a-z]+$/.test(href.split('#')[0]) && href !== '/')
+    if (href.startsWith('/') && !href.startsWith('/go/') && !/\/$|#|\.[a-z]+$/.test(href.split('#')[0].split('?')[0]) && href !== '/')
       warn(`lien interne sans slash final : ${href}`);
   }
   for (const m of html.matchAll(/<img\s([^>]*)>/g)) {
@@ -99,7 +99,7 @@ for (const file of htmlFiles) {
 }
 for (const file of htmlFiles) {
   const route = routeOf(file);
-  if (route.startsWith('/go/') || route === '/' || route === '/404/') continue;
+  if (route.startsWith('/go/') || route.startsWith('/embed/') || route === '/' || route === '/404/') continue;
   if (!linked.has(route)) warnings.push(`${route} → page orpheline (aucun lien interne entrant)`);
 }
 

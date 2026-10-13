@@ -32,8 +32,8 @@ export default defineConfig({
     mdx(),
     affiliateRedirects,
     sitemap({
-      // Les pages de redirection affiliées et la 404 ne doivent jamais être indexées.
-      filter: (page) => !/\/(go|404|mentions-legales)\//.test(page),
+      // Les pages de redirection affiliées, les simulateurs intégrables et la 404 ne doivent jamais être indexées.
+      filter: (page) => !/\/(go|embed|404|mentions-legales)\//.test(page),
       changefreq: 'weekly',
       i18n: { defaultLocale: 'fr', locales: { fr: 'fr-FR' } },
     }),

@@ -1,0 +1,33 @@
+---
+// Infographie partageable : image + code d'intégration avec crédit (source de backlinks).
+import { SITE } from '../data/site';
+import { abs } from '../lib/schema';
+interface Props { src: string; alt: string; title: string; width: number; height: number }
+const { src, alt, title, width, height } = Astro.props;
+const page = abs(Astro.url.pathname);
+const code =
+  `<a href="${page}"><img src="${abs(src)}" alt="${alt}" width="${width}" height="${height}" style="max-width:100%;height:auto" loading="lazy"></a>\n` +
+  `<p style="font-size:13px">Source : <a href="${page}">${title}, ${SITE.name}</a></p>`;
+const id = 'infographie-' + src.split('/').pop()!.replace(/\.\w+$/, '');
+---
+<figure class="capture infographic">
+  <img src={src.replace(/\.png$/, '.webp')} alt={alt} width={width} height={height} loading="lazy" decoding="async" />
+  <figcaption>{title}. Réutilisation libre avec mention de la source.</figcaption>
+</figure>
+<section class="embed-box" aria-labelledby={id}>
+  <h3 id={id} style="margin-top:0">Partage cette infographie</h3>
+  <p>Tu peux la publier sur ton site, ton blog ou ton intranet, gratuitement, en gardant le lien vers la source. Copie ce code dans un bloc HTML, ou <a href={src} download>télécharge l’image</a> pour LinkedIn ou une présentation.</p>
+  <textarea readonly aria-label="Code d’intégration de l’infographie">{code}</textarea>
+  <div class="row"><button type="button" class="btn btn-sm" data-copy>Copier le code</button><span class="small muted" aria-live="polite"></span></div>
+</section>
+<script is:inline>
+  document.querySelectorAll('[data-copy]').forEach((b) => {
+    if (b.dataset.ready) return;
+    b.dataset.ready = '1';
+    b.addEventListener('click', async () => {
+      const box = b.closest('.embed-box'), ta = box.querySelector('textarea'), msg = box.querySelector('[aria-live]');
+      try { await navigator.clipboard.writeText(ta.value); msg.textContent = 'Code copié.'; }
+      catch { ta.select(); msg.textContent = 'Sélectionne le code puis copie-le (Ctrl+C).'; }
+    });
+  });
+</script>

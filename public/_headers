@@ -15,3 +15,12 @@
 
 /og/*
   Cache-Control: public, max-age=604800
+
+/embed/*
+  ! X-Frame-Options
+  X-Robots-Tag: noindex
+  Content-Security-Policy: frame-ancestors *
+
+/infographies/*
+  Cache-Control: public, max-age=604800
+  Access-Control-Allow-Origin: *

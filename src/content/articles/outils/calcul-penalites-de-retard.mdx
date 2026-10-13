@@ -36,6 +36,7 @@ import PenalitesCalculator from '../../../components/PenalitesCalculator.astro';
 import Callout from '../../../components/Callout.astro';
 import Verdict from '../../../components/Verdict.astro';
 import AffLink from '../../../components/AffLink.astro';
+import EmbedCode from '../../../components/EmbedCode.astro';
 
 Un client qui paie en retard te doit plus que le montant de la facture : des **pénalités de retard** et, entre professionnels, une **indemnité forfaitaire de 40 €**. Encore faut-il connaître le bon taux et savoir les calculer. Ce simulateur te donne le montant exact à réclamer.
 
@@ -68,3 +69,5 @@ Notre méthode complète et des modèles d’e-mail sont dans [relance de factur
   <p>Le plus efficace reste l’automatisation : un logiciel qui envoie les relances à ta place et calcule les pénalités. <strong>Axonaut</strong> le fait très bien pour une TPE, <strong>Abby</strong> pour un micro-entrepreneur.</p>
   <p style="display:flex;gap:8px;flex-wrap:wrap"><AffLink slug="axonaut" label="Automatiser mes relances avec Axonaut" /> <AffLink slug="abby" variant="ghost" label="Abby" /></p>
 </Verdict>
+
+<EmbedCode tool="penalites-de-retard" />

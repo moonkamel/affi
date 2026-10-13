@@ -28,6 +28,7 @@ faq:
 ---
 import CaisseSimulator from '../../../components/CaisseSimulator.astro';
 import AffLink from '../../../components/AffLink.astro';
+import EmbedCode from '../../../components/EmbedCode.astro';
 
 Le prix affiché par les éditeurs de caisse ne dit qu’une partie de l’histoire. Abonnement, modules, matériel, installation et frais de carte bancaire : ce simulateur additionne tout pour te donner le **coût mensuel réel** et le **coût total sur la durée d’engagement**. Les valeurs par défaut correspondent à un restaurant d’environ 50 couverts : adapte-les à ton commerce (laisse « couverts » vide si ce repère ne te concerne pas).
 
@@ -58,3 +59,5 @@ Si tu encaisses surtout par carte sans avoir besoin d’une vraie caisse, un sim
 <p style="display:flex;gap:8px;flex-wrap:wrap"><AffLink slug="zelty" label="Devis Zelty" /> <AffLink slug="lightspeed" variant="ghost" label="Prix Lightspeed" /> <AffLink slug="sumup" variant="ghost" label="Devis SumUp" /></p>
 
 <p data-maillage>Pour un salon, voir le <a href="/metiers/logiciel-coiffure/">logiciel coiffure</a>, et pour suivre tes stocks, le <a href="/encaissement/logiciel-gestion-stock/">logiciel de gestion de stock</a>. Compare ensuite les offres : <a href="/encaissement/logiciel-de-caisse/">logiciel de caisse</a>, <a href="/avis/lightspeed-restaurant/">avis Lightspeed Restaurant</a>, <a href="/alternatives/alternatives-lightspeed/">alternatives à Lightspeed</a> et <a href="/avis/sumup-caisse-pro/">avis SumUp Caisse Pro</a>.</p>
+
+<EmbedCode tool="cout-caisse" />

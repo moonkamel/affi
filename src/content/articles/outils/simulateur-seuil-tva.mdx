@@ -31,6 +31,7 @@ faq:
 import TvaSimulator from '../../../components/TvaSimulator.astro';
 import Callout from '../../../components/Callout.astro';
 import AffLink from '../../../components/AffLink.astro';
+import EmbedCode from '../../../components/EmbedCode.astro';
 
 La franchise en base de TVA te dispense de facturer la TVA, tant que tu restes sous certains seuils. Le dépassement est souvent découvert trop tard, avec des factures à refaire. Renseigne trois chiffres et le simulateur te dit où tu en es.
 
@@ -55,3 +56,5 @@ Pour estimer aussi tes cotisations, utilise le [simulateur de charges auto-entre
 <p style="display:flex;gap:8px;flex-wrap:wrap"><AffLink slug="abby" label="Suivre mes seuils avec Abby" /> <AffLink slug="tiime" variant="ghost" label="Tiime" /></p>
 
 <p data-maillage>Pour tenir tes comptes simplement : <a href="/comptabilite/comptabilite-auto-entrepreneur/">comptabilité auto-entrepreneur</a>. Le kit complet : <a href="/metiers/logiciels-freelance/">logiciels pour freelance</a>.</p>
+
+<EmbedCode tool="seuil-tva" />

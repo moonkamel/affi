@@ -237,6 +237,12 @@ Objectif : 15 à 30 domaines référents de qualité les 6 premiers mois.
 - Correction : taux BNC micro 2026 = 25,6 % (et non 26,1 %), plafonds micro 2026-2028 = 203 100 € / 83 600 €.
 - Crédibilité : photo d'auteur (`SITE.author.photo`), bloc « Notre test » (champ `tested` des articles, à remplir seulement après un vrai test), composant `<Capture>` pour les captures d'écran (`public/captures/<logiciel>/`).
 
+### Backlinks passifs (fait)
+- **Simulateurs intégrables** : 6 versions iframe sur `/embed/<outil>/` (noindex, hors sitemap, thème clair avec `?theme=light`, hauteur auto). Chaque page outil propose le code à copier, avec un lien de crédit vers la page outil. Liste dans `src/data/embeds.ts`.
+- **Infographie** « Calendrier de la facture électronique 2026-2027 » (`npm run infographie`), affichée sur `/facturation/facture-electronique-2026/` avec un code de partage qui crédite la page.
+- ⚠ Les codes d'intégration utilisent `SITE_URL` : ne les diffuser qu'une fois le domaine définitif en place, sinon les liens pointeront vers l'ancienne adresse.
+- Diffusion : envoyer les codes aux CCI, CMA, BGE, experts-comptables blogueurs, formations à la création d'entreprise ; publier l'infographie sur LinkedIn et Pinterest avec le lien.
+
 ### À mettre à jour chaque semestre
 - 1er janvier et 1er juillet : taux des pénalités de retard (`PenalitesCalculator.astro` + page).
 - Chaque année : barème kilométrique (`IkCalculator.astro` + page), taux URSSAF (`ChargesSimulator.astro`, `TjmCalculator.astro`).

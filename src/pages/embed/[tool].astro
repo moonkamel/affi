@@ -1,0 +1,56 @@
+---
+// Version intégrable (iframe) d'un simulateur : sans en-tête ni pied de page, noindex,
+// canonique vers la page outil. Thème clair avec ?theme=light.
+import '../../styles/global.css';
+import { EMBEDS, type Embed } from '../../data/embeds';
+import { SITE } from '../../data/site';
+import { abs } from '../../lib/schema';
+import TvaSimulator from '../../components/TvaSimulator.astro';
+import ChargesSimulator from '../../components/ChargesSimulator.astro';
+import TjmCalculator from '../../components/TjmCalculator.astro';
+import IkCalculator from '../../components/IkCalculator.astro';
+import PenalitesCalculator from '../../components/PenalitesCalculator.astro';
+import CaisseSimulator from '../../components/CaisseSimulator.astro';
+
+export function getStaticPaths() {
+  return EMBEDS.map((e) => ({ params: { tool: e.slug }, props: { embed: e } }));
+}
+const { embed } = Astro.props as { embed: Embed };
+const COMPONENTS = {
+  'seuil-tva': TvaSimulator,
+  'charges-auto-entrepreneur': ChargesSimulator,
+  'tjm-freelance': TjmCalculator,
+  'indemnites-kilometriques': IkCalculator,
+  'penalites-de-retard': PenalitesCalculator,
+  'cout-caisse': CaisseSimulator,
+} as const;
+const Tool = COMPONENTS[embed.slug as keyof typeof COMPONENTS];
+---
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{embed.title} | {SITE.name}</title>
+    <meta name="robots" content="noindex, follow" />
+    <link rel="canonical" href={abs(embed.page)} />
+    <link rel="preload" href="/fonts/figtree.woff2" as="font" type="font/woff2" crossorigin />
+    <script is:inline>
+      // Thème avant le premier rendu, pour éviter un flash sombre sur un site clair.
+      if (new URLSearchParams(location.search).get('theme') === 'light') document.documentElement.dataset.theme = 'light';
+    </script>
+  </head>
+  <body class="embed">
+    <main class="embed-wrap">
+      <h1>{embed.title}</h1>
+      <Tool />
+      <p class="embed-credit">Simulateur gratuit proposé par <a href={abs(embed.page)} target="_blank" rel="noopener">{SITE.name}</a></p>
+    </main>
+    <script is:inline define:vars={{ slug: embed.slug }}>
+      // Envoie la hauteur réelle au site hôte pour ajuster l'iframe (script facultatif côté hôte).
+      const send = () => parent !== window && parent.postMessage({ logimalin: slug, h: Math.ceil(document.querySelector('.embed-wrap').getBoundingClientRect().height) + 12 }, '*');
+      new ResizeObserver(send).observe(document.body);
+      addEventListener('load', send);
+    </script>
+  </body>
+</html>

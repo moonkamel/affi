@@ -432,3 +432,26 @@ img.avatar { object-fit: cover; padding: 0; }
 .capture { margin: 26px 0; }
 .capture img { width: 100%; height: auto; border-radius: 12px; border: 1.5px solid var(--line); box-shadow: 6px 7px 0 -2px var(--sky); }
 .capture figcaption { margin-top: 8px; font-size: .88rem; color: var(--muted); }
+
+/* Thème clair : réservé aux simulateurs intégrés sur des sites tiers (/embed/…?theme=light) */
+:root[data-theme="light"] {
+  --paper: #ffffff; --paper-2: #f6f7fb; --card: #ffffff; --ink: #161a2b; --muted: #5a6175; --line: #dde1ec;
+  --accent: #3d5afe; --accent-ink: #ffffff; --accent-deep: #2438b8; --accent-soft: #e6eaff;
+  --sun: #f2b632; --sun-soft: #fff4d6; --sky: #e3e9ff; --shadow: rgba(20, 24, 40, .12);
+  color-scheme: light;
+}
+/* Pages intégrables : pas d'en-tête, pas de grain, fond neutre */
+body.embed { background: var(--paper); padding: 0; }
+body.embed::before, body.embed::after { display: none; }
+.embed-wrap { max-width: 760px; margin: 0 auto; padding: 4px; }
+.embed-wrap .sim { margin: 0; }
+.embed-wrap h1 { font-family: var(--display); font-size: 1.15rem; margin: 0 0 10px; }
+.embed-credit { margin: 10px 2px 0; font-size: .8rem; color: var(--muted); }
+.embed-credit a { color: var(--accent); }
+/* Boîte « Intègre ce simulateur » sur les pages outils */
+.embed-box { margin: 30px 0; padding: 18px 20px; border: 1.5px dashed var(--line); border-radius: var(--radius); background: var(--paper-2); }
+.embed-box textarea { width: 100%; min-height: 128px; font: .8rem/1.45 var(--mono); padding: 10px; border: 1.5px solid var(--line); border-radius: 10px; background: var(--paper); color: var(--ink); resize: vertical; }
+.embed-box .row { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; margin: 10px 0; font-size: .92rem; }
+.embed-box label { display: inline-flex; gap: 6px; align-items: center; }
+.infographic img { max-width: 540px; display: block; margin: 0 auto; }
+.infographic figcaption { text-align: center; }

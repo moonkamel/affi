@@ -35,6 +35,7 @@ import ChargesSimulator from '../../../components/ChargesSimulator.astro';
 import Callout from '../../../components/Callout.astro';
 import Verdict from '../../../components/Verdict.astro';
 import AffLink from '../../../components/AffLink.astro';
+import EmbedCode from '../../../components/EmbedCode.astro';
 
 En micro-entreprise, les charges sont simples à calculer : un pourcentage de ce que tu encaisses. Encore faut-il connaître le bon taux, ne pas oublier la formation professionnelle et savoir si le versement libératoire vaut le coup. Ce simulateur fait le calcul pour toi.
 
@@ -69,3 +70,5 @@ Pour transformer ce résultat en tarif, utilise le [calculateur de TJM freelance
   <p>Le plus simple pour ne jamais se tromper : un logiciel qui calcule tes cotisations à chaque facture encaissée et te rappelle les échéances de déclaration. <strong>Abby</strong> le fait dans son offre gratuite, <strong>Indy</strong> va jusqu’à la comptabilité complète. Voir aussi notre guide de la <a href="/comptabilite/comptabilite-auto-entrepreneur/">comptabilité auto-entrepreneur</a>.</p>
   <p style="display:flex;gap:8px;flex-wrap:wrap"><AffLink slug="abby" label="Suivre mes charges avec Abby" /> <AffLink slug="indy" variant="ghost" label="Indy" /></p>
 </Verdict>
+
+<EmbedCode tool="charges-auto-entrepreneur" />
