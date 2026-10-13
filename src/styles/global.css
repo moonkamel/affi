@@ -1,6 +1,6 @@
 /* ───────────────────────────────────────────────────────────────
    Logimalin, système de design « papier découpé »
-   Layout : colonne de lecture étroite, cartes en papier découpé posées
+   Thème sombre uniquement. Layout : colonne de lecture étroite, cartes en papier découpé posées
    sur un fond texturé, une seule couleur forte (cobalt) + une étincelle (souci).
    ─────────────────────────────────────────────────────────────── */
 
@@ -18,26 +18,11 @@
 }
 
 :root {
-  /* Couleur */
-  --paper: #fbf8f3;
-  --paper-2: #f2ece2;
-  --card: #fffdf9;
-  --ink: #18213a;
-  --muted: #586074;
-  --line: #e4dccf;
-  --accent: #2747d8;
-  --accent-ink: #ffffff;
-  --accent-deep: #182c94;
-  --accent-soft: #e6ebff;
-  --sun: #f4ad1f;
-  --sun-soft: #fff0c9;
-  --mint: #c4ead7;
-  --peach: #ffd8c4;
-  --sky: #d3e2ff;
-  --good: #11804a;
-  --bad: #c2362b;
-  --shadow: rgba(24, 33, 58, .10);
-  --grain-opacity: .06;
+  /* Couleur : thème sombre uniquement */
+  --paper: #11131b; --paper-2: #181b26; --card: #1c2030; --ink: #eef0f7; --muted: #a5acbe; --line: #2c3245;
+  --accent: #8fa5ff; --accent-ink: #0e1224; --accent-deep: #c9d3ff; --accent-soft: #212a4c;
+  --sun: #f7c35a; --sun-soft: #3a3016; --mint: #1d3a30; --peach: #3e2a24; --sky: #1e2946;
+  --good: #4cc98a; --bad: #ff7a6e; --shadow: rgba(0, 0, 0, .35); --grain-opacity: .09;
   /* Type */
   --display: 'Bricolage', 'Avenir Next', 'Segoe UI', system-ui, sans-serif;
   --font: 'Figtree', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
@@ -47,25 +32,8 @@
   --radius-sm: 10px;
   --max: 720px;
   --wide: 1160px;
-  color-scheme: light;
-}
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --paper: #11131b; --paper-2: #181b26; --card: #1c2030; --ink: #eef0f7; --muted: #a5acbe; --line: #2c3245;
-    --accent: #8fa5ff; --accent-ink: #0e1224; --accent-deep: #c9d3ff; --accent-soft: #212a4c;
-    --sun: #f7c35a; --sun-soft: #3a3016; --mint: #1d3a30; --peach: #3e2a24; --sky: #1e2946;
-    --good: #4cc98a; --bad: #ff7a6e; --shadow: rgba(0, 0, 0, .35); --grain-opacity: .09;
-    color-scheme: dark;
-  }
-}
-:root[data-theme="dark"] {
-  --paper: #11131b; --paper-2: #181b26; --card: #1c2030; --ink: #eef0f7; --muted: #a5acbe; --line: #2c3245;
-  --accent: #8fa5ff; --accent-ink: #0e1224; --accent-deep: #c9d3ff; --accent-soft: #212a4c;
-  --sun: #f7c35a; --sun-soft: #3a3016; --mint: #1d3a30; --peach: #3e2a24; --sky: #1e2946;
-  --good: #4cc98a; --bad: #ff7a6e; --shadow: rgba(0, 0, 0, .35); --grain-opacity: .09;
   color-scheme: dark;
 }
-
 *, *::before, *::after { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; scroll-padding-top: 90px; }
 body {
@@ -134,18 +102,10 @@ strong { font-weight: 700; }
 .nav a { color: var(--ink); text-decoration: none; padding: 6px 10px; border-radius: 999px; transition: background .2s; }
 .nav a:hover { background: var(--paper-2); color: var(--ink); }
 .nav a[aria-current] { background: var(--accent-soft); color: var(--accent-deep); }
-.theme-toggle { border: 1.5px solid var(--line); background: var(--card); color: var(--ink); width: 38px; height: 38px; border-radius: 999px; display: grid; place-items: center; cursor: pointer; transition: transform .25s, border-color .2s; }
-.theme-toggle:hover { transform: rotate(18deg); border-color: var(--ink); }
-.theme-toggle svg { width: 18px; height: 18px; }
-.theme-toggle .moon { display: none; }
-:root[data-theme="dark"] .theme-toggle .sun { display: none; }
-:root[data-theme="dark"] .theme-toggle .moon { display: block; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .theme-toggle .sun { display: none; } :root:not([data-theme="light"]) .theme-toggle .moon { display: block; } }
 @media (max-width: 760px) {
   .nav { order: 3; width: calc(100% + 20px); margin: 0 -10px; flex-wrap: nowrap; overflow-x: auto; padding-bottom: 8px; scrollbar-width: none; }
   .nav::-webkit-scrollbar { display: none; }
   .nav a { white-space: nowrap; }
-  .theme-toggle { margin-left: auto; }
 }
 
 /* ───────── Fil d'Ariane & méta ───────── */
