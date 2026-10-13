@@ -1,12 +1,21 @@
 ---
+import SiloIcon from './SiloIcon.astro';
+import type { Silo } from '../data/site';
 interface Props { items: { href: string; title: string; description: string }[] }
 const { items } = Astro.props;
+const siloOf = (href: string) => href.split('/')[1] as Silo;
 ---
 {items.length > 0 && (
   <section aria-labelledby="a-lire">
     <h2 id="a-lire">À lire aussi</h2>
     <div class="grid">
-      {items.map((it) => <a class="tile" href={it.href}><strong>{it.title}</strong><span>{it.description}</span></a>)}
+      {items.map((it) => (
+        <a class="tile" href={it.href}>
+          <SiloIcon silo={siloOf(it.href)} class="tile-icon" />
+          <strong>{it.title}</strong>
+          <span>{it.description}</span>
+        </a>
+      ))}
     </div>
   </section>
 )}

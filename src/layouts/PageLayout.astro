@@ -13,7 +13,7 @@ if (schemaType === 'AboutPage') page.mainEntity = person();
 <BaseLayout title={seoTitle ?? title} description={description} noindex={noindex} jsonLd={graph(page, breadcrumbs(crumbs))}>
   <div class="container"><div class="prose">
     <Breadcrumbs items={crumbs} />
-    <h1>{title}</h1>
+    <header class="article-head"><h1>{title}</h1></header>
     <slot />
   </div></div>
 </BaseLayout>

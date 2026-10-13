@@ -2,6 +2,7 @@
 // Pages hub de chaque silo : elles concentrent les liens internes vers les articles du silo.
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import SiloIcon from '../../components/SiloIcon.astro';
 import { SILOS, type Silo } from '../../data/site';
 import { abs, breadcrumbs, graph } from '../../lib/schema';
 import { articlePath, getArticles, siloOf } from '../../lib/articles';
@@ -45,6 +46,15 @@ const intros: Record<Silo, string> = {
     'Des simulateurs gratuits pour chiffrer le coût réel de tes outils avant de signer : abonnement, matériel, frais de paiement, tout compris.',
 };
 
+const typeLabels: Record<string, string> = {
+  comparatif: 'Comparatif',
+  guide: 'Guide',
+  avis: 'Avis',
+  versus: 'Duel',
+  alternatives: 'Alternatives',
+  outil: 'Outil gratuit',
+};
+
 const jsonLd = graph(
   {
     '@type': 'CollectionPage',
@@ -61,16 +71,20 @@ const jsonLd = graph(
 <BaseLayout title={info.seoTitle} description={info.description} jsonLd={jsonLd}>
   <div class="container">
     <Breadcrumbs items={crumbs} />
-    <h1>{info.title}</h1>
-    <p class="prose" style="margin-left:0">{intros[silo]}</p>
+    <div class="hub-head">
+      <SiloIcon silo={silo} class="hub-icon" />
+      <h1>{info.title}</h1>
+    </div>
+    <p class="hub-intro">{intros[silo]}</p>
     <div class="grid">
-        {articles.map((a) => (
-          <a class="tile" href={articlePath(a)}>
-            <span class="kicker">{a.data.type}</span>
-            <strong>{a.data.title}</strong>
-            <span>{a.data.description}</span>
-          </a>
-        ))}
+      {articles.map((a) => (
+        <a class="tile" href={articlePath(a)}>
+          <span class="kicker">{typeLabels[a.data.type]}</span>
+          <strong>{a.data.title}</strong>
+          <span>{a.data.description}</span>
+          <span class="tile-go">Lire →</span>
+        </a>
+      ))}
     </div>
   </div>
 </BaseLayout>

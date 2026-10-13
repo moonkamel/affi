@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { SITE, SILOS } from '../data/site';
+import SiloIcon from '../components/SiloIcon.astro';
+import { SITE, SILOS, type Silo } from '../data/site';
 import { graph, organization, website, person } from '../lib/schema';
 import { articlePath, getArticles, siloOf } from '../lib/articles';
 
@@ -9,11 +10,9 @@ const featured = [
   'facturation/facture-electronique-auto-entrepreneur',
   'outils/modele-facture-gratuit',
   'site-internet/creer-un-site-internet',
-  'facturation/facture-electronique-2026',
   'facturation/logiciel-de-facturation',
   'encaissement/terminal-de-paiement',
   'comptabilite/logiciel-comptabilite',
-  'facturation/plateforme-agreee-facture-electronique',
 ]
   .map((id) => articles.find((a) => a.id === id))
   .filter((a) => a !== undefined);
@@ -21,66 +20,89 @@ const needs = (['facturation', 'comptabilite', 'encaissement', 'site-internet', 
   articles.some((a) => siloOf(a) === s),
 );
 const metiers = articles.filter((a) => siloOf(a) === 'metiers' && a.id.includes('/logiciels-'));
+const count = articles.length;
 ---
 <BaseLayout
   title="Logimalin : logiciels pour TPE et indépendants comparés"
   description="Facturation, comptabilité, site internet, terminal de paiement, CRM : les meilleurs logiciels pour TPE et indépendants comparés, avec les prix 2026."
   jsonLd={graph(organization(), website(), person())}
 >
-  <section class="hero container">
-    <span class="kicker">Comparatifs indépendants · prix vérifiés en {SITE.pricesChecked}</span>
-    <h1>Les bons logiciels pour faire tourner ta TPE, comparés par un entrepreneur</h1>
-    <p>Facturer, encaisser, tenir ta compta, trouver des clients, avoir un site : on compare les outils avec les vraies questions d’un dirigeant de petite entreprise. Combien ça coûte vraiment, combien de temps ça fait gagner, et pour qui c’est fait.</p>
-    <p style="display:flex;gap:10px;flex-wrap:wrap">
-      <a class="btn" href="/facturation/facture-electronique-auto-entrepreneur/">Facture électronique : ce qui change</a>
-      <a class="btn btn-ghost" href="/outils/modele-facture-gratuit/">Créer une facture gratuite</a>
-    </p>
-  </section>
+  <div class="container">
+    <section class="hero">
+      <div>
+        <span class="sticker">Prix vérifiés · {SITE.pricesChecked}</span>
+        <h1>Les <span class="mark">bons logiciels</span> pour faire tourner ta TPE</h1>
+        <p>Facturer, encaisser, tenir ta compta, trouver des clients : on compare les outils avec les questions d’un vrai dirigeant. Combien ça coûte au final, combien de temps ça fait gagner, et pour qui c’est fait.</p>
+        <div class="actions">
+          <a class="btn" href="/facturation/facture-electronique-auto-entrepreneur/">Facture électronique : ce qui change</a>
+          <a class="btn btn-ghost" href="/outils/modele-facture-gratuit/">Créer une facture gratuite</a>
+        </div>
+        <div class="proof">
+          <span><b>{count}</b> guides et comparatifs</span>
+          <span><b>30</b> logiciels notés</span>
+          <span><b>0 €</b> pour nos outils</span>
+        </div>
+      </div>
+      <div class="collage" aria-hidden="true">
+        <div class="paper-sheet c-card"><div class="c-chip"></div><div class="c-num">•••• 2026</div></div>
+        <div class="paper-sheet c-invoice">
+          <div class="c-title">FACTURE</div>
+          <div class="c-bar" style="width:60%"></div>
+          <div class="c-line"><span>Création de logo</span><span>450 €</span></div>
+          <div class="c-line"><span>Cartes de visite</span><span>120 €</span></div>
+          <div class="c-total"><span>Total</span><span>570 €</span></div>
+          <div class="c-bar" style="width:80%"></div>
+        </div>
+        <div class="paper-sheet c-chart"><div class="bars"><i style="height:35%"></i><i style="height:55%"></i><i style="height:45%"></i><i style="height:75%"></i><i style="height:95%"></i></div><div class="c-cap">Temps gagné / mois</div></div>
+        <span class="sticker c-sticker">Gratuit</span>
+        <span class="c-tape t1"></span>
+        <span class="c-tape t2"></span>
+        <svg class="c-spark" viewBox="0 0 24 24"><path d="M12 1.5l2.6 7.9 7.9 2.6-7.9 2.6L12 22.5l-2.6-7.9L1.5 12l7.9-2.6z" fill="currentColor"/></svg>
+      </div>
+    </section>
 
-  <section class="container" aria-labelledby="besoins">
-    <h2 id="besoins">De quoi as-tu besoin ?</h2>
+    <div class="section-head"><h2 id="besoins">De quoi as-tu besoin ?</h2><p>Six familles d’outils, comparées sans jargon.</p></div>
     <div class="grid">
       {needs.map((s) => (
         <a class="tile" href={`/${s}/`}>
+          <SiloIcon silo={s} class="tile-icon" />
           <strong>{SILOS[s].title}</strong>
           <span>{SILOS[s].description}</span>
+          <span class="tile-go">Voir les comparatifs →</span>
         </a>
       ))}
     </div>
-  </section>
 
-  <section class="container" aria-labelledby="metiers">
-    <h2 id="metiers">Le kit complet par métier</h2>
-    <div class="grid">
-      {metiers.map((a) => (
-        <a class="tile" href={articlePath(a)}>
-          <strong>{a.data.title}</strong>
-          <span>{a.data.description}</span>
-        </a>
-      ))}
-    </div>
-  </section>
-
-  <section class="container" aria-labelledby="populaires">
-    <h2 id="populaires">Les guides les plus consultés</h2>
+    <div class="section-head"><h2 id="populaires">Les guides les plus utiles en ce moment</h2><p>Réforme de la facture électronique oblige.</p></div>
     <div class="grid">
       {featured.map((a) => (
         <a class="tile" href={articlePath(a)}>
+          <SiloIcon silo={siloOf(a) as Silo} class="tile-icon" />
           <span class="kicker">{SILOS[siloOf(a)].label}</span>
           <strong>{a.data.title}</strong>
           <span>{a.data.description}</span>
         </a>
       ))}
     </div>
-  </section>
 
-  <section class="container" aria-labelledby="pourquoi">
-    <h2 id="pourquoi">Pourquoi nous faire confiance ?</h2>
-    <ul>
-      <li><strong>Un regard d’entrepreneur</strong> : on juge les outils sur le temps gagné et le coût réel, pas sur la liste des fonctions. <a href="/a-propos/">Qui sommes-nous</a></li>
-      <li><strong>Une méthode publique</strong> : critères et pondérations expliqués. <a href="/methodologie/">Notre méthodologie</a></li>
-      <li><strong>Des prix datés</strong> : chaque page affiche sa date de mise à jour.</li>
-      <li><strong>La transparence</strong> : les liens affiliés sont signalés et n’achètent pas les classements. <a href="/transparence-affiliation/">En savoir plus</a></li>
+    <div class="section-head"><h2 id="metiers">Le kit complet de ton métier</h2><p>Les outils indispensables et le budget mensuel.</p></div>
+    <div class="grid">
+      {metiers.map((a) => (
+        <a class="tile" href={articlePath(a)}>
+          <SiloIcon silo="metiers" class="tile-icon" />
+          <strong>{a.data.title}</strong>
+          <span>{a.data.description}</span>
+          <span class="tile-go">Voir le kit →</span>
+        </a>
+      ))}
+    </div>
+
+    <div class="section-head"><h2 id="pourquoi">Pourquoi nous faire confiance</h2></div>
+    <ul class="trust">
+      <li><strong>Un regard d’entrepreneur</strong><span>On juge les outils sur le temps gagné et le coût réel, pas sur la liste des fonctions. <a href="/a-propos/">Qui sommes-nous</a></span></li>
+      <li><strong>Une méthode publique</strong><span>Critères et pondérations expliqués noir sur blanc. <a href="/methodologie/">Notre méthodologie</a></span></li>
+      <li><strong>Des prix datés</strong><span>Chaque page affiche sa date de mise à jour et ses tarifs vérifiés.</span></li>
+      <li><strong>La transparence</strong><span>Les liens affiliés sont signalés et n’achètent pas les classements. <a href="/transparence-affiliation/">En savoir plus</a></span></li>
     </ul>
-  </section>
+  </div>
 </BaseLayout>
