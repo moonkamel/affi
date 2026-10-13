@@ -1,0 +1,71 @@
+---
+// Calculateur de TJM (taux journalier moyen) pour freelance. JS inline, sans framework.
+---
+<form class="sim" id="sim-tjm" aria-labelledby="tjm-titre" onsubmit="return false">
+  <strong id="tjm-titre">Calcule ton TJM</strong>
+  <div class="row">
+    <div>
+      <label for="tjm-net">Revenu net annuel visé, avant impôt (€)</label>
+      <input id="tjm-net" type="number" min="0" value="40000" inputmode="decimal" />
+    </div>
+    <div>
+      <label for="tjm-statut">Statut</label>
+      <select id="tjm-statut">
+        <option value="26.1">Micro-entreprise, profession libérale (26,1 %)</option>
+        <option value="23.2">Micro-entreprise, libéral CIPAV (23,2 %)</option>
+        <option value="21.2">Micro-entreprise, prestations BIC (21,2 %)</option>
+        <option value="45">Société (EURL, SASU) : environ 45 % de prélèvements</option>
+      </select>
+    </div>
+    <div>
+      <label for="tjm-frais">Frais professionnels annuels (€)</label>
+      <input id="tjm-frais" type="number" min="0" value="4000" inputmode="decimal" />
+    </div>
+    <div>
+      <label for="tjm-conges">Semaines de congés par an</label>
+      <input id="tjm-conges" type="number" min="0" max="20" value="5" inputmode="numeric" />
+    </div>
+    <div>
+      <label for="tjm-nonfact">Jours non facturés par mois (prospection, admin)</label>
+      <input id="tjm-nonfact" type="number" min="0" max="20" value="3" inputmode="numeric" />
+    </div>
+    <div>
+      <label for="tjm-marge">Marge de sécurité (%)</label>
+      <input id="tjm-marge" type="number" min="0" max="50" value="10" inputmode="numeric" />
+    </div>
+  </div>
+  <output class="sim-out" for="tjm-net tjm-statut tjm-frais tjm-conges tjm-nonfact tjm-marge" aria-live="polite">
+    <div>TJM minimum à facturer (HT)</div>
+    <div class="big" id="tjm-r">–</div>
+    <div id="tjm-d" class="small"></div>
+  </output>
+</form>
+
+<script is:inline>
+  (() => {
+    const f = document.getElementById('sim-tjm');
+    if (!f) return;
+    const v = (id) => Math.max(0, parseFloat(String(document.getElementById(id).value).replace(',', '.')) || 0);
+    const eur = (n) => n.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 });
+    const calc = () => {
+      const taux = v('tjm-statut') / 100;
+      const societe = taux >= 0.4;
+      // 253 jours ouvrés environ (365 - week-ends - jours fériés), moins congés et jours non facturés.
+      const moisTravailles = Math.max(1, 12 - (v('tjm-conges') * 5) / 21);
+      const jours = Math.max(20, Math.round(253 - v('tjm-conges') * 5 - v('tjm-nonfact') * moisTravailles));
+      const net = v('tjm-net') * (1 + v('tjm-marge') / 100);
+      // Micro : les frais ne sont pas déductibles, les cotisations portent sur le CA.
+      // Société : les prélèvements portent sur le bénéfice (CA - frais).
+      const ca = societe ? net / (1 - taux) + v('tjm-frais') : (net + v('tjm-frais')) / (1 - taux);
+      const tjm = ca / jours;
+      document.getElementById('tjm-r').textContent = eur(Math.ceil(tjm / 10) * 10);
+      document.getElementById('tjm-d').innerHTML =
+        `Jours facturables : <strong>${jours}</strong> par an · Chiffre d’affaires à réaliser : <strong>${eur(ca)}</strong><br>` +
+        `Soit environ <strong>${eur(ca / 12)}</strong> de facturation par mois` +
+        (!societe && ca > 77700 ? '<br>⚠ Ce chiffre d’affaires dépasse probablement le plafond de la micro-entreprise pour les services : vérifie sur urssaf.fr.' : '') +
+        (!societe && ca > 37500 ? '<br>Au-delà de 37 500 € de prestations, tu factures la TVA en plus de ce TJM.' : '');
+    };
+    f.addEventListener('input', calc);
+    calc();
+  })();
+</script>

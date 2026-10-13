@@ -225,13 +225,16 @@ Objectif : 15 à 30 domaines référents de qualité les 6 premiers mois.
 - 17 nouvelles pages : TVA auto-entrepreneur, facture électronique gratuite, relance facture impayée, facture d'acompte, facture électronique association, badgeuse, logiciel de planning (généraliste), lien de paiement, comptabilité auto-entrepreneur, emailing gratuit, avis Systeme.io / Hostinger / Axonaut / Obat / Tolteck, Abby vs Indy, Indy vs Tiime.
 - Image Open Graph propre à chaque page (`npm run og`), flux RSS (`/rss.xml`), IndexNow (`npm run indexnow` après chaque mise en ligne), en-têtes de cache.
 
-### Prochaines pages (volumes OpenSEO)
-1. Logiciel gestion de stock (≈ 1 300/mois)
-2. Note de frais / application note de frais (≈ 880)
-3. Site internet pas cher (≈ 590)
-4. Logiciel coiffure / institut (≈ 390)
-5. Pages « alternatives » : alternative à Excel facture, alternative à Henrri, alternative à Sumeria Pro
-6. Calculateurs : TJM freelance, charges auto-entrepreneur, seuils TVA (aimants à liens)
+### Vague 4 (faite)
+- Pages : logiciel de gestion de stock, note de frais, site internet pas cher, logiciel coiffure et institut, alternatives à Henrri, facture sur Excel.
+- Calculateurs (aimants à liens) : calcul de TJM freelance, simulateur de charges auto-entrepreneur, simulateur de seuil de TVA.
+- Maillage : chaque fiche produit renvoie automatiquement vers notre avis du logiciel ; un paragraphe de liens contextuels (`<p data-maillage>`) dans 63 pages. Chaque article reçoit au moins 5 liens internes dans le corps de texte (hors menus et « À lire aussi »).
+- Nouveaux logiciels dans `software.ts` : Zoho Inventory, Odoo, N2F, Planity, Kiute, Salonkee.
+
+### Pistes suivantes
+- Avis Planity, Avis Zoho Inventory, Avis N2F (requêtes de marque).
+- Logiciel pour esthéticienne à domicile, logiciel pour boulangerie, logiciel pour commerce de détail.
+- Calculateur d’indemnités kilométriques, calculateur de pénalités de retard.
 
 ### Indexation
 - Google Search Console + sitemap, Bing Webmaster Tools (import depuis GSC), IndexNow à chaque publication.

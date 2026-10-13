@@ -1,0 +1,86 @@
+---
+// Simulateur de cotisations auto-entrepreneur (micro-entreprise). Taux 2026 indicatifs.
+---
+<form class="sim" id="sim-charges" aria-labelledby="ch-titre" onsubmit="return false">
+  <strong id="ch-titre">Calcule tes charges d’auto-entrepreneur</strong>
+  <div class="row">
+    <div>
+      <label for="ch-ca">Chiffre d’affaires encaissé (€)</label>
+      <input id="ch-ca" type="number" min="0" value="3000" inputmode="decimal" />
+    </div>
+    <div>
+      <label for="ch-periode">Période</label>
+      <select id="ch-periode">
+        <option value="1">Par mois</option>
+        <option value="3">Par trimestre</option>
+        <option value="12">Par an</option>
+      </select>
+    </div>
+    <div>
+      <label for="ch-act">Activité</label>
+      <select id="ch-act">
+        <option value="vente">Vente de marchandises, restauration, hébergement</option>
+        <option value="bic" selected>Prestations de services commerciales ou artisanales (BIC)</option>
+        <option value="bnc">Profession libérale non réglementée (BNC)</option>
+        <option value="cipav">Profession libérale relevant de la CIPAV</option>
+      </select>
+    </div>
+    <div>
+      <label for="ch-artisan">Inscrit à la Chambre de métiers (artisan)</label>
+      <select id="ch-artisan">
+        <option value="0">Non</option>
+        <option value="1">Oui</option>
+      </select>
+    </div>
+    <div>
+      <label for="ch-vl">Versement libératoire de l’impôt</label>
+      <select id="ch-vl">
+        <option value="0">Non</option>
+        <option value="1">Oui</option>
+      </select>
+    </div>
+    <div>
+      <label for="ch-acre">Réduction ACRE en cours (%)</label>
+      <input id="ch-acre" type="number" min="0" max="100" value="0" inputmode="numeric" />
+    </div>
+  </div>
+  <output class="sim-out" for="ch-ca ch-periode ch-act ch-artisan ch-vl ch-acre" aria-live="polite">
+    <div>Ce qu’il te reste après cotisations</div>
+    <div class="big" id="ch-r">–</div>
+    <div id="ch-d" class="small"></div>
+  </output>
+</form>
+
+<script is:inline>
+  (() => {
+    const f = document.getElementById('sim-charges');
+    if (!f) return;
+    // Taux 2026 (cotisations sociales, versement libératoire, formation professionnelle).
+    const T = {
+      vente: { cot: 12.3, vl: 1, cfp: 0.1 },
+      bic: { cot: 21.2, vl: 1.7, cfp: 0.1 },
+      bnc: { cot: 26.1, vl: 2.2, cfp: 0.2 },
+      cipav: { cot: 23.2, vl: 2.2, cfp: 0.2 },
+    };
+    const v = (id) => Math.max(0, parseFloat(String(document.getElementById(id).value).replace(',', '.')) || 0);
+    const eur = (n) => n.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 });
+    const calc = () => {
+      const t = T[document.getElementById('ch-act').value];
+      const ca = v('ch-ca');
+      const artisan = document.getElementById('ch-artisan').value === '1';
+      const cot = (ca * t.cot * (1 - Math.min(100, v('ch-acre')) / 100)) / 100;
+      const cfp = (ca * (artisan ? 0.3 : t.cfp)) / 100;
+      const impot = document.getElementById('ch-vl').value === '1' ? (ca * t.vl) / 100 : 0;
+      const reste = ca - cot - cfp - impot;
+      const an = 12 / v('ch-periode');
+      document.getElementById('ch-r').textContent = eur(reste);
+      document.getElementById('ch-d').innerHTML =
+        `Cotisations sociales : <strong>${eur(cot)}</strong> (${t.cot.toLocaleString('fr-FR')} %` + (v('ch-acre') ? ', après ACRE' : '') + `) · ` +
+        `Formation professionnelle : <strong>${eur(cfp)}</strong>` +
+        (impot ? ` · Impôt libératoire : <strong>${eur(impot)}</strong>` : ' · Impôt sur le revenu : à part, au barème') +
+        `<br>Sur un an : <strong>${eur(ca * an)}</strong> de chiffre d’affaires, <strong>${eur(reste * an)}</strong> après prélèvements (avant tes frais professionnels).`;
+    };
+    f.addEventListener('input', calc);
+    calc();
+  })();
+</script>

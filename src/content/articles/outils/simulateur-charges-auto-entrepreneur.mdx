@@ -1,0 +1,71 @@
+---
+title: "Simulateur de charges auto-entrepreneur 2026 : combien il te reste vraiment"
+seoTitle: "Simulateur charges auto-entrepreneur 2026 (gratuit)"
+description: "Calcule tes cotisations auto-entrepreneur 2026 selon ton activité : URSSAF, formation pro, versement libératoire et ACRE. Gratuit et sans inscription."
+keyword: "simulateur charges auto entrepreneur"
+secondaryKeywords:
+  - "charges auto entrepreneur"
+  - "cotisations auto entrepreneur 2026"
+  - "calcul charges micro entreprise"
+  - "taux urssaf auto entrepreneur"
+  - "versement libératoire"
+type: outil
+published: 2026-10-13
+updated: 2026-10-13
+related:
+  - outils/calcul-tjm-freelance
+  - outils/simulateur-seuil-tva
+  - comptabilite/comptabilite-auto-entrepreneur
+  - facturation/tva-auto-entrepreneur
+tldr:
+  - "<strong>Taux 2026</strong> : 12,3 % (vente), 21,2 % (services BIC), 26,1 % (libéral non réglementé), 23,2 % (CIPAV)."
+  - "Les cotisations portent sur le <strong>chiffre d’affaires encaissé</strong>, pas sur le bénéfice."
+  - "S’y ajoutent la <strong>formation professionnelle</strong> (0,1 à 0,3 %) et, en option, le <strong>versement libératoire</strong> de l’impôt (1 à 2,2 %)."
+faq:
+  - q: "Quel est le taux de charges d’un auto-entrepreneur en 2026 ?"
+    a: "Selon les taux publiés pour 2026 : 12,3 % du chiffre d’affaires pour la vente de marchandises, 21,2 % pour les prestations de services commerciales ou artisanales, 26,1 % pour les professions libérales non réglementées et 23,2 % pour celles qui relèvent de la CIPAV. Vérifie toujours les taux en vigueur sur autoentrepreneur.urssaf.fr."
+  - q: "Le versement libératoire est-il intéressant ?"
+    a: "Il l’est généralement si ton revenu fiscal de référence est modéré et que ton taux marginal d’imposition serait supérieur au taux libératoire (1 %, 1,7 % ou 2,2 % du chiffre d’affaires). Il faut respecter un plafond de revenu fiscal de référence pour y avoir droit."
+  - q: "Les frais sont-ils déductibles en auto-entreprise ?"
+    a: "Non. Les cotisations et l’impôt sont calculés sur le chiffre d’affaires, sans déduction des frais réels. Si tes frais sont élevés, une société ou le régime réel peut devenir plus intéressant."
+  - q: "Quand faut-il déclarer son chiffre d’affaires ?"
+    a: "Chaque mois ou chaque trimestre, selon l’option choisie, sur le site de l’URSSAF ou l’application AutoEntrepreneur. Même un chiffre d’affaires nul doit être déclaré."
+---
+import ChargesSimulator from '../../../components/ChargesSimulator.astro';
+import Callout from '../../../components/Callout.astro';
+import Verdict from '../../../components/Verdict.astro';
+import AffLink from '../../../components/AffLink.astro';
+
+En micro-entreprise, les charges sont simples à calculer : un pourcentage de ce que tu encaisses. Encore faut-il connaître le bon taux, ne pas oublier la formation professionnelle et savoir si le versement libératoire vaut le coup. Ce simulateur fait le calcul pour toi.
+
+<ChargesSimulator />
+
+## Les taux 2026
+
+| Activité | Cotisations sociales | Versement libératoire | Formation pro. |
+|---|---|---|---|
+| Vente de marchandises, restauration, hébergement | 12,3 % | 1 % | 0,1 % |
+| Prestations de services BIC (commerciales, artisanales) | 21,2 % | 1,7 % | 0,1 % (0,3 % artisan) |
+| Profession libérale non réglementée (BNC) | 26,1 % | 2,2 % | 0,2 % |
+| Profession libérale CIPAV | 23,2 % | 2,2 % | 0,2 % |
+
+Les artisans paient aussi une taxe pour frais de chambre de métiers, et les commerçants une taxe pour frais de chambre de commerce, de quelques dixièmes de point. Taux indicatifs, à vérifier sur autoentrepreneur.urssaf.fr.
+
+<Callout title="L’ACRE">
+  <p>L’aide à la création ou à la reprise d’entreprise réduit tes cotisations pendant les premiers trimestres d’activité. Son taux de réduction dépend de ta date de création : renseigne le pourcentage indiqué sur ton espace URSSAF dans le champ dédié.</p>
+</Callout>
+
+## Charges, TVA et plafonds : trois sujets différents
+
+- Les **cotisations** se calculent sur ton chiffre d’affaires, dès le premier euro.
+- La **TVA** ne s’applique qu’au-delà des seuils de franchise : teste ta situation avec le [simulateur de seuil de TVA](/outils/simulateur-seuil-tva/) et lis notre guide [TVA auto-entrepreneur](/facturation/tva-auto-entrepreneur/).
+- Le **plafond de la micro-entreprise** décide si tu peux rester au régime micro.
+
+Pour transformer ce résultat en tarif, utilise le [calculateur de TJM freelance](/outils/calcul-tjm-freelance/).
+
+<p data-maillage>Tous les outils d’un indépendant sont réunis dans <a href="/metiers/logiciels-freelance/">logiciels pour freelance</a>, et la tenue des comptes dans <a href="/comptabilite/comptabilite-auto-entrepreneur/">comptabilité auto-entrepreneur</a>.</p>
+
+<Verdict>
+  <p>Le plus simple pour ne jamais se tromper : un logiciel qui calcule tes cotisations à chaque facture encaissée et te rappelle les échéances de déclaration. <strong>Abby</strong> le fait dans son offre gratuite, <strong>Indy</strong> va jusqu’à la comptabilité complète. Voir aussi notre guide de la <a href="/comptabilite/comptabilite-auto-entrepreneur/">comptabilité auto-entrepreneur</a>.</p>
+  <p style="display:flex;gap:8px;flex-wrap:wrap"><AffLink slug="abby" label="Suivre mes charges avec Abby" /> <AffLink slug="indy" variant="ghost" label="Indy" /></p>
+</Verdict>

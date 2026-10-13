@@ -1,0 +1,57 @@
+---
+title: "Simulateur seuil de TVA auto-entrepreneur : dois-tu facturer la TVA ?"
+seoTitle: "Simulateur seuil TVA auto-entrepreneur 2026"
+description: "Dépasses-tu le seuil de franchise de TVA ? Seuil de base, seuil majoré, date d’application : la réponse en 20 secondes, gratuitement."
+keyword: "seuil tva auto entrepreneur"
+secondaryKeywords:
+  - "simulateur tva auto entrepreneur"
+  - "dépassement seuil tva"
+  - "franchise en base de tva seuil"
+  - "seuil majoré tva"
+type: outil
+published: 2026-10-13
+updated: 2026-10-13
+related:
+  - facturation/tva-auto-entrepreneur
+  - outils/simulateur-charges-auto-entrepreneur
+  - facturation/facture-auto-entrepreneur
+  - facturation/logiciel-facturation-auto-entrepreneur
+tldr:
+  - "<strong>Services</strong> : seuil de 37 500 €, seuil majoré de 41 250 €. <strong>Vente</strong> : 85 000 € et 93 500 €."
+  - "Seuil de base dépassé : TVA <strong>au 1er janvier suivant</strong>. Seuil majoré dépassé : TVA <strong>immédiatement</strong>."
+  - "Le simulateur compare ton chiffre d’affaires de l’an dernier, d’aujourd’hui et de fin d’année."
+faq:
+  - q: "Comment savoir si je dépasse le seuil de TVA ?"
+    a: "Compare ton chiffre d’affaires de l’année civile en cours et de l’année précédente aux seuils : 37 500 € (services) ou 85 000 € (vente) pour le seuil de base, 41 250 € ou 93 500 € pour le seuil majoré. Le simulateur ci-dessus fait la comparaison pour toi."
+  - q: "Que faire quand on dépasse le seuil de TVA ?"
+    a: "Demander un numéro de TVA intracommunautaire au service des impôts des entreprises, ajouter la TVA sur tes factures à partir de la date applicable, retirer la mention « TVA non applicable, art. 293 B du CGI » et déclarer la TVA collectée."
+  - q: "Les seuils de TVA ont-ils changé en 2026 ?"
+    a: "Selon les informations disponibles en octobre 2026, les seuils restent ceux indiqués sur cette page : le projet de seuil unique abaissé n’a pas été retenu. Vérifie les montants en vigueur sur impots.gouv.fr."
+---
+import TvaSimulator from '../../../components/TvaSimulator.astro';
+import Callout from '../../../components/Callout.astro';
+import AffLink from '../../../components/AffLink.astro';
+
+La franchise en base de TVA te dispense de facturer la TVA, tant que tu restes sous certains seuils. Le dépassement est souvent découvert trop tard, avec des factures à refaire. Renseigne trois chiffres et le simulateur te dit où tu en es.
+
+<TvaSimulator />
+
+## Les règles appliquées
+
+| Situation | Conséquence |
+|---|---|
+| Chiffre d’affaires de l’an dernier au-dessus du seuil de base | TVA due depuis le 1er janvier de cette année |
+| Seuil de base dépassé cette année, seuil majoré non atteint | Franchise jusqu’au 31 décembre, TVA au 1er janvier suivant |
+| Seuil majoré dépassé cette année | TVA due dès la facture qui fait franchir le seuil |
+
+En cas d’activité mixte (vente et services), les deux seuils s’appliquent : le chiffre d’affaires global ne doit pas dépasser le seuil vente, et la part services ne doit pas dépasser le seuil services. Tout le détail dans notre guide [TVA auto-entrepreneur](/facturation/tva-auto-entrepreneur/).
+
+<Callout title="Ne te fais plus surprendre">
+  <p>Un <a href="/facturation/logiciel-facturation-auto-entrepreneur/">logiciel de facturation pour micro-entrepreneur</a> suit ton chiffre d’affaires en temps réel et passe tes factures en TVA au bon moment. Pour la mention à porter sur tes factures, consulte le guide <a href="/facturation/facture-auto-entrepreneur/">facture auto-entrepreneur</a>.</p>
+</Callout>
+
+Pour estimer aussi tes cotisations, utilise le [simulateur de charges auto-entrepreneur](/outils/simulateur-charges-auto-entrepreneur/).
+
+<p style="display:flex;gap:8px;flex-wrap:wrap"><AffLink slug="abby" label="Suivre mes seuils avec Abby" /> <AffLink slug="tiime" variant="ghost" label="Tiime" /></p>
+
+<p data-maillage>Pour tenir tes comptes simplement : <a href="/comptabilite/comptabilite-auto-entrepreneur/">comptabilité auto-entrepreneur</a>. Le kit complet : <a href="/metiers/logiciels-freelance/">logiciels pour freelance</a>.</p>

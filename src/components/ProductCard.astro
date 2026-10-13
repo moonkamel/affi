@@ -1,9 +1,14 @@
 ---
+import { getCollection } from 'astro:content';
 import { getSoftware } from '../data/software';
 import AffLink from './AffLink.astro';
 interface Props { slug: string; rank?: number; reviewHref?: string }
-const { slug, rank, reviewHref } = Astro.props;
+const { slug, rank } = Astro.props;
 const s = getSoftware(slug);
+// Lien automatique vers notre page d'avis du logiciel, si elle existe (maillage interne).
+const review = (await getCollection('articles', (e) => !e.data.draft && e.data.review?.product === slug))[0];
+const reviewHref = Astro.props.reviewHref ?? (review ? `/${review.id}/` : undefined);
+const showReview = reviewHref && reviewHref !== Astro.url.pathname;
 ---
 <section class="card" id={`logiciel-${s.slug}`}>
   <div class="card-head">
@@ -23,7 +28,7 @@ const s = getSoftware(slug);
   <div class="card-foot">
     <div class="small"><strong>Prix :</strong> {s.price.label}{s.price.note && <span class="muted"> ({s.price.note})</span>}</div>
     <div style="display:flex;gap:8px;flex-wrap:wrap">
-      {reviewHref && <a class="btn btn-ghost btn-sm" href={reviewHref}>Lire l’avis</a>}
+      {showReview && <a class="btn btn-ghost btn-sm" href={reviewHref}>Lire l’avis {s.name}</a>}
       <AffLink slug={s.slug} size="sm" />
     </div>
   </div>

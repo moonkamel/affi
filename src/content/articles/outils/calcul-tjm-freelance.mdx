@@ -1,0 +1,67 @@
+---
+title: "Calcul du TJM freelance : le simulateur gratuit pour fixer ton tarif"
+seoTitle: "Calcul TJM freelance : simulateur gratuit 2026"
+description: "Calcule ton TJM de freelance en 30 secondes : revenu visé, charges, congés et jours non facturés. Simulateur gratuit pour micro-entreprise et société."
+keyword: "calcul tjm freelance"
+secondaryKeywords:
+  - "tjm freelance"
+  - "calculer son tjm"
+  - "taux journalier moyen freelance"
+  - "simulateur tjm"
+  - "tjm auto entrepreneur"
+type: outil
+published: 2026-10-13
+updated: 2026-10-13
+related:
+  - outils/simulateur-charges-auto-entrepreneur
+  - metiers/logiciels-freelance
+  - facturation/logiciel-facturation-auto-entrepreneur
+  - outils/modele-devis-gratuit
+tldr:
+  - "<strong>Formule</strong> : chiffre d’affaires nécessaire ÷ jours réellement facturables."
+  - "Un freelance facture en général <strong>180 à 210 jours par an</strong>, pas 253 : congés, prospection et administratif ne sont pas payés."
+  - "En micro-entreprise, les cotisations portent sur le chiffre d’affaires et <strong>les frais ne sont pas déductibles</strong> : intègre-les dans ton TJM."
+faq:
+  - q: "Comment calculer son TJM en freelance ?"
+    a: "Additionne ton revenu net visé et tes frais professionnels, divise par (1 – taux de charges) pour obtenir le chiffre d’affaires nécessaire, puis divise ce chiffre d’affaires par ton nombre de jours facturables dans l’année, en général entre 180 et 210."
+  - q: "Combien de jours facture un freelance par an ?"
+    a: "Sur environ 253 jours ouvrés, il faut retirer les congés (25 jours pour 5 semaines) et le temps non facturé : prospection, administratif, formation. La plupart des freelances facturent entre 180 et 210 jours par an."
+  - q: "Quel TJM pour un freelance débutant ?"
+    a: "Il dépend surtout du métier et du marché : renseigne-toi sur les tarifs pratiqués dans ta spécialité, puis vérifie avec ce simulateur que le tarif visé couvre réellement ton revenu, tes charges et tes frais. Un TJM trop bas est difficile à remonter ensuite."
+  - q: "Le TJM est-il HT ou TTC ?"
+    a: "Le TJM s’exprime hors taxe. Si tu es en franchise de TVA, ton client paie le TJM tel quel. Si tu factures la TVA, tu ajoutes 20 % sur la facture, que tu reverses ensuite à l’État."
+---
+import TjmCalculator from '../../../components/TjmCalculator.astro';
+import Callout from '../../../components/Callout.astro';
+import AffLink from '../../../components/AffLink.astro';
+
+Fixer son **TJM** (taux journalier moyen) au doigt mouillé est l’erreur la plus coûteuse d’un freelance. Ce calculateur part de ce que tu veux gagner et remonte jusqu’au tarif journalier minimum, en tenant compte des charges, des congés et de tous les jours que personne ne te paie.
+
+<TjmCalculator />
+
+## Comment le calcul fonctionne
+
+1. **Jours facturables** : environ 253 jours ouvrés par an, moins tes congés et tes jours non facturés (prospection, devis, comptabilité, formation).
+2. **Chiffre d’affaires nécessaire** : en micro-entreprise, (revenu net + frais) ÷ (1 – taux de cotisations). En société, le simulateur applique un taux global d’environ 45 % sur le bénéfice, une approximation à affiner avec ton expert-comptable.
+3. **TJM** : chiffre d’affaires ÷ jours facturables, arrondi à la dizaine supérieure.
+
+La marge de sécurité couvre les mois creux, les impayés et les clients qui négocient. Garde-la.
+
+## Les erreurs classiques
+
+- **Compter 220 jours facturés** : c’est rarement le cas la première année. Pars sur 180 à 200.
+- **Oublier les frais** : matériel, logiciels, assurance, coworking, déplacements. En micro, ils ne sont pas déductibles.
+- **Oublier l’impôt sur le revenu** : le résultat du simulateur est un revenu avant impôt. Le [simulateur de charges auto-entrepreneur](/outils/simulateur-charges-auto-entrepreneur/) intègre l’option du versement libératoire.
+- **Oublier la TVA** : au-delà du seuil de franchise, tu factures la TVA en plus. Vérifie ta situation avec le [simulateur de seuil de TVA](/outils/simulateur-seuil-tva/).
+
+<Callout title="Du TJM au devis">
+  <p>Une fois ton tarif fixé, fais un devis propre en deux minutes avec notre <a href="/outils/modele-devis-gratuit/">modèle de devis gratuit</a>, puis facture avec un <a href="/facturation/logiciel-facturation-auto-entrepreneur/">logiciel de facturation pour auto-entrepreneur</a> qui suit ton chiffre d’affaires.</p>
+</Callout>
+
+## Et après ?
+
+Pour un freelance, l’outil qui fait gagner le plus de temps reste un logiciel qui transforme le devis en facture et relance les impayés automatiquement. Le kit complet est dans notre guide des [logiciels pour freelance](/metiers/logiciels-freelance/).
+
+<p style="display:flex;gap:8px;flex-wrap:wrap"><AffLink slug="abby" label="Facturer avec Abby (gratuit)" /> <AffLink slug="indy" variant="ghost" label="Essayer Indy" /></p>
+
+<p data-maillage>Les obligations comptables sont résumées dans <a href="/comptabilite/comptabilite-auto-entrepreneur/">comptabilité auto-entrepreneur</a> et la TVA dans <a href="/facturation/tva-auto-entrepreneur/">TVA auto-entrepreneur</a>.</p>
