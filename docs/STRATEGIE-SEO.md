@@ -1,10 +1,10 @@
 # Stratégie SEO : Bon Outil Pro (toutes les TPE et indépendants)
 
-Document de travail : positionnement, architecture, mots-clés, plan de contenu, liens, Google Ads.
+Document de travail : positionnement, architecture, mots-clés **avec données réelles**, plan de contenu, liens, Google Ads.
 
-> **Volumes de recherche** : je n'ai pas pu obtenir de volumes chiffrés fiables (il faut Google Keyword Planner, Semrush ou Ahrefs).
-> Les priorités ci-dessous viennent de l'intention d'achat, de la concurrence observée dans les résultats Google et de l'actualité (réforme de la facture électronique).
-> **Première action** : passe la colonne « mot-clé » dans Google Keyword Planner (gratuit avec un compte Ads), localisation France, et ajuste les priorités.
+> **Source des données** : OpenSEO (données DataForSEO / Google Ads), marché France, langue française, octobre 2026.
+> **Volume** = recherches mensuelles moyennes en France. **KD** = difficulté de classement (0 à 100) : sous 20, un site neuf avec un bon contenu peut viser la première page ; au-dessus de 50, il faut de l'autorité (liens).
+> Les mots-clés et le contexte sont enregistrés dans le projet OpenSEO « Bon Outil Pro (France) ».
 
 ---
 
@@ -66,60 +66,76 @@ Accueil
 
 ---
 
-## 4. Carte des mots-clés (1 mot-clé principal = 1 URL)
+## 4. Carte des mots-clés (données réelles, 1 mot-clé principal = 1 URL)
 
-### Pages en ligne
+### Les grandes découvertes de la recherche
 
-| URL | Mot-clé principal | Intention | Priorité |
+1. **La facture électronique est LA mine d'or** : « facture électronique auto entrepreneur » (14 800/mois, KD 7), « annuaire facturation électronique » (14 800, KD 3), « facture électronique 2026 » (9 900, KD 28), « plateforme agréée facture électronique » (8 100, KD 21), « facture électronique micro entreprise » (5 400, KD 15). Énormes volumes, faible concurrence, et la première page est tenue par de petits blogs : c'est la priorité absolue jusqu'en septembre 2027.
+2. **Les modèles et guides pratiques** ont des volumes forts avec un KD proche de 0 : « modèle facture » (5 400, KD 0), « facture proforma » (6 600, KD 0), « facture auto entrepreneur » (4 400, KD 10), « mention obligatoire facture » (3 600, KD 12), « modèle devis » (2 400, KD 3). D'où le générateur de facture/devis gratuit.
+3. **Les requêtes génériques commerciales sont accessibles** : « créer un site internet » (5 400, KD 0), « terminal de paiement » (4 400, KD 0), « logiciel de facturation » (3 600, KD 0), « logiciel de caisse » (2 400, KD 9). Les CPC sont élevés (9 à 13 €), preuve d'une forte valeur commerciale.
+4. **Les avis de marque** sont quasi sans concurrence : « shopify avis » (2 900, KD 0), « indy avis » (2 400, KD 4), « pennylane avis » (1 300, KD 9), « tiime avis » (720, KD 0).
+5. **Le restaurant est une niche faible en volume** : « logiciel réservation restaurant » 70, « logiciel planning restaurant » 10. On garde les pages mais ce n'est plus une priorité. Exception : « caisse enregistreuse restaurant » (880, KD 4).
+6. **À éviter** : « caisse enregistreuse » (12 100) est une SERP de boutiques (intention d'achat de matériel) ; « simulateur auto entrepreneur » (KD 71) et « nom de domaine » (KD 77) sont trop disputés.
+
+### Pages en ligne et leur cible
+
+| URL | Mot-clé principal | Volume | KD | Volume cumulé du cluster (env.) |
+|---|---|---|---|---|
+| /facturation/facture-electronique-auto-entrepreneur/ | facture électronique auto entrepreneur | 14 800 | 7 | ~22 000 (+ micro entreprise 5 400, obligatoire 1 300…) |
+| /facturation/annuaire-facturation-electronique/ | annuaire facturation électronique | 14 800 | 3 | ~15 000 |
+| /facturation/facture-electronique-2026/ | facture électronique 2026 | 9 900 | 28 | ~18 000 (+ obligatoire 6 600, date 1 600) |
+| /facturation/plateforme-agreee-facture-electronique/ | plateforme agréée facture électronique | 8 100 | 21 | ~15 000 (+ gratuite 2 900, portail public 2 400, PDP 1 300) |
+| /facturation/facture-proforma/ | facture proforma | 6 600 | 0 | ~6 600 |
+| /outils/modele-facture-gratuit/ | modèle facture | 5 400 | 0 | ~15 000 (+ facture en ligne gratuit 3 600, modèle AE 2 400, faire une facture 1 900, exemple 1 600) |
+| /site-internet/creer-un-site-internet/ | créer un site internet | 5 400 | 0 | ~16 000 (+ créer un site web gratuit 3 600, gratuit 2 900, comment 2 400) |
+| /facturation/facture-auto-entrepreneur/ | facture auto entrepreneur | 4 400 | 10 | ~8 000 (+ micro entreprise 1 300, sans TVA 720…) |
+| /comptabilite/logiciel-comptabilite/ | logiciel comptabilité | 5 400 | 44 | ~10 000 (+ gratuit 1 600, de comptabilité 1 900, association 880) |
+| /encaissement/terminal-de-paiement/ | terminal de paiement | 4 400 | 0 | ~7 500 (+ TPE carte bancaire 1 600, TPE portable 880) |
+| /crm/logiciel-crm/ | logiciel crm | 3 600 | 40 | ~7 000 (+ CRM gratuit 1 300, CRM français 720) |
+| /facturation/mentions-obligatoires-facture/ | mention obligatoire facture | 3 600 | 12 | ~5 500 |
+| /facturation/logiciel-de-facturation/ | logiciel de facturation | 3 600 | 0 | ~12 000 (+ logiciel facturation 2 900, devis facture 1 600, gratuit 3 600) |
+| /avis/shopify/ | shopify avis | 2 900 | 0 | ~4 000 (+ prix 1 000) |
+| /facturation/e-reporting/ | e-reporting | 2 900 | 1 | ~3 000 |
+| /avis/indy/ | indy avis | 2 400 | 4 | ~2 700 |
+| /outils/modele-devis-gratuit/ | modèle devis | 2 400 | 3 | ~3 000 |
+| /encaissement/logiciel-de-caisse/ | logiciel de caisse | 2 400 | 9 | ~4 500 |
+| /facturation/factur-x/ | factur-x | 1 600 | 0 | ~1 600 |
+| /facturation/logiciel-facturation-auto-entrepreneur/ | logiciel facturation auto entrepreneur | 1 600 | 0 | ~2 500 |
+| /avis/pennylane/ | pennylane avis | 1 300 | 9 | ~1 800 |
+| /encaissement/logiciel-caisse-restaurant/ | caisse enregistreuse restaurant | 880 | 4 | ~1 200 |
+| /outils/simulateur-cout-caisse-enregistreuse/ | prix caisse enregistreuse | 880 | 0 | ~900 |
+| /avis/tiime/, /avis/wix/, /avis/sumup/, /avis/abby/ | avis de marque | 390 à 720 | 0 | ~2 300 |
+| /facturation/logiciel-devis-batiment/ | logiciel devis batiment | 320 | 3 | ~1 500 (+ logiciel bâtiment 590) |
+| Pages restaurant, kits métier, comparatifs | longue traîne | < 300 | — | maillage et conversion |
+
+**Potentiel adressé : de l’ordre de 200 000 recherches mensuelles** en cumulant les clusters (avec des chevauchements possibles), dont la majorité sur des mots-clés à KD inférieur à 30. Un site bien placé capte en général 20 à 30 % des clics d’une première position, beaucoup moins au-delà de la 5e.
+
+### Les prochaines pages, par ordre de priorité (données réelles)
+
+| Page à créer | Mot-clé | Volume | KD |
 |---|---|---|---|
-| /facturation/facture-electronique-2026/ | facture électronique 2026 | Info (gros volume, actualité) | ★★★ |
-| /facturation/logiciel-facturation-auto-entrepreneur/ | logiciel facturation auto entrepreneur | Achat | ★★★ |
-| /site-internet/creer-site-internet-entreprise/ | créer site internet entreprise | Achat | ★★★ |
-| /comptabilite/logiciel-comptabilite-tpe/ | logiciel comptabilité TPE | Achat | ★★★ |
-| /encaissement/terminal-paiement-sans-abonnement/ | terminal de paiement sans abonnement | Achat | ★★★ |
-| /crm/logiciel-crm-tpe/ | CRM TPE | Achat | ★★☆ |
-| /facturation/logiciel-devis-facture-artisan/ | logiciel devis facture artisan | Achat | ★★★ |
-| /facturation/facture-electronique-commercant/ | facture électronique commerçant | Info → achat | ★★☆ |
-| /metiers/logiciels-artisan-btp/ | logiciel artisan | Kit | ★★☆ |
-| /metiers/logiciels-freelance/ | outils freelance | Kit | ★★☆ |
-| /metiers/logiciels-restaurant/ | logiciel gestion restaurant | Kit | ★★☆ |
-| /encaissement/logiciel-caisse-restaurant/ | logiciel caisse restaurant | Achat | ★★☆ |
-| /metiers/logiciel-reservation-restaurant/ | logiciel réservation restaurant | Achat | ★☆☆ |
-| /equipe/logiciel-planning-restaurant/ | logiciel planning restaurant | Achat | ★☆☆ |
-| /outils/simulateur-cout-caisse-enregistreuse/ | prix caisse enregistreuse | Prix | ★★☆ |
-| /comparatifs/zelty-vs-lightspeed/, /alternatives/alternatives-lightspeed/, /avis/… | requêtes de marque | Décision | ★★☆ |
-
-### Les 40 prochaines pages, par ordre de priorité
-
-**Vague 1 (mois 1-2) : facture électronique, la vague de recherche en cours jusqu'à septembre 2027**
-1. /facturation/plateforme-agreee-facture-electronique/ : « plateforme agréée », « liste PDP »
-2. /facturation/facture-electronique-auto-entrepreneur/
-3. /facturation/logiciel-facturation-gratuit/
-4. /facturation/factur-x/ · /facturation/e-reporting/
-5. /comparatifs/abby-vs-indy/ · /comparatifs/pennylane-vs-tiime/
-6. /avis/abby/ · /avis/axonaut/ (300 € par client selon les conditions 2021, à revérifier) · /avis/pennylane/
-7. /alternatives/alternatives-pennylane/ (les hausses de prix créent une demande de migration)
-
-**Vague 2 (mois 2-4) : les silos à forte commission**
-8. /site-internet/creer-boutique-en-ligne/ · /site-internet/hebergement-web-pas-cher/ · /comparatifs/wix-vs-hostinger/ · /comparatifs/shopify-vs-wix/
-9. /site-internet/systeme-io-avis/ (40 % récurrent, cookie à vie)
-10. /crm/logiciel-emailing/ · /comparatifs/hubspot-vs-pipedrive/ · /crm/logiciel-avis-clients/
-11. /encaissement/caisse-enregistreuse-commerce/ · /comparatifs/sumup-vs-zettle/ · /encaissement/lien-de-paiement/
-12. /comptabilite/logiciel-comptabilite-sasu/ · /comptabilite/expert-comptable-en-ligne/
-13. /outils/simulateur-frais-terminal-paiement/ · /outils/calculateur-tarif-journalier-freelance/ · /outils/generateur-mentions-legales/
-
-**Vague 3 (mois 4-8) : un kit par métier, puis les pages métier × besoin**
-14. /metiers/logiciels-coiffeur/ · /metiers/logiciels-commercant/ · /metiers/logiciels-coach/ · /metiers/logiciels-e-commerce/ · /metiers/logiciels-vtc/
-15. Métier × besoin : « logiciel devis plombier », « logiciel devis électricien », « logiciel facturation coiffeur », « caisse enregistreuse boulangerie », « logiciel facturation consultant »… Chaque page reprend la structure du comparatif parent avec les critères du métier. Ne publie que des pages réellement différentes : des pages dupliquées en changeant juste le métier sont pénalisées par Google.
+| /facturation/tva-auto-entrepreneur/ | tva auto entrepreneur | 12 100 | 17 |
+| /facturation/facture-electronique-gratuite/ | facture électronique gratuit | 9 900 | 43 |
+| /facturation/relance-facture-impayee/ (+ modèle de lettre) | relance facture impayée | 1 000 | 0 |
+| /facturation/facture-acompte/ | facture acompte | 1 300 | 0 |
+| /facturation/facture-electronique-association/ | facture électronique association | 1 300 | 0 |
+| /equipe/badgeuse/ | badgeuse | 2 400 | 0 |
+| /encaissement/lien-de-paiement/ | lien de paiement | 720 | 1 |
+| /comptabilite/logiciel-gestion-de-stock/ | logiciel gestion de stock | 1 300 | 5 |
+| /equipe/logiciel-note-de-frais/ | logiciel note de frais (CPC 43 €) | 880 | 0 |
+| /equipe/logiciel-planning/ | logiciel planning (+ gratuit 590) | 880 | 0 |
+| /comptabilite/comptabilite-auto-entrepreneur/ | comptabilité auto entrepreneur (+ livre des recettes 480) | 720 | 0 |
+| /crm/emailing-gratuit/ | emailing gratuit | 1 600 | 22 |
+| /site-internet/site-internet-pas-cher/ | site internet pas cher | 590 | 4 |
+| /metiers/logiciels-coiffure/ | logiciel coiffure | 390 | 0 |
+| /comparatifs/abby-vs-indy/ | abby ou indy | 140 | 0 |
+| Avis : systeme io (320), hostinger (320), axonaut (260), obat (170), tolteck (140) | avis de marque | 140 à 320 | 0 à 12 |
 
 ### Modèles de titres qui marchent
 - `Meilleur logiciel de X en 2026 : comparatif de N solutions`
-- `X vs Y : lequel choisir pour [profil] ?`
-- `Avis X 2026 : prix, points forts et limites`
-- `N alternatives à X (moins chères / sans engagement)`
-- `[Métier] : les logiciels indispensables et leur budget`
-
----
+- `X : définition, obligations et [bénéfice] (2026)` pour les sujets réglementaires
+- `Modèle de X gratuit : crée ton X en ligne (PDF)` pour les outils
+- `Avis X 2026 : prix, avantages et limites`
 
 ## 5. Ce qui est volontairement exclu
 
@@ -176,7 +192,7 @@ Objectif : 15 à 30 domaines référents de qualité les 6 premiers mois.
 
 - **Pas avant 2 à 3 mois de données SEO.** Commence par les pages qui convertissent déjà.
 - **Lis les règles de chaque programme** : beaucoup interdisent d'enchérir sur leur marque.
-- **Cibles rentables** : programmes à forte commission fixe ou récurrente, sur des mots-clés génériques :
+- **Cibles rentables** (CPC relevés par OpenSEO) : programmes à forte commission fixe ou récurrente, sur des mots-clés génériques :
   - Systeme.io (40 % récurrent) → « créer tunnel de vente », « logiciel formation en ligne »
   - Axonaut (prime par client) → « logiciel gestion TPE », « logiciel devis facture »
   - SumUp (prime par commerçant) → « terminal de paiement », « caisse enregistreuse prix »

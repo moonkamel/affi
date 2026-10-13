@@ -1,0 +1,190 @@
+---
+// Générateur de facture / devis gratuit, 100 % côté navigateur : aucune donnée n'est envoyée.
+// Les coordonnées de l'émetteur sont mémorisées localement (localStorage) pour la prochaine fois.
+interface Props { mode?: 'facture' | 'devis' }
+const { mode = 'facture' } = Astro.props;
+const isDevis = mode === 'devis';
+const today = new Date().toISOString().slice(0, 10);
+---
+<div class="gen" data-mode={mode}>
+  <form class="sim gen-form" id="gen-form" onsubmit="return false" aria-label={isDevis ? 'Créer un devis' : 'Créer une facture'}>
+    <strong>1. Toi (émetteur)</strong>
+    <label for="g-em-nom">Nom ou raison sociale</label>
+    <input id="g-em-nom" data-save placeholder="Julie Martin EI" />
+    <label for="g-em-adr">Adresse</label>
+    <input id="g-em-adr" data-save placeholder="12 rue des Lilas, 69003 Lyon" />
+    <div class="row">
+      <div><label for="g-em-siren">SIREN / SIRET</label><input id="g-em-siren" data-save placeholder="123 456 789" /></div>
+      <div><label for="g-em-mail">E-mail / téléphone</label><input id="g-em-mail" data-save placeholder="julie@exemple.fr" /></div>
+    </div>
+    <label for="g-em-tva">TVA</label>
+    <select id="g-em-tva" data-save>
+      <option value="franchise">Franchise en base (auto-entrepreneur) : pas de TVA</option>
+      <option value="20">TVA 20 %</option>
+      <option value="10">TVA 10 %</option>
+      <option value="5.5">TVA 5,5 %</option>
+    </select>
+    <label for="g-em-iban">IBAN (optionnel)</label>
+    <input id="g-em-iban" data-save placeholder="FR76 …" />
+
+    <strong style="display:block;margin-top:18px">2. Ton client</strong>
+    <label for="g-cl-nom">Nom ou raison sociale</label>
+    <input id="g-cl-nom" placeholder="Boulangerie Dupont SARL" />
+    <label for="g-cl-adr">Adresse</label>
+    <input id="g-cl-adr" placeholder="4 place du Marché, 69002 Lyon" />
+    <label for="g-cl-siren">SIREN du client (si professionnel)</label>
+    <input id="g-cl-siren" placeholder="987 654 321" />
+
+    <strong style="display:block;margin-top:18px">3. {isDevis ? 'Le devis' : 'La facture'}</strong>
+    <div class="row">
+      <div><label for="g-num">Numéro</label><input id="g-num" value={isDevis ? 'D-2026-001' : '2026-001'} /></div>
+      <div><label for="g-date">Date</label><input id="g-date" type="date" value={today} /></div>
+    </div>
+    <label for="g-ech">{isDevis ? 'Validité du devis (jours)' : 'Échéance de paiement (jours)'}</label>
+    <input id="g-ech" type="number" min="0" value="30" inputmode="numeric" />
+
+    <strong style="display:block;margin-top:18px">4. Lignes</strong>
+    <div id="g-lines"></div>
+    <button type="button" class="btn btn-ghost btn-sm" id="g-add" style="margin-top:8px">+ Ajouter une ligne</button>
+
+    <label for="g-note">Note (optionnel)</label>
+    <input id="g-note" placeholder={isDevis ? 'Délai de réalisation : 2 semaines après acceptation' : 'Merci pour votre confiance'} />
+
+    <p style="display:flex;gap:8px;flex-wrap:wrap;margin-top:18px">
+      <button type="button" class="btn" id="g-print">Télécharger en PDF / imprimer</button>
+      <button type="button" class="btn btn-ghost" id="g-reset">Effacer</button>
+    </p>
+    <p class="small muted">Tout reste dans ton navigateur : aucune donnée n’est envoyée. Dans la fenêtre d’impression, choisis « Enregistrer au format PDF ».</p>
+  </form>
+
+  <section class="doc" id="g-doc" aria-label="Aperçu">
+    <div class="doc-head">
+      <div>
+        <div class="doc-em" id="d-em-nom">Ton nom EI</div>
+        <div id="d-em-adr" class="doc-small"></div>
+        <div id="d-em-siren" class="doc-small"></div>
+        <div id="d-em-mail" class="doc-small"></div>
+      </div>
+      <div class="doc-title">
+        <div class="doc-kind">{isDevis ? 'DEVIS' : 'FACTURE'}</div>
+        <div class="doc-small">N° <span id="d-num"></span></div>
+        <div class="doc-small">Date : <span id="d-date"></span></div>
+        <div class="doc-small"><span>{isDevis ? 'Valable jusqu’au' : 'Échéance'}</span> : <span id="d-ech"></span></div>
+      </div>
+    </div>
+    <div class="doc-client">
+      <div class="doc-small doc-label">{isDevis ? 'Pour' : 'Facturé à'}</div>
+      <div id="d-cl-nom" class="doc-em">Nom du client</div>
+      <div id="d-cl-adr" class="doc-small"></div>
+      <div id="d-cl-siren" class="doc-small"></div>
+    </div>
+    <table class="doc-table">
+      <thead><tr><th>Désignation</th><th>Qté</th><th>PU HT</th><th>Total HT</th></tr></thead>
+      <tbody id="d-lines"></tbody>
+    </table>
+    <div class="doc-totals" id="d-totals"></div>
+    <div class="doc-small" id="d-mentions"></div>
+    <div class="doc-small" id="d-note"></div>
+    {isDevis && <div class="doc-sign"><div class="doc-small">Bon pour accord, date et signature du client :</div></div>}
+  </section>
+</div>
+
+<script is:inline define:vars={{ isDevis }}>
+  (() => {
+    const $ = (id) => document.getElementById(id);
+    const form = $('gen-form');
+    if (!form) return;
+    const KEY = 'bop-generateur-emetteur';
+    const eur = (n) => n.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' });
+    const num = (v) => Math.max(0, parseFloat(String(v).replace(',', '.')) || 0);
+    const fmtDate = (s) => (s ? new Date(s + 'T12:00:00').toLocaleDateString('fr-FR') : '');
+    const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+
+    // Mémorise les coordonnées de l'émetteur (facultatif : ignoré si le stockage est indisponible).
+    try {
+      const saved = JSON.parse(localStorage.getItem(KEY) || '{}');
+      form.querySelectorAll('[data-save]').forEach((el) => { if (saved[el.id]) el.value = saved[el.id]; });
+    } catch {}
+    const persist = () => {
+      try {
+        const data = {};
+        form.querySelectorAll('[data-save]').forEach((el) => (data[el.id] = el.value));
+        localStorage.setItem(KEY, JSON.stringify(data));
+      } catch {}
+    };
+
+    const lines = $('g-lines');
+    const addLine = (d = '', q = '1', p = '') => {
+      const row = document.createElement('div');
+      row.className = 'gen-line';
+      row.innerHTML =
+        '<input aria-label="Désignation" placeholder="Désignation" class="l-d">' +
+        '<input aria-label="Quantité" inputmode="decimal" class="l-q">' +
+        '<input aria-label="Prix unitaire HT" inputmode="decimal" placeholder="PU HT" class="l-p">' +
+        '<button type="button" aria-label="Supprimer la ligne" class="l-x">×</button>';
+      row.querySelector('.l-d').value = d;
+      row.querySelector('.l-q').value = q;
+      row.querySelector('.l-p').value = p;
+      row.querySelector('.l-x').onclick = () => { row.remove(); render(); };
+      lines.appendChild(row);
+    };
+
+    const render = () => {
+      const tva = $('g-em-tva').value;
+      const rate = tva === 'franchise' ? 0 : num(tva) / 100;
+      $('d-em-nom').textContent = $('g-em-nom').value || 'Ton nom EI';
+      $('d-em-adr').textContent = $('g-em-adr').value;
+      $('d-em-siren').textContent = $('g-em-siren').value ? 'SIREN : ' + $('g-em-siren').value : '';
+      $('d-em-mail').textContent = $('g-em-mail').value;
+      $('d-cl-nom').textContent = $('g-cl-nom').value || 'Nom du client';
+      $('d-cl-adr').textContent = $('g-cl-adr').value;
+      $('d-cl-siren').textContent = $('g-cl-siren').value ? 'SIREN : ' + $('g-cl-siren').value : '';
+      $('d-num').textContent = $('g-num').value;
+      const date = $('g-date').value;
+      $('d-date').textContent = fmtDate(date);
+      const ech = new Date((date || new Date().toISOString().slice(0, 10)) + 'T12:00:00');
+      ech.setDate(ech.getDate() + num($('g-ech').value));
+      $('d-ech').textContent = ech.toLocaleDateString('fr-FR');
+
+      let ht = 0;
+      let html = '';
+      lines.querySelectorAll('.gen-line').forEach((row) => {
+        const d = row.querySelector('.l-d').value;
+        const q = num(row.querySelector('.l-q').value);
+        const p = num(row.querySelector('.l-p').value);
+        if (!d && !p) return;
+        ht += q * p;
+        html += '<tr><td>' + esc(d) + '</td><td>' + q.toLocaleString('fr-FR') + '</td><td>' + eur(p) + '</td><td>' + eur(q * p) + '</td></tr>';
+      });
+      $('d-lines').innerHTML = html || '<tr><td colspan="4" class="doc-small">Ajoute une ligne à gauche</td></tr>';
+      const vat = ht * rate;
+      $('d-totals').innerHTML = rate
+        ? '<div>Total HT : <strong>' + eur(ht) + '</strong></div><div>TVA ' + (rate * 100).toLocaleString('fr-FR') + ' % : <strong>' + eur(vat) + '</strong></div><div class="doc-em">Total TTC : ' + eur(ht + vat) + '</div>'
+        : '<div class="doc-em">Total : ' + eur(ht) + '</div><div class="doc-small">TVA non applicable, art. 293 B du CGI</div>';
+
+      const pro = Boolean($('g-cl-siren').value);
+      const m = [];
+      if (isDevis) {
+        m.push('Devis gratuit, valable ' + num($('g-ech').value) + ' jours.');
+      } else {
+        m.push('Paiement à réception, au plus tard à l’échéance indiquée. Pas d’escompte pour paiement anticipé.');
+        m.push('En cas de retard : pénalités au taux de 3 fois le taux d’intérêt légal' + (pro ? ', et indemnité forfaitaire pour frais de recouvrement de 40 €.' : '.'));
+      }
+      if ($('g-em-iban').value) m.push('IBAN : ' + esc($('g-em-iban').value));
+      $('d-mentions').innerHTML = m.join('<br>');
+      $('d-note').textContent = $('g-note').value;
+    };
+
+    $('g-add').onclick = () => { addLine(); render(); };
+    $('g-print').onclick = () => { persist(); window.print(); };
+    $('g-reset').onclick = () => {
+      ['g-cl-nom', 'g-cl-adr', 'g-cl-siren', 'g-note'].forEach((id) => ($(id).value = ''));
+      lines.innerHTML = '';
+      addLine();
+      render();
+    };
+    form.addEventListener('input', () => { persist(); render(); });
+    addLine(isDevis ? 'Prestation (détail des travaux)' : 'Prestation', '1', '');
+    render();
+  })();
+</script>

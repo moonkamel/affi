@@ -1,0 +1,68 @@
+---
+title: "Factur-X : le format de facture électronique expliqué simplement"
+seoTitle: "Factur-X : c’est quoi ? Format, profils et logiciels"
+description: "Factur-X : un PDF lisible par un humain avec des données XML lisibles par les logiciels. Fonctionnement, profils, différence avec UBL et CII."
+keyword: "factur-x"
+secondaryKeywords:
+  - "facturx"
+  - "format factur-x"
+  - "factur-x gratuit"
+  - "factur-x c'est quoi"
+  - "ubl cii factur-x"
+type: guide
+published: 2026-10-13
+updated: 2026-10-13
+related:
+  - facturation/facture-electronique-2026
+  - facturation/plateforme-agreee-facture-electronique
+  - facturation/logiciel-de-facturation
+tldr:
+  - "<strong>Factur-X</strong> = un <strong>PDF</strong> (lisible par ton client) qui contient un fichier <strong>XML</strong> (lisible par les logiciels)."
+  - "C’est l’un des <strong>trois formats acceptés</strong> par la réforme, avec <strong>UBL</strong> et <strong>CII</strong>."
+  - "Tu n’as <strong>pas à le fabriquer toi-même</strong> : un logiciel de facturation conforme le génère automatiquement."
+faq:
+  - q: "Qu’est-ce que le format Factur-X ?"
+    a: "Factur-X est un format de facture électronique dit hybride, élaboré en France et en Allemagne : c’est un fichier PDF/A-3 qui contient, en pièce jointe intégrée, un fichier XML structuré reprenant les données de la facture. L’humain lit le PDF, le logiciel lit le XML."
+  - q: "Factur-X est-il obligatoire ?"
+    a: "Non, Factur-X est l’un des trois formats acceptés par la réforme française de la facture électronique, avec UBL et CII. Ce qui est obligatoire, c’est d’utiliser un format structuré et de passer par une plateforme agréée."
+  - q: "Comment créer une facture Factur-X gratuitement ?"
+    a: "Le plus simple est d’utiliser un logiciel de facturation immatriculé plateforme agréée qui propose une offre gratuite, comme Abby, Indy ou Tiime : tu remplis ta facture normalement, le logiciel génère le fichier Factur-X et le transmet."
+  - q: "Un PDF classique peut-il être transformé en Factur-X ?"
+    a: "Pas simplement : il faut y intégrer un XML conforme contenant toutes les données de la facture. Des outils de conversion existent, mais pour une petite entreprise, créer directement ses factures dans un logiciel conforme est beaucoup plus fiable."
+---
+import Verdict from '../../../components/Verdict.astro';
+import AffLink from '../../../components/AffLink.astro';
+
+Avec la réforme de la facture électronique, un PDF envoyé par e-mail ne suffit plus pour facturer une entreprise. Il faut un format **structuré**, que les logiciels savent lire automatiquement. Factur-X est le plus connu des trois formats acceptés, parce qu’il ressemble à ce que tu connais déjà : un PDF.
+
+## Factur-X en une image
+
+Un fichier Factur-X, c’est **deux factures en une** :
+
+- un **PDF** (au format d’archivage PDF/A-3), que ton client ouvre et lit comme d’habitude ;
+- un **fichier XML intégré**, invisible à l’œil, qui contient les mêmes données de façon structurée : numéro, date, SIREN, montants, TVA, lignes de facture.
+
+Les logiciels de ton client lisent le XML et enregistrent la facture sans ressaisie. C’est tout l’intérêt de la réforme : moins d’erreurs, des paiements plus rapides, et des données transmises directement à l’administration.
+
+## Factur-X, UBL, CII : quelle différence ?
+
+| Format | Nature | Pour qui |
+|---|---|---|
+| **Factur-X** | Hybride : PDF + XML | Le plus pratique pour les TPE : lisible par tous |
+| **UBL** | XML pur | Très utilisé à l’international et par les grands systèmes |
+| **CII** | XML pur | Standard européen, base du XML de Factur-X |
+
+Les trois sont acceptés. Comme les [plateformes agréées](/facturation/plateforme-agreee-facture-electronique/) savent convertir entre eux, ton client peut recevoir ta facture même s’il utilise un autre format.
+
+## Les profils Factur-X
+
+Factur-X existe en plusieurs niveaux de détail, appelés profils : **MINIMUM**, **BASIC WL**, **BASIC**, **EN 16931** et **EXTENDED**. Plus le profil est élevé, plus le XML contient d’informations (jusqu’au détail de chaque ligne). Pour la réforme, ton logiciel choisit automatiquement le bon profil : tu n’as pas à t’en préoccuper.
+
+## Comment créer des factures Factur-X ?
+
+Ne cherche pas à fabriquer le fichier toi-même. Utilise un logiciel de facturation conforme : tu remplis ta facture comme d’habitude, il génère le Factur-X, le transmet via la plateforme agréée et conserve l’archive. Plusieurs le font gratuitement pour les petites entreprises. Voir notre comparatif des [meilleurs logiciels de facturation](/facturation/logiciel-de-facturation/).
+
+<Verdict>
+  <p>Factur-X est le format le plus simple à adopter pour une TPE, et ton logiciel s’en occupe. Pour un micro-entrepreneur, <strong>Abby</strong> le génère gratuitement ; pour une TPE, <strong>Indy</strong> ou <strong>Axonaut</strong>.</p>
+  <p style="display:flex;gap:8px;flex-wrap:wrap"><AffLink slug="abby" label="Abby (gratuit)" /> <AffLink slug="axonaut" variant="ghost" label="Axonaut" /></p>
+</Verdict>

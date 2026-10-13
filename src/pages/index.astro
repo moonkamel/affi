@@ -6,12 +6,14 @@ import { articlePath, getArticles, siloOf } from '../lib/articles';
 
 const articles = await getArticles();
 const featured = [
+  'facturation/facture-electronique-auto-entrepreneur',
+  'outils/modele-facture-gratuit',
+  'site-internet/creer-un-site-internet',
   'facturation/facture-electronique-2026',
-  'facturation/logiciel-facturation-auto-entrepreneur',
-  'site-internet/creer-site-internet-entreprise',
-  'encaissement/terminal-paiement-sans-abonnement',
-  'comptabilite/logiciel-comptabilite-tpe',
-  'crm/logiciel-crm-tpe',
+  'facturation/logiciel-de-facturation',
+  'encaissement/terminal-de-paiement',
+  'comptabilite/logiciel-comptabilite',
+  'facturation/plateforme-agreee-facture-electronique',
 ]
   .map((id) => articles.find((a) => a.id === id))
   .filter((a) => a !== undefined);
@@ -30,8 +32,8 @@ const metiers = articles.filter((a) => siloOf(a) === 'metiers' && a.id.includes(
     <h1>Les bons logiciels pour faire tourner ta TPE, comparés par un entrepreneur</h1>
     <p>Facturer, encaisser, tenir ta compta, trouver des clients, avoir un site : on compare les outils avec les vraies questions d’un dirigeant de petite entreprise. Combien ça coûte vraiment, combien de temps ça fait gagner, et pour qui c’est fait.</p>
     <p style="display:flex;gap:10px;flex-wrap:wrap">
-      <a class="btn" href="/facturation/facture-electronique-2026/">Facture électronique : ce qui change</a>
-      <a class="btn btn-ghost" href="/metiers/">Le kit de mon métier</a>
+      <a class="btn" href="/facturation/facture-electronique-auto-entrepreneur/">Facture électronique : ce qui change</a>
+      <a class="btn btn-ghost" href="/outils/modele-facture-gratuit/">Créer une facture gratuite</a>
     </p>
   </section>
 

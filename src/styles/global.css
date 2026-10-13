@@ -144,3 +144,37 @@ tbody tr:last-child td { border-bottom: 0; }
 @media (max-width: 600px) { .sim .row { grid-template-columns: 1fr; } }
 .sim-out { display: block; margin-top: 18px; background: var(--accent-soft); border-radius: var(--radius); padding: 14px 18px; }
 .sim-out .big { font-size: 1.8rem; font-weight: 800; color: var(--accent); }
+
+/* Générateur de facture / devis */
+.gen { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px; align-items: start; margin: 22px 0; }
+@media (max-width: 900px) { .gen { grid-template-columns: minmax(0, 1fr); } .doc { position: static; } }
+.gen-form { margin: 0; }
+.gen-line { display: grid; grid-template-columns: minmax(0, 1fr) 56px 90px 32px; gap: 6px; margin-top: 6px; }
+.gen-line input { padding: 6px 8px; }
+.l-x { border: 1px solid var(--border); background: var(--surface); border-radius: 8px; cursor: pointer; font-size: 1.1rem; }
+.doc { background: #fff; color: #111; border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; font-size: .9rem; line-height: 1.45; position: sticky; top: 80px; }
+.doc-head { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.doc-kind { font-size: 1.5rem; font-weight: 800; letter-spacing: .06em; color: var(--accent); }
+.doc-title { text-align: right; }
+.doc-em { font-weight: 700; }
+.doc-small { font-size: .8rem; color: #374151; }
+.doc-label { text-transform: uppercase; letter-spacing: .05em; }
+.doc-client { margin: 20px 0; padding: 12px; background: #f8fafc; border-radius: 8px; }
+.doc-table { min-width: 0; font-size: .85rem; margin-bottom: 12px; }
+.doc-table th, .doc-table td { padding: 6px 8px; }
+.doc-table td:nth-child(n+2), .doc-table th:nth-child(n+2) { text-align: right; white-space: nowrap; }
+.doc-totals { text-align: right; margin: 12px 0 18px; }
+.doc-sign { margin-top: 24px; border: 1px dashed #9ca3af; border-radius: 8px; height: 90px; padding: 8px; }
+/* Impression : seule la facture est imprimée, sans pages blanches. */
+@media print {
+  @page { margin: 14mm; }
+  body { background: #fff; }
+  .site-header, .site-footer, .skip, .gen-form, .prose > :not(.gen) { display: none !important; }
+  .container, .prose { max-width: none; padding: 0; margin: 0; }
+  .gen { display: block !important; width: auto !important; transform: none !important; left: auto !important; margin: 0; }
+  .doc { position: static; border: 0; padding: 0; }
+}
+/* Le générateur sort de la colonne de texte pour avoir la place d'afficher formulaire + aperçu. */
+@media (min-width: 901px) {
+  .prose .gen { width: min(1088px, calc(100vw - 32px)); position: relative; left: 50%; transform: translateX(-50%); }
+}
