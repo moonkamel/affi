@@ -4,6 +4,7 @@
 - ✅ **Indy** : validé sur Affilae (partenariat 2067), lien branché.
 - ✅ **Pennylane** : validé sur Affilae (partenariat 777), lien branché.
 - ✅ **Systeme.io** : lien d'affiliation branché (17/10/2026).
+- ✅ **Axonaut** : lien partenaire branché (17/10/2026).
 - ⏳ **SumUp** : candidature Impact en cours d'examen (script de vérification sur l'accueil, à retirer une fois validé).
 - ❌ **Abby** : refusé par l'annonceur sur Affilae (15/10/2026). Recandidater quand le site aura du trafic (Search Console à l'appui).
 
