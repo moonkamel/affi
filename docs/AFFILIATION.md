@@ -1,5 +1,10 @@
 # Programmes d'affiliation — liens d'inscription
 
+## Statut (17/10/2026)
+- ✅ **Indy** : validé sur Affilae (partenariat 2067), lien branché.
+- ✅ **Pennylane** : validé sur Affilae (partenariat 777), lien branché.
+- ❌ **Abby** : refusé par l'annonceur sur Affilae (15/10/2026). Recandidater quand le site aura du trafic (Search Console à l'appui).
+
 Mise à jour : 13 octobre 2026. Les commissions changent souvent : vérifie les conditions au moment de l'inscription, puis renseigne `affiliateUrl` dans `src/data/software.ts` (les liens `/go/<slug>/` basculent automatiquement).
 
 Légende : ✅ programme public confirmé · 🔎 programme à demander / à vérifier · ❌ pas de programme connu
