@@ -77,3 +77,25 @@ Message court : site Logimalin, audience TPE et indépendants, page déjà publi
 - Lien affilié toujours en `rel="sponsored nofollow"` (déjà géré par `/go/`).
 - Lire les conditions : beaucoup interdisent l'enchère Google Ads sur leur marque.
 - Hostinger demande un site avec du trafic réel : postuler après 1 à 2 mois.
+
+## Suivi des clics affiliés
+
+Chaque lien `/go/<slug>/` est réécrit dans le navigateur en `/go/<slug>/<page d'origine>/`
+(script en bas de `BaseLayout.astro`). La redirection reste la même (`dist/_redirects`), mais
+Cloudflare enregistre le chemin complet : on sait quel logiciel a été cliqué et depuis quelle page.
+Les robots, qui n'exécutent pas le JavaScript, arrivent sur `/go/<slug>/` seul et sont donc à part.
+
+Historique : 31 jours (offre gratuite Cloudflare), 30 jours maximum par requête. Requête GraphQL
+(connecteur Cloudflare GraphQL, zone `b9973a216807ea48f09c76444059304f`) :
+
+```graphql
+query { viewer { zones(filter: {zoneTag: "b9973a216807ea48f09c76444059304f"}) {
+  httpRequestsAdaptiveGroups(limit: 100, orderBy: [count_DESC], filter: {
+    datetime_geq: "AAAA-MM-JJT00:00:00Z", datetime_leq: "AAAA-MM-JJT00:00:00Z",
+    clientRequestPath_like: "/go/%/%/" }) {
+    count dimensions { clientRequestPath } } } } }
+```
+
+Lecture : `/go/indy/facturation/logiciel-facturation-auto-entrepreneur/` = un clic vers Indy depuis
+la page « logiciel de facturation auto-entrepreneur ». À relever chaque mois, avant que les données
+de plus de 31 jours disparaissent, et à comparer avec les clics affichés par chaque programme.

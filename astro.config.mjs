@@ -13,7 +13,12 @@ const affiliateRedirects = {
   name: 'affiliate-redirects',
   hooks: {
     'astro:build:done': ({ dir }) => {
-      const lines = SOFTWARE.map((s) => `/go/${s.slug}/ ${s.affiliateUrl ?? s.website} 302`);
+      // La 2e règle (/go/<slug>/<page d'origine>/) sert au suivi des clics par page. Cloudflare Pages limite
+      // les règles dynamiques à 100 : au-delà de 100 logiciels, il faudra passer par une Pages Function.
+      const lines = SOFTWARE.flatMap((s) => {
+        const to = s.affiliateUrl ?? s.website;
+        return [`/go/${s.slug}/ ${to} 302`, `/go/${s.slug}/* ${to} 302`];
+      });
       writeFileSync(new URL('_redirects', dir), lines.join('\n') + '\n');
     },
   },

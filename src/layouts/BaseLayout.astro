@@ -84,5 +84,16 @@ const ogImage = abs(image);
       <slot />
     </main>
     <Footer />
+    <script is:inline>
+      // Suivi des clics affiliés : /go/<slug>/ devient /go/<slug>/<page d'origine>/, compté dans les stats
+      // serveur Cloudflare (voir docs/AFFILIATION.md). Le HTML garde l'URL courte ; les robots sans JS ne sont pas comptés ici.
+      (() => {
+        const from = location.pathname.slice(1) || 'accueil/';
+        for (const a of document.querySelectorAll('a[href^="/go/"]')) {
+          const m = a.getAttribute('href').match(/^\/go\/([^/]+)\/$/);
+          if (m) a.setAttribute('href', `/go/${m[1]}/${from}`);
+        }
+      })();
+    </script>
   </body>
 </html>
