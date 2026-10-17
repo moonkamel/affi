@@ -14,6 +14,7 @@ export const organization = () => ({
   name: SITE.name,
   url: abs('/'),
   logo: { '@type': 'ImageObject', url: abs('/logo.png'), width: 512, height: 512 },
+  ...(SITE.sameAs.length ? { sameAs: SITE.sameAs } : {}),
 });
 
 export const website = () => ({

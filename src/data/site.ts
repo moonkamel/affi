@@ -4,6 +4,8 @@ export const SITE = {
   name: 'Logimalin',
   tagline: 'Les bons logiciels pour TPE et indépendants, comparés par un entrepreneur',
   url: process.env.SITE_URL ?? 'https://www.logi-malin.fr',
+  // Profils officiels de la marque (pas de l'auteur) : relient le site à ses pages sociales dans les données structurées.
+  sameAs: ['https://www.linkedin.com/company/logimalin'],
   locale: 'fr_FR',
   lang: 'fr',
   // Mois de la dernière vérification globale des tarifs affichés.
