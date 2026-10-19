@@ -56,7 +56,7 @@
         detail = `Ton chiffre d’affaires prévu dépasse ${eur(base)} sans atteindre ${eur(maj)} : tu restes en franchise jusqu’au 31 décembre, puis tu factures la TVA à partir du 1er janvier.`;
       } else {
         titre = 'Franchise en base de TVA';
-        detail = `Tu ne factures pas la TVA. Mention à porter sur tes factures : « TVA non applicable, art. 293 B du CGI ». Marge avant le seuil : <strong>${eur(base - prev)}</strong>.`;
+        detail = `Tu ne factures pas la TVA. Mention à porter sur tes factures : « TVA non applicable, art. 293 B du CGI » jusqu’au 31 décembre 2026, puis « TVA non applicable, art. L. 233-3 du CIBS » à partir du 1er janvier 2027. Marge avant le seuil : <strong>${eur(base - prev)}</strong>.`;
       }
       document.getElementById('tva-r').textContent = titre;
       document.getElementById('tva-d').innerHTML = detail + `<br>Seuils utilisés : ${eur(base)} (base) et ${eur(maj)} (majoré).`;

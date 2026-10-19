@@ -160,7 +160,8 @@ const today = new Date().toISOString().slice(0, 10);
       const vat = ht * rate;
       $('d-totals').innerHTML = rate
         ? '<div>Total HT : <strong>' + eur(ht) + '</strong></div><div>TVA ' + (rate * 100).toLocaleString('fr-FR') + ' % : <strong>' + eur(vat) + '</strong></div><div class="doc-em">Total TTC : ' + eur(ht + vat) + '</div>'
-        : '<div class="doc-em">Total : ' + eur(ht) + '</div><div class="doc-small">TVA non applicable, art. 293 B du CGI</div>';
+        // Recodification de la TVA dans le CIBS : nouvelle référence pour les factures datées du 1er janvier 2027.
+        : '<div class="doc-em">Total : ' + eur(ht) + '</div><div class="doc-small">TVA non applicable, ' + (date >= '2027-01-01' ? 'art. L. 233-3 du CIBS' : 'art. 293 B du CGI') + '</div>';
 
       const pro = Boolean($('g-cl-siren').value);
       const m = [];
