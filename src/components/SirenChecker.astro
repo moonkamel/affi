@@ -1,0 +1,251 @@
+---
+// Vérificateur de fichier clients : retrouve ou contrôle le SIREN de chaque ligne via l'API publique
+// Recherche d'entreprises (data.gouv), signale les entreprises fermées et calcule le n° de TVA intracommunautaire.
+// Tout se passe dans le navigateur : le fichier n'est envoyé à aucun serveur Logimalin.
+const LIMIT = 50;
+---
+<div class="sim siren" id="siren-tool" data-limit={LIMIT}>
+  <strong>Vérifie ton fichier clients (gratuit jusqu’à {LIMIT} lignes)</strong>
+
+  <label for="sc-file">1. Importe ton fichier (CSV) ou colle tes lignes depuis Excel</label>
+  <input id="sc-file" type="file" accept=".csv,.txt,text/csv,text/plain" />
+  <textarea id="sc-paste" rows="6" placeholder={'Nom\tSIREN\tCode postal\nBoulangerie Martin\t\t69003\nAtelier Dupont\t812345678\t'} aria-label="Lignes collées depuis Excel"></textarea>
+  <p class="small">Une ligne par client, avec une ligne d’en-tête. Il faut au moins le nom ou le SIREN/SIRET ; le code postal améliore la recherche par nom. Tes données restent dans ton navigateur : seuls le nom, le SIREN et le code postal sont interrogés dans la base publique de l’État.</p>
+  <button type="button" class="btn btn-ghost" id="sc-read">Lire les données</button>
+
+  <div id="sc-map" hidden>
+    <p class="small" id="sc-info"></p>
+    <div class="row">
+      <div><label for="sc-col-name">Colonne du nom</label><select id="sc-col-name"></select></div>
+      <div><label for="sc-col-id">Colonne SIREN ou SIRET</label><select id="sc-col-id"></select></div>
+      <div><label for="sc-col-cp">Colonne code postal</label><select id="sc-col-cp"></select></div>
+    </div>
+    <button type="button" class="btn" id="sc-run">2. Lancer la vérification</button>
+  </div>
+
+  <output class="sim-out" id="sc-out" aria-live="polite" hidden>
+    <div id="sc-progress"></div>
+    <div id="sc-summary" class="sc-summary"></div>
+    <div class="md-table" id="sc-table-wrap"></div>
+    <p id="sc-actions" hidden>
+      <button type="button" class="btn" id="sc-dl">Télécharger le fichier vérifié (CSV pour Excel)</button>
+    </p>
+    <p class="small" id="sc-more" hidden></p>
+  </output>
+  <p class="small">Source : <a href="https://recherche-entreprises.api.gouv.fr/" rel="noopener">API Recherche d’entreprises</a> (répertoire Sirene de l’INSEE et registres officiels, licence ouverte). Le numéro de TVA est calculé à partir du SIREN : vérifie-le sur le service VIES de la Commission européenne avant de l’imprimer sur une facture.</p>
+</div>
+
+<script is:inline>
+  (() => {
+    const root = document.getElementById('siren-tool');
+    if (!root) return;
+    const LIMIT = Number(root.dataset.limit) || 50;
+    const API = 'https://recherche-entreprises.api.gouv.fr/search';
+    const $ = (id) => document.getElementById(id);
+    let header = [], rows = [], results = [];
+
+    // ---------- Lecture du fichier ----------
+    const parse = (text) => {
+      text = text.replace(/^﻿/, '').replace(/\r\n?/g, '\n').trim();
+      if (!text) return [];
+      const first = text.split('\n')[0];
+      const counts = { '\t': first.split('\t').length, ';': first.split(';').length, ',': first.split(',').length };
+      const sep = Object.keys(counts).sort((a, b) => counts[b] - counts[a])[0];
+      const out = []; let row = [], cell = '', q = false;
+      for (let i = 0; i < text.length; i++) {
+        const c = text[i];
+        if (q) {
+          if (c === '"' && text[i + 1] === '"') { cell += '"'; i++; }
+          else if (c === '"') q = false;
+          else cell += c;
+        } else if (c === '"' && cell === '') q = true;
+        else if (c === sep) { row.push(cell.trim()); cell = ''; }
+        else if (c === '\n') { row.push(cell.trim()); out.push(row); row = []; cell = ''; }
+        else cell += c;
+      }
+      row.push(cell.trim()); out.push(row);
+      return out.filter((r) => r.some((x) => x !== ''));
+    };
+    const digits = (s) => String(s || '').replace(/\D/g, '');
+    const guess = (re, test) => {
+      let i = header.findIndex((h) => re.test(h));
+      if (i < 0 && test) i = header.findIndex((_, k) => rows.slice(0, 20).filter((r) => test(r[k])).length >= Math.min(3, rows.length));
+      return i;
+    };
+    const fill = (sel, idx) => {
+      sel.innerHTML = '';
+      const none = new Option('(aucune)', '-1'); sel.add(none);
+      header.forEach((h, i) => sel.add(new Option(h || `Colonne ${i + 1}`, String(i))));
+      sel.value = String(idx);
+    };
+    const load = (text) => {
+      const data = parse(text);
+      if (data.length < 2) { alert('Il faut une ligne d’en-tête et au moins une ligne de données.'); return; }
+      header = data[0]; rows = data.slice(1);
+      fill($('sc-col-name'), guess(/nom|raison|soci[ée]t[ée]|client|entreprise|d[ée]nomination/i));
+      fill($('sc-col-id'), guess(/siren|siret/i, (v) => [9, 14].includes(digits(v).length)));
+      fill($('sc-col-cp'), guess(/postal|^cp$|code ?postal/i, (v) => /^\d{5}$/.test(String(v || '').trim())));
+      $('sc-info').textContent = `${rows.length} ligne(s) détectée(s)` + (rows.length > LIMIT ? `. La version gratuite vérifie les ${LIMIT} premières.` : '.') + ' Vérifie les colonnes ci-dessous :';
+      $('sc-map').hidden = false;
+    };
+    $('sc-read').addEventListener('click', () => {
+      const f = $('sc-file').files[0];
+      if (f) {
+        const r = new FileReader();
+        r.onload = () => {
+          let t = r.result;
+          // Fichier Excel français enregistré en CSV : souvent en Windows-1252
+          if (t.includes('�')) { const r2 = new FileReader(); r2.onload = () => load(r2.result); r2.readAsText(f, 'windows-1252'); }
+          else load(t);
+        };
+        r.readAsText(f, 'utf-8');
+      } else load($('sc-paste').value);
+    });
+
+    // ---------- Contrôles ----------
+    const luhn = (s) => {
+      let sum = 0;
+      for (let i = 0; i < s.length; i++) {
+        let n = +s[s.length - 1 - i];
+        if (i % 2) { n *= 2; if (n > 9) n -= 9; }
+        sum += n;
+      }
+      return sum % 10 === 0;
+    };
+    const validSiren = (s) => /^\d{9}$/.test(s) && (luhn(s) || s === '356000000');
+    const validSiret = (s) => /^\d{14}$/.test(s) && (luhn(s) || s.startsWith('356000000'));
+    const tva = (siren) => 'FR' + String((12 + 3 * (Number(siren) % 97)) % 97).padStart(2, '0') + siren;
+    const norm = (s) => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/\b(sas|sasu|sarl|eurl|sa|sci|snc|ei|eirl|ste|societe|la|le|les|de|du|des|et)\b/g, ' ').replace(/[^a-z0-9]+/g, ' ').trim();
+    const close = (a, b) => {
+      const A = new Set(norm(a).split(' ').filter((w) => w.length > 2)), B = new Set(norm(b).split(' ').filter((w) => w.length > 2));
+      if (!A.size || !B.size) return true;
+      let c = 0; A.forEach((w) => { if (B.has(w)) c++; });
+      return c / Math.min(A.size, B.size) >= 0.5;
+    };
+    const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+    const query = async (params, tries = 0) => {
+      const url = API + '?' + new URLSearchParams({ per_page: '5', page: '1', ...params });
+      const res = await fetch(url, { headers: { Accept: 'application/json' } });
+      if (res.status === 429 && tries < 4) { await sleep(1200 * (tries + 1)); return query(params, tries + 1); }
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      return res.json();
+    };
+    const pick = (e) => {
+      const s = e.siege || {};
+      const adresse = s.adresse || [s.numero_voie, s.type_voie, s.libelle_voie, s.code_postal, s.libelle_commune].filter(Boolean).join(' ');
+      return {
+        siren: e.siren,
+        siret: s.siret || '',
+        nom: e.nom_complet || e.nom_raison_sociale || '',
+        adresse,
+        naf: e.activite_principale || s.activite_principale || '',
+        etat: e.etat_administratif || s.etat_administratif || '',
+        fermeture: e.date_fermeture || s.date_fermeture || '',
+      };
+    };
+
+    const check = async (r) => {
+      const ci = +$('sc-col-name').value, ii = +$('sc-col-id').value, pi = +$('sc-col-cp').value;
+      const name = ci >= 0 ? r[ci] || '' : '';
+      const id = ii >= 0 ? digits(r[ii]) : '';
+      const cp = pi >= 0 ? digits(r[pi]).slice(0, 5) : '';
+      const base = { name, id, statut: '', note: '' };
+      if (id) {
+        if (id.length === 14 && !validSiret(id)) return { ...base, statut: 'erreur', note: 'SIRET invalide (erreur de saisie probable)' };
+        if (id.length === 9 && !validSiren(id)) return { ...base, statut: 'erreur', note: 'SIREN invalide (erreur de saisie probable)' };
+        if (id.length !== 9 && id.length !== 14) return { ...base, statut: 'erreur', note: 'Ni 9 chiffres (SIREN) ni 14 (SIRET)' };
+        const siren = id.slice(0, 9);
+        const data = await query({ q: siren });
+        const e = (data.results || []).find((x) => x.siren === siren);
+        if (!e) return { ...base, statut: 'introuvable', note: 'Numéro absent de la base publique (entreprise non diffusible ou numéro erroné)' };
+        const p = pick(e);
+        let note = '';
+        if (name && !close(name, p.nom)) note = 'Le nom du fichier ne correspond pas : vérifie le numéro';
+        if (id.length === 14 && id !== p.siret) note = (note ? note + '. ' : '') + 'SIRET d’un établissement secondaire : le siège est indiqué';
+        return { ...base, ...p, statut: p.etat === 'C' ? 'fermee' : note.startsWith('Le nom') ? 'verifier' : 'ok', note };
+      }
+      if (!name) return { ...base, statut: 'erreur', note: 'Ni nom ni SIREN' };
+      const params = { q: name };
+      if (cp) params.code_postal = cp;
+      const data = await query(params);
+      const list = data.results || [];
+      if (!list.length) return { ...base, statut: 'introuvable', note: cp ? 'Aucun résultat avec ce nom et ce code postal' : 'Aucun résultat : ajoute le code postal ou le SIREN' };
+      const p = pick(list[0]);
+      const autres = (data.total_results || list.length) - 1;
+      const sure = autres === 0 || (close(name, p.nom) && !list.slice(1).some((x) => close(name, x.nom_complet)));
+      return {
+        ...base, ...p,
+        statut: p.etat === 'C' ? 'fermee' : sure ? 'ok' : 'verifier',
+        note: sure ? 'Trouvé par le nom' : `${autres} autre(s) entreprise(s) au nom proche : confirme le SIREN`,
+      };
+    };
+
+    // ---------- Affichage ----------
+    const LABEL = { ok: '✅ Active', fermee: '⛔ Fermée', verifier: '⚠️ À vérifier', introuvable: '❓ Introuvable', erreur: '❌ Erreur' };
+    const render = () => {
+      const t = document.createElement('table');
+      const head = ['Ligne', 'Nom dans ton fichier', 'Résultat', 'SIREN', 'Nom officiel', 'Adresse du siège', 'TVA intracom. (calculée)', 'Remarque'];
+      const tr = t.createTHead().insertRow();
+      head.forEach((h) => { const th = document.createElement('th'); th.textContent = h; tr.appendChild(th); });
+      const tb = t.createTBody();
+      results.forEach((x, i) => {
+        const row = tb.insertRow();
+        [i + 1, x.name, LABEL[x.statut] || '…', x.siren || '', x.nom || '', x.adresse || '', x.siren ? tva(x.siren) : '',
+          x.note + (x.fermeture ? ` (fermée le ${x.fermeture.split('-').reverse().join('/')})` : '')]
+          .forEach((v) => { row.insertCell().textContent = v; });
+      });
+      $('sc-table-wrap').replaceChildren(t);
+      const c = (s) => results.filter((x) => x.statut === s).length;
+      $('sc-summary').innerHTML = `<span><strong>${c('ok')}</strong> actives</span><span><strong>${c('fermee')}</strong> fermées</span><span><strong>${c('verifier')}</strong> à vérifier</span><span><strong>${c('introuvable') + c('erreur')}</strong> introuvables ou erronées</span>`;
+    };
+
+    $('sc-run').addEventListener('click', async () => {
+      const btn = $('sc-run');
+      const batch = rows.slice(0, LIMIT);
+      results = [];
+      btn.disabled = true;
+      $('sc-out').hidden = false; $('sc-actions').hidden = true; $('sc-more').hidden = true;
+      for (let i = 0; i < batch.length; i++) {
+        $('sc-progress').textContent = `Vérification ${i + 1} sur ${batch.length}…`;
+        try { results.push(await check(batch[i])); }
+        catch (err) { results.push({ name: batch[i][+$('sc-col-name').value] || '', statut: 'erreur', note: 'Service public indisponible, réessaie plus tard' }); }
+        render();
+        await sleep(160); // limite de l'API : 7 requêtes par seconde
+      }
+      $('sc-progress').textContent = `Terminé : ${batch.length} ligne(s) vérifiée(s).`;
+      $('sc-actions').hidden = false;
+      if (rows.length > LIMIT) {
+        $('sc-more').hidden = false;
+        $('sc-more').innerHTML = `Ton fichier compte ${rows.length} lignes : la version gratuite s’arrête à ${LIMIT}. <a href="/outils/verification-fichier-clients-complet/">La version complète et la surveillance de tes clients arrivent bientôt : inscris-toi pour être prévenu</a>.`;
+      }
+      btn.disabled = false;
+    });
+
+    // ---------- Export CSV ----------
+    $('sc-dl').addEventListener('click', () => {
+      const esc = (v) => { v = String(v ?? ''); return /[";\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; };
+      const extra = ['Résultat', 'SIREN vérifié', 'SIRET du siège', 'Nom officiel', 'Adresse du siège', 'Code NAF', 'TVA intracommunautaire (calculée)', 'Remarque'];
+      const lines = [header.concat(extra).map(esc).join(';')];
+      results.forEach((x, i) => {
+        const add = [(LABEL[x.statut] || '').replace(/^\S+\s/, ''), x.siren || '', x.siret || '', x.nom || '', x.adresse || '', x.naf || '', x.siren ? tva(x.siren) : '', x.note || ''];
+        lines.push(rows[i].concat(add).map(esc).join(';'));
+      });
+      const blob = new Blob(['﻿' + lines.join('\r\n')], { type: 'text/csv;charset=utf-8' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob); a.download = 'fichier-clients-verifie.csv';
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+    });
+  })();
+</script>
+
+<style>
+  .siren textarea { width: 100%; font: inherit; font-size: .92rem; font-family: ui-monospace, monospace; padding: 9px 12px; border: 1.5px solid var(--line); border-radius: 10px; background: var(--paper); color: var(--ink); margin-top: 8px; }
+  .siren .row { grid-template-columns: 1fr 1fr 1fr; }
+  @media (max-width: 600px) { .siren .row { grid-template-columns: 1fr; } }
+  .siren .btn { margin-top: 14px; }
+  .siren .small { font-size: .85rem; color: var(--muted, #555); }
+  .sc-summary { display: flex; flex-wrap: wrap; gap: 8px 18px; margin: 10px 0; }
+  .siren .md-table { background: var(--card); margin: 12px 0; }
+  .siren .md-table td, .siren .md-table th { font-size: .82rem; white-space: nowrap; }
+</style>

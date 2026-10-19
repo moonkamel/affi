@@ -1,0 +1,85 @@
+---
+title: "Vérifier les SIREN de ton fichier clients : outil gratuit pour la facture électronique"
+seoTitle: "Vérifier SIREN et SIRET en masse : outil gratuit"
+description: "Importe ton fichier clients : l’outil retrouve les SIREN manquants, repère les entreprises fermées et calcule les numéros de TVA. Gratuit jusqu’à 50 lignes."
+keyword: "vérifier siren"
+secondaryKeywords:
+  - "vérification siret en masse"
+  - "vérifier un numéro siret"
+  - "trouver le siren d'une entreprise"
+  - "fichier clients facture électronique"
+  - "siren client facture"
+  - "numéro tva intracommunautaire siren"
+type: outil
+draft: true
+published: 2026-10-19
+updated: 2026-10-19
+related:
+  - facturation/mentions-obligatoires-facture
+  - facturation/facture-electronique-2026
+  - facturation/annuaire-facturation-electronique
+  - facturation/logiciel-de-facturation
+tldr:
+  - "<strong>Depuis la réforme de la facture électronique</strong>, le SIREN du client professionnel est une mention obligatoire : ton fichier clients doit le contenir."
+  - "<strong>L’outil</strong> retrouve le SIREN à partir du nom, contrôle les numéros saisis, signale les entreprises fermées et calcule le numéro de TVA intracommunautaire."
+  - "<strong>Gratuit jusqu’à 50 lignes</strong>, sans inscription. Ton fichier reste dans ton navigateur."
+faq:
+  - q: "Pourquoi le SIREN du client devient-il obligatoire sur les factures ?"
+    a: "La réforme de la facture électronique ajoute quatre mentions obligatoires, dont le SIREN du client professionnel. Il permet aussi de trouver, dans l’annuaire de la facturation électronique, la plateforme sur laquelle ton client reçoit ses factures."
+  - q: "Comment trouver le SIREN d’une entreprise ?"
+    a: "Sur l’annuaire des entreprises de l’État (annuaire-entreprises.data.gouv.fr), en cherchant par nom et commune. Pour tout un fichier, l’outil de cette page fait la recherche ligne par ligne dans la même base publique."
+  - q: "Comment savoir si un SIREN est valide ?"
+    a: "Un SIREN compte 9 chiffres et respecte une clé de contrôle (algorithme de Luhn), comme le SIRET à 14 chiffres. L’outil vérifie cette clé, puis contrôle que le numéro existe bien dans le répertoire Sirene et que l’entreprise est toujours active."
+  - q: "Comment calculer le numéro de TVA intracommunautaire à partir du SIREN ?"
+    a: "Il s’écrit FR, suivi d’une clé à 2 chiffres et du SIREN. La clé vaut (12 + 3 × (SIREN modulo 97)) modulo 97. Le calcul donne le bon format, mais seul le service VIES de la Commission européenne confirme que le numéro est actif."
+  - q: "Mes données sont-elles envoyées à Logimalin ?"
+    a: "Non. Le fichier est lu dans ton navigateur. Pour chaque ligne, seuls le nom, le SIREN ou SIRET et le code postal sont envoyés à l’API publique Recherche d’entreprises de l’État. Rien n’est enregistré sur nos serveurs."
+  - q: "Que faire des clients fermés ?"
+    a: "Archive-les dans ton logiciel de facturation pour ne plus leur envoyer de factures. S’il reste des factures impayées, une entreprise fermée ou en liquidation demande une démarche spécifique : déclarer ta créance au mandataire judiciaire dans les délais."
+---
+import SirenChecker from '../../../components/SirenChecker.astro';
+import Callout from '../../../components/Callout.astro';
+import NewsletterBox from '../../../components/NewsletterBox.astro';
+
+Avec la facture électronique, chaque facture à un client professionnel doit porter **son numéro SIREN**. Dans la plupart des TPE, le fichier clients a été rempli au fil des années : SIREN manquants, numéros mal recopiés, entreprises fermées depuis longtemps. Cet outil fait le ménage pour toi, ligne par ligne, dans la base officielle de l’État.
+
+<SirenChecker />
+
+## Comment utiliser l’outil
+
+1. **Exporte ton fichier clients** depuis ton logiciel de facturation ou Excel, au format CSV (« Enregistrer sous », puis « CSV séparateur point-virgule »). Tu peux aussi copier les colonnes dans Excel et les coller dans le cadre.
+2. **Vérifie les colonnes** détectées : le nom, le SIREN ou SIRET, et le code postal si tu l’as.
+3. **Lance la vérification**, puis télécharge le fichier complété. Il reprend tes colonnes d’origine et ajoute le résultat, le SIREN vérifié, le SIRET du siège, le nom officiel, l’adresse, le code NAF et le numéro de TVA calculé.
+4. **Corrige les lignes signalées** et réimporte le fichier dans ton logiciel.
+
+## Comment lire les résultats
+
+| Résultat | Ce que ça veut dire | Que faire |
+|---|---|---|
+| ✅ Active | Entreprise trouvée et en activité | Rien, reporte le SIREN dans ton logiciel |
+| ⛔ Fermée | Entreprise radiée ou cessée | Archive le client, vérifie s’il reste des impayés |
+| ⚠️ À vérifier | Plusieurs entreprises portent un nom proche, ou le nom ne correspond pas au numéro | Confirme le SIREN avec ton client ou sur une de ses factures |
+| ❓ Introuvable | Aucun résultat | Ajoute le code postal, corrige le nom, ou demande le SIREN au client |
+| ❌ Erreur | Numéro mal formé (clé de contrôle fausse) | Erreur de saisie : reprends le numéro sur un document du client |
+
+<Callout title="Les particuliers n’ont pas de SIREN">
+  La réforme concerne les factures entre professionnels. Tes clients particuliers n’ont pas de SIREN : pour eux, la facture électronique n’est pas obligatoire, mais tu devras transmettre certaines données à l’administration (e-reporting). Garde-les dans ton fichier, sans SIREN.
+</Callout>
+
+## Pourquoi c’est le bon moment
+
+- **Depuis le 1er septembre 2026**, toutes les entreprises doivent pouvoir recevoir des factures électroniques.
+- **Au 1er septembre 2027**, les PME, TPE et micro-entreprises devront aussi les émettre, avec les [nouvelles mentions obligatoires](/facturation/mentions-obligatoires-facture/), dont le SIREN du client.
+- Le SIREN sert aussi à retrouver ton client dans l’[annuaire de la facturation électronique](/facturation/annuaire-facturation-electronique/), qui indique où il reçoit ses factures.
+
+Un fichier propre maintenant, c’est un passage sans accroc à ton futur [logiciel de facturation](/facturation/logiciel-de-facturation/) ou à ta [plateforme agréée](/facturation/plateforme-agreee-facture-electronique/).
+
+## Et au-delà de 50 lignes ?
+
+La version gratuite vérifie les 50 premières lignes. Une version complète est en préparation : fichiers de plusieurs milliers de lignes et **surveillance de tes clients**, avec une alerte si l’un d’eux ferme ou fait l’objet d’une procédure collective (redressement, liquidation). [Inscris-toi pour être prévenu](/outils/verification-fichier-clients-complet/).
+
+<NewsletterBox heading="Prépare la facture électronique : la check-list gratuite" />
+
+Sources : [API Recherche d’entreprises](https://recherche-entreprises.api.gouv.fr/) (répertoire Sirene de l’INSEE, licence ouverte), [annuaire des entreprises](https://annuaire-entreprises.data.gouv.fr/), [VIES, Commission européenne](https://ec.europa.eu/taxation_customs/vies/). Vérifié en octobre 2026.
+
+<p data-maillage>Pour préparer la réforme : la <a href="/facturation/facture-electronique-2026/">facture électronique 2026-2027</a>, les <a href="/facturation/mentions-obligatoires-facture/">mentions obligatoires</a> et l’<a href="/facturation/annuaire-facturation-electronique/">annuaire</a>. Pour facturer gratuitement en attendant : le <a href="/outils/modele-facture-gratuit/">modèle de facture gratuit</a>.</p>

@@ -1,0 +1,21 @@
+---
+// Page d'attente de la version complète du vérificateur de fichier clients (non indexée).
+// Les visites de cette page mesurent l'intérêt pour la version payante (Cloudflare, relevé mensuel).
+import PageLayout from '../../layouts/PageLayout.astro';
+import NewsletterBox from '../../components/NewsletterBox.astro';
+---
+<PageLayout
+  title="Vérificateur de fichier clients : la version complète arrive"
+  seoTitle="Vérificateur de fichier clients : version complète"
+  description="Version complète du vérificateur de fichier clients Logimalin : fichiers de plusieurs milliers de lignes et surveillance mensuelle de tes clients."
+  noindex
+>
+  <p>Merci de ton intérêt ! La version gratuite du <a href="/outils/verification-siren-fichier-clients/">vérificateur de fichier clients</a> s’arrête à 50 lignes. Nous préparons une version complète :</p>
+  <ul>
+    <li><strong>Fichiers sans limite pratique</strong> : plusieurs milliers de lignes vérifiées d’un coup, avec le même fichier enrichi en sortie.</li>
+    <li><strong>Surveillance de tes clients</strong> : chaque mois, une alerte par e-mail si un client ferme, déménage, ou fait l’objet d’une procédure collective (redressement, liquidation). De quoi te faire payer avant qu’il soit trop tard.</li>
+  </ul>
+  <p>Inscris-toi à notre lettre d’information : tu seras prévenu dès l’ouverture, avec un tarif de lancement réservé aux inscrits.</p>
+  <NewsletterBox heading="Sois prévenu de l’ouverture" />
+  <p>En attendant, tu peux découper ton fichier en blocs de 50 lignes et les vérifier gratuitement avec <a href="/outils/verification-siren-fichier-clients/">l’outil actuel</a>.</p>
+</PageLayout>
