@@ -30,7 +30,12 @@ for row in range(2, ws.max_row + 1):
         ws.cell(row, 13).value = info['reponse']
     if info.get('lien'):
         ws.cell(row, 14).value = info['lien']
-    ws.cell(row, 15).value = 'Relance prévue le ' + relance(d).strftime('%d/%m/%Y') if not info.get('relance') else 'Relancé'
+    if info.get('note'):
+        ws.cell(row, 15).value = info['note']
+    elif statut in ('Envoyé', 'Relancé'):
+        ws.cell(row, 15).value = 'Relancé' if info.get('relance') else 'Relance prévue le ' + relance(d).strftime('%d/%m/%Y')
+    else:
+        ws.cell(row, 15).value = None
 wb.save(XLSX)
 
 # CSV pour Google Sheets (séparateur d'arguments « ; »)
