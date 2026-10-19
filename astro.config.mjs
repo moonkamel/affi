@@ -63,6 +63,23 @@ const imagesFor = (path) =>
     title: g.title,
   }));
 
+
+// Enveloppe chaque tableau Markdown dans un conteneur défilant : le tableau garde toute la largeur du cadre
+// (sinon, avec `display: block`, les lignes s'arrêtent avant le bord quand le contenu est court).
+function rehypeWrapTables() {
+  const wrap = (node) => {
+    if (!node.children) return;
+    node.children = node.children.map((child) => {
+      if (child.type === 'element' && child.tagName === 'table') {
+        return { type: 'element', tagName: 'div', properties: { className: ['md-table'] }, children: [child] };
+      }
+      wrap(child);
+      return child;
+    });
+  };
+  return (tree) => wrap(tree);
+}
+
 export default defineConfig({
   site: SITE.url,
   trailingSlash: 'always',
@@ -74,7 +91,7 @@ export default defineConfig({
   compressHTML: true,
   prefetch: { prefetchAll: false, defaultStrategy: 'hover' },
   integrations: [
-    mdx(),
+    mdx({ rehypePlugins: [rehypeWrapTables] }),
     affiliateRedirects,
     fixTableAnchors,
     sitemap({
