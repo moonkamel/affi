@@ -1,0 +1,243 @@
+---
+// Prévisionnel de business plan sur 3 ans : compte de résultat simplifié, seuil de rentabilité,
+// plan de financement et trésorerie de fin d'année. JS inline, sans framework, rien n'est envoyé.
+---
+<form class="sim bp" id="sim-bp" aria-labelledby="bp-titre" onsubmit="return false">
+  <strong id="bp-titre">Ton prévisionnel sur 3 ans</strong>
+  <p class="small muted">Montants hors taxe. Les calculs restent dans ton navigateur : rien n’est envoyé.</p>
+
+  <fieldset>
+    <legend>Activité</legend>
+    <div class="row">
+      <div>
+        <label for="bp-ca">Chiffre d’affaires de la 1re année (€)</label>
+        <input id="bp-ca" type="number" min="0" value="60000" inputmode="decimal" />
+      </div>
+      <div>
+        <label for="bp-croiss">Croissance par an ensuite (%)</label>
+        <input id="bp-croiss" type="number" min="-50" max="300" value="20" inputmode="decimal" />
+      </div>
+      <div>
+        <label for="bp-var">Achats et coûts variables (% du chiffre d’affaires)</label>
+        <input id="bp-var" type="number" min="0" max="100" value="30" inputmode="decimal" />
+      </div>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Charges fixes par mois</legend>
+    <div class="row">
+      <div>
+        <label for="bp-loyer">Loyer et charges des locaux (€)</label>
+        <input id="bp-loyer" type="number" min="0" value="0" inputmode="decimal" />
+      </div>
+      <div>
+        <label for="bp-logi">Logiciels, téléphone, assurance, banque (€)</label>
+        <input id="bp-logi" type="number" min="0" value="150" inputmode="decimal" />
+      </div>
+      <div>
+        <label for="bp-autres">Autres frais fixes : comptable, marketing, déplacements (€)</label>
+        <input id="bp-autres" type="number" min="0" value="250" inputmode="decimal" />
+      </div>
+      <div>
+        <label for="bp-remu">Ta rémunération et tes cotisations (€)</label>
+        <input id="bp-remu" type="number" min="0" value="2000" inputmode="decimal" />
+      </div>
+      <div>
+        <label for="bp-sal">Salaires et charges des salariés (€)</label>
+        <input id="bp-sal" type="number" min="0" value="0" inputmode="decimal" />
+      </div>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Démarrage et financement</legend>
+    <div class="row">
+      <div>
+        <label for="bp-inv">Investissements de départ : matériel, aménagement, site (€)</label>
+        <input id="bp-inv" type="number" min="0" value="8000" inputmode="decimal" />
+      </div>
+      <div>
+        <label for="bp-bfr">Trésorerie de départ nécessaire : stock, délais de paiement (€)</label>
+        <input id="bp-bfr" type="number" min="0" value="3000" inputmode="decimal" />
+      </div>
+      <div>
+        <label for="bp-apport">Apport personnel (€)</label>
+        <input id="bp-apport" type="number" min="0" value="5000" inputmode="decimal" />
+      </div>
+      <div>
+        <label for="bp-honneur">Prêt d’honneur (€)</label>
+        <input id="bp-honneur" type="number" min="0" value="0" inputmode="decimal" />
+      </div>
+      <div>
+        <label for="bp-pret">Prêt bancaire (€)</label>
+        <input id="bp-pret" type="number" min="0" value="6000" inputmode="decimal" />
+      </div>
+      <div>
+        <label for="bp-duree">Durée du prêt bancaire (années)</label>
+        <input id="bp-duree" type="number" min="1" max="15" value="5" inputmode="numeric" />
+      </div>
+      <div>
+        <label for="bp-taux">Taux du prêt bancaire (%)</label>
+        <input id="bp-taux" type="number" min="0" max="20" step="0.1" value="5" inputmode="decimal" />
+      </div>
+      <div>
+        <label for="bp-amort">Durée d’amortissement des investissements (années)</label>
+        <input id="bp-amort" type="number" min="1" max="10" value="3" inputmode="numeric" />
+      </div>
+    </div>
+  </fieldset>
+
+  <output class="sim-out" aria-live="polite">
+    <div>Seuil de rentabilité (chiffre d’affaires annuel)</div>
+    <div class="big" id="bp-seuil">–</div>
+    <div id="bp-seuil-d" class="small"></div>
+  </output>
+
+  <div class="table-wrap">
+    <table class="bp-table" id="bp-cr">
+      <caption>Compte de résultat prévisionnel simplifié</caption>
+      <thead><tr><th scope="col"></th><th scope="col">Année 1</th><th scope="col">Année 2</th><th scope="col">Année 3</th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <div class="table-wrap">
+    <table class="bp-table" id="bp-fin">
+      <caption>Plan de financement de départ</caption>
+      <thead><tr><th scope="col">Besoins</th><th scope="col">Montant</th><th scope="col">Ressources</th><th scope="col">Montant</th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <p id="bp-alerte" class="small"></p>
+  <p class="bp-actions">
+    <button type="button" class="btn btn-sm" id="bp-csv">Télécharger le tableau (CSV, ouvre dans Excel)</button>
+    <button type="button" class="btn btn-sm btn-ghost" id="bp-print">Imprimer ou enregistrer en PDF</button>
+  </p>
+</form>
+
+<style>
+  .bp fieldset { border: 0; padding: 0; margin: 14px 0 0; }
+  .bp legend { font-family: var(--display); font-weight: 700; font-size: .95rem; padding: 0; margin-top: 8px; color: var(--accent); }
+  .bp-table { width: 100%; margin-top: 18px; font-variant-numeric: tabular-nums; }
+  .bp-table caption { text-align: left; font-family: var(--display); font-weight: 700; padding-bottom: 6px; }
+  .bp-table td:not(:first-child), .bp-table th:not(:first-child) { text-align: right; white-space: nowrap; }
+  .bp-table tr.total td { font-weight: 700; border-top: 2px solid var(--line); }
+  .bp-table td.neg { color: var(--bad); }
+  .bp-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+  @media print {
+    .site-header, .site-footer, .toc, .related, .faq, .author-box, .bp fieldset, .bp-actions, .bp > p.small { display: none !important; }
+    .bp { box-shadow: none; border: 0; }
+  }
+</style>
+
+<script is:inline>
+  (() => {
+    const f = document.getElementById('sim-bp');
+    if (!f) return;
+    const v = (id) => parseFloat(String(document.getElementById(id).value).replace(',', '.')) || 0;
+    const pos = (id) => Math.max(0, v(id));
+    const eur = (n) => n.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 });
+    let rows = [];
+
+    const calc = () => {
+      const ca1 = pos('bp-ca');
+      const g = v('bp-croiss') / 100;
+      const ca = [ca1, ca1 * (1 + g), ca1 * (1 + g) * (1 + g)];
+      const varRate = Math.min(100, pos('bp-var')) / 100;
+      const fixeMois = pos('bp-loyer') + pos('bp-logi') + pos('bp-autres');
+      const remu = pos('bp-remu') * 12;
+      const sal = pos('bp-sal') * 12;
+      const inv = pos('bp-inv');
+      const amort = inv / Math.max(1, pos('bp-amort'));
+      const pret = pos('bp-pret');
+      const n = Math.max(1, Math.round(pos('bp-duree')));
+      const r = pos('bp-taux') / 100;
+      // Mensualité constante, puis intérêts et capital remboursé chaque année.
+      const m = r > 0 ? (pret * (r / 12)) / (1 - Math.pow(1 + r / 12, -12 * n)) : pret / (12 * n);
+      let crd = pret;
+      const interets = [], capital = [];
+      for (let y = 0; y < 3; y++) {
+        let i = 0, c = 0;
+        for (let k = 0; k < 12 && crd > 0.01 && y < n; k++) {
+          const ik = crd * (r / 12);
+          const ck = Math.min(crd, m - ik);
+          i += ik; c += ck; crd -= ck;
+        }
+        interets.push(i); capital.push(c);
+      }
+
+      const res = [], caf = [], treso = [];
+      const apport = pos('bp-apport'), honneur = pos('bp-honneur'), bfr = pos('bp-bfr');
+      // Trésorerie après le démarrage : ressources - investissements - besoin de trésorerie (stock, délais clients).
+      let cash = apport + honneur + pret - inv - bfr;
+      rows = [['', 'Année 1', 'Année 2', 'Année 3']];
+      const line = (label, arr) => rows.push([label, ...arr.map((x) => Math.round(x) || 0)]);
+      const achats = ca.map((x) => x * varRate);
+      const fixes = [0, 1, 2].map(() => fixeMois * 12);
+      for (let y = 0; y < 3; y++) {
+        const amortY = y < pos('bp-amort') ? amort : 0;
+        const rv = ca[y] - achats[y] - fixes[y] - remu - sal - amortY - interets[y];
+        res.push(rv);
+        caf.push(rv + amortY);
+        // Le prêt d'honneur est un prêt personnel apporté à l'entreprise : le créateur le rembourse sur sa rémunération.
+        cash += rv + amortY - capital[y];
+        treso.push(cash);
+      }
+      line('Chiffre d’affaires', ca);
+      line('Achats et coûts variables', achats.map((x) => -x));
+      line('Charges fixes', fixes.map((x) => -x));
+      line('Ta rémunération', [remu, remu, remu].map((x) => -x));
+      line('Salaires', [sal, sal, sal].map((x) => -x));
+      line('Amortissements', [0, 1, 2].map((y) => -(y < pos('bp-amort') ? amort : 0)));
+      line('Intérêts d’emprunt', interets.map((x) => -x));
+      line('Résultat avant impôt', res);
+      line('Capacité d’autofinancement', caf);
+      line('Trésorerie en fin d’année', treso);
+
+      const tb = f.querySelector('#bp-cr tbody');
+      tb.innerHTML = rows.slice(1).map((rw, i) => {
+        const total = i >= 7 ? ' class="total"' : '';
+        return `<tr${total}><td>${rw[0]}</td>${rw.slice(1).map((x) => `<td${x < 0 && i >= 7 ? ' class="neg"' : ''}>${eur(x)}</td>`).join('')}</tr>`;
+      }).join('');
+
+      const besoins = [['Investissements', inv], ['Trésorerie de départ', bfr]];
+      const ress = [['Apport personnel', apport], ['Prêt d’honneur', honneur], ['Prêt bancaire', pret]];
+      const totB = inv + bfr, totR = apport + honneur + pret;
+      const fb = f.querySelector('#bp-fin tbody');
+      fb.innerHTML = [0, 1, 2].map((i) =>
+        `<tr><td>${besoins[i] ? besoins[i][0] : ''}</td><td>${besoins[i] ? eur(besoins[i][1]) : ''}</td><td>${ress[i][0]}</td><td>${eur(ress[i][1])}</td></tr>`
+      ).join('') + `<tr class="total"><td>Total</td><td>${eur(totB)}</td><td>Total</td><td${totR < totB ? ' class="neg"' : ''}>${eur(totR)}</td></tr>`;
+      rows.push([], ['Plan de financement', 'Montant'], ...besoins.map(([a, b]) => [a, b]), ...ress.map(([a, b]) => [a, b]));
+
+      // Seuil de rentabilité : charges fixes annuelles (y compris rémunération) ÷ taux de marge sur coûts variables.
+      const cf = fixeMois * 12 + remu + sal + amort + interets[0];
+      const marge = 1 - varRate;
+      const seuil = marge > 0 ? cf / marge : Infinity;
+      document.getElementById('bp-seuil').textContent = isFinite(seuil) ? eur(seuil) : 'impossible';
+      document.getElementById('bp-seuil-d').innerHTML = isFinite(seuil)
+        ? `Soit <strong>${eur(seuil / 12)}</strong> de chiffre d’affaires par mois pour couvrir toutes tes charges, ta rémunération comprise. ` +
+          (ca1 >= seuil ? `Ton prévisionnel l’atteint dès la 1re année.` : `Ton chiffre d’affaires de 1re année est en dessous : il manque <strong>${eur(seuil - ca1)}</strong>.`)
+        : 'Avec 100 % de coûts variables, chaque vente coûte ce qu’elle rapporte : revois tes prix.';
+
+      const alertes = [];
+      if (totR < totB) alertes.push(`⚠ Il manque <strong>${eur(totB - totR)}</strong> de financement pour couvrir tes besoins de départ.`);
+      if (Math.min(...treso) < 0) alertes.push('⚠ La trésorerie devient négative : prévois plus de fonds de départ, un prêt plus long ou des charges plus basses.');
+      if (!alertes.length) alertes.push('✓ Le financement couvre les besoins de départ et la trésorerie reste positive sur 3 ans.');
+      document.getElementById('bp-alerte').innerHTML = alertes.join('<br>');
+    };
+
+    document.getElementById('bp-csv').onclick = () => {
+      const csv = rows.map((r) => r.map((c) => (typeof c === 'string' ? `"${c.replace(/"/g, '""')}"` : c)).join(';')).join('\r\n');
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8' }));
+      a.download = 'previsionnel-business-plan.csv';
+      a.click();
+      URL.revokeObjectURL(a.href);
+    };
+    document.getElementById('bp-print').onclick = () => window.print();
+    f.addEventListener('input', calc);
+    calc();
+  })();
+</script>

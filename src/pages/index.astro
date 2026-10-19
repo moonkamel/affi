@@ -21,6 +21,8 @@ const needs = (['facturation', 'comptabilite', 'encaissement', 'site-internet', 
   articles.some((a) => siloOf(a) === s),
 );
 const metiers = articles.filter((a) => siloOf(a) === 'metiers' && a.id.includes('/logiciels-'));
+const creerOrder = ['creer/business-plan', 'creer/sasu-ou-eurl', 'creer/arce', 'creer/declaration-urssaf-auto-entrepreneur', 'creer/plafond-auto-entrepreneur', 'creer/pret-d-honneur'];
+const creer = creerOrder.map((id) => articles.find((a) => a.id === id)).filter((a) => a !== undefined);
 const count = articles.length;
 ---
 <BaseLayout
@@ -96,6 +98,18 @@ const count = articles.length;
           <strong>{a.data.title}</strong>
           <span>{a.data.description}</span>
           <span class="tile-go">Voir le kit →</span>
+        </a>
+      ))}
+    </div>
+
+    <div class="section-head"><h2 id="creer">Tu te lances ?</h2><p>Business plan, statut, aides et déclarations, expliqués simplement.</p></div>
+    <div class="grid">
+      {creer.map((a) => (
+        <a class="tile" href={articlePath(a)}>
+          <SiloIcon silo="creer" class="tile-icon" />
+          <strong>{a.data.title}</strong>
+          <span>{a.data.description}</span>
+          <span class="tile-go">Lire le guide →</span>
         </a>
       ))}
     </div>

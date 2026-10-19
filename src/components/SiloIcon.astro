@@ -103,6 +103,16 @@ const C = { ink: 'var(--ink)', card: 'var(--card)', accent: 'var(--accent)', sun
       <circle cx="24" cy="23" r="4" style={`fill:${C.card}`} />
     </g>
   )}
+  {silo === 'creer' && (
+    <g>
+      <path d="M24 6c6 4 9 11 9 18v8H15v-8c0-7 3-14 9-18z" style={`fill:${C.ink}`} transform="translate(2 2)" opacity=".18" />
+      <path d="M15 28l-6 6v4l6-2zM33 28l6 6v4l-6-2z" style={`fill:${C.peach};stroke:${C.ink};stroke-width:1.5`} stroke-linejoin="round" />
+      <path d="M24 6c6 4 9 11 9 18v8H15v-8c0-7 3-14 9-18z" style={`fill:${C.card};stroke:${C.ink};stroke-width:1.5`} stroke-linejoin="round" />
+      <circle cx="24" cy="19" r="4" style={`fill:${C.sky};stroke:${C.ink};stroke-width:1.3`} />
+      <path d="M20 32h8l-1.5 7c-.4 1.6-4.6 1.6-5 0z" style={`fill:${C.sun};stroke:${C.ink};stroke-width:1.3`} stroke-linejoin="round" />
+      <rect x="18" y="26" width="12" height="2.5" rx="1.2" style={`fill:${C.accent}`} />
+    </g>
+  )}
   {silo === 'outils' && (
     <g>
       <path d="M12 38L30 20" style={`stroke:${C.ink}`} stroke-width="5" stroke-linecap="round" />

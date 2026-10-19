@@ -319,3 +319,24 @@ bon de commande / bon de livraison (1 000, KD 0) ; métiers garage, plombier, pa
 
 Le baromètre 2027 est figé sur les 40 logiciels relevés en octobre 2026 (STUDY_SLUGS dans src/lib/barometre.ts) :
 les logiciels ajoutés ensuite n'en modifient plus les chiffres.
+
+## Vague 9 (19/10/2026) : rubrique « Créer et gérer » (`/creer/`)
+
+Objectif : capter les créateurs et micro-entrepreneurs en amont du choix d'un logiciel (volumes Google France, OpenSEO, octobre 2026).
+
+| Page | Mot-clé | Volume | Difficulté |
+|---|---|---|---|
+| /creer/business-plan/ (outil prévisionnel 3 ans) | business plan | 14 800 | 11 |
+| /creer/code-ape/ | code ape | 18 100 | 14 |
+| /creer/arce/ | arce | 12 100 | 17 |
+| /creer/declaration-urssaf-auto-entrepreneur/ | déclaration urssaf auto entrepreneur | 12 100 | 37 |
+| /creer/plafond-auto-entrepreneur/ | plafond auto entrepreneur | 9 900 | 53 |
+| /creer/cfe-auto-entrepreneur/ | cfe auto entrepreneur | 5 400 | 3 |
+| /creer/versement-liberatoire/ | versement libératoire | 4 400 | 9 |
+| /creer/pret-d-honneur/ | prêt d'honneur | 3 600 | 15 |
+| /creer/sasu-ou-eurl/ | sasu ou eurl | 1 900 | 9 |
+| /crm/prospection-commerciale/ | prospection commerciale | 1 300 | 1 |
+
+Faits vérifiés sur sources officielles (URSSAF, impots.gouv, service-public, France Travail, Unédic, INSEE, Bpifrance Création) : plafonds 2026 (83 600 / 203 100 €), ACRE réduite à 25 % pour les débuts d'activité depuis le 01/07/2026 (décret 2026-69), PFU 31,4 % en 2026, NAF 2025 au 01/01/2027. À revérifier chaque janvier.
+
+Exclu volontairement : banque pro, assurance RC pro, mutuelle (affiliation réglementée, ORIAS), optimisation fiscale poussée, Kbis et guichet unique (requêtes de navigation).

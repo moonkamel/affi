@@ -100,6 +100,12 @@ export const SILOS = {
     seoTitle: 'Avis sur les logiciels pour TPE et indépendants',
     description: 'Avis détaillés sur les logiciels pour TPE et indépendants : tarifs, points forts, limites et profil idéal de chaque solution.',
   },
+  creer: {
+    label: 'Créer et gérer',
+    title: 'Créer et gérer son entreprise',
+    seoTitle: 'Créer et gérer sa micro-entreprise : guides 2026',
+    description: 'Business plan, statut, aides, déclarations URSSAF, impôts et CFE : les démarches pour créer et gérer ton entreprise, expliquées simplement.',
+  },
   outils: {
     label: 'Outils',
     title: 'Outils et simulateurs gratuits',
