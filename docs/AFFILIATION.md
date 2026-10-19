@@ -7,6 +7,10 @@
 - ✅ **Axonaut** : lien partenaire branché (17/10/2026).
 - ✅ **SumUp** : accepté sur Impact, lien https://sumupeu.sjv.io/AgVnba branché (terminal et Caisse Pro). Script de vérification Impact retiré de l'accueil.
 - ❌ **Abby** : refusé par l'annonceur sur Affilae (15/10/2026). Recandidater quand le site aura du trafic (Search Console à l'appui).
+- ❌ **Brevo** : refusé sur PartnerStack (19/10/2026). Recandidater en janvier 2027.
+- ⏳ **Pipedrive** (PartnerStack), **Legalstart** (Affilae) et **SeDomicilier** (Awin) : demandes envoyées le 19/10/2026.
+
+Tableau de suivi complet : `docs/suivi-affiliation.xlsx` (copie Google Sheets « Suivi des affiliations Logimalin » sur le Drive).
 
 Mise à jour : 13 octobre 2026. Les commissions changent souvent : vérifie les conditions au moment de l'inscription, puis renseigne `affiliateUrl` dans `src/data/software.ts` (les liens `/go/<slug>/` basculent automatiquement).
 
