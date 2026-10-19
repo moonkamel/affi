@@ -1,0 +1,59 @@
+---
+// Plafond de la micro-entreprise proratisé l'année de création (seuils 2026-2028) et marge restante.
+---
+<form class="sim" id="sim-plafond" aria-labelledby="plafond-titre" onsubmit="return false">
+  <strong id="plafond-titre">Calcule ton plafond 2026</strong>
+  <div class="row">
+    <div>
+      <label for="pl-act">Activité</label>
+      <select id="pl-act">
+        <option value="services">Prestations de services (BIC ou BNC)</option>
+        <option value="vente">Vente, restauration, hébergement</option>
+      </select>
+    </div>
+    <div>
+      <label for="pl-debut">Date de début d’activité (laisse vide si avant 2026)</label>
+      <input id="pl-debut" type="date" min="2026-01-01" max="2026-12-31" />
+    </div>
+    <div>
+      <label for="pl-ca">Chiffre d’affaires encaissé en 2026 à ce jour (€)</label>
+      <input id="pl-ca" type="number" min="0" value="30000" inputmode="decimal" />
+    </div>
+  </div>
+  <output class="sim-out" for="pl-act pl-debut pl-ca" aria-live="polite">
+    <div>Ton plafond micro-entreprise pour 2026</div>
+    <div class="big" id="pl-r">–</div>
+    <div id="pl-d" class="small"></div>
+  </output>
+</form>
+
+<script is:inline>
+  (() => {
+    const f = document.getElementById('sim-plafond');
+    if (!f) return;
+    const P = { services: 83600, vente: 203100 };
+    const TVA = { services: 37500, vente: 85000 };
+    const eur = (n) => n.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 });
+    const calc = () => {
+      const act = document.getElementById('pl-act').value;
+      const d = document.getElementById('pl-debut').value;
+      const ca = Math.max(0, parseFloat(String(document.getElementById('pl-ca').value).replace(',', '.')) || 0);
+      let jours = 365;
+      if (d && d.startsWith('2026-')) {
+        const debut = new Date(d + 'T00:00:00Z');
+        jours = Math.round((Date.UTC(2027, 0, 1) - debut.getTime()) / 86400000);
+      }
+      const plafond = Math.round((P[act] * jours) / 365);
+      document.getElementById('pl-r').textContent = eur(plafond);
+      const reste = plafond - ca;
+      document.getElementById('pl-d').innerHTML =
+        (jours < 365 ? `Plafond annuel ${eur(P[act])} × ${jours} jours d’activité ÷ 365. ` : '') +
+        (reste >= 0
+          ? `Il te reste <strong>${eur(reste)}</strong> de chiffre d’affaires avant le plafond.`
+          : `Tu dépasses de <strong>${eur(-reste)}</strong> : pas de conséquence si c’est la première année, mais un 2e dépassement consécutif te fera passer au réel.`) +
+        (ca > TVA[act] ? `<br>⚠ Tu as aussi dépassé le seuil de franchise de TVA (${eur(TVA[act])}) : vérifie ta situation avec le simulateur de TVA.` : '');
+    };
+    f.addEventListener('input', calc);
+    calc();
+  })();
+</script>
