@@ -1,6 +1,17 @@
 // Baromètre des prix des logiciels pour TPE : statistiques calculées à partir de src/data/software.ts.
 // Tout est recalculé à chaque build : mettre à jour les prix dans software.ts suffit.
-import { SOFTWARE, type Category, type Software } from '../data/software';
+import { SOFTWARE as ALL, type Category, type Software } from '../data/software';
+
+// Périmètre figé de l'édition 2027 (relevé d'octobre 2026) : une étude datée ne doit pas changer à chaque
+// logiciel ajouté au site. Pour l'édition suivante, mets à jour cette liste et le texte de la page.
+const STUDY_SLUGS = [
+  'lightspeed', 'lightspeed-retail', 'zelty', 'sumup', 'laddition', 'innovorder', 'zenchef', 'thefork-manager',
+  'guestonline', 'eatapp', 'skello', 'combo', 'abby', 'indy', 'tiime', 'axonaut', 'pennylane', 'tolteck', 'obat',
+  'batappli', 'sumup-terminal', 'zettle', 'mypos', 'hostinger', 'wix', 'shopify', 'systemeio', 'hubspot',
+  'pipedrive', 'sellsy', 'brevo', 'zoho-inventory', 'odoo', 'n2f', 'planity', 'kiute', 'salonkee', 'learnybox',
+  'podia', 'teachable',
+];
+export const STUDY = ALL.filter((s) => STUDY_SLUGS.includes(s.slug));
 
 export const FAMILIES: Record<Category, string> = {
   facturation: 'Facturation',
@@ -24,7 +35,7 @@ const isFrench = (s: Software) => (s.badges ?? []).includes('Français');
 
 export const families = (Object.keys(FAMILIES) as Category[])
   .map((c) => {
-    const list = SOFTWARE.filter((s) => s.category === c);
+    const list = STUDY.filter((s) => s.category === c);
     const prices = list.filter((s) => s.price.from !== null).map((s) => s.price.from as number);
     return {
       category: c,
@@ -41,12 +52,12 @@ export const families = (Object.keys(FAMILIES) as Category[])
   .filter((f) => f.count > 0);
 
 export const totals = {
-  count: SOFTWARE.length,
+  count: STUDY.length,
   families: families.length,
-  free: SOFTWARE.filter(isFree).length,
-  noPrice: SOFTWARE.filter(noPublicPrice).length,
-  french: SOFTWARE.filter(isFrench).length,
-  freeTrial: SOFTWARE.filter((s) => s.freeTrial === true).length,
+  free: STUDY.filter(isFree).length,
+  noPrice: STUDY.filter(noPublicPrice).length,
+  french: STUDY.filter(isFrench).length,
+  freeTrial: STUDY.filter((s) => s.freeTrial === true).length,
 };
 export const share = {
   free: pct(totals.free, totals.count),
@@ -61,7 +72,7 @@ export const opacity = families
   .sort((a, b) => b.value - a.value);
 
 // Budgets types : prix d'entrée publics des outils recommandés sur le site (hors matériel, commissions et taxes).
-const price = (slug: string) => SOFTWARE.find((s) => s.slug === slug)?.price.from ?? 0;
+const price = (slug: string) => STUDY.find((s) => s.slug === slug)?.price.from ?? 0;
 export const budgets = [
   { profile: 'Freelance ou micro-entrepreneur de services', tools: [['Facturation', 'abby'], ['Site internet', 'hostinger'], ['Emailing', 'brevo']] },
   { profile: 'Artisan du bâtiment', tools: [['Devis et factures', 'obat'], ['Site internet', 'hostinger'], ['Terminal de paiement', 'sumup-terminal']] },
@@ -69,7 +80,7 @@ export const budgets = [
   { profile: 'Restaurant avec salariés', tools: [['Caisse', 'lightspeed'], ['Réservation', 'zenchef'], ['Planning', 'combo']] },
 ].map((b) => {
   const rows = b.tools.map(([need, slug]) => {
-    const sw = SOFTWARE.find((s) => s.slug === slug)!;
+    const sw = STUDY.find((s) => s.slug === slug)!;
     return { need, name: sw.name.replace(/ \(.*\)$/, ''), price: price(slug), paiement: sw.category === 'paiement' };
   });
   return { profile: b.profile, rows, total: rows.reduce((t, r) => t + r.price, 0) };

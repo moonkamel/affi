@@ -1,12 +1,11 @@
 // Données brutes du baromètre, téléchargeables (journalistes, chercheurs, blogueurs).
 import type { APIRoute } from 'astro';
-import { SOFTWARE } from '../../data/software';
-import { FAMILIES } from '../../lib/barometre';
+import { FAMILIES, STUDY } from '../../lib/barometre';
 
 const esc = (v: unknown) => `"${String(v ?? '').replace(/"/g, '""')}"`;
 export const GET: APIRoute = () => {
   const head = ['logiciel', 'famille', 'prix_entree_eur_mois', 'tarif_affiche', 'precision', 'offre_gratuite', 'essai_gratuit', 'editeur_francais', 'releve'];
-  const rows = SOFTWARE.map((s) => [
+  const rows = STUDY.map((s) => [
     s.name,
     FAMILIES[s.category],
     s.price.from ?? '',
