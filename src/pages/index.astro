@@ -21,7 +21,7 @@ const needs = (['facturation', 'comptabilite', 'encaissement', 'site-internet', 
   articles.some((a) => siloOf(a) === s),
 );
 const metiers = articles.filter((a) => siloOf(a) === 'metiers' && a.id.includes('/logiciels-'));
-const creerOrder = ['creer/business-plan', 'creer/sasu-ou-eurl', 'creer/arce', 'creer/declaration-urssaf-auto-entrepreneur', 'creer/plafond-auto-entrepreneur', 'creer/pret-d-honneur'];
+const creerOrder = ['creer/business-plan', 'creer/creer-micro-entreprise', 'creer/statut-juridique', 'creer/acre', 'creer/aides-creation-entreprise', 'creer/sasu-ou-eurl'];
 const creer = creerOrder.map((id) => articles.find((a) => a.id === id)).filter((a) => a !== undefined);
 const count = articles.length;
 ---

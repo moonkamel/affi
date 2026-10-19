@@ -340,3 +340,19 @@ Objectif : capter les créateurs et micro-entrepreneurs en amont du choix d'un l
 Faits vérifiés sur sources officielles (URSSAF, impots.gouv, service-public, France Travail, Unédic, INSEE, Bpifrance Création) : plafonds 2026 (83 600 / 203 100 €), ACRE réduite à 25 % pour les débuts d'activité depuis le 01/07/2026 (décret 2026-69), PFU 31,4 % en 2026, NAF 2025 au 01/01/2027. À revérifier chaque janvier.
 
 Exclu volontairement : banque pro, assurance RC pro, mutuelle (affiliation réglementée, ORIAS), optimisation fiscale poussée, Kbis et guichet unique (requêtes de navigation).
+
+## Vague 10 (19/10/2026) : compléter la rubrique « Créer et gérer »
+
+| Page | Mot-clé | Volume |
+|---|---|---|
+| /creer/acre/ | acre | 33 100 |
+| /creer/creer-micro-entreprise/ | créer une micro entreprise | 9 900 |
+| /creer/domiciliation-entreprise/ | domiciliation entreprise | 5 400 |
+| /creer/aides-creation-entreprise/ | aides création entreprise | 2 400 |
+| /creer/statut-juridique/ | statut juridique | 1 900 |
+| /creer/etude-de-marche/ | étude de marché | 1 000 |
+| /creer/nom-entreprise/ | nom entreprise | 880 |
+
+Faits vérifiés (service-public F11677 et A18795, URSSAF, INPI, Bpifrance Création, CCI Paris) : ACRE à demander sous 60 jours, 25 % en micro depuis le 01/07/2026, fin au 3e trimestre civil suivant ; guichet unique exclusif depuis le 01/01/2025 ; domiciliation au domicile en société limitée à 5 ans seulement en cas de clause contraire ; dépôt de marque INPI 190 € + 40 € par classe (tarifs au 02/07/2026). Tarifs de domiciliation (SeDomicilier, Kandbaz, LegalPlace) à revérifier chaque semestre.
+
+Affiliation possible, à demander par l'éditeur avant d'ajouter des liens : SeDomicilier (Affilae), Legalstart (Affilae, environ 10 % des honoraires), LegalPlace (programme maison). Exclu : Qonto et Shine (paiement, réglementé).
