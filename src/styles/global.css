@@ -179,6 +179,7 @@ strong { font-weight: 700; }
 table { border-collapse: collapse; font-size: .93rem; width: 100%; font-variant-numeric: tabular-nums; }
 .table-wrap table { min-width: 560px; }
 .prose > table { display: block; overflow-x: auto; margin: 26px 0; border: 1.5px solid var(--line); border-radius: var(--radius); background: var(--card); }
+.prose > pre { margin: 22px 0; padding: 16px 18px; border-radius: var(--radius); border: 1.5px solid var(--line); font-size: .84rem; line-height: 1.55; white-space: pre-wrap; overflow-wrap: anywhere; }
 th, td { text-align: left; padding: 11px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
 thead th { background: var(--paper-2); font-family: var(--display); font-size: .78rem; text-transform: uppercase; letter-spacing: .06em; font-weight: 700; }
 tbody tr:last-child td, tbody tr:last-child th { border-bottom: 0; }

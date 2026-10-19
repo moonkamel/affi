@@ -279,3 +279,25 @@ Objectif : 15 à 30 domaines référents de qualité les 6 premiers mois.
 
 ### Calendrier
 - Pic septembre 2026 → septembre 2027 sur la facture électronique : publier et mettre à jour en priorité ces pages.
+
+## Vague 7 (19 octobre 2026) : opportunités OpenSEO
+
+Relevé de ~140 requêtes FR (get_keyword_metrics). Pages créées, toutes à difficulté ≤ 34 :
+
+| Page | Requête principale | Volume | KD |
+|---|---|---|---|
+| alternatives/alternatives-mailchimp | mailchimp / alternative mailchimp | 40 500 | 0 |
+| avis/pipedrive | pipedrive | 22 200 | 0 |
+| crm/signature-electronique-gratuite | signature électronique gratuite | 8 100 | 11 |
+| alternatives/alternatives-calendly | calendly / calendly gratuit | 74 000 / 2 400 | 4 / 0 |
+| facturation/chorus-pro | chorus pro | 368 000 | 34 |
+| facturation/facture-electronique-lmnp | facture électronique lmnp | 1 000 | 0 |
+| facturation/facture-electronique-sci | facture électronique sci | 880 | 0 |
+| facturation/facture-avoir | facture d'avoir (+ rectificative, modèle avoir) | 1 400 | 0 |
+| facturation/recu-de-paiement | reçu / attestation de paiement | 2 100 | 0 |
+
+Sections ajoutées : modèle Word (facture-excel), modèle de note de frais (note-de-frais).
+
+Pistes suivantes : avis Henrri (90 500, KD 0), Sellsy, Evoliz, Zettle, Popina, Freebe, Batappli ;
+logiciel de gestion de projet (1 600, KD 10) ; logiciel gestion commerciale (880, KD 0) ;
+bon de commande / bon de livraison (1 000, KD 0) ; métiers garage, plombier, paysagiste, coach sportif.
