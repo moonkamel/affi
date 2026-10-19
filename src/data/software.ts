@@ -351,7 +351,7 @@ export const SOFTWARE: Software[] = [
     name: 'Axonaut',
     category: 'facturation',
     website: 'https://axonaut.com/',
-    affiliateUrl: 'https://axonaut.com/?a=B6858H145A',
+    affiliateUrl: 'https://axonaut.com/?a=B64E8H1450',
     program: { network: 'Espace partenaire Axonaut (lien validé le 17/10/2026)', commission: '≈ 300 € par client apporté (à vérifier dans l’espace partenaire)', notes: 'Meilleure commission fixe identifiée.' },
     price: { from: 69.99, label: 'dès 69,99 € HT/mois', note: 'en mensuel, tarif dégressif selon le nombre d’utilisateurs' },
     priceChecked: '2026-10',
