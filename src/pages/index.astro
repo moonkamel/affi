@@ -3,7 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import SiloIcon from '../components/SiloIcon.astro';
 import WeeklyInfographic from '../components/WeeklyInfographic.astro';
 import { SITE, SILOS, type Silo } from '../data/site';
-import { graph, organization, website, person } from '../lib/schema';
+import { graph, organization, website } from '../lib/schema';
 import { articlePath, getArticles, siloOf } from '../lib/articles';
 
 const articles = await getArticles();
@@ -28,7 +28,7 @@ const count = articles.length;
 <BaseLayout
   title="Logimalin : logiciels pour TPE et indépendants comparés"
   description="Facturation, comptabilité, site internet, terminal de paiement, CRM : les meilleurs logiciels pour TPE et indépendants comparés, avec les prix 2026."
-  jsonLd={graph(organization(), website(), person())}
+  jsonLd={graph(organization(), website())}
 >
   <div class="container">
     <section class="hero">

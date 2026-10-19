@@ -9,7 +9,7 @@ import { SITE } from '../data/site';
 >
   <h2>Éditeur du site</h2>
   <p>{SITE.publisher.legalName}<br />{SITE.publisher.address}<br />Contact : <a href={`mailto:${SITE.publisher.email}`}>{SITE.publisher.email}</a></p>
-  <p>Directeur de la publication : {SITE.author.name}</p>
+  <p>Directeur de la publication : {SITE.publisher.director}</p>
   <h2>Hébergement</h2>
   <p>{SITE.publisher.host}</p>
   <h2>Données personnelles</h2>

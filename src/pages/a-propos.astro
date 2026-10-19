@@ -5,25 +5,23 @@ import Avatar from '../components/Avatar.astro';
 ---
 <PageLayout
   title="À propos : qui compare les logiciels sur Logimalin ?"
-  seoTitle="À propos de Logimalin et de son auteur"
-  description="Entrepreneur, je compare les logiciels de facturation, comptabilité, encaissement et marketing pour TPE avec les critères d’un dirigeant."
+  seoTitle="À propos de Logimalin et de sa rédaction"
+  description="Logimalin compare les logiciels de facturation, comptabilité, encaissement et marketing pour TPE et indépendants, avec les critères d’un dirigeant."
   schemaType="AboutPage"
 >
-  <!-- Ta photo s'affiche ici dès que SITE.author.photo est renseigné (src/data/site.ts). Ajoute aussi ton parcours :
-       entreprises créées, années d'expérience, outils utilisés au quotidien. Un vrai visage et des faits vérifiables
-       renforcent la confiance des lecteurs et de Google. -->
-  <div class="author" style="margin-top:0"><Avatar size={96} /><div><strong>{SITE.author.name}</strong><div class="muted">{SITE.author.role}, fondateur de {SITE.name}</div>{SITE.author.sameAs.length > 0 && <p style="margin:.4em 0 0">{SITE.author.sameAs.map((u) => <a href={u} rel="me">{new URL(u).hostname.replace('www.', '')}</a>)}</p>}</div></div>
-  <p id="auteur">Je m’appelle <strong>{SITE.author.name}</strong>, je suis entrepreneur. Comme tous les dirigeants de petites structures, je passe une partie de mon temps sur ce qui n’est pas mon métier : facturer, relancer, tenir les comptes, choisir des outils.</p>
-  <p>J’ai créé <strong>{SITE.name}</strong> parce que la plupart des comparatifs de logiciels sont écrits par les éditeurs eux-mêmes ou listent des fonctionnalités sans dire l’essentiel : combien ça coûte une fois toutes les options ajoutées, combien de temps ça fait vraiment gagner, et pour quel type d’entreprise c’est fait.</p>
+  <div class="author" style="margin-top:0"><Avatar size={96} /><div><strong>{SITE.author.name}</strong><div class="muted">Comparatifs et guides pour TPE et indépendants</div>{SITE.sameAs.length > 0 && <p style="margin:.4em 0 0">{SITE.sameAs.map((u) => <a href={u} rel="me">LinkedIn</a>)}</p>}</div></div>
+  <p id="auteur"><strong>{SITE.name}</strong> est un site indépendant tenu par une petite équipe d’entrepreneurs. Comme tous les dirigeants de petites structures, nous passons une partie de notre temps sur ce qui n’est pas notre métier : facturer, relancer, tenir les comptes, choisir des outils.</p>
+  <p>Nous avons créé {SITE.name} parce que la plupart des comparatifs de logiciels sont écrits par les éditeurs eux-mêmes ou listent des fonctionnalités sans dire l’essentiel : combien ça coûte une fois toutes les options ajoutées, combien de temps ça fait vraiment gagner, et pour quel type d’entreprise c’est fait.</p>
   <h2>Ce que tu trouveras ici</h2>
   <ul>
     <li>Des <a href="/facturation/">guides sur la facturation et la facture électronique</a>, la réforme qui concerne toutes les entreprises d’ici 2027.</li>
     <li>Des comparatifs de <a href="/comptabilite/">logiciels de comptabilité</a>, de <a href="/encaissement/">terminaux de paiement et caisses</a>, de <a href="/site-internet/">créateurs de sites</a> et de <a href="/crm/">CRM</a>.</li>
     <li>Le <a href="/metiers/">kit de logiciels complet par métier</a> : artisan, freelance, restaurant, commerçant…</li>
+    <li>Des guides pour <a href="/creer/">créer et gérer son entreprise</a> : business plan, statut, aides, déclarations.</li>
     <li>Des <a href="/outils/">outils gratuits</a> pour chiffrer le coût réel avant de signer.</li>
   </ul>
   <h2>Comment le site est financé</h2>
   <p>Le site est gratuit. Il se finance par des liens affiliés : quand tu t’abonnes à un logiciel via certains liens, l’éditeur peut nous verser une commission, sans surcoût pour toi. Cela n’achète ni une place dans un classement ni un avis favorable. Détails sur la page <a href="/transparence-affiliation/">transparence</a> et dans notre <a href="/methodologie/">méthodologie</a>.</p>
-  <h2>Me contacter</h2>
-  <p>Une erreur, un tarif qui a changé, un logiciel à ajouter ? Écris-moi à <a href={`mailto:${SITE.publisher.email}`}>{SITE.publisher.email}</a>.</p>
+  <h2>Nous contacter</h2>
+  <p>Une erreur, un tarif qui a changé, un logiciel à ajouter ? Écris-nous à <a href={`mailto:${SITE.publisher.email}`}>{SITE.publisher.email}</a>.</p>
 </PageLayout>

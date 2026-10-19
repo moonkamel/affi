@@ -2,7 +2,7 @@
 // il sert aux URLs canoniques, au sitemap et aux données structurées.
 export const SITE = {
   name: 'Logimalin',
-  tagline: 'Les bons logiciels pour TPE et indépendants, comparés par un entrepreneur',
+  tagline: 'Les bons logiciels pour TPE et indépendants, comparés sans jargon',
   url: process.env.SITE_URL ?? 'https://www.logi-malin.fr',
   // Profils officiels de la marque (pas de l'auteur) : relient le site à ses pages sociales dans les données structurées.
   sameAs: ['https://www.linkedin.com/company/logimalin'],
@@ -10,15 +10,10 @@ export const SITE = {
   lang: 'fr',
   // Mois de la dernière vérification globale des tarifs affichés.
   pricesChecked: 'octobre 2026',
+  // Signature éditoriale : le site est signé par l'équipe, sans nom de personne.
   author: {
-    name: 'Tarik',
-    role: 'Entrepreneur',
+    name: 'L’équipe Logimalin',
     url: '/a-propos/',
-    // Ajoute ici tes profils publics (LinkedIn, etc.) : Google s'en sert pour relier l'auteur à une vraie personne.
-    sameAs: [] as string[],
-    // Photo de l'auteur : dépose un JPEG carré (au moins 400 × 400 px) dans public/ puis indique son chemin,
-    // par exemple '/auteur.jpg'. Tant que la valeur est null, l'initiale est affichée.
-    photo: null as string | null,
   },
   // Newsletter Brevo. Colle ici l'URL « action » de ton formulaire Brevo (Contacts → Formulaires → Partager →
   // code HTML : l'attribut action="https://….sibforms.com/serve/…"). Tant qu'elle vaut null, la check-list
@@ -29,6 +24,8 @@ export const SITE = {
   // Éditeur légal du site (mentions légales). À compléter.
   publisher: {
     legalName: 'À compléter',
+    // Directeur de la publication : obligatoire pour un éditeur professionnel (nom de la personne ou de la société).
+    director: 'À compléter',
     address: 'À compléter',
     email: 'contact@logi-malin.fr',
     host: 'Cloudflare, Inc., 101 Townsend St, San Francisco, CA 94107, États-Unis (Cloudflare Pages)',

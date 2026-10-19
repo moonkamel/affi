@@ -74,7 +74,7 @@ const showDisclosure = true; // Mention obligatoire dès qu'une page peut conten
         <a class="silo-pill" href={`/${silo}/`}><SiloIcon silo={silo} />{SILOS[silo].label}</a>
         <h1>{d.title}</h1>
         <div class="meta">
-          <span class="who"><Avatar size={30} /><span>Par <a href={SITE.author.url} rel="author">{SITE.author.name}</a>, {SITE.author.role.toLowerCase()}</span></span>
+          <span class="who"><Avatar size={30} /><span>Par <a href={SITE.author.url} rel="author">{SITE.author.name}</a></span></span>
           <span>Mis à jour le <time datetime={d.updated.toISOString()}>{fmt(d.updated)}</time></span>
         </div>
       </header>

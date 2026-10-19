@@ -6,7 +6,6 @@ export const abs = (path: string) => new URL(path, SITE.url).href;
 
 const ORG_ID = abs('/#organization');
 const SITE_ID = abs('/#website');
-const AUTHOR_ID = abs('/a-propos/#auteur');
 
 export const organization = () => ({
   '@type': 'Organization',
@@ -27,15 +26,6 @@ export const website = () => ({
   publisher: { '@id': ORG_ID },
 });
 
-export const person = () => ({
-  '@type': 'Person',
-  '@id': AUTHOR_ID,
-  name: SITE.author.name,
-  jobTitle: SITE.author.role,
-  url: abs(SITE.author.url),
-  ...(SITE.author.sameAs.length ? { sameAs: SITE.author.sameAs } : {}),
-  ...(SITE.author.photo ? { image: abs(SITE.author.photo) } : {}),
-});
 
 export const breadcrumbs = (items: { name: string; path: string }[]) => ({
   '@type': 'BreadcrumbList',
@@ -64,7 +54,7 @@ export const article = (o: {
   inLanguage: 'fr-FR',
   mainEntityOfPage: abs(o.path),
   image: abs(o.image),
-  author: person(),
+  author: { '@id': ORG_ID },
   publisher: { '@id': ORG_ID },
   isPartOf: { '@id': SITE_ID },
 });
@@ -106,7 +96,7 @@ export const review = (path: string, s: Software, rating: number, summary: strin
   '@type': 'Review',
   '@id': abs(path) + '#avis',
   itemReviewed: softwareApp(s),
-  author: person(),
+  author: { '@id': ORG_ID },
   publisher: { '@id': ORG_ID },
   reviewBody: summary,
   reviewRating: { '@type': 'Rating', ratingValue: rating, bestRating: 10, worstRating: 0 },

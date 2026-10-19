@@ -34,7 +34,7 @@ Choisi à partir des données OpenSEO (octobre 2026) : environ 70 noms testés s
 - **Le profil** pour lequel chaque outil est fait, et celui pour lequel il ne l'est pas ;
 - **Le kit complet par métier**, avec un budget mensuel total.
 
-Pour la crédibilité (E-E-A-T), la page `/a-propos/` doit montrer une vraie personne : photo, parcours d'entrepreneur, projets, profil LinkedIn (`SITE.author.sameAs`). Les avis doivent contenir tes captures d'essai. C'est ce qui distingue un site d'affiliation qui se classe d'un site qui stagne.
+Signature : le site est signé « L’équipe Logimalin » (choix de l’éditeur, aucun nom de personne publié). La crédibilité (E-E-A-T) repose donc sur la méthode publique, les sources officielles citées et datées, la page LinkedIn de la marque et les tests réels (`tested`). Les avis doivent contenir tes captures d'essai. C'est ce qui distingue un site d'affiliation qui se classe d'un site qui stagne.
 
 ---
 
@@ -235,7 +235,7 @@ Objectif : 15 à 30 domaines référents de qualité les 6 premiers mois.
 - Avis Planity, Zoho Inventory, N2F.
 - Calculateurs : indemnités kilométriques (barème 2026), pénalités de retard (taux du 2nd semestre 2026).
 - Correction : taux BNC micro 2026 = 25,6 % (et non 26,1 %), plafonds micro 2026-2028 = 203 100 € / 83 600 €.
-- Crédibilité : photo d'auteur (`SITE.author.photo`), bloc « Notre test » (champ `tested` des articles, à remplir seulement après un vrai test), composant `<Capture>` pour les captures d'écran (`public/captures/<logiciel>/`).
+- Crédibilité : bloc « Notre test » (champ `tested` des articles, à remplir seulement après un vrai test), composant `<Capture>` pour les captures d'écran (`public/captures/<logiciel>/`).
 
 ### Backlinks passifs (fait)
 - **Simulateurs intégrables** : 6 versions iframe sur `/embed/<outil>/` (noindex, hors sitemap, thème clair avec `?theme=light`, hauteur auto). Chaque page outil propose le code à copier, avec un lien de crédit vers la page outil. Liste dans `src/data/embeds.ts`.

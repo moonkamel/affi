@@ -2,11 +2,10 @@
 import { SITE } from '../data/site';
 import Avatar from './Avatar.astro';
 ---
-<aside class="author" aria-label="À propos de l’auteur">
+<aside class="author" aria-label="À propos de la rédaction">
   <Avatar />
   <div>
     <strong>Écrit par <a href={SITE.author.url} rel="author">{SITE.author.name}</a></strong>
-    <div class="muted">{SITE.author.role}</div>
-    <p style="margin:.4em 0 0">Entrepreneur, je compare les logiciels avec les questions qu’un dirigeant de TPE se pose vraiment : combien ça coûte au final, combien de temps ça fait gagner, et ce qui se passe le jour où ça coince. <a href="/methodologie/">Notre méthode</a>.</p>
+    <p style="margin:.4em 0 0">Nous comparons les logiciels avec les questions qu’un dirigeant de TPE se pose vraiment : combien ça coûte au final, combien de temps ça fait gagner, et ce qui se passe le jour où ça coince. <a href="/methodologie/">Notre méthode</a>.</p>
   </div>
 </aside>
