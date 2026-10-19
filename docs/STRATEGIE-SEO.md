@@ -301,3 +301,21 @@ Sections ajoutées : modèle Word (facture-excel), modèle de note de frais (not
 Pistes suivantes : avis Henrri (90 500, KD 0), Sellsy, Evoliz, Zettle, Popina, Freebe, Batappli ;
 logiciel de gestion de projet (1 600, KD 10) ; logiciel gestion commerciale (880, KD 0) ;
 bon de commande / bon de livraison (1 000, KD 0) ; métiers garage, plombier, paysagiste, coach sportif.
+
+## Vague 8 (19 octobre 2026)
+
+| Page | Requête principale | Volume | KD |
+|---|---|---|---|
+| avis/henrri | henrri | 90 500 | 0 |
+| avis/sellsy | sellsy | 22 200 | 8 |
+| avis/evoliz | evoliz | 18 100 | 0 |
+| avis/zettle | zettle | 14 800 | 5 |
+| equipe/logiciel-gestion-de-projet | logiciel de gestion de projet | 1 600 | 10 |
+| crm/logiciel-gestion-commerciale | logiciel gestion commerciale | 880 | 0 |
+| facturation/bon-de-commande | bon de commande / bon de livraison modèle | 1 040 | 0 |
+| metiers/logiciel-garage-automobile | logiciel garage automobile | 320 | 0 |
+| metiers/logiciel-plombier | logiciel plombier | 260 | 0 |
+| metiers/logiciel-paysagiste | logiciel paysagiste (+ extrabat 12 100) | 260 | 0 |
+
+Le baromètre 2027 est figé sur les 40 logiciels relevés en octobre 2026 (STUDY_SLUGS dans src/lib/barometre.ts) :
+les logiciels ajoutés ensuite n'en modifient plus les chiffres.

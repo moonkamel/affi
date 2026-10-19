@@ -24,6 +24,7 @@ export const FAMILIES: Record<Category, string> = {
   site: 'Site internet et vente en ligne',
   crm: 'CRM et emailing',
   gestion: 'Gestion de stock',
+  projet: 'Gestion de projet',
 };
 
 const pct = (a: number, b: number) => (b ? Math.round((a / b) * 100) : 0);
