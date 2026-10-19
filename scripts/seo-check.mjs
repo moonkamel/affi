@@ -79,6 +79,7 @@ for (const file of htmlFiles) {
     if (!href) continue;
     if (href.startsWith('/go/') && !/rel="[^"]*sponsored/.test(attrs)) err(`lien affilié ${href} sans rel="sponsored"`);
     if (href.startsWith('/') && !exists(href)) err(`lien interne cassé : ${href}`);
+    if (href.startsWith('#') && href.length > 1 && !html.includes(`id="${decodeURIComponent(href.slice(1))}"`)) err(`ancre sans cible : ${href}`);
     if (href.startsWith('/') && !href.startsWith('/go/') && !/\/$|#|\.[a-z]+$/.test(href.split('#')[0].split('?')[0]) && href !== '/')
       warn(`lien interne sans slash final : ${href}`);
   }

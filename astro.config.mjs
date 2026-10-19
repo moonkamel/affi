@@ -24,6 +24,25 @@ const affiliateRedirects = {
   },
 };
 
+// Ancres du tableau comparatif sans fiche correspondante sur la page : on pointe vers l'avis du logiciel,
+// ou on retire le lien. Sinon le clic sur le nom du logiciel ne mène nulle part.
+const fixTableAnchors = {
+  name: 'fix-table-anchors',
+  hooks: {
+    'astro:build:done': ({ dir }) => {
+      const root = dir.pathname;
+      for (const f of walk(root).filter((f) => f.endsWith('.html'))) {
+        const html = readFileSync(f, 'utf8');
+        const out = html.replace(/<a href="#(logiciel-[^"]+)"(?: data-review="([^"]*)")?>(.*?)<\/a>/g, (m, id, review, text) => {
+          if (html.includes(`id="${id}"`)) return review ? m.replace(/ data-review="[^"]*"/, '') : m;
+          return review ? `<a href="${review}">${text}</a>` : text;
+        });
+        if (out !== html) writeFileSync(f, out);
+      }
+    },
+  },
+};
+
 // Sitemap enrichi : date de mise à jour (frontmatter `updated`) et infographies (Google Images).
 const ARTICLES = new URL('./src/content/articles/', import.meta.url).pathname;
 const walk = (d) => readdirSync(d).flatMap((f) => (statSync(join(d, f)).isDirectory() ? walk(join(d, f)) : [join(d, f)]));
@@ -57,6 +76,7 @@ export default defineConfig({
   integrations: [
     mdx(),
     affiliateRedirects,
+    fixTableAnchors,
     sitemap({
       // Les pages de redirection affiliées, les simulateurs intégrables et la 404 ne doivent jamais être indexées.
       filter: (page) => !/\/(go|embed|404|mentions-legales)\//.test(page),

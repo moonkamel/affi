@@ -1,4 +1,5 @@
 ---
+import { getCollection } from 'astro:content';
 import { getSoftware } from '../data/software';
 import { SITE } from '../data/site';
 import AffLink from './AffLink.astro';
@@ -6,6 +7,9 @@ import AffLink from './AffLink.astro';
 interface Props { products: string[]; caption?: string; ranked?: boolean }
 const { products, caption, ranked = true } = Astro.props;
 const list = products.map(getSoftware);
+// Le nom renvoie vers la fiche du logiciel plus bas (#logiciel-<slug>). Si la page n'a pas de fiche,
+// le build remplace l'ancre par notre avis (data-review), ou retire le lien (voir astro.config.mjs).
+const reviews = new Map((await getCollection('articles', (e) => !e.data.draft && !!e.data.review)).map((e) => [e.data.review!.product, `/${e.id}/`]));
 const yesNo = (v: boolean | null) => (v === null ? 'À vérifier' : v ? 'Oui' : 'Non');
 ---
 <div class="table-wrap">
@@ -19,7 +23,7 @@ const yesNo = (v: boolean | null) => (v === null ? 'À vérifier' : v ? 'Oui' : 
     <tbody>
       {list.map((s, i) => (
         <tr>
-          <th scope="row"><a href={`#logiciel-${s.slug}`}>{ranked && `${i + 1}. `}{s.name}</a></th>
+          <th scope="row"><a href={`#logiciel-${s.slug}`} data-review={reviews.get(s.slug)}>{ranked && `${i + 1}. `}{s.name}</a></th>
           <td><strong>{s.score.toFixed(1).replace('.', ',')}</strong>/10</td>
           <td>{s.bestFor}</td>
           <td>{s.price.label}</td>
