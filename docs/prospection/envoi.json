@@ -1,0 +1,71 @@
+{
+  "regles": "13 envois par jour ouvré, un destinataire par mail, une seule relance à J+5 (jour ouvré suivant si week-end), répondre dans le fil d'origine.",
+  "drive_file_id": "1IYsjr7ZCWfOs2Wog83LMxR09-GuFanvIGVuPI2IyJoc",
+  "envoyes": {
+    "redaction@maddyness.com": {
+      "date": "2026-10-19",
+      "thread": "1a1539f8e7e98309",
+      "message": "1a153b908c83f2f1"
+    },
+    "contact@leblogdudirigeant.com": {
+      "date": "2026-10-19",
+      "thread": "1a1539f9a8d489d4",
+      "message": "1a153b912df368e2"
+    },
+    "forum@compta-online.com": {
+      "date": "2026-10-19",
+      "thread": "1a1539725bdca51d",
+      "message": "1a153b919c323123"
+    },
+    "contact@portail-autoentrepreneur.fr": {
+      "date": "2026-10-19",
+      "thread": "1a1539732f146fa0",
+      "message": "1a153b92547a8faf"
+    },
+    "tavor.management@gmail.com": {
+      "date": "2026-10-19",
+      "thread": "1a153973e46546b0",
+      "message": "1a153b92f0f019b9"
+    },
+    "contact@fnae.fr": {
+      "date": "2026-10-19",
+      "thread": "1a15397501e18117",
+      "message": "1a153b93f2c92e0f"
+    },
+    "contact@union-auto-entrepreneurs.com": {
+      "date": "2026-10-19",
+      "thread": "1a15397656f1e369",
+      "message": "1a153b94640ac3cf"
+    },
+    "ccir@bretagne.cci.fr": {
+      "date": "2026-10-19",
+      "thread": "1a15399ca1f0b41b",
+      "message": "1a153b950f65d3a7"
+    },
+    "entreprises44@cma-paysdelaloire.fr": {
+      "date": "2026-10-19",
+      "thread": "1a1539b9a854a28b",
+      "message": "1a153b9608144a82"
+    },
+    "accueil@bge.asso.fr": {
+      "date": "2026-10-19",
+      "thread": "1a1539a32d870758",
+      "message": "1a153b96af76ac62"
+    },
+    "conseilentreprise@reunion.cci.fr": {
+      "date": "2026-10-19",
+      "thread": "1a1539fbfb3a2494",
+      "message": "1a153b971f0ba285"
+    },
+    "entreprendre@loiret.cci.fr": {
+      "date": "2026-10-19",
+      "thread": "1a1539fd2214673c",
+      "message": "1a153b9785be51c3"
+    },
+    "espace-entreprendre@cher.cci.fr": {
+      "date": "2026-10-19",
+      "thread": "1a1539fe2f169671",
+      "message": "1a153b9829afeb4e"
+    }
+  }
+}
