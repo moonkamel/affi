@@ -1,0 +1,30 @@
+# Dossier de création « prêt pour la banque » : conception
+
+Décision du 20/10/2026, après mesure des volumes (docs/recherche/volumes-outil-payant-2026-10-20.md) : un produit payant à l'unité pour les créateurs d'entreprise, qui remplace un prévisionnel d'expert-comptable (500 à 1 500 €) ou une étude de marché de cabinet.
+
+## Phase 1 : gratuite, en ligne (20/10/2026)
+
+- **Étude de marché locale** sur /creer/etude-de-marche/ (composant `MarketStudy.astro`) :
+  - 83 activités courantes de TPE avec leurs codes NAF (`src/data/activites-naf.ts`) ;
+  - recherche de la commune par nom ou code postal (`public/data/communes-2026.json`, populations légales INSEE en vigueur en 2026, paquet @etalab/decoupage-administratif 6.0.0) ;
+  - nombre d'entreprises actives de l'activité dans la commune, le département et en France (API Recherche d'entreprises, `etat_administratif=A`) ;
+  - densité pour 10 000 habitants et verdict (moins de 0,7 fois la moyenne nationale, dans la moyenne, plus de 1,3 fois) ;
+  - liste des 10 premières entreprises de la commune ;
+  - lien vers le business plan gratuit.
+- **Appel direct** à l'API depuis le navigateur ; si le navigateur le bloque (CORS), bascule automatique sur le relais Cloudflare `functions/api/entreprises.js` (seul `/api/*` passe par une fonction, voir `public/_routes.json`).
+- **À mesurer** dans le relevé mensuel : visites de /creer/etude-de-marche/ et appels à /api/entreprises (Cloudflare).
+
+## Phase 2 : payante (39 à 49 €, paiement unique)
+
+Contenu du dossier :
+1. **Étude de marché locale complète** : zone de chalandise (communes à 5, 10 et 20 km, à partir des coordonnées des communes), liste complète des concurrents exportable, évolution des créations et fermetures sur 5 ans, revenus des ménages de la zone (INSEE Filosofi).
+2. **Prévisionnel sur 3 ans mois par mois** : reprise du `BusinessPlanBuilder` avec BFR, TVA, emprunt et amortissements détaillés.
+3. **Plan de financement et trésorerie** au format attendu par les banques et les réseaux (Initiative France, Réseau Entreprendre).
+4. **Dossier PDF** mis en page, avec la trame des 8 parties du business plan pré-remplie par les réponses.
+
+Prérequis avant de vendre :
+- structure juridique, mentions légales complètes, CGV ;
+- Stripe (Checkout, paiement unique) : connecteur à autoriser dans claude.ai ;
+- génération du PDF côté navigateur (pas de stockage des données du créateur) ou fonction Cloudflare.
+
+Critère de passage en phase 2 : au moins quelques centaines d'utilisations par mois de l'étude gratuite et des recherches « étude de marché » où la page entre en première ou deuxième page.
