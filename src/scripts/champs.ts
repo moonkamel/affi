@@ -15,7 +15,7 @@ const champNumerique = (i: HTMLInputElement) => {
   i.setAttribute('enterkeyhint', 'done');
   i.setAttribute('spellcheck', 'false');
   // Sélectionne le contenu au premier clic : on remplace la valeur d'exemple sans devoir l'effacer.
-  i.addEventListener('focus', () => setTimeout(() => { try { i.select(); } catch { /* champ non sélectionnable */ } }, 0));
+  i.addEventListener('focus', () => setTimeout(() => { if (i.value === '-') return; try { i.select(); } catch { /* champ non sélectionnable */ } }, 0));
   // Nettoyage à la sortie : « 1 200 € » ou « 12 % » deviennent « 1200 » et « 12 ».
   i.addEventListener('blur', () => {
     const propre = i.value.replace(/[\s  €%]/g, '').replace(/\.(?=\d{3}(\D|$))/g, '');

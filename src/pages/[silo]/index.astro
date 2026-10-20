@@ -72,6 +72,13 @@ const typeLabels: Record<string, string> = {
   outil: 'Outil gratuit',
 };
 
+// Pages de rubrique : trois contenus mis en avant (comparatifs d'abord), puis le reste classé par type, en liste.
+const ORDRE_TYPES = ['comparatif', 'versus', 'alternatives', 'avis', 'guide', 'outil'];
+const TITRES_TYPES: Record<string, string> = { comparatif: 'Comparatifs', versus: 'Duels', alternatives: 'Alternatives', avis: 'Avis détaillés', guide: 'Guides', outil: 'Outils gratuits' };
+const rubrique = articles;
+const aLaUne = silo === 'outils' || rubrique.length < 7 ? [] : [...rubrique].sort((a, b) => ORDRE_TYPES.indexOf(a.data.type) - ORDRE_TYPES.indexOf(b.data.type)).slice(0, 3);
+const sections = ORDRE_TYPES.map((t) => ({ id: `type-${t}`, titre: TITRES_TYPES[t], items: rubrique.filter((a) => a.data.type === t && !aLaUne.includes(a)) })).filter((x) => x.items.length);
+
 const jsonLd = graph(
   {
     '@type': 'CollectionPage',
@@ -143,16 +150,41 @@ const jsonLd = graph(
         </div>
       </>
     ) : (
-    <div class="grid">
-      {articles.map((a) => (
-        <a class="tile" href={articlePath(a)}>
-          <span class="kicker">{typeLabels[a.data.type]}</span>
-          <strong>{a.data.title}</strong>
-          <span>{a.data.description}</span>
-          <span class="tile-go">Lire →</span>
-        </a>
-      ))}
-    </div>
+      <>
+        {aLaUne.length > 0 && (
+          <section class="rub-une" aria-labelledby="rub-une-titre">
+            <h2 id="rub-une-titre" class="rub-titre">À lire en premier</h2>
+            <ol class="rub-une-liste">
+              {aLaUne.map((a, i) => (
+                <li><a href={articlePath(a)}>
+                  <span class="rub-num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+                  <span class="rub-type">{typeLabels[a.data.type]}</span>
+                  <strong>{a.data.title}</strong>
+                  <span class="rub-desc">{a.data.description}</span>
+                </a></li>
+              ))}
+            </ol>
+          </section>
+        )}
+        {sections.length > 1 && (
+          <nav class="rub-ancres" aria-label="Types de contenus">
+            {sections.map((x) => <a href={`#${x.id}`}>{x.titre} <span>{x.items.length}</span></a>)}
+          </nav>
+        )}
+        {sections.map((x) => (
+          <section class="rub-section" aria-labelledby={x.id}>
+            <h2 id={x.id} class="rub-titre">{x.titre} <span>{x.items.length}</span></h2>
+            <ul class="rub-liste">
+              {x.items.map((a) => (
+                <li><a href={articlePath(a)}>
+                  <strong>{a.data.title}</strong>
+                  <span class="rub-desc">{a.data.description}</span>
+                </a></li>
+              ))}
+            </ul>
+          </section>
+        ))}
+      </>
     )}
   </div>
 </BaseLayout>

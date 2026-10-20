@@ -88,6 +88,58 @@ document.querySelectorAll<HTMLFormElement>('form.sim[id]:not([data-sans-memoire]
   });
 });
 
+// ───────── 2 bis. Saisie vide ou incorrecte ─────────
+// Un champ vidé (alors qu'il avait une valeur), du texte à la place d'un nombre ou une valeur hors des bornes
+// du champ : message sous le champ, résultat remplacé par « – » et détail estompé, au lieu d'un faux « 0 € ».
+const nombre = (v: string) => Number(v.replace(/[\s\u00a0\u202f€%]/g, '').replace(/[−–]/g, '-').replace(',', '.'));
+const fmt = (n: number) => n.toLocaleString('fr-FR');
+document.querySelectorAll<HTMLFormElement>('form.sim').forEach((f) => {
+  const champs = [...f.querySelectorAll<HTMLInputElement>('input[data-num]')];
+  if (!champs.length) return;
+  const requis = new Set(champs.filter((c) => c.value.trim() !== '').map((c) => c.id));
+  const alerte = document.createElement('p');
+  alerte.className = 'sim-alerte';
+  alerte.hidden = true;
+  f.querySelector('.sim-out')?.prepend(alerte);
+  const erreurDe = (c: HTMLInputElement) => {
+    const v = c.value.trim();
+    if (!v) return requis.has(c.id) ? 'Renseigne ce champ.' : '';
+    const n = nombre(v);
+    if (!Number.isFinite(n)) return 'Saisis un nombre, par exemple 1 250,50.';
+    const min = c.getAttribute('min'), max = c.getAttribute('max');
+    if (min !== null && n < Number(min)) return Number(min) === 0 ? 'La valeur ne peut pas être négative.' : `Minimum : ${fmt(Number(min))}.`;
+    if (max !== null && n > Number(max)) return `Maximum : ${fmt(Number(max))}.`;
+    return '';
+  };
+  const verifier = (enCours?: Element | null) => {
+    let premier = '';
+    for (const c of champs) {
+      if (c.offsetParent === null) continue; // champ masqué : ignoré
+      // Champ en cours de frappe et vide : on attend qu'il soit quitté avant de le signaler.
+      const err = c === enCours && !c.value.trim() ? '' : erreurDe(c);
+      let msg = document.getElementById(`${c.id}-err`);
+      if (err) {
+        if (!msg) { msg = document.createElement('p'); msg.id = `${c.id}-err`; msg.className = 'champ-erreur'; c.insertAdjacentElement('afterend', msg); }
+        msg.textContent = err;
+        c.setAttribute('aria-invalid', 'true');
+        c.setAttribute('aria-describedby', msg.id);
+        if (!premier) premier = document.querySelector(`label[for="${c.id}"]`)?.textContent?.replace(/\s*\(.*?\)\s*$/, '').trim() || 'un champ';
+      } else if (msg) {
+        msg.remove(); c.removeAttribute('aria-invalid'); c.removeAttribute('aria-describedby');
+      }
+    }
+    f.classList.toggle('sim-invalide', Boolean(premier));
+    alerte.hidden = !premier;
+    if (premier) {
+      alerte.textContent = `Vérifie le champ « ${premier} » pour voir le résultat.`;
+      f.querySelectorAll<HTMLElement>('.sim-out .big').forEach((b) => { b.textContent = '–'; });
+    }
+  };
+  f.addEventListener('input', (e) => verifier(e.target as Element));
+  f.addEventListener('change', () => verifier());
+  verifier();
+});
+
 // Résultat qui change : petite mise en avant (désactivée si l'utilisateur limite les animations).
 if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
   document.querySelectorAll<HTMLElement>('.sim-out .big').forEach((el) => {

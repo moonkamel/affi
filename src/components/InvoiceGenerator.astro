@@ -45,7 +45,8 @@ const today = new Date().toISOString().slice(0, 10);
 
     <strong style="display:block;margin-top:18px">4. Lignes</strong>
     <div id="g-lines"></div>
-    <button type="button" class="btn btn-ghost btn-sm" id="g-add" style="margin-top:8px">+ Ajouter une ligne</button>
+    <div class="gen-ajouts"><button type="button" class="btn btn-ghost btn-sm" id="g-add">+ Ajouter une ligne</button><button type="button" class="btn btn-ghost btn-sm" id="g-remise">+ Ajouter une remise</button></div>
+    <p class="hint">Pour une remise, un prix unitaire négatif (par exemple -50) est déduit du total.</p>
 
     <label for="g-note">Note (optionnel)</label>
     <input id="g-note" placeholder={isDevis ? 'Délai de réalisation : 2 semaines après acceptation' : 'Merci pour votre confiance'} />
@@ -97,7 +98,8 @@ const today = new Date().toISOString().slice(0, 10);
     if (!form) return;
     const KEY = 'logimalin-generateur-emetteur';
     const eur = (n) => n.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' });
-    const num = (v) => Math.max(0, parseFloat(String(v).replace(/[\s\u00a0\u202f€%]/g, '').replace(',', '.')) || 0);
+    const signe = (v) => parseFloat(String(v).replace(/[\s\u00a0\u202f€%]/g, '').replace(/[−–]/g, '-').replace(',', '.')) || 0;
+    const num = (v) => Math.max(0, signe(v));
     const fmtDate = (s) => (s ? new Date(s + 'T12:00:00').toLocaleDateString('fr-FR') : '');
     const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
 
@@ -152,7 +154,8 @@ const today = new Date().toISOString().slice(0, 10);
       lines.querySelectorAll('.gen-line').forEach((row) => {
         const d = row.querySelector('.l-d').value;
         const q = num(row.querySelector('.l-q').value);
-        const p = num(row.querySelector('.l-p').value);
+        // Prix négatif accepté : ligne de remise ou d'avoir.
+        const p = signe(row.querySelector('.l-p').value);
         if (!d && !p) return;
         ht += q * p;
         html += '<tr><td>' + esc(d) + '</td><td>' + q.toLocaleString('fr-FR') + '</td><td>' + eur(p) + '</td><td>' + eur(q * p) + '</td></tr>';
@@ -178,6 +181,11 @@ const today = new Date().toISOString().slice(0, 10);
     };
 
     $('g-add').onclick = () => { addLine(); render(); };
+    $('g-remise').onclick = () => {
+      addLine('Remise', '1', '-'); render();
+      const p = lines.lastElementChild.querySelector('.l-p');
+      p.focus(); p.setSelectionRange(1, 1);
+    };
     $('g-print').onclick = () => { persist(); window.print(); };
     $('g-reset').onclick = () => {
       ['g-cl-nom', 'g-cl-adr', 'g-cl-siren', 'g-note'].forEach((id) => ($(id).value = ''));
