@@ -6,6 +6,7 @@ import SiloIcon from '../../components/SiloIcon.astro';
 import { SILOS, type Silo } from '../../data/site';
 import { abs, breadcrumbs, graph } from '../../lib/schema';
 import { articlePath, getArticles, siloOf } from '../../lib/articles';
+import OutilsVitrine from '../../components/OutilsVitrine.astro';
 import { GROUPES_OUTILS, OUTILS_INFO, STOCKAGES_OUTILS, TYPES_OUTIL, type TypeOutil } from '../../data/outils';
 
 export async function getStaticPaths() {
@@ -95,11 +96,24 @@ const jsonLd = graph(
 <BaseLayout title={info.seoTitle} description={info.description} jsonLd={jsonLd}>
   <div class="container" data-pagefind-body>
     <Breadcrumbs items={crumbs} />
-    <div class="hub-head">
-      <SiloIcon silo={silo} class="hub-icon" />
-      <h1>{silo === 'outils' ? `${tousOutils.length} outils gratuits pour ta TPE` : info.title}</h1>
-    </div>
-    <p class="hub-intro">{intros[silo]}</p>
+    {silo === 'outils' ? (
+      <section class="out-hero">
+        <div>
+          <span class="acc-kicker">Outils gratuits</span>
+          <h1>{tousOutils.length} outils gratuits pour ta TPE</h1>
+          <p class="hub-intro">{intros[silo]}</p>
+        </div>
+        <OutilsVitrine />
+      </section>
+    ) : (
+      <>
+        <div class="hub-head">
+          <SiloIcon silo={silo} class="hub-icon" />
+          <h1>{info.title}</h1>
+        </div>
+        <p class="hub-intro">{intros[silo]}</p>
+      </>
+    )}
     {silo === 'outils' ? (
       <>
         <p class="out-modeles"><a href="/modeles/">Tu cherches un document prêt à l’emploi ? Voir la bibliothèque de modèles →</a></p>
@@ -124,9 +138,9 @@ const jsonLd = graph(
             {groupes.map((g) => <a href={`#${g.id}`}>{g.titre}</a>)}
           </nav>
         </div>
-        {groupes.map((g) => (
-          <section class="out-groupe" aria-labelledby={g.id} data-groupe>
-            <div class="out-groupe-tete"><h2 id={g.id}>{g.titre}</h2>{g.intro && <p>{g.intro}</p>}</div>
+        {groupes.map((g, gi) => (
+          <section class="out-groupe" aria-labelledby={g.id} data-groupe data-scene="flux">
+            <div class="out-groupe-tete"><span class="out-chap" aria-hidden="true">{String(gi + 1).padStart(2, '0')}</span><h2 id={g.id}>{g.titre}</h2>{g.intro && <p>{g.intro}</p>}</div>
             <ul class="out-grille">
               {g.items.map((a) => {
                 const o = infoOutil(a);
@@ -144,6 +158,17 @@ const jsonLd = graph(
             </ul>
           </section>
         ))}
+        <section class="out-fin" data-scene="flux" aria-labelledby="out-fin-titre">
+          <svg class="mm-etoile" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5l2.6 7.9 7.9 2.6-7.9 2.6L12 22.5l-2.6-7.9L1.5 12l7.9-2.6z" fill="currentColor"/></svg>
+          <h2 id="out-fin-titre">Pas de compte, pas d’abonnement, pas de piège</h2>
+          <div class="out-compteurs">
+            <span><b data-compteur={tousOutils.length}>{tousOutils.length}</b>outils gratuits</span>
+            <span><b data-compteur="0">0</b>compte à créer</span>
+            <span><b data-compteur="0" data-suffixe=" €">0 €</b>à payer</span>
+          </div>
+          <p>Tes saisies restent dans ton navigateur, et tes derniers calculs t’attendent quand tu reviens.</p>
+          <a class="acc-bande-btn mm-btn" href="/modeles/">Voir aussi les modèles de documents</a>
+        </section>
         <div class="out-vide" hidden>
           <strong>Aucun outil pour « <span></span> »</strong>
           <p>Essaie un mot plus court, ou cherche dans les guides.</p>
@@ -189,6 +214,8 @@ const jsonLd = graph(
     )}
   </div>
 </BaseLayout>
+
+{silo === 'outils' && <script>import '../../scripts/scenes.ts'; import '../../scripts/outils-anime.ts';</script>}
 
 {silo === 'outils' && (
   <script is:inline>

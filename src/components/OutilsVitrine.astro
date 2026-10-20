@@ -1,0 +1,79 @@
+---
+// Vitrine animée de la page des outils : un même montant (1 500 €) passe dans quatre outils, à tour de rôle.
+// Lecture automatique quand la vitrine est visible, en pause au survol ou dès que le visiteur choisit un onglet ;
+// aucune lecture automatique si l'utilisateur limite les animations.
+const panneaux = [
+  { id: 'tva', onglet: 'TVA', question: '1 500 € HT, ça fait combien TTC ?', valeur: 1800, libelle: 'Prix TTC (TVA 20 %)', formule: '1 500 € × 1,20 = 1 800,00 €', lien: '/outils/calcul-ht-ttc/', cta: 'Convertisseur HT ↔ TTC' },
+  { id: 'marge', onglet: 'Marge', question: 'Acheté 1 500 € HT, coefficient 1,6 : à quel prix vendre ?', valeur: 2400, libelle: 'Prix de vente HT', formule: 'Marge de 900 € · taux de marge 60 %', lien: '/outils/calcul-marge/', cta: 'Calcul de marge' },
+  { id: 'charges', onglet: 'Charges', question: '1 500 € encaissés en prestations de services : combien pour l’URSSAF ?', valeur: 318, libelle: 'Cotisations sociales (21,2 %)', formule: 'Hors formation professionnelle et impôt', lien: '/outils/simulateur-charges-auto-entrepreneur/', cta: 'Simulateur de charges' },
+  { id: 'retard', onglet: 'Retard', question: 'Une facture de 1 800 € TTC payée avec 30 jours de retard ?', valeur: 58.35, libelle: 'Pénalités et indemnité à réclamer', formule: '18,35 € de pénalités (12,40 %) + 40 € d’indemnité', lien: '/outils/calcul-penalites-de-retard/', cta: 'Pénalités de retard' },
+];
+const eur = (n: number) => n.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' });
+---
+<div class="vit" data-vitrine>
+  <div class="vit-tete">
+    <span class="vit-direct"><i aria-hidden="true"></i>Un montant, quatre réponses</span>
+    <div class="vit-onglets" role="tablist" aria-label="Exemples de calcul">
+      {panneaux.map((p, i) => (
+        <button type="button" role="tab" id={`vit-t-${p.id}`} aria-controls={`vit-${p.id}`} aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1} data-vit={i}>{p.onglet}<span class="vit-jauge" aria-hidden="true"></span></button>
+      ))}
+    </div>
+  </div>
+  {panneaux.map((p, i) => (
+    <div class="vit-panneau" id={`vit-${p.id}`} role="tabpanel" aria-labelledby={`vit-t-${p.id}`} data-panneau={i} hidden={i !== 0}>
+      <p class="vit-question">{p.question}</p>
+      <div class="vit-resultat">
+        <span>{p.libelle}</span>
+        <strong data-valeur={p.valeur}>{eur(p.valeur)}</strong>
+        <span class="vit-formule">{p.formule}</span>
+      </div>
+      <a class="vit-lien" href={p.lien}>Ouvrir : {p.cta} →</a>
+    </div>
+  ))}
+</div>
+
+<script is:inline>
+  (() => {
+    const v = document.querySelector('[data-vitrine]');
+    if (!v) return;
+    const onglets = [...v.querySelectorAll('[data-vit]')], panneaux = [...v.querySelectorAll('[data-panneau]')];
+    const reduit = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const eur = (n) => n.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' });
+    let actuel = 0, minuteur = 0, auto = !reduit, visible = false, survol = false;
+    const compter = (el) => {
+      const fin = Number(el.dataset.valeur), debut = performance.now(), duree = 700;
+      if (reduit) { el.textContent = eur(fin); return; }
+      const pas = (t) => {
+        const k = Math.min(1, (t - debut) / duree), e = 1 - Math.pow(1 - k, 3);
+        el.textContent = eur(Math.round(fin * e * 100) / 100);
+        if (k < 1) requestAnimationFrame(pas);
+      };
+      requestAnimationFrame(pas);
+    };
+    const montrer = (i, focus) => {
+      actuel = (i + onglets.length) % onglets.length;
+      onglets.forEach((b, j) => { b.setAttribute('aria-selected', String(j === actuel)); b.tabIndex = j === actuel ? 0 : -1; });
+      panneaux.forEach((p, j) => { p.hidden = j !== actuel; });
+      compter(panneaux[actuel].querySelector('[data-valeur]'));
+      if (focus) onglets[actuel].focus();
+      v.style.setProperty('--duree', auto ? '3.6s' : '0s');
+      v.classList.remove('vit-joue'); void v.offsetWidth; if (auto) v.classList.add('vit-joue');
+    };
+    const programmer = () => {
+      clearTimeout(minuteur);
+      if (auto && visible && !survol) minuteur = setTimeout(() => montrer(actuel + 1), 3600);
+    };
+    onglets.forEach((b, i) => {
+      b.addEventListener('click', () => { auto = false; v.classList.remove('vit-joue'); montrer(i); clearTimeout(minuteur); });
+      b.addEventListener('keydown', (e) => {
+        const d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+        if (d) { e.preventDefault(); auto = false; montrer(actuel + d, true); clearTimeout(minuteur); }
+      });
+    });
+    v.addEventListener('mouseenter', () => { survol = true; v.classList.add('vit-pause'); clearTimeout(minuteur); });
+    v.addEventListener('mouseleave', () => { survol = false; v.classList.remove('vit-pause'); if (auto) montrer(actuel); });
+    v.addEventListener('focusin', () => { auto = false; v.classList.remove('vit-joue'); clearTimeout(minuteur); });
+    new IntersectionObserver(([e]) => { visible = e.isIntersecting; if (visible && auto) { montrer(actuel); } programmer(); }).observe(v);
+    const obs = new MutationObserver(programmer); obs.observe(v, { attributes: true, attributeFilter: ['class'] });
+  })();
+</script>
