@@ -1,25 +1,136 @@
 ---
-import PageLayout from '../layouts/PageLayout.astro';
-import { SITE } from '../data/site';
+// Page « À propos » : manifeste qui s'allume mot à mot au défilement, les quatre questions de la méthode
+// (cartes à retourner), chiffres du site et contact. Sans animation, tout s'affiche normalement.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
 import Avatar from '../components/Avatar.astro';
+import SiloIcon from '../components/SiloIcon.astro';
+import { SITE, SILOS } from '../data/site';
+import { SOFTWARE } from '../data/software';
+import { MODELES } from '../data/modeles';
+import { INFOGRAPHICS } from '../data/infographics';
+import { abs, breadcrumbs, graph, organization } from '../lib/schema';
+import { getArticles } from '../lib/articles';
+
+const articles = await getArticles();
+const nbOutils = articles.filter((a) => a.data.type === 'outil').length;
+const path = '/a-propos/';
+const crumbs = [{ name: 'Accueil', path: '/' }, { name: 'À propos', path }];
+const jsonLd = graph({ '@type': 'AboutPage', '@id': abs(path) + '#page', name: 'À propos de Logimalin', url: abs(path), inLanguage: 'fr-FR', mainEntity: organization() }, breadcrumbs(crumbs));
+
+// Le manifeste, découpé en mots pour l'effet d'allumage au défilement (le texte reste lisible tel quel).
+const manifeste = [
+  `${SITE.name} est un site indépendant tenu par une petite équipe d’entrepreneurs.`,
+  'Comme tous les dirigeants de petites structures, nous passons une partie de notre temps sur ce qui n’est pas notre métier : facturer, relancer, tenir les comptes, choisir des outils.',
+  'La plupart des comparatifs sont écrits par les éditeurs eux-mêmes, ou listent des fonctions sans dire l’essentiel.',
+  'Nous, on compte ce que ça coûte vraiment, le temps que ça fait gagner, et pour qui c’est fait.',
+];
+let i = 0;
+// Ponctuation haute (« : », « ; »…) collée au mot précédent par une espace insécable, pour qu'elle ne passe jamais seule à la ligne.
+const decouper = (p: string) => p.split(' ').reduce<string[]>((l, m) => (/^[:;!?»]$/.test(m) && l.length ? [...l.slice(0, -1), `${l[l.length - 1]}\u00a0${m}`] : [...l, m]), []);
+const phrases = manifeste.map((p, k) => ({ fort: k === manifeste.length - 1, mots: decouper(p).map((m) => ({ m, i: i++ })) }));
+const totalMots = i;
+
+const questions = [
+  { q: 'Combien ça coûte, au final ?', r: `Abonnement, options, matériel, commissions et hausse au renouvellement : le prix réel, vérifié en ${SITE.pricesChecked}.` },
+  { q: 'Combien de temps ça fait gagner ?', r: 'On regarde le quotidien : saisir une facture, relancer, rapprocher la banque. Pas la liste des fonctions.' },
+  { q: 'Pour qui c’est fait ?', r: 'Micro-entrepreneur, artisan, commerçant, société avec salariés : chaque comparatif dit à qui l’outil convient, et à qui il ne convient pas.' },
+  { q: 'Où sont les pièges ?', r: 'Engagement, frais cachés, export des données, support : chaque logiciel a sa liste de limites.' },
+];
+const chiffres = [
+  { n: articles.length, l: 'guides et comparatifs' },
+  { n: SOFTWARE.length, l: 'logiciels notés' },
+  { n: nbOutils, l: 'outils gratuits' },
+  { n: MODELES.length, l: 'modèles de documents' },
+  { n: INFOGRAPHICS.length, l: 'infographies' },
+];
+const rubriques = (['facturation', 'comptabilite', 'encaissement', 'site-internet', 'crm', 'equipe', 'metiers', 'creer'] as const).filter((s) => articles.some((a) => a.id.startsWith(`${s}/`)));
 ---
-<PageLayout
-  title="À propos : qui compare les logiciels sur Logimalin ?"
-  seoTitle="À propos de Logimalin et de sa rédaction"
-  description="Logimalin compare les logiciels de facturation, comptabilité, encaissement et marketing pour TPE et indépendants, avec les critères d’un dirigeant."
-  schemaType="AboutPage"
->
-  <div class="author" style="margin-top:0"><Avatar size={96} /><div><strong>{SITE.author.name}</strong><div class="muted">Comparatifs et guides pour TPE et indépendants</div>{SITE.sameAs.length > 0 && <p style="margin:.4em 0 0">{SITE.sameAs.map((u) => <a href={u} rel="me">LinkedIn</a>)}</p>}</div></div>
-  <p id="auteur"><strong>{SITE.name}</strong> est un site indépendant tenu par une petite équipe d’entrepreneurs. Comme tous les dirigeants de petites structures, nous passons une partie de notre temps sur ce qui n’est pas notre métier : facturer, relancer, tenir les comptes, choisir des outils.</p>
-  <p>Nous avons créé {SITE.name} parce que la plupart des comparatifs de logiciels sont écrits par les éditeurs eux-mêmes ou listent des fonctionnalités sans dire l’essentiel : combien ça coûte une fois toutes les options ajoutées, combien de temps ça fait vraiment gagner, et pour quel type d’entreprise c’est fait.</p>
-  <h2>Ce que tu trouveras ici</h2>
-  <ul>
-    <li>Des <a href="/facturation/">guides sur la facturation et la facture électronique</a>, la réforme qui concerne toutes les entreprises d’ici 2027.</li>
-    <li>Des comparatifs de <a href="/comptabilite/">logiciels de comptabilité</a>, de <a href="/encaissement/">terminaux de paiement et caisses</a>, de <a href="/site-internet/">créateurs de sites</a> et de <a href="/crm/">CRM</a>.</li>
-    <li>Le <a href="/metiers/">kit de logiciels complet par métier</a> : artisan, freelance, restaurant, commerçant…</li>
-    <li>Des guides pour <a href="/creer/">créer et gérer son entreprise</a> : business plan, statut, aides, déclarations.</li>
-    <li>Des <a href="/outils/">outils gratuits</a> pour chiffrer le coût réel avant de signer.</li>
-  </ul>
-  <h2>Nous contacter</h2>
-  <p>Une erreur, un tarif qui a changé, un logiciel à ajouter ? Écris-nous à <a href={`mailto:${SITE.publisher.email}`}>{SITE.publisher.email}</a>.</p>
-</PageLayout>
+<BaseLayout title="À propos de Logimalin et de sa rédaction" description="Logimalin compare les logiciels de facturation, comptabilité, encaissement et marketing pour TPE et indépendants, avec les critères d’un dirigeant." jsonLd={jsonLd}>
+  <div class="container" data-pagefind-body>
+    <Breadcrumbs items={crumbs} />
+    <section class="ap-hero">
+      <div class="ap-signe" aria-hidden="true"><Avatar size={88} /><span class="ap-orbite"></span></div>
+      <span class="acc-kicker">À propos</span>
+      <h1>On compare les logiciels comme un patron de TPE les choisirait</h1>
+      <p class="acc-lead">{SITE.tagline}. Des guides, des comparatifs et des outils gratuits, écrits par {SITE.author.name}.</p>
+      {SITE.sameAs.length > 0 && <p class="ap-liens">{SITE.sameAs.map((u) => <a href={u} rel="me">Suivre sur LinkedIn</a>)}</p>}
+      <span class="ap-fleche" aria-hidden="true">↓</span>
+    </section>
+
+    <section class="ap-manifeste" id="auteur" data-scene="pinned" data-etapes="1" style={`--n:${totalMots}`} aria-label="Pourquoi Logimalin">
+      <div class="ap-colle">
+        <div class="ap-texte">
+          {phrases.map((p) => (
+            <p class={p.fort ? 'ap-fort' : undefined}>{p.mots.map((w) => <><span style={`--i:${w.i}`}>{w.m}</span>{' '}</>)}</p>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="acc-section" aria-labelledby="ap-q-titre">
+      <div class="acc-tete">
+        <div><span class="acc-kicker">Notre méthode</span><h2 id="ap-q-titre">Quatre questions, pour chaque logiciel</h2></div>
+        <p>Survole ou touche une carte pour voir comment on vérifie. Le détail est dans la <a href="/methodologie/">méthodologie</a>.</p>
+      </div>
+      <ul class="ap-cartes">
+        {questions.map((q, k) => (
+          <li><button type="button" class="ap-carte" aria-pressed="false">
+            <span class="ap-face"><span class="ap-num">0{k + 1}</span><strong>{q.q}</strong><span class="ap-indice">Comment on vérifie →</span></span>
+            <span class="ap-dos"><span>{q.r}</span></span>
+          </button></li>
+        ))}
+      </ul>
+    </section>
+
+    <section class="ap-chiffres" data-scene="flux" aria-labelledby="ap-chiffres-titre">
+      <h2 id="ap-chiffres-titre">{SITE.name} aujourd’hui</h2>
+      <div class="out-compteurs">
+        {chiffres.map((c) => <span><b data-compteur={c.n}>{c.n}</b>{c.l}</span>)}
+      </div>
+      <p>Tout est gratuit et sans inscription. Chaque page affiche sa date de mise à jour.</p>
+    </section>
+
+    <section class="acc-section" aria-labelledby="ap-trouver">
+      <span class="acc-kicker">Ce que tu trouveras ici</span>
+      <h2 id="ap-trouver">Par où commencer</h2>
+      <div class="acc-familles">
+        {rubriques.map((s) => (
+          <a href={`/${s}/`} class="acc-famille">
+            <SiloIcon silo={s} class="acc-famille-icone" />
+            <span class="acc-famille-texte"><strong>{SILOS[s].title}</strong><span>{SILOS[s].description}</span></span>
+          </a>
+        ))}
+        <a href="/outils/" class="acc-famille"><SiloIcon silo="outils" class="acc-famille-icone" /><span class="acc-famille-texte"><strong>Outils gratuits</strong><span>Calculateurs et simulateurs pour chiffrer le coût réel avant de signer.</span></span></a>
+      </div>
+    </section>
+
+    <section class="acc-bande ap-contact" aria-labelledby="ap-contact-titre">
+      <div>
+        <h2 id="ap-contact-titre">Une erreur, un tarif qui a changé, un logiciel à ajouter ?</h2>
+        <p>Écris-nous à <b>{SITE.publisher.email}</b> : on corrige sous 48 heures.</p>
+      </div>
+      <span class="ap-contact-btns">
+        <a class="acc-bande-btn" href={`mailto:${SITE.publisher.email}`}>Nous écrire</a>
+        <button type="button" class="ap-copier" data-copier={SITE.publisher.email}>Copier l’adresse</button>
+      </span>
+    </section>
+  </div>
+</BaseLayout>
+
+<script is:inline>
+  (() => {
+    // Cartes à retourner (clic ou toucher ; survol à la souris géré en CSS)
+    document.querySelectorAll('.ap-carte').forEach((c) => c.addEventListener('click', () => c.setAttribute('aria-pressed', String(c.getAttribute('aria-pressed') !== 'true'))));
+    // Copier l'adresse
+    const b = document.querySelector('[data-copier]');
+    b?.addEventListener('click', async () => {
+      try { await navigator.clipboard.writeText(b.dataset.copier); b.textContent = 'Adresse copiée ✓'; }
+      catch { window.prompt('Copie cette adresse :', b.dataset.copier); }
+    });
+  })();
+</script>
+<script>
+  import './../scripts/scenes.ts';
+  import './../scripts/outils-anime.ts';
+</script>
