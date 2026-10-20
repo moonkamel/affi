@@ -44,6 +44,12 @@ const activites = ACTIVITES.map((a) => a.naf.join(','));
         </table>
       </div>
       <p id="mk-verdict" class="mk-verdict"></p>
+      <div id="mk-ca" class="mk-ca" hidden>
+        <strong>Le chiffre d’affaires de tes concurrents</strong>
+        <p id="mk-ca-txt"></p>
+        <p class="small">Seules les sociétés publient leurs comptes : les micro-entreprises et les plus petites structures n’apparaissent pas dans ce calcul. Prends ce chiffre comme un repère d’entreprise installée ; la première année, on réalise souvent bien moins.</p>
+        <p><a class="btn btn-sm" id="mk-ca-bp" href="/creer/business-plan/">Utiliser ce chiffre dans mon business plan</a></p>
+      </div>
       <p id="mk-note" class="small"></p>
       <div id="mk-list-wrap" hidden>
         <strong>Les entreprises de ton activité dans la commune</strong>
@@ -158,11 +164,11 @@ const activites = ACTIVITES.map((a) => a.naf.join(','));
       $('mk-res').hidden = true;
       try {
         const lieu = c.cps ? { code_postal: c.cps.join(',') } : { code_commune: c.code };
-        const rCom = await appel({ activite_principale: naf, per_page: '10', include: 'matching_etablissements', limite_matching_etablissements: '1', ...lieu });
+        const rCom = await appel({ activite_principale: naf, per_page: '25', include: 'matching_etablissements,finances', limite_matching_etablissements: '1', ...lieu });
         await pause(200);
         const rEpci = c.epci ? await appel({ activite_principale: naf, epci: c.epci.code, per_page: '1' }) : null;
         if (rEpci) await pause(200);
-        const rDep = await appel({ activite_principale: naf, departement: c.dep, per_page: '1' });
+        const rDep = await appel({ activite_principale: naf, departement: c.dep, per_page: '25', include: 'finances' });
         await pause(200);
         const rFr = await appel({ activite_principale: naf, per_page: '1' });
         const popDep = communes.filter((x) => x.dep === c.dep).reduce((s, x) => s + x.pop, 0);
@@ -203,10 +209,31 @@ const activites = ACTIVITES.map((a) => a.naf.join(','));
         const g = root.querySelector(`#mk-act option[value="${i}"]`)?.parentElement?.label || '';
         $('mk-note').textContent = (petite ? `Ta commune compte moins de 3 000 habitants : la comparaison se fait sur ${zEpci ? 'l’intercommunalité, plus représentative' : 'le département, plus représentatif'} de ta zone de chalandise. ` : '')
           + (/Services et conseil|E-commerce/.test(g + ' ' + $('mk-act').selectedOptions[0].text) ? 'Pour cette activité, tes clients ne sont pas forcément locaux : regarde surtout les chiffres du département et de la France. ' : '');
+        // Chiffre d'affaires des concurrents qui publient leurs comptes (dernier exercice connu)
+        const derniersCA = (r) => (r.results || []).map((e) => {
+          const ans = Object.keys(e.finances || {}).sort().reverse();
+          for (const a of ans) { const v = e.finances[a] && e.finances[a].ca; if (typeof v === 'number' && v > 0) return { v, a }; }
+          return null;
+        }).filter(Boolean);
+        let echant = derniersCA(rCom), zoneCA = c.nom;
+        if (echant.length < 5) { echant = derniersCA(rDep); zoneCA = `ton département (${c.dep})`; }
+        const blocCA = $('mk-ca');
+        if (echant.length >= 3) {
+          const vals = echant.map((x) => x.v).sort((a, b) => a - b);
+          const q = (p) => { const i = (vals.length - 1) * p, lo = Math.floor(i), hi = Math.ceil(i); return vals[lo] + (vals[hi] - vals[lo]) * (i - lo); };
+          const med = q(0.5);
+          const annees = [...new Set(echant.map((x) => x.a))].sort();
+          const eur = (n) => n.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 });
+          $('mk-ca-txt').innerHTML = `Chiffre d’affaires médian : <strong>${eur(med)}</strong> par an (la moitié des concurrents fait entre ${eur(q(0.25))} et ${eur(q(0.75))}). Calculé sur ${echant.length} entreprises de ${zoneCA} qui publient leurs comptes (${annees.length > 1 ? `exercices ${annees[0]} à ${annees[annees.length - 1]}` : `exercice ${annees[0]}`}).`;
+          const act = $('mk-act').selectedOptions[0].text;
+          $('mk-ca-bp').href = `/creer/business-plan/?ca=${Math.round(med / 1000) * 1000}&source=${encodeURIComponent(`${act} à ${c.nom}`)}#sim-bp`;
+          blocCA.hidden = false;
+        } else blocCA.hidden = true;
+
         // Liste des concurrents de la commune
         const ul = $('mk-comp');
         ul.innerHTML = '';
-        (rCom.results || []).forEach((e) => {
+        (rCom.results || []).slice(0, 10).forEach((e) => {
           const et = (e.matching_etablissements || [])[0] || e.siege || {};
           const li = document.createElement('li');
           const b = document.createElement('strong');
@@ -246,6 +273,8 @@ const activites = ACTIVITES.map((a) => a.naf.join(','));
   .market .md-table { background: var(--card); margin: 12px 0; }
   .mk-verdict { font-weight: 600; }
   .mk-actions { margin: 10px 0 0; }
+  .mk-ca { margin: 16px 0; padding: 14px 16px; border-radius: 12px; background: var(--card); border: 1.5px solid var(--line); }
+  .mk-ca p { margin: 8px 0; }
   @media print {
     :global(html.print-mk body *) { visibility: hidden; }
     :global(html.print-mk #market-tool), :global(html.print-mk #market-tool *) { visibility: visible; }

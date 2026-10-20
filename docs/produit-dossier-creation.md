@@ -10,6 +10,8 @@ Décision du 20/10/2026, après mesure des volumes (docs/recherche/volumes-outil
   - nombre d'entreprises actives de l'activité dans la commune, l'intercommunalité (EPCI, 1 255 groupements), le département et en France (API Recherche d'entreprises, `etat_administratif=A`) ;
   - pour une commune de moins de 3 000 habitants, la comparaison se fait sur l'intercommunalité ;
   - impression ou enregistrement en PDF du résultat ;
+  - chiffre d'affaires médian et fourchette (25 % à 75 %) des concurrents qui publient leurs comptes, dans la commune ou à défaut le département (champ `finances` de l'API, 3 entreprises au minimum) ;
+  - bouton qui pré-remplit le chiffre d'affaires du business plan (`/creer/business-plan/?ca=…&source=…`) ;
   - densité pour 10 000 habitants et verdict (moins de 0,7 fois la moyenne nationale, dans la moyenne, plus de 1,3 fois) ;
   - liste des 10 premières entreprises de la commune ;
   - lien vers le business plan gratuit.

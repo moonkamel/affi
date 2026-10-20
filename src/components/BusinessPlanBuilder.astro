@@ -5,6 +5,7 @@
 <form class="sim bp" id="sim-bp" aria-labelledby="bp-titre" onsubmit="return false">
   <strong id="bp-titre">Ton prévisionnel sur 3 ans</strong>
   <p class="small muted">Montants hors taxe. Les calculs restent dans ton navigateur : rien n’est envoyé.</p>
+  <p class="bp-src" id="bp-src" hidden></p>
 
   <fieldset>
     <legend>Activité</legend>
@@ -130,6 +131,7 @@
     .site-header, .site-footer, .toc, .related, .faq, .author-box, .bp fieldset, .bp-actions, .bp > p.small { display: none !important; }
     .bp { box-shadow: none; border: 0; }
   }
+  .bp-src { margin: 8px 0 0; padding: 10px 12px; border-radius: 10px; background: var(--sun-soft); font-size: .9rem; }
 </style>
 
 <script is:inline>
@@ -237,6 +239,15 @@
       URL.revokeObjectURL(a.href);
     };
     document.getElementById('bp-print').onclick = () => window.print();
+    // Pré-remplissage depuis l'étude de marché locale (?ca=…&source=…)
+    const qs = new URLSearchParams(location.search);
+    const caEtude = Number(qs.get('ca'));
+    if (caEtude > 0 && caEtude < 100000000) {
+      document.getElementById('bp-ca').value = String(Math.round(caEtude));
+      const src = document.getElementById('bp-src');
+      src.textContent = `Chiffre d’affaires repris de ton étude de marché (${(qs.get('source') || '').slice(0, 120)}) : c’est le chiffre médian des concurrents installés. Ajuste-le à ta situation, la première année est souvent plus faible.`;
+      src.hidden = false;
+    }
     f.addEventListener('input', calc);
     calc();
   })();
