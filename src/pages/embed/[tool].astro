@@ -22,6 +22,7 @@ import SwotBuilder from '../../components/SwotBuilder.astro';
 import PestelBuilder from '../../components/PestelBuilder.astro';
 import QrAvisGoogle from '../../components/QrAvisGoogle.astro';
 import DocumentEmployeur from '../../components/DocumentEmployeur.astro';
+import IlcCalculator from '../../components/IlcCalculator.astro';
 
 export function getStaticPaths() {
   return EMBEDS.map((e) => ({ params: { tool: e.slug }, props: { embed: e } }));
@@ -45,6 +46,7 @@ const COMPONENTS = {
   pestel: PestelBuilder,
   'qr-avis-google': QrAvisGoogle,
   'documents-employeur': DocumentEmployeur,
+  ilc: IlcCalculator,
 } as const;
 const Tool = COMPONENTS[embed.slug as keyof typeof COMPONENTS];
 ---

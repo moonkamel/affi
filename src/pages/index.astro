@@ -5,6 +5,7 @@ import WeeklyInfographic from '../components/WeeklyInfographic.astro';
 import { SITE, SILOS, type Silo } from '../data/site';
 import { graph, organization, website } from '../lib/schema';
 import { articlePath, getArticles, siloOf } from '../lib/articles';
+import { OUTILS_ACCUEIL } from '../data/outils';
 
 const articles = await getArticles();
 const featured = [
@@ -24,6 +25,8 @@ const metiers = articles.filter((a) => siloOf(a) === 'metiers' && a.id.includes(
 const creerOrder = ['creer/business-plan', 'creer/creer-micro-entreprise', 'creer/statut-juridique', 'creer/acre', 'creer/aides-creation-entreprise', 'creer/sasu-ou-eurl'];
 const creer = creerOrder.map((id) => articles.find((a) => a.id === id)).filter((a) => a !== undefined);
 const count = articles.length;
+const nbOutils = articles.filter((a) => a.data.type === 'outil').length;
+const outilsAccueil = OUTILS_ACCUEIL.filter((o) => articles.some((a) => a.id === o.id));
 ---
 <BaseLayout
   title="Logimalin : logiciels pour TPE et indépendants comparés"
@@ -43,7 +46,7 @@ const count = articles.length;
         <div class="proof">
           <span><b>{count}</b> guides et comparatifs</span>
           <span><b>30</b> logiciels notés</span>
-          <span><b>0 €</b> pour nos outils</span>
+          <span><b>{nbOutils}</b> outils gratuits</span>
         </div>
       </div>
       <div class="collage" aria-hidden="true">
@@ -72,6 +75,18 @@ const count = articles.length;
           <strong>{SILOS[s].title}</strong>
           <span>{SILOS[s].description}</span>
           <span class="tile-go">Voir les comparatifs →</span>
+        </a>
+      ))}
+    </div>
+
+    <div class="section-head"><h2 id="outils">Nos outils gratuits</h2><p>Sans inscription, tout reste dans ton navigateur. <a href="/outils/">Voir les {nbOutils} outils</a></p></div>
+    <div class="grid">
+      {outilsAccueil.map((o) => (
+        <a class="tile" href={`/${o.id}/`}>
+          <span class="kicker">Outil gratuit</span>
+          <strong>{o.titre}</strong>
+          <span>{o.accroche}</span>
+          <span class="tile-go">Ouvrir →</span>
         </a>
       ))}
     </div>

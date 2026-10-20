@@ -1,0 +1,89 @@
+---
+// Révision ou indexation d'un loyer commercial avec l'indice des loyers commerciaux (ILC).
+// Les valeurs viennent de src/data/ilc.ts (mise à jour trimestrielle).
+import { ILC, ILC_INFO, libelleIlc } from '../data/ilc';
+const series = ILC.map((v) => ({ id: `${v.annee}-${v.trimestre}`, label: libelleIlc(v), valeur: v.valeur }));
+const dernier = series[series.length - 1];
+// Indice de référence par défaut : même trimestre, un an plus tôt (indexation annuelle la plus courante).
+const unAn = series[series.length - 5] ?? series[0];
+---
+<form class="sim" id="sim-ilc" aria-labelledby="ilc-titre" onsubmit="return false">
+  <strong id="ilc-titre">Révision du loyer commercial avec l’ILC</strong>
+  <div class="row">
+    <div>
+      <label for="ilc-loyer">Loyer actuel hors taxes et hors charges (€)</label>
+      <input id="ilc-loyer" type="number" min="0" step="10" value="1800" inputmode="decimal" />
+    </div>
+    <div>
+      <label for="ilc-periode">Ce montant est un loyer</label>
+      <select id="ilc-periode"><option value="mois" selected>mensuel</option><option value="trimestre">trimestriel</option><option value="an">annuel</option></select>
+    </div>
+    <div>
+      <label for="ilc-ref">Indice de référence (celui de la dernière fixation du loyer)</label>
+      <select id="ilc-ref">
+        {series.map((s) => <option value={s.id} selected={s.id === unAn.id}>{s.label} : {s.valeur.toLocaleString('fr-FR')}</option>)}
+        <option value="autre">Autre valeur (saisie libre)</option>
+      </select>
+      <input id="ilc-ref-autre" type="number" min="1" step="0.01" placeholder="Ex. : 108,91" inputmode="decimal" hidden />
+    </div>
+    <div>
+      <label for="ilc-new">Nouvel indice (le dernier connu à la date de révision)</label>
+      <select id="ilc-new">
+        {series.map((s) => <option value={s.id} selected={s.id === dernier.id}>{s.label} : {s.valeur.toLocaleString('fr-FR')}</option>)}
+        <option value="autre">Autre valeur (saisie libre)</option>
+      </select>
+      <input id="ilc-new-autre" type="number" min="1" step="0.01" inputmode="decimal" hidden />
+    </div>
+  </div>
+  <output class="sim-out" aria-live="polite">
+    <div>Nouveau loyer</div>
+    <div class="big" id="ilc-r">–</div>
+    <div id="ilc-d" class="small"></div>
+  </output>
+  <table class="sim-tab"><tbody id="ilc-tab"></tbody></table>
+  <p class="hint">Dernier indice disponible : {dernier.label}, {dernier.valeur.toLocaleString('fr-FR')} ({ILC_INFO.dernierePublication}). Prochaine publication de l’INSEE : {ILC_INFO.prochainePublication}.</p>
+</form>
+
+<script is:inline define:vars={{ series }}>
+  (() => {
+    const f = document.getElementById('sim-ilc');
+    if (!f) return;
+    const $ = (id) => document.getElementById(id);
+    const num = (id) => { const x = parseFloat(String($(id).value).replace(',', '.')); return Number.isFinite(x) && x > 0 ? x : null; };
+    const eur = (n) => n.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR', minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    const pc = (n) => `${n > 0 ? '+' : ''}${n.toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} %`;
+    const ligne = (k, v, cls) => { const tr = document.createElement('tr'); if (cls) tr.className = cls; const th = document.createElement('th'); th.textContent = k; const td = document.createElement('td'); td.textContent = v; tr.append(th, td); return tr; };
+    const indice = (sel, autre) => {
+      $(autre).hidden = $(sel).value !== 'autre';
+      if ($(sel).value === 'autre') return { label: 'valeur saisie', avecArticle: 'l’indice saisi', valeur: num(autre) };
+      const s = series.find((x) => x.id === $(sel).value);
+      return { label: s.label, avecArticle: `le ${s.label}`, valeur: s.valeur };
+    };
+    let compte = false;
+    const calc = (e) => {
+      const ref = indice('ilc-ref', 'ilc-ref-autre'), neu = indice('ilc-new', 'ilc-new-autre');
+      const loyer = num('ilc-loyer'), per = $('ilc-periode').value;
+      if (!loyer || !ref.valeur || !neu.valeur) { $('ilc-r').textContent = '–'; $('ilc-d').textContent = 'Renseigne le loyer et les deux indices.'; $('ilc-tab').replaceChildren(); return; }
+      const coef = neu.valeur / ref.valeur, nouveau = loyer * coef, varPc = (coef - 1) * 100;
+      const parAn = { mois: 12, trimestre: 4, an: 1 }[per];
+      const libPer = { mois: 'par mois', trimestre: 'par trimestre', an: 'par an' }[per];
+      $('ilc-r').textContent = `${eur(nouveau)} ${libPer}`;
+      $('ilc-d').textContent = varPc >= 0
+        ? `L’indice a progressé de ${pc(varPc).replace('+', '')} entre ${ref.avecArticle} et ${neu.avecArticle} : ton loyer augmente de ${eur(nouveau - loyer)} ${libPer}${per === 'an' ? '' : `, soit ${eur((nouveau - loyer) * parAn)} sur un an`}.`
+        : `L’indice a baissé de ${pc(varPc).replace('-', '')} entre ${ref.avecArticle} et ${neu.avecArticle} : ton loyer diminue de ${eur(loyer - nouveau)} ${libPer}, si ton bail prévoit une indexation à la hausse comme à la baisse.`;
+      $('ilc-tab').replaceChildren(
+        ligne('Loyer actuel', `${eur(loyer)} ${libPer}`),
+        ligne(`Indice de référence (${ref.label})`, ref.valeur.toLocaleString('fr-FR')),
+        ligne(`Nouvel indice (${neu.label})`, neu.valeur.toLocaleString('fr-FR')),
+        ligne('Formule', `${eur(loyer)} × ${neu.valeur.toLocaleString('fr-FR')} ÷ ${ref.valeur.toLocaleString('fr-FR')}`),
+        ligne('Variation de l’indice', pc(varPc)),
+        ligne(`Nouveau loyer ${libPer}`, eur(nouveau), 'tot'),
+        ligne('Nouveau loyer annuel', eur(nouveau * parAn)),
+      );
+      if (!compte && e) { compte = true; try { navigator.sendBeacon('/api/mesure/ilc'); } catch (err) { /* sans importance */ } }
+    };
+    f.addEventListener('input', calc);
+    f.addEventListener('change', calc);
+    calc();
+  })();
+</script>

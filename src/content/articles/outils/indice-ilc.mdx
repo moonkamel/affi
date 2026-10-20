@@ -1,0 +1,95 @@
+---
+title: "Indice ILC : dernière valeur et calcul de la révision du loyer commercial"
+seoTitle: "Indice ILC : dernière valeur et calcul du loyer commercial"
+description: "Dernière valeur de l’indice des loyers commerciaux (ILC), historique depuis 2021 et calculateur gratuit pour réviser ou indexer ton loyer commercial."
+keyword: "ilc"
+secondaryKeywords:
+  - "indice ilc"
+  - "indice des loyers commerciaux"
+  - "révision loyer commercial"
+  - "calcul révision loyer commercial"
+  - "indexation loyer commercial"
+  - "calcul indexation loyer"
+  - "bail commercial 3 6 9"
+type: outil
+published: 2026-10-20
+updated: 2026-10-20
+related:
+  - outils/calcul-seuil-de-rentabilite
+  - creer/domiciliation-entreprise
+  - encaissement/logiciel-de-caisse
+  - outils/calcul-bfr
+tldr:
+  - "<strong>Dernier ILC</strong> : 137,16 au 2e trimestre 2026, en hausse de 0,26 % sur un an (publié par l’INSEE en septembre 2026)."
+  - "<strong>Calcul</strong> : nouveau loyer = loyer actuel × nouvel indice ÷ indice de référence."
+  - "<strong>L’ILC</strong> concerne les commerces et les artisans ; les bureaux et les professions libérales utilisent l’ILAT."
+faq:
+  - q: "Quelle est la dernière valeur de l’ILC ?"
+    a: "L’indice des loyers commerciaux du 2e trimestre 2026 est de 137,16, en hausse de 0,26 % sur un an. Il a été publié par l’INSEE en septembre 2026. La valeur du 3e trimestre 2026 est attendue fin décembre 2026."
+  - q: "Comment calculer la révision d’un loyer commercial avec l’ILC ?"
+    a: "Multiplie le loyer actuel par le nouvel indice, puis divise par l’indice de référence, celui qui a servi à la dernière fixation du loyer. Exemple : 1 800 € × 137,16 ÷ 136,81 = 1 804,60 € par mois."
+  - q: "Quel indice choisir : ILC, ILAT ou ICC ?"
+    a: "L’ILC s’applique aux activités commerciales et artisanales. L’ILAT concerne les activités tertiaires (bureaux, professions libérales, entrepôts). Depuis la loi Pinel de 2014, l’ICC ne peut plus servir de référence pour la révision triennale des baux commerciaux conclus ou renouvelés depuis."
+  - q: "Quelle différence entre indexation et révision triennale ?"
+    a: "L’indexation, prévue par une clause d’échelle mobile du bail, s’applique automatiquement à la date prévue, souvent chaque année. La révision triennale est un droit légal : le bailleur ou le locataire peut la demander tous les 3 ans, et la hausse est en principe plafonnée à la variation de l’indice sur la période."
+  - q: "Le loyer peut-il baisser avec l’ILC ?"
+    a: "Oui, si l’indice baisse entre les deux dates et que la clause du bail joue à la hausse comme à la baisse. Une clause qui ne joue qu’à la hausse est jugée non conforme par les tribunaux."
+---
+import IlcCalculator from '../../../components/IlcCalculator.astro';
+import Callout from '../../../components/Callout.astro';
+import EmbedCode from '../../../components/EmbedCode.astro';
+import { ILC, ILC_INFO, libelleIlc } from '../../../data/ilc';
+
+L’indice des loyers commerciaux (ILC) sert à faire évoluer le loyer des commerces et des artisans, chaque année avec la clause d’indexation du bail ou tous les 3 ans lors de la révision triennale. Choisis l’indice de référence de ton bail et le dernier indice publié : le calculateur donne le nouveau loyer, mensuel et annuel.
+
+<IlcCalculator />
+
+## Les dernières valeurs de l’ILC
+
+<div class="md-table">
+<table>
+<thead><tr><th>Trimestre</th><th>ILC</th><th>Évolution sur un an</th></tr></thead>
+<tbody>
+{ILC.slice().reverse().slice(0, 12).map((v) => {
+  const an = ILC.find((x) => x.annee === v.annee - 1 && x.trimestre === v.trimestre);
+  return <tr><td>{libelleIlc(v)}</td><td>{v.valeur.toLocaleString('fr-FR')}</td><td>{an ? `${((v.valeur / an.valeur - 1) * 100).toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2, signDisplay: 'always' })} %` : '–'}</td></tr>;
+})}
+</tbody>
+</table>
+</div>
+
+Base 100 au 1er trimestre 2008. Série vérifiée le {new Date(ILC_INFO.derniereVerification).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}, prochaine publication : {ILC_INFO.prochainePublication}.
+
+## La formule
+
+> Nouveau loyer = loyer actuel × nouvel indice ÷ indice de référence
+
+**Exemple** : un loyer de 1 800 € par mois indexé chaque année au 2e trimestre. L’indice de référence est celui du 2e trimestre 2025 (136,81), le nouvel indice celui du 2e trimestre 2026 (137,16). Nouveau loyer : 1 800 × 137,16 ÷ 136,81 = **1 804,60 € par mois**.
+
+<Callout title="Le bon indice de référence">
+  <p>L’indice de référence est celui qui a servi à fixer le loyer actuel, pas celui de la signature du bail s’il y a déjà eu des révisions. Le nouvel indice est le dernier publié à la date de révision. Les deux doivent être espacés de la même durée que les révisions : un an pour une indexation annuelle, trois ans pour une révision triennale.</p>
+</Callout>
+
+## Indexation annuelle ou révision triennale
+
+| | Indexation (clause d’échelle mobile) | Révision triennale légale |
+|---|---|---|
+| Source | Une clause du bail | Le Code de commerce (article L. 145-38) |
+| Fréquence | Celle prévue au bail, souvent chaque année | Tous les 3 ans au plus tôt, à la demande d’une partie |
+| Déclenchement | Automatique à la date prévue | Par lettre recommandée ou acte de commissaire de justice |
+| Limite | Révision possible si le loyer a varié de plus de 25 % (article L. 145-39) | Hausse plafonnée à la variation de l’indice, sauf modification matérielle des facteurs locaux de commercialité |
+
+## Bail commercial 3-6-9 : les dates à retenir
+
+- **Durée** : 9 ans minimum. Le locataire peut donner congé à la fin de chaque période de 3 ans, d’où le nom de bail « 3-6-9 ».
+- **Révision** : possible tous les 3 ans (révision triennale) et chaque année si le bail prévoit une indexation.
+- **Renouvellement** : à l’issue des 9 ans. La hausse du loyer est en principe plafonnée à la variation de l’indice, et un déplafonnement éventuel est étalé à 10 % par an au plus.
+- **Bail dérogatoire** (ou précaire) : 3 ans maximum au total, sans droit au renouvellement. L’indexation dépend alors uniquement de ce qui est écrit dans le contrat.
+
+Un loyer qui augmente pèse directement sur ta rentabilité : refais ton [calcul de seuil de rentabilité](/outils/calcul-seuil-de-rentabilite/) avec le nouveau loyer.
+
+Sources : [INSEE, indice des loyers commerciaux, série 001532540](https://www.insee.fr/fr/statistiques/serie/001532540), [Code de commerce](https://www.legifrance.gouv.fr/codes/texte_lc/LEGITEXT000005634379/). Vérifié en octobre 2026.
+
+<p data-maillage>Pour suivre tes charges fixes : le <a href="/outils/calcul-seuil-de-rentabilite/">seuil de rentabilité</a> et le <a href="/outils/calcul-bfr/">besoin en fonds de roulement</a>. Pour domicilier une activité sans local : la <a href="/creer/domiciliation-entreprise/">domiciliation d’entreprise</a>.</p>
+
+<EmbedCode tool="ilc" />

@@ -6,6 +6,7 @@ import SiloIcon from '../../components/SiloIcon.astro';
 import { SILOS, type Silo } from '../../data/site';
 import { abs, breadcrumbs, graph } from '../../lib/schema';
 import { articlePath, getArticles, siloOf } from '../../lib/articles';
+import { GROUPES_OUTILS } from '../../data/outils';
 
 export async function getStaticPaths() {
   // Pas de page hub vide (contenu mince = mauvais signal pour Google).
@@ -21,6 +22,12 @@ const all = await getArticles();
 const articles = all.filter((a) => siloOf(a) === silo);
 // La page Outils reprend aussi les outils publiés dans d'autres rubriques (étude de marché, business plan…).
 const autresOutils = silo === 'outils' ? all.filter((a) => siloOf(a) !== 'outils' && a.data.type === 'outil') : [];
+// Sur /outils/, tous les outils (de toutes les rubriques) sont classés par besoin ; les autres silos gardent la grille simple.
+const tousOutils = silo === 'outils' ? all.filter((a) => a.data.type === 'outil' || siloOf(a) === 'outils') : [];
+const groupes = GROUPES_OUTILS.map((g) => ({ ...g, items: g.outils.map((id) => tousOutils.find((a) => a.id === id)).filter((a) => a !== undefined) })).filter((g) => g.items.length);
+const classes = new Set(groupes.flatMap((g) => g.items.map((a) => a.id)));
+const autres = tousOutils.filter((a) => !classes.has(a.id));
+if (autres.length) groupes.push({ id: 'autres', titre: 'Autres outils', intro: '', outils: [], items: autres });
 const path = `/${silo}/`;
 const crumbs = [{ name: 'Accueil', path: '/' }, { name: info.label, path }];
 
@@ -48,7 +55,7 @@ const intros: Record<Silo, string> = {
   creer:
     'Créer son entreprise, puis la faire tourner sans mauvaise surprise : business plan, choix du statut, aides à la création, déclarations URSSAF, impôt et CFE. Nos guides s’appuient sur les sources officielles (URSSAF, impots.gouv, France Travail, Bpifrance) et indiquent la date de leur dernière vérification.',
   outils:
-    'Des simulateurs gratuits pour chiffrer le coût réel de tes outils avant de signer (abonnement, matériel, frais de paiement), et des outils pour lancer ton entreprise : étude de marché locale, business plan, plafonds de la micro-entreprise.',
+    'Des outils gratuits, sans inscription, pour les tâches que tu fais une fois par mois ou une fois par an : facturer, convertir la TVA, fixer tes prix, calculer ton seuil de rentabilité, préparer ton dossier pour la banque ou rédiger les documents d’un salarié. Tout reste dans ton navigateur.',
 };
 
 const typeLabels: Record<string, string> = {
@@ -68,7 +75,7 @@ const jsonLd = graph(
     description: info.description,
     url: abs(path),
     inLanguage: 'fr-FR',
-    hasPart: [...articles, ...autresOutils].map((a) => ({ '@type': 'Article', headline: a.data.title, url: abs(articlePath(a)) })),
+    hasPart: (silo === 'outils' ? tousOutils : [...articles, ...autresOutils]).map((a) => ({ '@type': 'Article', headline: a.data.title, url: abs(articlePath(a)) })),
   },
   breadcrumbs(crumbs),
 );
@@ -81,6 +88,29 @@ const jsonLd = graph(
       <h1>{info.title}</h1>
     </div>
     <p class="hub-intro">{intros[silo]}</p>
+    {silo === 'outils' ? (
+      <>
+        <nav class="hub-chips" aria-label="Catégories d’outils">
+          {groupes.map((g) => <a href={`#${g.id}`}>{g.titre}</a>)}
+        </nav>
+        {groupes.map((g) => (
+          <section aria-labelledby={g.id}>
+            <h2 class="hub-sub" id={g.id}>{g.titre}</h2>
+            {g.intro && <p class="hub-sub-intro">{g.intro}</p>}
+            <div class="grid">
+              {g.items.map((a) => (
+                <a class="tile" href={articlePath(a)}>
+                  <span class="kicker">Outil gratuit</span>
+                  <strong>{a.data.title}</strong>
+                  <span>{a.data.description}</span>
+                  <span class="tile-go">Ouvrir →</span>
+                </a>
+              ))}
+            </div>
+          </section>
+        ))}
+      </>
+    ) : (
     <div class="grid">
       {articles.map((a) => (
         <a class="tile" href={articlePath(a)}>
@@ -91,20 +121,6 @@ const jsonLd = graph(
         </a>
       ))}
     </div>
-    {autresOutils.length > 0 && (
-      <>
-        <h2 class="hub-sub">Outils pour créer ton entreprise</h2>
-        <div class="grid">
-          {autresOutils.map((a) => (
-            <a class="tile" href={articlePath(a)}>
-              <span class="kicker">Outil gratuit</span>
-              <strong>{a.data.title}</strong>
-              <span>{a.data.description}</span>
-              <span class="tile-go">Ouvrir →</span>
-            </a>
-          ))}
-        </div>
-      </>
     )}
   </div>
 </BaseLayout>
