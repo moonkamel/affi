@@ -994,8 +994,8 @@ html.scenes .mod-etapes li .mod-pastille { transform: scale(calc(.85 + var(--a) 
 html.scenes .out-groupe-tete { position: relative; }
 html.scenes .out-chap { display: block; position: absolute; z-index: -1; right: 0; top: -0.45em; font-family: var(--display); font-weight: 800; font-size: clamp(4rem, 9vw, 7rem); line-height: 1; letter-spacing: -.05em; color: transparent; -webkit-text-stroke: 1.5px color-mix(in srgb, var(--accent) 30%, transparent); transform: translateY(calc((0.5 - var(--p, .5)) * 70px)); pointer-events: none; }
 .out-groupe { position: relative; isolation: isolate; }
-html.out-anime .out-grille > li { opacity: 0; transform: translateY(26px) scale(.98); transition: opacity .55s ease var(--delai, 0ms), transform .6s cubic-bezier(.2, .8, .2, 1) var(--delai, 0ms); }
-html.out-anime .out-grille > li.vu { opacity: 1; transform: none; }
+html.out-anime :is(.out-grille, .ig-galerie) > li { opacity: 0; transform: translateY(26px) scale(.98); transition: opacity .55s ease var(--delai, 0ms), transform .6s cubic-bezier(.2, .8, .2, 1) var(--delai, 0ms); }
+html.out-anime :is(.out-grille, .ig-galerie) > li.vu { opacity: 1; transform: none; }
 @media (hover: hover) and (pointer: fine) {
   .out-grille .acc-carte { transform: perspective(800px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); transition: transform .25s ease, border-color .2s; background-image: radial-gradient(240px circle at var(--mx, 50%) var(--my, 0%), color-mix(in srgb, var(--tcol, var(--accent)) 12%, transparent), transparent 70%); }
   .out-grille .acc-carte:hover { transform: perspective(800px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateY(-3px); }
@@ -1088,6 +1088,62 @@ html.art-anime .prose .apparait.vu tbody tr { opacity: 1; transform: none; }
 html.art-anime .tldr li { animation: apparait .5s ease-out both; }
 html.art-anime .tldr li:nth-child(2) { animation-delay: .12s; } html.art-anime .tldr li:nth-child(3) { animation-delay: .24s; } html.art-anime .tldr li:nth-child(4) { animation-delay: .36s; }
 
+/* ───────── Galerie des infographies ───────── */
+.ig-hero > div:first-child { position: relative; z-index: 3; }
+.ig-hero { overflow-x: clip; display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); gap: 40px; align-items: center; padding-block: 24px 10px; }
+.ig-hero h1 { font-size: clamp(2.3rem, 5.4vw, 3.9rem); line-height: 1; letter-spacing: -.035em; margin: 12px 0 18px; }
+.ig-scene { position: relative; height: 440px; perspective: 1200px; }
+.ig-scene img { display: block; width: 100%; height: auto; border-radius: 12px; box-shadow: 0 30px 60px rgba(0, 0, 0, .5); }
+.ig-une { position: absolute; left: 50%; top: 50%; width: 230px; transform: translate(-50%, -50%) translateY(calc((.5 - var(--p, .5)) * 30px)); transition: transform .4s; z-index: 2; }
+.ig-une .sticker { position: absolute; top: -12px; right: -10px; transform: rotate(5deg); }
+.ig-scene .ig-cote { position: absolute; top: 50%; width: 180px; opacity: .6; filter: saturate(.8); }
+.ig-scene .ig-g { left: 50%; transform: translate(-50%, -50%) translateX(calc(-130px - var(--p, .5) * 24px)) rotateY(calc(28deg + var(--p, .5) * 10deg)) scale(.88); }
+.ig-scene .ig-d { left: 50%; transform: translate(-50%, -50%) translateX(calc(130px + var(--p, .5) * 24px)) rotateY(calc(-28deg - var(--p, .5) * 10deg)) scale(.88); }
+@media (prefers-reduced-motion: no-preference) {
+  .ig-une { animation: igArrive .9s cubic-bezier(.2, .8, .2, 1) both; }
+  .ig-cote { animation: igCote 1s .1s cubic-bezier(.2, .8, .2, 1) both; }
+}
+@keyframes igArrive { from { opacity: 0; transform: translate(-50%, -40%) scale(.9); } }
+@keyframes igCote { from { opacity: 0; } }
+.ig-barre { margin-top: 20px; padding-bottom: 12px; }
+.ig-galerie { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 230px), 1fr)); gap: 30px 20px; margin: 30px 0 0; padding: 0; list-style: none; }
+.ig-galerie li[hidden] { display: none; }
+.ig-vignette { position: relative; }
+.ig-ouvrir { position: relative; display: block; width: 100%; padding: 0; border: 0; background: none; cursor: zoom-in; border-radius: 12px; }
+.ig-ouvrir img { display: block; width: 100%; height: auto; border-radius: 12px; border: 1px solid var(--line); box-shadow: 0 14px 30px rgba(0, 0, 0, .35); }
+.ig-loupe { position: absolute; right: 10px; bottom: 10px; display: grid; place-items: center; width: 40px; height: 40px; border-radius: 12px; background: color-mix(in srgb, var(--paper) 80%, transparent); color: var(--ink); opacity: 0; transform: translateY(6px); transition: opacity .2s, transform .2s; }
+.ig-loupe svg { width: 20px; height: 20px; }
+.ig-ouvrir:hover .ig-loupe, .ig-ouvrir:focus-visible .ig-loupe { opacity: 1; transform: none; }
+@media (hover: hover) and (pointer: fine) {
+  .ig-ouvrir { transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); transition: transform .25s ease; }
+  .ig-ouvrir::after { content: ""; position: absolute; inset: 0; border-radius: 12px; pointer-events: none; background: radial-gradient(240px circle at var(--mx, 50%) var(--my, 0%), rgba(255, 255, 255, .14), transparent 70%); opacity: 0; transition: opacity .25s; }
+  .ig-ouvrir:hover::after { opacity: 1; }
+}
+.ig-week { position: absolute; top: -10px; right: -6px; transform: rotate(4deg); z-index: 3; }
+.ig-theme { display: inline-block; margin-top: 14px; font-family: var(--display); font-size: .72rem; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; color: var(--sun); }
+.ig-galerie h2 { font-size: 1.08rem; line-height: 1.3; margin: 4px 0 4px; }
+.ig-galerie h2 a { color: var(--ink); text-decoration: none; }
+.ig-galerie h2 a:hover { color: var(--accent); }
+.ig-galerie p { margin: 0 0 4px; font-size: .9rem; color: var(--muted); }
+.ig-actions { display: flex; flex-wrap: wrap; gap: 4px 16px; }
+.ig-actions a { font-weight: 700; text-decoration: none; min-height: 36px; display: inline-flex; align-items: center; }
+.ig-reprendre { margin-top: 72px; }
+.ig-visionneuse { width: min(760px, calc(100vw - 24px)); max-height: calc(100vh - 24px); padding: 14px; border: 1px solid var(--line); border-radius: 20px; background: var(--card); color: var(--ink); }
+.ig-visionneuse::backdrop { background: rgba(6, 8, 14, .85); backdrop-filter: blur(4px); }
+.ig-v-tete, .ig-v-pied { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.ig-v-tete form { margin: 0; }
+.ig-v-compte { font-family: var(--display); font-weight: 700; color: var(--muted); }
+.ig-v-corps { display: grid; grid-template-columns: 48px minmax(0, 1fr) 48px; align-items: center; gap: 8px; margin: 10px 0; }
+.ig-v-img { width: 100%; height: auto; max-height: calc(100vh - 190px); object-fit: contain; border-radius: 10px; }
+.ig-v-entre { animation: apparait .35s ease-out; }
+.ig-v-nav { width: 48px; height: 48px; border-radius: 50%; border: 1px solid var(--line); background: var(--paper-2); color: var(--ink); font-size: 1.6rem; line-height: 1; cursor: pointer; }
+.ig-v-nav:hover { border-color: var(--accent); }
+.ig-v-titre { font-family: var(--display); }
+.ig-v-pied span { display: flex; gap: 16px; }
+.ig-v-pied a { font-weight: 700; text-decoration: none; }
+@media (max-width: 900px) { .ig-hero { grid-template-columns: minmax(0, 1fr); } .ig-scene { height: 360px; } .ig-une { width: 200px; } .ig-scene .ig-cote { width: 150px; } }
+@media (max-width: 560px) { .ig-galerie { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 12px; } .ig-galerie p:not(.ig-actions) { display: none; } .ig-galerie h2 { font-size: .95rem; } .ig-v-corps { grid-template-columns: minmax(0, 1fr); } .ig-v-nav { display: none; } .ig-scene { height: 300px; } .ig-une { width: 170px; } .ig-scene .ig-cote { width: 125px; } }
+
 /* ───────── Barre de navigation mobile ───────── */
 .nav-mobile { display: none; }
 @media (max-width: 760px) {
@@ -1144,7 +1200,7 @@ kbd { font-family: var(--mono); font-size: .85em; padding: 1px 6px; border: 1px 
 /* Impression d'une page de facture ou de devis : seule la facture est imprimée, sans pages blanches.
    Limité aux pages qui contiennent le générateur (.gen), pour ne pas masquer les autres outils imprimables. */
 @media print {
-  .sim-barre, .haut-de-page, .recherche, .btn-recherche, .voisins, .sim-flottant, .nav-mobile, .aller-outil, .jr, .mm, .gm, .vit, .out-fin, .dm, .mod-gestes, .rub-fil, .rub-mot, .lecture, .toc-flottant, .suite { display: none !important; }
+  .sim-barre, .haut-de-page, .recherche, .btn-recherche, .voisins, .sim-flottant, .nav-mobile, .aller-outil, .jr, .mm, .gm, .vit, .out-fin, .dm, .mod-gestes, .rub-fil, .rub-mot, .lecture, .toc-flottant, .suite, .ig-scene, .ig-visionneuse { display: none !important; }
   .site-header { transform: none !important; }
   @page { margin: 14mm; }
   body { background: #fff; }
@@ -1243,14 +1299,6 @@ body.embed::before, body.embed::after { display: none; }
 .weekly-all { font-weight: 700; }
 @media (max-width: 720px) { .weekly { grid-template-columns: 1fr; padding: 18px; } .weekly-img { max-width: 320px; margin: 0 auto; } }
 /* Galerie des infographies */
-.ig-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 150px), 1fr)); gap: 22px 16px; margin: 26px 0; }
-.ig-card { position: relative; }
-.ig-card img { width: 100%; height: auto; display: block; border-radius: 10px; border: 1.5px solid var(--line); box-shadow: 6px 7px 0 -2px var(--sky); transition: transform .25s; }
-.ig-card a:hover img { transform: translateY(-3px) rotate(-.6deg); }
-.ig-card h2 { font-size: 1.02rem; line-height: 1.3; margin: 12px 0 4px; }
-.ig-card h2 a { color: var(--ink); text-decoration: none; }
-.ig-card p { margin: 0 0 4px; font-size: .9rem; color: var(--muted); }
-.ig-week { position: absolute; top: -10px; right: -6px; transform: rotate(4deg); }
 .infographic-block { margin: 34px 0; }
 
 /* Étude / baromètre */

@@ -1,27 +1,158 @@
 ---
-import PageLayout from '../../layouts/PageLayout.astro';
+// Galerie des infographies : présentation en relief de l'infographie de la semaine, filtres par thème,
+// vignettes inclinables et visionneuse plein écran (flèches, clavier, glisser au doigt).
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import { INFOGRAPHICS, hostPath, webp, png, WIDTH, HEIGHT, infographicOfWeek } from '../../data/infographics';
+import { abs, breadcrumbs, graph } from '../../lib/schema';
+
+const THEMES: Record<string, string[]> = {
+  'Facture électronique': ['calendrier-facture-electronique-2026-2027', 'formats-facture-electronique', 'e-reporting-2027'],
+  'Facturer et se faire payer': ['mentions-obligatoires-facture-2026', 'calendrier-relance-facture-impayee', 'penalites-de-retard-2026'],
+  'Micro-entreprise': ['seuils-tva-auto-entrepreneur-2026', 'cotisations-auto-entrepreneur-2026', 'plafond-micro-vs-seuil-tva-2026', 'calcul-tjm-freelance'],
+  'Coûts et frais': ['bareme-kilometrique-2026', 'cout-caisse-enregistreuse', 'prix-site-internet-tpe'],
+};
+const themeDe = (slug: string) => Object.entries(THEMES).find(([, l]) => l.includes(slug))?.[0] ?? 'Autres';
 const week = infographicOfWeek();
+const i = INFOGRAPHICS.findIndex((g) => g.slug === week.slug);
+const voisines = [INFOGRAPHICS[(i - 1 + INFOGRAPHICS.length) % INFOGRAPHICS.length], INFOGRAPHICS[(i + 1) % INFOGRAPHICS.length]];
+const themes = Object.keys(THEMES).filter((t) => INFOGRAPHICS.some((g) => themeDe(g.slug) === t));
+const liste = INFOGRAPHICS.map((g) => ({ slug: g.slug, titre: g.title, img: webp(g), png: png(g), page: hostPath(g) + '#infographie', alt: g.alt }));
+const path = '/infographies/';
+const crumbs = [{ name: 'Accueil', path: '/' }, { name: 'Infographies', path }];
+const jsonLd = graph(
+  {
+    '@type': 'CollectionPage',
+    '@id': abs(path) + '#page',
+    name: 'Infographies pour TPE et indépendants',
+    url: abs(path),
+    inLanguage: 'fr-FR',
+    hasPart: INFOGRAPHICS.map((g) => ({ '@type': 'ImageObject', name: g.title, contentUrl: abs(png(g)), url: abs(hostPath(g)), caption: g.alt })),
+  },
+  breadcrumbs(crumbs),
+);
 ---
-<PageLayout
-  title="Infographies pour TPE et indépendants"
-  seoTitle="Infographies TPE : TVA, facture, cotisations 2026"
+<BaseLayout
+  title="Infographies TPE : TVA, facture, cotisations 2026"
   description="Facture électronique, seuils de TVA, cotisations, barème kilométrique : nos infographies 2026 à télécharger et à partager librement avec la source."
+  jsonLd={jsonLd}
 >
-  <p>Les règles qui comptent pour une petite entreprise, résumées en une image. Chaque infographie est datée, renvoie vers un guide complet, et peut être reprise gratuitement sur ton site, ton blog, LinkedIn ou dans une présentation, en citant la source. <strong>Une infographie est mise en avant chaque lundi</strong> sur la page d’accueil.</p>
-  <div class="ig-grid">
-    {INFOGRAPHICS.map((g) => (
-      <article class="ig-card">
-        <a href={hostPath(g) + '#infographie'}>
-          <img src={webp(g)} alt={g.alt} width={WIDTH} height={HEIGHT} loading="lazy" decoding="async" />
-        </a>
-        {g.slug === week.slug && <span class="sticker ig-week">Cette semaine</span>}
-        <h2><a href={hostPath(g) + '#infographie'}>{g.title}</a></h2>
-        <p>{g.teaser}</p>
-        <p class="small"><a href={png(g)} download>Télécharger l’image</a></p>
-      </article>
-    ))}
+  <div class="container" data-pagefind-body>
+    <Breadcrumbs items={crumbs} />
+    <section class="ig-hero" data-scene="flux">
+      <div>
+        <span class="acc-kicker">Infographies</span>
+        <h1>Les règles qui comptent, en une image</h1>
+        <p class="acc-lead">Chaque infographie est datée, renvoie vers un guide complet et peut être reprise gratuitement sur ton site, ton blog, LinkedIn ou dans une présentation, en citant la source.</p>
+        <div class="mod-stats">
+          <span><b>{INFOGRAPHICS.length}</b>infographies</span>
+          <span><b>1</b>nouvelle chaque lundi</span>
+          <span><b>0 €</b>libres de réutilisation</span>
+        </div>
+      </div>
+      <div class="ig-scene" aria-hidden="true">
+        <img class="ig-cote ig-g" src={webp(voisines[0])} alt="" width={WIDTH} height={HEIGHT} decoding="async" />
+        <img class="ig-cote ig-d" src={webp(voisines[1])} alt="" width={WIDTH} height={HEIGHT} decoding="async" />
+        <a class="ig-une" href={hostPath(week) + '#infographie'} tabindex="-1"><img src={webp(week)} alt="" width={WIDTH} height={HEIGHT} decoding="async" fetchpriority="high" /><span class="sticker">Cette semaine</span></a>
+      </div>
+    </section>
+
+    <div class="out-barre ig-barre">
+      <div class="out-barre-ligne">
+        <div class="out-types" role="group" aria-label="Thème">
+          <button type="button" aria-pressed="true" data-theme="">Toutes <span>{INFOGRAPHICS.length}</span></button>
+          {themes.map((t) => <button type="button" aria-pressed="false" data-theme={t}>{t} <span>{INFOGRAPHICS.filter((g) => themeDe(g.slug) === t).length}</span></button>)}
+        </div>
+        <span class="out-compte" aria-live="polite"></span>
+      </div>
+    </div>
+
+    <ul class="ig-galerie">
+      {INFOGRAPHICS.map((g, n) => (
+        <li data-ig data-theme={themeDe(g.slug)}>
+          <div class="ig-vignette">
+            <button type="button" class="ig-ouvrir" data-ouvrir={n} aria-label={`Agrandir l’infographie : ${g.title}`}>
+              <img src={webp(g)} alt={g.alt} width={WIDTH} height={HEIGHT} loading="lazy" decoding="async" />
+              <span class="ig-loupe" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M15.5 15.5L21 21M10.5 7.5v6M7.5 10.5h6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></span>
+            </button>
+            {g.slug === week.slug && <span class="sticker ig-week">Cette semaine</span>}
+          </div>
+          <span class="ig-theme">{g.pill}</span>
+          <h2><a href={hostPath(g) + '#infographie'}>{g.title}</a></h2>
+          <p>{g.teaser}</p>
+          <p class="ig-actions"><a href={hostPath(g) + '#infographie'}>Lire le guide →</a><a href={png(g)} download>Télécharger</a></p>
+        </li>
+      ))}
+    </ul>
+
+    <section class="acc-bande ig-reprendre" aria-labelledby="ig-reprendre-titre">
+      <div>
+        <h2 id="ig-reprendre-titre">Reprends-les librement</h2>
+        <p>Publie-les sans les modifier, avec un lien vers la page source : chaque page propose un code prêt à copier. Les informations sont datées en bas de l’image.</p>
+      </div>
+      <a class="acc-bande-btn" href={hostPath(week) + '#infographie'}>Voir celle de la semaine</a>
+    </section>
   </div>
-  <h2>Conditions de réutilisation</h2>
-  <p>Tu peux publier ces infographies gratuitement, sans les modifier, en ajoutant un lien vers la page source. Chaque page propose un code prêt à copier. Les informations sont datées : vérifie la date indiquée en bas de l’image.</p>
-</PageLayout>
+
+  <dialog class="ig-visionneuse" id="ig-visionneuse" aria-label="Visionneuse d’infographies" data-liste={JSON.stringify(liste)}>
+    <div class="ig-v-tete">
+      <span class="ig-v-compte"></span>
+      <form method="dialog"><button class="btn btn-ghost btn-sm" aria-label="Fermer la visionneuse">Fermer</button></form>
+    </div>
+    <div class="ig-v-corps">
+      <button type="button" class="ig-v-nav" data-pas="-1" aria-label="Infographie précédente">‹</button>
+      <img class="ig-v-img" src="" alt="" width={WIDTH} height={HEIGHT} />
+      <button type="button" class="ig-v-nav" data-pas="1" aria-label="Infographie suivante">›</button>
+    </div>
+    <div class="ig-v-pied">
+      <strong class="ig-v-titre"></strong>
+      <span><a class="ig-v-page" href="#">Lire le guide →</a><a class="ig-v-png" href="#" download>Télécharger</a></span>
+    </div>
+  </dialog>
+</BaseLayout>
+
+<script is:inline>
+  (() => {
+    // Filtres par thème
+    const items = [...document.querySelectorAll('[data-ig]')];
+    const boutons = [...document.querySelectorAll('button[data-theme]')];
+    const compte = document.querySelector('.ig-barre .out-compte');
+    boutons.forEach((b) => b.addEventListener('click', () => {
+      const t = b.dataset.theme;
+      boutons.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+      let n = 0;
+      items.forEach((li) => { const ok = !t || li.dataset.theme === t; li.hidden = !ok; if (ok) n++; });
+      compte.textContent = n === items.length ? '' : `${n} infographie${n > 1 ? 's' : ''} sur ${items.length}`;
+    }));
+
+    // Visionneuse
+    const v = document.getElementById('ig-visionneuse');
+    const liste = JSON.parse(v.dataset.liste);
+    const img = v.querySelector('.ig-v-img');
+    let actuelle = 0;
+    const visibles = () => items.map((li, i) => (li.hidden ? -1 : i)).filter((i) => i >= 0);
+    const montrer = (i) => {
+      actuelle = i;
+      const g = liste[i];
+      img.classList.remove('ig-v-entre'); void img.offsetWidth; img.classList.add('ig-v-entre');
+      img.src = g.img; img.alt = g.alt;
+      v.querySelector('.ig-v-titre').textContent = g.titre;
+      v.querySelector('.ig-v-page').href = g.page;
+      v.querySelector('.ig-v-png').href = g.png;
+      const vis = visibles();
+      v.querySelector('.ig-v-compte').textContent = `${vis.indexOf(i) + 1} / ${vis.length}`;
+    };
+    const pas = (d) => { const vis = visibles(); const k = vis.indexOf(actuelle); montrer(vis[(k + d + vis.length) % vis.length]); };
+    document.querySelectorAll('[data-ouvrir]').forEach((b) => b.addEventListener('click', () => { montrer(Number(b.dataset.ouvrir)); v.showModal(); }));
+    v.querySelectorAll('[data-pas]').forEach((b) => b.addEventListener('click', () => pas(Number(b.dataset.pas))));
+    v.addEventListener('keydown', (e) => { if (e.key === 'ArrowRight') pas(1); if (e.key === 'ArrowLeft') pas(-1); });
+    v.addEventListener('click', (e) => { if (e.target === v) v.close(); });
+    let x0 = null;
+    v.addEventListener('touchstart', (e) => { x0 = e.touches[0].clientX; }, { passive: true });
+    v.addEventListener('touchend', (e) => { if (x0 === null) return; const dx = e.changedTouches[0].clientX - x0; if (Math.abs(dx) > 50) pas(dx < 0 ? 1 : -1); x0 = null; });
+  })();
+</script>
+<script>
+  import '../../scripts/scenes.ts';
+  import '../../scripts/outils-anime.ts';
+</script>
