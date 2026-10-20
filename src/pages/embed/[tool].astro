@@ -17,6 +17,7 @@ import SeuilCalculator from '../../components/SeuilCalculator.astro';
 import BfrCalculator from '../../components/BfrCalculator.astro';
 import EbeCalculator from '../../components/EbeCalculator.astro';
 import CafCalculator from '../../components/CafCalculator.astro';
+import IdentifiantsEntreprise from '../../components/IdentifiantsEntreprise.astro';
 
 export function getStaticPaths() {
   return EMBEDS.map((e) => ({ params: { tool: e.slug }, props: { embed: e } }));
@@ -35,6 +36,7 @@ const COMPONENTS = {
   bfr: BfrCalculator,
   ebe: EbeCalculator,
   caf: CafCalculator,
+  'tva-intracom': IdentifiantsEntreprise,
 } as const;
 const Tool = COMPONENTS[embed.slug as keyof typeof COMPONENTS];
 ---

@@ -1,0 +1,92 @@
+---
+title: "Numéro SIRET : à quoi il sert, où le trouver et comment le vérifier"
+seoTitle: "Numéro SIRET : le trouver, le vérifier, le comprendre"
+description: "SIRET, SIREN, NIC : ce que contient ton numéro, où le trouver, le délai pour l’obtenir. Et vérifie celui d’une entreprise en 10 secondes."
+keyword: "numéro siret"
+secondaryKeywords:
+  - "siret"
+  - "trouver un siret"
+  - "siret entreprise"
+  - "différence siren siret"
+  - "numéro siren"
+  - "nic siret"
+  - "délai obtention siret"
+type: guide
+published: 2026-10-20
+updated: 2026-10-20
+related:
+  - outils/numero-tva-intracommunautaire
+  - creer/avis-de-situation-insee
+  - creer/code-ape
+  - creer/creer-micro-entreprise
+tldr:
+  - "<strong>SIRET</strong> = SIREN (9 chiffres, l’entreprise) + NIC (5 chiffres, l’établissement), soit 14 chiffres."
+  - "<strong>Il est attribué</strong> gratuitement par l’INSEE après ton immatriculation, en général sous quelques jours à quelques semaines."
+  - "<strong>Pour trouver ou vérifier</strong> celui d’une entreprise : l’outil ci-dessous ou l’annuaire des entreprises de l’État."
+faq:
+  - q: "Quelle est la différence entre SIREN et SIRET ?"
+    a: "Le SIREN (9 chiffres) identifie l’entreprise elle-même et ne change jamais. Le SIRET (14 chiffres) identifie chacun de ses établissements : c’est le SIREN suivi d’un numéro d’établissement à 5 chiffres, le NIC. Une entreprise a un seul SIREN mais autant de SIRET que d’adresses d’activité."
+  - q: "Où trouver mon numéro SIRET ?"
+    a: "Dans le courrier ou l’e-mail de l’INSEE reçu après ton immatriculation, sur ton avis de situation au répertoire Sirene, sur ton extrait Kbis ou ton extrait du registre national des entreprises, dans ton espace URSSAF, et sur l’annuaire des entreprises de l’État en cherchant ton nom."
+  - q: "Combien de temps faut-il pour obtenir un SIRET ?"
+    a: "Après le dépôt de ton dossier sur le guichet unique de l’INPI et sa validation, l’INSEE attribue généralement le numéro en quelques jours. Compte souvent une à quatre semaines entre ta demande d’immatriculation et la réception du SIRET, selon la complétude du dossier."
+  - q: "Le numéro SIRET change-t-il quand on déménage ?"
+    a: "Oui : en cas de transfert du siège ou de l’établissement, le SIREN reste le même mais un nouveau NIC est attribué, donc un nouveau SIRET. Mets-le à jour sur tes factures, ton site et auprès de tes clients."
+  - q: "Comment vérifier qu’un numéro SIRET est valide ?"
+    a: "Un SIRET valide respecte une clé de contrôle (algorithme de Luhn) : l’outil de cette page la vérifie, puis cherche l’entreprise dans le répertoire Sirene pour afficher son nom, son adresse et si elle est toujours active."
+  - q: "Le SIRET est-il payant ?"
+    a: "Non. L’attribution du SIREN et du SIRET par l’INSEE est gratuite, tout comme l’avis de situation. Méfie-toi des sites qui facturent l’obtention d’un numéro SIRET : ils ne font que relayer une démarche gratuite."
+---
+import IdentifiantsEntreprise from '../../../components/IdentifiantsEntreprise.astro';
+import Callout from '../../../components/Callout.astro';
+
+Le numéro SIRET est la carte d’identité de ton établissement : il figure sur tes factures, tes devis, ton site et la plupart de tes démarches. Voici comment il est construit, où le trouver et comment vérifier celui d’un client ou d’un fournisseur.
+
+## Vérifier ou trouver un numéro SIRET
+
+Saisis un SIRET, un SIREN ou le nom d’une entreprise : l’outil contrôle le numéro et affiche l’entreprise trouvée dans le répertoire officiel Sirene, avec son SIRET de siège et son numéro de TVA.
+
+<IdentifiantsEntreprise />
+
+## Ce que contient un numéro SIRET
+
+| Partie | Longueur | Exemple | Ce qu’elle identifie |
+|---|---|---|---|
+| SIREN | 9 chiffres | 303 265 045 | L’entreprise, pour toute sa vie |
+| NIC | 5 chiffres | 00011 | L’établissement (le lieu d’activité) |
+| SIRET | 14 chiffres | 303 265 045 00011 | L’établissement de cette entreprise |
+
+Le dernier chiffre du SIREN et celui du SIRET sont des chiffres de contrôle : une faute de frappe est presque toujours détectée.
+
+## Où trouver ton numéro SIRET
+
+- **Le courrier ou l’e-mail de l’INSEE** reçu après ton immatriculation.
+- **Ton avis de situation au répertoire Sirene**, téléchargeable gratuitement à tout moment : voir notre guide de l’[avis de situation INSEE](/creer/avis-de-situation-insee/).
+- **Ton extrait Kbis** si tu es inscrit au registre du commerce, ou ton extrait du registre national des entreprises (RNE).
+- **Ton espace URSSAF** ou, pour un micro-entrepreneur, le site autoentrepreneur.urssaf.fr.
+- **L’annuaire des entreprises de l’État** (annuaire-entreprises.data.gouv.fr), en cherchant ton nom.
+
+<Callout title="Tu attends encore ton SIRET ?">
+  <p>Tu peux commencer à travailler dès ton immatriculation, mais tu dois indiquer ton SIRET sur tes factures. Prépare tes devis et attends le numéro pour émettre tes factures : il arrive en général rapidement une fois le dossier validé.</p>
+</Callout>
+
+## Où le numéro SIRET doit figurer
+
+| Document | SIREN ou SIRET |
+|---|---|
+| Factures et devis | SIREN ou SIRET obligatoire, avec désormais le SIREN du client professionnel |
+| Site internet | Dans les mentions légales |
+| Papier à en-tête, bons de commande | Recommandé |
+| Déclarations sociales et fiscales | SIRET de l’établissement concerné |
+
+Avec la réforme de la facture électronique, le SIREN de ton client professionnel devient une [mention obligatoire de la facture](/facturation/mentions-obligatoires-facture/). L’outil ci-dessus le retrouve à partir de son nom.
+
+## SIRET, code APE, numéro de TVA : qui fait quoi
+
+- **Le SIRET** identifie ton établissement.
+- **Le code APE** (ou NAF) décrit ton activité principale : voir notre guide du [code APE](/creer/code-ape/).
+- **Le numéro de TVA intracommunautaire** se calcule à partir du SIREN et sert aux échanges dans l’Union européenne : voir notre [outil de calcul du numéro de TVA](/outils/numero-tva-intracommunautaire/).
+
+Sources : [INSEE, répertoire Sirene](https://www.insee.fr/fr/information/2406147), [service-public.fr](https://entreprendre.service-public.gouv.fr/vosdroits/F32135), [annuaire des entreprises](https://annuaire-entreprises.data.gouv.fr/). Vérifié en octobre 2026.
+
+<p data-maillage>Tu crées ton entreprise ? Les étapes pour <a href="/creer/creer-micro-entreprise/">créer une micro-entreprise</a>, choisir ton <a href="/creer/statut-juridique/">statut juridique</a> et trouver un <a href="/creer/nom-entreprise/">nom d’entreprise</a>.</p>

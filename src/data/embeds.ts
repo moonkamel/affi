@@ -21,6 +21,7 @@ export const EMBEDS: Embed[] = [
   { slug: 'bfr', title: 'Calcul du BFR et du fonds de roulement', page: '/outils/calcul-bfr/', height: 980 },
   { slug: 'ebe', title: 'Calcul de l’EBE', page: '/outils/calcul-ebe/', height: 860 },
   { slug: 'caf', title: 'Calcul de la capacité d’autofinancement', page: '/outils/calcul-caf/', height: 900 },
+  { slug: 'tva-intracom', title: 'Numéro de TVA intracommunautaire et SIRET', page: '/outils/numero-tva-intracommunautaire/', height: 640 },
   { slug: 'cout-caisse', title: 'Simulateur de coût de caisse enregistreuse', page: '/outils/simulateur-cout-caisse-enregistreuse/', height: 820 },
 ];
 

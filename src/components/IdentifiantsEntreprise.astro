@@ -1,0 +1,158 @@
+---
+// Numéro de TVA intracommunautaire, SIREN et SIRET : contrôle la clé du numéro saisi, calcule le numéro de TVA
+// et, si possible, interroge l'API publique Recherche d'entreprises (directement, puis via notre relais).
+---
+<form class="sim" id="sim-ident" aria-labelledby="ident-titre" onsubmit="return false">
+  <strong id="ident-titre">Numéro de TVA intracommunautaire, SIREN, SIRET</strong>
+  <label for="ident-q">SIREN (9 chiffres), SIRET (14 chiffres) ou nom de l’entreprise</label>
+  <div class="ident-bar">
+    <input id="ident-q" type="text" autocomplete="off" placeholder="Ex. : 552 032 534 ou Boulangerie Martin Lyon" />
+    <button type="submit" class="btn" id="ident-go">Rechercher</button>
+  </div>
+  <p class="hint">Pour un nom, ajoute la ville pour affiner. Les informations viennent du répertoire public Sirene de l’INSEE.</p>
+  <ul id="ident-list" class="ident-list" hidden></ul>
+  <output class="sim-out" aria-live="polite" id="ident-out" hidden>
+    <div id="ident-l">Numéro de TVA intracommunautaire</div>
+    <div class="big" id="ident-r">–</div>
+    <div id="ident-d" class="small"></div>
+  </output>
+  <table class="sim-tab" id="ident-tab-w" hidden><tbody id="ident-tab"></tbody></table>
+  <p class="small" id="ident-liens" hidden></p>
+</form>
+
+<script is:inline>
+  (() => {
+    const f = document.getElementById('sim-ident');
+    if (!f) return;
+    const $ = (id) => document.getElementById(id);
+    const API = 'https://recherche-entreprises.api.gouv.fr/search';
+    const digits = (s) => String(s || '').replace(/\D/g, '');
+    const luhn = (s) => { let sum = 0; for (let i = 0; i < s.length; i++) { let n = +s[s.length - 1 - i]; if (i % 2) { n *= 2; if (n > 9) n -= 9; } sum += n; } return sum % 10 === 0; };
+    // La Poste (SIREN 356000000) déroge à la clé de Luhn : ses SIRET ont une somme de chiffres multiple de 5.
+    const sirenOk = (s) => /^\d{9}$/.test(s) && (luhn(s) || s === '356000000');
+    const siretOk = (s) => /^\d{14}$/.test(s) && (s.startsWith('356000000') ? [...s].reduce((a, c) => a + +c, 0) % 5 === 0 : luhn(s));
+    const tva = (siren) => 'FR' + String((12 + 3 * (Number(siren) % 97)) % 97).padStart(2, '0') + siren;
+    const espace = (s) => s.replace(/^(\d{3})(\d{3})(\d{3})(\d*)$/, (_, a, b, c, d) => [a, b, c, d].filter(Boolean).join(' '));
+    const dateFr = (iso) => (iso ? new Date(iso).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }) : '');
+    const mesurer = () => { try { navigator.sendBeacon('/api/mesure/identifiants'); } catch (e) { /* sans importance */ } };
+    const el = (tag, txt) => { const e = document.createElement(tag); if (txt != null) e.textContent = txt; return e; };
+    const ligne = (k, v) => { const tr = el('tr'); tr.append(el('th', k), el('td', v)); return tr; };
+
+    const appel = async (q) => {
+      const p = new URLSearchParams({ q, per_page: '5', page: '1' });
+      try {
+        const r = await fetch(`${API}?${p}`, { headers: { Accept: 'application/json' } });
+        if (r.ok) return r.json();
+        throw new Error(String(r.status));
+      } catch (e) {
+        const r = await fetch(`/api/entreprises?${p}`);
+        if (!r.ok) throw new Error(String(r.status));
+        return r.json();
+      }
+    };
+
+    const afficherNumero = (siren, siret) => {
+      $('ident-out').hidden = false;
+      $('ident-r').textContent = tva(siren);
+      const lignes = [ligne('SIREN', espace(siren))];
+      if (siret) lignes.push(ligne('SIRET saisi', espace(siret)), ligne('NIC (5 derniers chiffres du SIRET)', siret.slice(9)));
+      lignes.push(ligne('Clé TVA', tva(siren).slice(2, 4)));
+      $('ident-tab').replaceChildren(...lignes);
+      $('ident-tab-w').hidden = false;
+      const liens = $('ident-liens');
+      liens.replaceChildren();
+      const a = (href, txt) => { const x = el('a', txt); x.href = href; x.rel = 'noopener'; x.target = '_blank'; return x; };
+      liens.append('Vérifier : ', a(`https://annuaire-entreprises.data.gouv.fr/entreprise/${siren}`, 'fiche de l’entreprise'), ' · ',
+        a('https://avis-situation-sirene.insee.fr/', 'avis de situation INSEE'), ' · ',
+        a('https://ec.europa.eu/taxation_customs/vies/', 'validité du numéro de TVA (VIES)'));
+      liens.hidden = false;
+    };
+
+    const completer = (e, siret) => {
+      const s = e.siege || {};
+      const actif = (e.etat_administratif || s.etat_administratif) !== 'C';
+      const adresse = s.adresse || [s.numero_voie, s.type_voie, s.libelle_voie, s.code_postal, s.libelle_commune].filter(Boolean).join(' ');
+      const lignes = [
+        ligne('Entreprise', e.nom_complet || e.nom_raison_sociale || ''),
+        ligne('État', actif ? 'Active' : `Fermée${e.date_fermeture ? ' le ' + dateFr(e.date_fermeture) : ''}`),
+        ligne('SIREN', espace(e.siren)),
+        ligne('SIRET du siège', s.siret ? espace(s.siret) : '–'),
+      ];
+      if (siret && siret !== s.siret) lignes.push(ligne('SIRET saisi (établissement secondaire)', espace(siret)));
+      if (adresse) lignes.push(ligne('Adresse du siège', adresse));
+      if (e.activite_principale) lignes.push(ligne('Code APE (NAF)', e.activite_principale));
+      if (e.date_creation) lignes.push(ligne('Date de création', dateFr(e.date_creation)));
+      lignes.push(ligne('Clé TVA', tva(e.siren).slice(2, 4)));
+      $('ident-tab').replaceChildren(...lignes);
+      $('ident-d').textContent = actif
+        ? 'Numéro calculé à partir du SIREN. Le format est exact ; vérifie sur le service VIES que l’entreprise est bien assujettie à la TVA (une micro-entreprise en franchise peut ne pas en avoir).'
+        : 'Attention : cette entreprise est fermée dans le répertoire Sirene. Son numéro de TVA n’est plus valable.';
+      // Les cellules longues passent à la ligne sur mobile.
+      $('ident-tab').querySelectorAll('td').forEach((td) => { if (td.textContent.length > 28) td.style.whiteSpace = 'normal'; });
+    };
+
+    const rechercher = async () => {
+      const q = $('ident-q').value.trim();
+      const d = digits(q);
+      $('ident-list').hidden = true;
+      if (!q) return;
+      mesurer();
+      if (/^[\d\s.-]+$/.test(q) && (d.length === 9 || d.length === 14)) {
+        const siren = d.slice(0, 9), siret = d.length === 14 ? d : '';
+        if (siret ? !siretOk(siret) : !sirenOk(siren)) {
+          $('ident-out').hidden = false; $('ident-r').textContent = 'Numéro invalide'; $('ident-tab-w').hidden = true; $('ident-liens').hidden = true;
+          $('ident-d').textContent = `Ce ${siret ? 'SIRET' : 'SIREN'} ne respecte pas la clé de contrôle : un chiffre est probablement faux ou inversé.`;
+          return;
+        }
+        afficherNumero(siren, siret);
+        $('ident-d').textContent = 'Recherche de l’entreprise dans le répertoire Sirene…';
+        try {
+          const j = await appel(siren);
+          const e = (j.results || []).find((x) => x.siren === siren);
+          if (e) completer(e, siret);
+          else $('ident-d').textContent = 'Numéro valide, mais introuvable dans le répertoire public (entreprise non diffusible ou très récente). Le numéro de TVA est calculé à partir du SIREN.';
+        } catch (err) {
+          $('ident-d').textContent = 'Numéro calculé à partir du SIREN. Le répertoire Sirene ne répond pas pour le moment : réessaie dans un instant pour afficher le nom et l’état de l’entreprise.';
+        }
+        return;
+      }
+      if (/^\d+$/.test(d) && d.length === q.replace(/\s/g, '').length) {
+        $('ident-out').hidden = false; $('ident-r').textContent = 'Format incorrect'; $('ident-tab-w').hidden = true; $('ident-liens').hidden = true;
+        $('ident-d').textContent = `Un SIREN compte 9 chiffres et un SIRET 14 : tu en as saisi ${d.length}.`;
+        return;
+      }
+      // Recherche par nom
+      $('ident-out').hidden = true; $('ident-tab-w').hidden = true; $('ident-liens').hidden = true;
+      const list = $('ident-list');
+      list.replaceChildren(el('li', 'Recherche…')); list.hidden = false;
+      try {
+        const j = await appel(q);
+        const res = j.results || [];
+        if (!res.length) { list.replaceChildren(el('li', 'Aucune entreprise trouvée. Essaie avec moins de mots ou ajoute la ville.')); return; }
+        list.replaceChildren(...res.map((e) => {
+          const s = e.siege || {};
+          const li = el('li'); const b = el('button'); b.type = 'button';
+          b.append(el('strong', e.nom_complet || e.nom_raison_sociale || e.siren), el('span', ` · ${espace(e.siren)} · ${s.libelle_commune || ''}${e.etat_administratif === 'C' ? ' · fermée' : ''}`));
+          b.addEventListener('click', () => { list.hidden = true; $('ident-q').value = espace(e.siren); afficherNumero(e.siren, ''); completer(e, ''); });
+          li.appendChild(b); return li;
+        }));
+      } catch (err) {
+        list.replaceChildren(el('li', 'Le répertoire Sirene ne répond pas pour le moment. Réessaie dans un instant, ou saisis directement le SIREN.'));
+      }
+    };
+    f.addEventListener('submit', (ev) => { ev.preventDefault(); rechercher(); });
+  })();
+</script>
+
+<style>
+  /* .sim-out et .ident-list fixent un display : sans cette règle, l'attribut hidden resterait sans effet. */
+  #sim-ident [hidden] { display: none !important; }
+  .ident-bar { display: flex; gap: 8px; }
+  .ident-bar input { flex: 1; min-width: 0; }
+  .ident-bar .btn { flex: none; }
+  .ident-list { list-style: none; padding: 0; margin: 12px 0 0; display: grid; gap: 6px; }
+  .ident-list :global(button) { width: 100%; text-align: left; font: inherit; padding: 9px 12px; border: 1.5px solid var(--line); border-radius: 10px; background: var(--paper); color: var(--ink); cursor: pointer; }
+  .ident-list :global(button:hover) { border-color: var(--accent); }
+  .ident-list :global(span) { color: var(--muted); font-size: .9rem; }
+  #ident-r { font-size: 1.9rem; word-break: break-all; }
+</style>

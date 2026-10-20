@@ -1,0 +1,96 @@
+---
+title: "Numéro de TVA intracommunautaire : le trouver et le calculer à partir du SIREN"
+seoTitle: "Numéro de TVA intracommunautaire : calcul et recherche"
+description: "Trouve le numéro de TVA intracommunautaire d’une entreprise avec son SIREN, son SIRET ou son nom. Formule de calcul, vérification VIES, micro-entreprise."
+keyword: "numéro tva intracommunautaire"
+secondaryKeywords:
+  - "tva intracommunautaire"
+  - "numéro tva intra"
+  - "numéro de tva intracommunautaire"
+  - "trouver numéro tva intracommunautaire"
+  - "calcul numéro tva intracommunautaire"
+  - "numéro tva intracommunautaire auto entrepreneur"
+  - "numéro eori"
+type: outil
+published: 2026-10-20
+updated: 2026-10-20
+related:
+  - creer/numero-siret
+  - creer/avis-de-situation-insee
+  - facturation/mentions-obligatoires-facture
+  - outils/calcul-ht-ttc
+tldr:
+  - "<strong>Format français</strong> : FR + une clé de 2 chiffres + le SIREN à 9 chiffres, soit 13 caractères (exemple : FR 40 303 265 045)."
+  - "<strong>La clé</strong> se calcule : (12 + 3 × (SIREN modulo 97)) modulo 97. L’outil ci-dessous le fait pour toi."
+  - "<strong>Vérifie toujours</strong> sur le service européen VIES qu’un numéro est actif avant de facturer une entreprise d’un autre pays de l’Union."
+faq:
+  - q: "Comment trouver le numéro de TVA intracommunautaire d’une entreprise ?"
+    a: "Saisis son SIREN, son SIRET ou son nom dans l’outil de cette page : il calcule le numéro et affiche l’entreprise trouvée dans le répertoire Sirene. Tu le trouves aussi sur ses factures, ses devis ou la fiche de l’entreprise sur annuaire-entreprises.data.gouv.fr."
+  - q: "Comment calculer le numéro de TVA intracommunautaire à partir du SIREN ?"
+    a: "Calcule le reste de la division du SIREN par 97, multiplie-le par 3, ajoute 12, puis prends à nouveau le reste de la division par 97 : tu obtiens la clé à 2 chiffres (avec un zéro devant si elle est inférieure à 10). Le numéro s’écrit FR + clé + SIREN."
+  - q: "Comment obtenir son propre numéro de TVA intracommunautaire ?"
+    a: "Une entreprise assujettie à la TVA reçoit son numéro automatiquement après son immatriculation. Il figure dans ton espace professionnel sur impots.gouv.fr. Sinon, demande-le à ton service des impôts des entreprises (SIE)."
+  - q: "Un auto-entrepreneur a-t-il un numéro de TVA intracommunautaire ?"
+    a: "Pas automatiquement : en franchise en base de TVA, il n’en a pas besoin pour ses ventes en France. Il doit en demander un à son SIE s’il achète ou vend des prestations de services auprès d’entreprises d’autres pays de l’Union, ou s’il dépasse les seuils de la franchise."
+  - q: "Le numéro de TVA est-il obligatoire sur une facture ?"
+    a: "Oui pour une entreprise assujettie : son propre numéro est une mention obligatoire. Celui du client professionnel l’est aussi pour les livraisons de biens intracommunautaires et les prestations de services où le client autoliquide la TVA."
+  - q: "Quelle différence avec le numéro EORI ?"
+    a: "Le numéro EORI sert aux formalités de douane pour importer ou exporter hors de l’Union européenne. En France, il s’écrit FR suivi du SIRET et se demande en ligne auprès de la douane. Le numéro de TVA intracommunautaire, lui, sert aux échanges entre pays de l’Union."
+---
+import IdentifiantsEntreprise from '../../../components/IdentifiantsEntreprise.astro';
+import Callout from '../../../components/Callout.astro';
+import EmbedCode from '../../../components/EmbedCode.astro';
+
+Tu dois facturer un client européen, compléter un formulaire fournisseur ou vérifier une facture reçue ? Saisis un SIREN, un SIRET ou simplement le nom de l’entreprise : l’outil contrôle le numéro, calcule le numéro de TVA intracommunautaire et affiche l’entreprise trouvée dans le répertoire officiel Sirene.
+
+<IdentifiantsEntreprise />
+
+## Comment est construit le numéro
+
+Un numéro de TVA intracommunautaire français compte 13 caractères :
+
+| Partie | Exemple | Rôle |
+|---|---|---|
+| Code pays | FR | La France |
+| Clé de contrôle | 40 | 2 chiffres calculés à partir du SIREN |
+| SIREN | 303 265 045 | L’identifiant à 9 chiffres de l’entreprise |
+
+**Le calcul de la clé**, pour le SIREN 303 265 045 :
+
+1. 303 265 045 modulo 97 = 74 (le reste de la division par 97) ;
+2. 3 × 74 = 222, puis 12 + 222 = 234 ;
+3. 234 modulo 97 = 40 : le numéro est FR 40 303 265 045.
+
+La formule complète : **clé = (12 + 3 × (SIREN mod 97)) mod 97**. Si le résultat est inférieur à 10, on ajoute un zéro devant (FR 05…).
+
+<Callout title="Un numéro calculé n’est pas un numéro actif">
+  <p>La formule donne toujours un numéro au bon format, même pour une entreprise qui n’est pas assujettie à la TVA (micro-entreprise en franchise) ou qui a fermé. Avant de facturer hors taxes un client d’un autre pays de l’Union, vérifie son numéro sur le <a href="https://ec.europa.eu/taxation_customs/vies/" rel="noopener">service VIES de la Commission européenne</a> et garde une trace de la vérification.</p>
+</Callout>
+
+## Quand faut-il un numéro de TVA intracommunautaire ?
+
+| Situation | Numéro nécessaire ? |
+|---|---|
+| Entreprise assujettie à la TVA (régime réel) | Oui, attribué automatiquement, à faire figurer sur toutes tes factures |
+| Micro-entreprise en franchise, clients en France uniquement | Non |
+| Micro-entreprise qui vend des prestations à des entreprises de l’Union | Oui, à demander au service des impôts des entreprises |
+| Micro-entreprise qui achète des services à une entreprise de l’Union (logiciel, publicité en ligne…) | Oui, pour autoliquider la TVA |
+| Dépassement des seuils de franchise | Oui, en même temps que le passage à la TVA |
+
+Pour savoir si tu dépasses les seuils de franchise, utilise notre [simulateur de seuil de TVA](/outils/simulateur-seuil-tva/).
+
+## Sur une facture
+
+- **Ton numéro** figure sur chaque facture dès que tu es assujetti à la TVA : c’est l’une des [mentions obligatoires d’une facture](/facturation/mentions-obligatoires-facture/).
+- **Le numéro du client** est obligatoire pour une livraison de biens à une entreprise d’un autre pays de l’Union (exonérée de TVA) et pour une prestation où le client autoliquide la TVA. Ajoute alors la mention « Autoliquidation ».
+- **Avec la facture électronique**, le SIREN de ton client professionnel français devient lui aussi une mention obligatoire. L’outil ci-dessus te le donne à partir de son nom.
+
+## Le numéro EORI, pour la douane
+
+Si tu importes ou exportes des marchandises hors de l’Union européenne, il te faut un numéro EORI. En France, il s’écrit FR suivi de ton SIRET (14 chiffres) et se demande gratuitement en ligne sur le site de la douane. Il ne remplace pas le numéro de TVA intracommunautaire : les deux coexistent.
+
+Sources : [service-public.fr, numéro de TVA intracommunautaire](https://entreprendre.service-public.gouv.fr/vosdroits/F23570), [Commission européenne, VIES](https://ec.europa.eu/taxation_customs/vies/), [API Recherche d’entreprises](https://recherche-entreprises.api.gouv.fr/). Vérifié en octobre 2026.
+
+<p data-maillage>Pour comprendre les autres identifiants : le <a href="/creer/numero-siret/">numéro SIRET</a>, l’<a href="/creer/avis-de-situation-insee/">avis de situation INSEE</a> et le <a href="/creer/code-ape/">code APE</a>. Pour facturer sans erreur : notre <a href="/outils/modele-facture-gratuit/">modèle de facture gratuit</a>.</p>
+
+<EmbedCode tool="tva-intracom" />
