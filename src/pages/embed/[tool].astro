@@ -11,6 +11,8 @@ import TjmCalculator from '../../components/TjmCalculator.astro';
 import IkCalculator from '../../components/IkCalculator.astro';
 import PenalitesCalculator from '../../components/PenalitesCalculator.astro';
 import CaisseSimulator from '../../components/CaisseSimulator.astro';
+import HtTtcCalculator from '../../components/HtTtcCalculator.astro';
+import MargeCalculator from '../../components/MargeCalculator.astro';
 
 export function getStaticPaths() {
   return EMBEDS.map((e) => ({ params: { tool: e.slug }, props: { embed: e } }));
@@ -23,6 +25,8 @@ const COMPONENTS = {
   'indemnites-kilometriques': IkCalculator,
   'penalites-de-retard': PenalitesCalculator,
   'cout-caisse': CaisseSimulator,
+  'ht-ttc': HtTtcCalculator,
+  marge: MargeCalculator,
 } as const;
 const Tool = COMPONENTS[embed.slug as keyof typeof COMPONENTS];
 ---

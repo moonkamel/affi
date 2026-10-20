@@ -1,0 +1,113 @@
+---
+// Calcul de marge : à partir du coût d'achat et d'une seconde donnée (prix de vente, coefficient, taux de marge
+// ou taux de marque), donne toutes les autres, puis l'effet d'une remise sur la marge.
+---
+<form class="sim" id="sim-marge" aria-labelledby="marge-titre" onsubmit="return false">
+  <strong id="marge-titre">Calcul de marge et de prix de vente</strong>
+  <div class="row">
+    <div>
+      <label for="marge-cout">Coût d’achat ou de revient HT (€)</label>
+      <input id="marge-cout" type="number" min="0" step="0.01" value="40" inputmode="decimal" />
+    </div>
+    <div>
+      <label for="marge-mode">Ce que tu connais aussi</label>
+      <select id="marge-mode">
+        <option value="pvht" selected>Le prix de vente HT</option>
+        <option value="pvttc">Le prix de vente TTC</option>
+        <option value="coef">Le coefficient multiplicateur (HT)</option>
+        <option value="tmarge">Le taux de marge visé</option>
+        <option value="tmarque">Le taux de marque visé</option>
+      </select>
+    </div>
+    <div>
+      <label for="marge-val" id="marge-val-l">Prix de vente HT (€)</label>
+      <input id="marge-val" type="number" min="0" step="0.01" value="100" inputmode="decimal" />
+    </div>
+    <div>
+      <label for="marge-tva">Taux de TVA sur la vente</label>
+      <select id="marge-tva">
+        <option value="20" selected>20 %</option>
+        <option value="10">10 %</option>
+        <option value="5.5">5,5 %</option>
+        <option value="2.1">2,1 %</option>
+        <option value="0">0 % (franchise en base, micro-entreprise)</option>
+      </select>
+    </div>
+  </div>
+  <output class="sim-out" for="marge-cout marge-mode marge-val marge-tva" aria-live="polite">
+    <div>Marge brute par vente</div>
+    <div class="big" id="marge-r">–</div>
+    <div id="marge-d" class="small"></div>
+  </output>
+  <table class="marge-tab" aria-label="Résultats détaillés">
+    <tbody id="marge-tab"></tbody>
+  </table>
+
+  <div class="marge-remise">
+    <label for="marge-rem">Et si tu fais une remise sur le prix de vente (%) ?</label>
+    <input id="marge-rem" type="number" min="0" max="100" step="0.5" value="10" inputmode="decimal" />
+    <p id="marge-rem-r" class="small" aria-live="polite"></p>
+  </div>
+</form>
+
+<script is:inline>
+  (() => {
+    const f = document.getElementById('sim-marge');
+    if (!f) return;
+    const $ = (id) => document.getElementById(id);
+    const num = (id) => { const x = parseFloat(String($(id).value).replace(',', '.')); return Number.isFinite(x) && x >= 0 ? x : null; };
+    const eur = (n) => n.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR', minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    const pc = (n) => `${n.toLocaleString('fr-FR', { maximumFractionDigits: 2 })} %`;
+    const co = (n) => n.toLocaleString('fr-FR', { maximumFractionDigits: 3 });
+    const LIB = { pvht: ['Prix de vente HT (€)', 100], pvttc: ['Prix de vente TTC (€)', 120], coef: ['Coefficient multiplicateur HT', 2.5], tmarge: ['Taux de marge visé (%)', 150], tmarque: ['Taux de marque visé (%)', 60] };
+
+    const ligne = (k, v) => { const tr = document.createElement('tr'); const th = document.createElement('th'); th.textContent = k; const td = document.createElement('td'); td.textContent = v; tr.append(th, td); return tr; };
+
+    const calc = () => {
+      const c = num('marge-cout'), v = num('marge-val'), t = parseFloat($('marge-tva').value) / 100, mode = $('marge-mode').value;
+      let p = null, alerte = '';
+      if (c !== null && v !== null) {
+        if (mode === 'pvht') p = v;
+        else if (mode === 'pvttc') p = v / (1 + t);
+        else if (mode === 'coef') p = c * v;
+        else if (mode === 'tmarge') p = c * (1 + v / 100);
+        else if (mode === 'tmarque') { if (v < 100) p = c / (1 - v / 100); else alerte = 'Un taux de marque est forcément inférieur à 100 % : la marge ne peut pas dépasser le prix de vente.'; }
+      }
+      if (p === null || !c || !p) {
+        $('marge-r').textContent = '–'; $('marge-d').textContent = alerte || 'Renseigne un coût d’achat et une seconde donnée.'; $('marge-tab').replaceChildren(); $('marge-rem-r').textContent = ''; return;
+      }
+      const m = p - c, ttc = p * (1 + t);
+      $('marge-r').textContent = eur(m);
+      $('marge-d').textContent = m < 0
+        ? `Tu vends à perte : le prix de vente HT (${eur(p)}) est inférieur au coût (${eur(c)}).`
+        : `Pour ${eur(c)} de coût HT et ${eur(p)} de prix de vente HT : taux de marge ${pc((m / c) * 100)}, taux de marque ${pc((m / p) * 100)}.`;
+      $('marge-tab').replaceChildren(
+        ligne('Prix de vente HT', eur(p)),
+        ligne(`Prix de vente TTC (TVA ${String(t * 100).replace('.', ',')} %)`, eur(ttc)),
+        ligne('Marge brute HT', eur(m)),
+        ligne('Taux de marge (marge ÷ coût)', pc((m / c) * 100)),
+        ligne('Taux de marque (marge ÷ prix de vente HT)', pc((m / p) * 100)),
+        ligne('Coefficient multiplicateur HT (prix HT ÷ coût)', co(p / c)),
+        ligne('Coefficient multiplicateur TTC (prix TTC ÷ coût HT)', co(ttc / c)),
+      );
+      // Remise : appliquée au prix de vente, la TVA suit ; la marge absorbe toute la baisse.
+      const r = Math.min(100, num('marge-rem') ?? 0) / 100, p2 = p * (1 - r), m2 = p2 - c;
+      $('marge-rem-r').innerHTML = !r ? '' : (m2 >= 0
+        ? `Avec ${pc(r * 100)} de remise, tu vends ${eur(p2 * (1 + t))} TTC et ta marge passe de ${eur(m)} à <strong>${eur(m2)}</strong> (−${pc(m ? ((m - m2) / m) * 100 : 0)}). Taux de marque après remise : ${pc(p2 ? (m2 / p2) * 100 : 0)}.`
+        : `Avec ${pc(r * 100)} de remise, tu vends à perte (${eur(m2)} par vente).`)
+        + (m > 0 ? ` Remise maximale avant de vendre à perte : <strong>${pc((m / p) * 100)}</strong>.` : '');
+    };
+
+    $('marge-mode').addEventListener('change', () => { const [l, d] = LIB[$('marge-mode').value]; $('marge-val-l').textContent = l; $('marge-val').value = d; calc(); });
+    f.addEventListener('input', calc);
+    calc();
+  })();
+</script>
+
+<style>
+  .marge-tab { width: 100%; border-collapse: collapse; margin-top: 14px; font-variant-numeric: tabular-nums; font-size: .92rem; }
+  .marge-tab :global(th), .marge-tab :global(td) { padding: 6px 8px; border-bottom: 1px solid var(--line); text-align: left; }
+  .marge-tab :global(th) { font-weight: 500; color: var(--muted); }
+  .marge-tab :global(td) { text-align: right; font-weight: 700; white-space: nowrap; }
+  .marge-remise { margin-top: 16px; padding-top: 4px; border-top: 1px dashed var(--line); }
+</style>

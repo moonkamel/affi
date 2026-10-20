@@ -15,6 +15,8 @@ export const EMBEDS: Embed[] = [
   { slug: 'tjm-freelance', title: 'Calcul du TJM freelance', page: '/outils/calcul-tjm-freelance/', height: 660 },
   { slug: 'indemnites-kilometriques', title: 'Calcul des indemnités kilométriques', page: '/outils/indemnites-kilometriques/', height: 520 },
   { slug: 'penalites-de-retard', title: 'Calcul des pénalités de retard', page: '/outils/calcul-penalites-de-retard/', height: 580 },
+  { slug: 'ht-ttc', title: 'Convertisseur HT TTC', page: '/outils/calcul-ht-ttc/', height: 620 },
+  { slug: 'marge', title: 'Calcul de marge et de prix de vente', page: '/outils/calcul-marge/', height: 780 },
   { slug: 'cout-caisse', title: 'Simulateur de coût de caisse enregistreuse', page: '/outils/simulateur-cout-caisse-enregistreuse/', height: 820 },
 ];
 

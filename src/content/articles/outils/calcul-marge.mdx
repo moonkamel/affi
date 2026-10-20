@@ -1,0 +1,106 @@
+---
+title: "Calcul de marge : taux de marge, taux de marque, coefficient et prix de vente"
+seoTitle: "Calcul de marge : taux de marge, taux de marque, coefficient"
+description: "Calcule ta marge, ton taux de marge, ton taux de marque et ton coefficient multiplicateur, ou trouve ton prix de vente. Gratuit, avec l’effet des remises."
+keyword: "calcul marge"
+secondaryKeywords:
+  - "calcul taux de marge"
+  - "taux de marque"
+  - "coefficient multiplicateur"
+  - "calcul marge brute"
+  - "calcul marge commerciale"
+  - "calcul prix de vente"
+  - "taux de marge et taux de marque"
+  - "calcul remise"
+type: outil
+published: 2026-10-20
+updated: 2026-10-20
+related:
+  - outils/calcul-ht-ttc
+  - creer/business-plan
+  - encaissement/logiciel-gestion-stock
+  - encaissement/logiciel-de-caisse
+tldr:
+  - "<strong>Taux de marge</strong> = marge ÷ coût d’achat HT. <strong>Taux de marque</strong> = marge ÷ prix de vente HT."
+  - "<strong>Coefficient multiplicateur</strong> = prix de vente ÷ coût d’achat : il donne le prix de vente en une multiplication."
+  - "<strong>Une remise</strong> de 10 % peut retirer bien plus de 10 % de ta marge : le calculateur te montre combien."
+faq:
+  - q: "Comment calculer une marge ?"
+    a: "Marge brute = prix de vente HT − coût d’achat HT (ou coût de revient). Exemple : un article acheté 40 € HT et vendu 100 € HT dégage 60 € de marge brute. Les calculs de marge se font toujours hors taxes."
+  - q: "Quelle est la différence entre taux de marge et taux de marque ?"
+    a: "Les deux divisent la même marge, mais pas par le même montant. Le taux de marge la divise par le coût d’achat HT (60 ÷ 40 = 150 %), le taux de marque par le prix de vente HT (60 ÷ 100 = 60 %). Le taux de marque est toujours inférieur à 100 %, le taux de marge peut le dépasser."
+  - q: "Comment calculer un prix de vente à partir d’un taux de marque ?"
+    a: "Prix de vente HT = coût d’achat HT ÷ (1 − taux de marque). Pour un coût de 40 € et un taux de marque de 60 % : 40 ÷ 0,4 = 100 € HT. Avec un taux de marge, la formule devient : coût × (1 + taux de marge)."
+  - q: "Qu’est-ce que le coefficient multiplicateur ?"
+    a: "C’est le nombre par lequel on multiplie le coût d’achat HT pour obtenir le prix de vente. Le coefficient HT donne le prix HT (100 ÷ 40 = 2,5) ; le coefficient TTC donne directement le prix affiché en magasin (120 ÷ 40 = 3 avec une TVA à 20 %)."
+  - q: "Comment calculer l’effet d’une remise sur la marge ?"
+    a: "Applique la remise au prix de vente, puis recalcule la marge. Un article vendu 100 € HT avec 60 € de marge, remisé de 10 %, est vendu 90 € HT : la marge tombe à 50 €, soit une baisse de 16,7 %. La remise maximale avant de vendre à perte est égale au taux de marque."
+---
+import MargeCalculator from '../../../components/MargeCalculator.astro';
+import Callout from '../../../components/Callout.astro';
+import EmbedCode from '../../../components/EmbedCode.astro';
+
+Fixer un prix de vente, vérifier qu’une promotion reste rentable, comparer deux fournisseurs : tout part de la marge. Saisis ton coût d’achat et une seconde donnée (prix de vente HT ou TTC, coefficient, taux de marge ou de marque) : le calculateur donne toutes les autres, puis l’effet d’une remise.
+
+<MargeCalculator />
+
+## Les formules
+
+| Indicateur | Formule | Exemple (coût 40 € HT, vente 100 € HT) |
+|---|---|---|
+| Marge brute | Prix de vente HT − coût d’achat HT | 100 − 40 = 60 € |
+| Taux de marge | Marge ÷ coût d’achat HT × 100 | 60 ÷ 40 = 150 % |
+| Taux de marque | Marge ÷ prix de vente HT × 100 | 60 ÷ 100 = 60 % |
+| Coefficient multiplicateur HT | Prix de vente HT ÷ coût d’achat HT | 100 ÷ 40 = 2,5 |
+| Coefficient multiplicateur TTC | Prix de vente TTC ÷ coût d’achat HT | 120 ÷ 40 = 3 (TVA à 20 %) |
+
+Pour retrouver un prix de vente :
+
+- **à partir d’un taux de marge** : coût × (1 + taux de marge) ;
+- **à partir d’un taux de marque** : coût ÷ (1 − taux de marque) ;
+- **à partir d’un coefficient** : coût × coefficient.
+
+## Table de correspondance
+
+Les trois indicateurs disent la même chose de trois façons. Cette table permet de passer de l’un à l’autre sans calcul :
+
+| Taux de marque | Taux de marge | Coefficient HT |
+|---|---|---|
+| 20 % | 25 % | 1,25 |
+| 25 % | 33,3 % | 1,33 |
+| 33,3 % | 50 % | 1,5 |
+| 40 % | 66,7 % | 1,67 |
+| 50 % | 100 % | 2 |
+| 60 % | 150 % | 2,5 |
+| 66,7 % | 200 % | 3 |
+| 75 % | 300 % | 4 |
+
+<Callout title="Taux de marge ou taux de marque : ne les confonds pas">
+  <p>Annoncer « 50 % de marge » sans préciser lequel crée des malentendus avec un associé, un banquier ou un fournisseur. Un taux de marque de 50 % correspond à un taux de marge de 100 %. Les commerçants raisonnent souvent en taux de marque ou en coefficient, les comptables en taux de marge.</p>
+</Callout>
+
+## Marge brute, marge commerciale, marge nette
+
+- **La marge commerciale** concerne la revente de marchandises : ventes HT − coût d’achat des marchandises vendues (achats + frais d’approche, corrigés de la variation de stock).
+- **La marge brute** est le terme courant pour la même différence entre prix de vente et coût direct, y compris pour un artisan ou un prestataire (matières, sous-traitance).
+- **La marge nette** est ce qui reste une fois payés toutes les charges : loyer, salaires, cotisations, logiciels, impôts. C’est elle qui dit si l’entreprise gagne de l’argent.
+
+Une bonne marge brute ne suffit pas : elle doit couvrir tes charges fixes. Pour le vérifier, calcule ton seuil de rentabilité dans notre [prévisionnel sur 3 ans](/creer/business-plan/).
+
+## Remises et soldes : ce qu’elles coûtent vraiment
+
+Une remise se déduit entièrement de ta marge. Plus le taux de marque est faible, plus la même remise pèse lourd :
+
+| Taux de marque | Remise de 10 % : baisse de la marge | Remise de 20 % : baisse de la marge |
+|---|---|---|
+| 30 % | −33 % | −67 % |
+| 50 % | −20 % | −40 % |
+| 60 % | −17 % | −33 % |
+
+Avec un taux de marque de 30 %, une remise de 10 % fait perdre un tiers de la marge : il faut vendre 50 % de volume en plus pour gagner autant. Le calculateur ci-dessus donne aussi la remise maximale avant de vendre à perte, égale à ton taux de marque.
+
+Pour passer d’un prix HT à un prix TTC, ou l’inverse, utilise notre [convertisseur HT TTC](/outils/calcul-ht-ttc/).
+
+<p data-maillage>Pour suivre tes marges article par article : un <a href="/encaissement/logiciel-gestion-stock/">logiciel de gestion de stock</a> ou un <a href="/encaissement/logiciel-de-caisse/">logiciel de caisse</a> qui calcule la marge de chaque vente. Pour bâtir ton prévisionnel : le <a href="/creer/business-plan/">business plan</a>.</p>
+
+<EmbedCode tool="marge" />

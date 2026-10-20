@@ -1,0 +1,109 @@
+---
+// Convertisseur HT ↔ TTC : saisir l'un des deux montants (ou le montant de TVA) recalcule les autres.
+---
+<form class="sim" id="sim-htttc" aria-labelledby="htttc-titre" onsubmit="return false">
+  <strong id="htttc-titre">Convertisseur HT ↔ TTC</strong>
+  <div class="row">
+    <div>
+      <label for="htttc-taux">Taux de TVA</label>
+      <select id="htttc-taux">
+        <option value="20" selected>20 % (taux normal)</option>
+        <option value="10">10 % (restauration, travaux de rénovation…)</option>
+        <option value="5.5">5,5 % (alimentation, rénovation énergétique…)</option>
+        <option value="2.1">2,1 % (médicaments remboursés, presse)</option>
+        <option value="8.5">8,5 % (taux normal en Guadeloupe, Martinique, Réunion)</option>
+        <option value="autre">Autre taux</option>
+      </select>
+    </div>
+    <div id="htttc-autre-w" hidden>
+      <label for="htttc-autre">Taux personnalisé (%)</label>
+      <input id="htttc-autre" type="number" min="0" max="100" step="0.01" value="13" inputmode="decimal" />
+    </div>
+    <div>
+      <label for="htttc-ht">Montant HT (€)</label>
+      <input id="htttc-ht" type="number" min="0" step="0.01" value="100" inputmode="decimal" />
+    </div>
+    <div>
+      <label for="htttc-ttc">Montant TTC (€)</label>
+      <input id="htttc-ttc" type="number" min="0" step="0.01" inputmode="decimal" />
+    </div>
+    <div>
+      <label for="htttc-tva">Montant de la TVA (€)</label>
+      <input id="htttc-tva" type="number" min="0" step="0.01" inputmode="decimal" />
+    </div>
+  </div>
+  <output class="sim-out" for="htttc-taux htttc-ht htttc-ttc htttc-tva" aria-live="polite">
+    <div id="htttc-l">Prix TTC</div>
+    <div class="big" id="htttc-r">–</div>
+    <div id="htttc-d" class="small"></div>
+  </output>
+  <table class="htttc-tab small" aria-label="Le même montant à chaque taux de TVA">
+    <thead><tr><th id="htttc-tab-h">Même montant HT</th><th>TVA</th><th>TTC</th></tr></thead>
+    <tbody id="htttc-tab"></tbody>
+  </table>
+</form>
+
+<script is:inline>
+  (() => {
+    const f = document.getElementById('sim-htttc');
+    if (!f) return;
+    const $ = (id) => document.getElementById(id);
+    const num = (id) => { const x = parseFloat(String($(id).value).replace(',', '.')); return Number.isFinite(x) && x >= 0 ? x : null; };
+    const eur = (n) => n.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR', minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    const pct = (t) => `${String(t).replace('.', ',')} %`;
+    const arr = (n) => Math.round(n * 100) / 100;
+    const taux = () => ($('htttc-taux').value === 'autre' ? (num('htttc-autre') ?? 0) : parseFloat($('htttc-taux').value));
+    // Le dernier champ modifié sert de référence ; les deux autres sont recalculés.
+    let source = 'htttc-ht';
+
+    const calc = () => {
+      const t = taux(), k = 1 + t / 100;
+      let ht = null;
+      const v = num(source);
+      if (v !== null) ht = source === 'htttc-ht' ? v : source === 'htttc-ttc' ? v / k : t ? v / (t / 100) : null;
+      ['htttc-ht', 'htttc-ttc', 'htttc-tva'].filter((id) => id !== source).forEach((id) => { $(id).value = ''; });
+      if (ht === null) { $('htttc-r').textContent = '–'; $('htttc-d').textContent = t ? '' : 'Avec un taux de 0 %, le montant de TVA ne permet pas de retrouver le prix.'; $('htttc-tab').replaceChildren(); return; }
+      const tva = arr(ht * t / 100), ttc = arr(ht + ht * t / 100);
+      if (source !== 'htttc-ht') $('htttc-ht').value = arr(ht).toFixed(2);
+      if (source !== 'htttc-ttc') $('htttc-ttc').value = ttc.toFixed(2);
+      if (source !== 'htttc-tva') $('htttc-tva').value = tva.toFixed(2);
+      const coef = k.toLocaleString('fr-FR', { maximumFractionDigits: 4 });
+      if (source === 'htttc-ttc') {
+        $('htttc-l').textContent = 'Prix HT';
+        $('htttc-r').textContent = eur(arr(ht));
+        $('htttc-d').textContent = `${eur(num('htttc-ttc'))} TTC ÷ ${coef} = ${eur(arr(ht))} HT, dont ${eur(tva)} de TVA à ${pct(t)}.`;
+      } else if (source === 'htttc-tva') {
+        $('htttc-l').textContent = 'Prix HT et TTC';
+        $('htttc-r').textContent = `${eur(arr(ht))} HT · ${eur(ttc)} TTC`;
+        $('htttc-d').textContent = `${eur(num('htttc-tva'))} de TVA à ${pct(t)} correspondent à un prix de ${eur(arr(ht))} HT.`;
+      } else {
+        $('htttc-l').textContent = 'Prix TTC';
+        $('htttc-r').textContent = eur(ttc);
+        $('htttc-d').textContent = `${eur(arr(ht))} HT × ${coef} = ${eur(ttc)} TTC, dont ${eur(tva)} de TVA à ${pct(t)}.`;
+      }
+      // Même montant aux autres taux : même HT si on part du HT, même TTC si on part du TTC.
+      const parTtc = source === 'htttc-ttc';
+      $('htttc-tab-h').textContent = parTtc ? `Pour ${eur(num('htttc-ttc'))} TTC, HT à…` : `Pour ${eur(arr(ht))} HT, taux`;
+      const lignes = [20, 10, 5.5, 2.1].map((r) => {
+        const h = parTtc ? num('htttc-ttc') / (1 + r / 100) : ht;
+        const tr = document.createElement('tr');
+        [parTtc ? `${pct(r)} : ${eur(arr(h))}` : pct(r), eur(arr(h * r / 100)), eur(arr(h + h * r / 100))].forEach((x) => { const td = document.createElement('td'); td.textContent = x; tr.appendChild(td); });
+        if (r === t) tr.className = 'on';
+        return tr;
+      });
+      $('htttc-tab').replaceChildren(...lignes);
+    };
+
+    ['htttc-ht', 'htttc-ttc', 'htttc-tva'].forEach((id) => $(id).addEventListener('input', () => { source = id; calc(); }));
+    $('htttc-taux').addEventListener('change', () => { $('htttc-autre-w').hidden = $('htttc-taux').value !== 'autre'; calc(); });
+    $('htttc-autre').addEventListener('input', calc);
+    calc();
+  })();
+</script>
+
+<style>
+  .htttc-tab { width: 100%; border-collapse: collapse; margin-top: 14px; font-variant-numeric: tabular-nums; }
+  .htttc-tab th, .htttc-tab td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--line); }
+  .htttc-tab th { font-weight: 600; color: var(--muted); }
+  .htttc-tab :global(tr.on) td { font-weight: 700; color: var(--accent); }
+</style>

@@ -1,0 +1,96 @@
+---
+title: "Calcul HT TTC : convertisseur de TVA gratuit (20 %, 10 %, 5,5 %, 2,1 %)"
+seoTitle: "Calcul HT TTC : convertisseur TVA gratuit (20 %, 10 %)"
+description: "Passe du HT au TTC, du TTC au HT ou retrouve le montant de TVA en une saisie. Taux de 20 %, 10 %, 5,5 % et 2,1 %, formules et exemples."
+keyword: "calcul ht ttc"
+secondaryKeywords:
+  - "calcul tva"
+  - "calculer la tva"
+  - "ttc en ht"
+  - "ht en ttc"
+  - "calcul ttc en ht"
+  - "convertisseur ht ttc"
+  - "calcul tva 20"
+  - "calculatrice tva"
+type: outil
+published: 2026-10-20
+updated: 2026-10-20
+related:
+  - outils/calcul-marge
+  - facturation/mentions-obligatoires-facture
+  - outils/modele-facture-gratuit
+  - outils/simulateur-seuil-tva
+tldr:
+  - "<strong>HT → TTC</strong> : multiplie par 1,2 à 20 %, par 1,1 à 10 %, par 1,055 à 5,5 %, par 1,021 à 2,1 %."
+  - "<strong>TTC → HT</strong> : divise par les mêmes coefficients. Retirer 20 % d’un prix TTC donne un résultat faux."
+  - "<strong>Montant de TVA</strong> : prix HT × taux, ou prix TTC − prix HT."
+faq:
+  - q: "Comment calculer un prix TTC à partir du HT ?"
+    a: "Multiplie le prix HT par (1 + taux de TVA). À 20 %, 100 € HT × 1,2 = 120 € TTC. À 10 %, 100 € HT × 1,1 = 110 € TTC. À 5,5 %, 100 € HT × 1,055 = 105,50 € TTC."
+  - q: "Comment passer d’un prix TTC au prix HT ?"
+    a: "Divise le prix TTC par (1 + taux de TVA). À 20 %, 120 € TTC ÷ 1,2 = 100 € HT. Ne retire pas 20 % du TTC : 120 € − 20 % donne 96 €, ce qui est faux, car la TVA est calculée sur le HT et non sur le TTC."
+  - q: "Comment calculer le montant de la TVA ?"
+    a: "Montant de TVA = prix HT × taux de TVA. À partir d’un prix TTC à 20 %, la TVA vaut TTC ÷ 6 (soit TTC − TTC ÷ 1,2). Exemple : 120 € TTC contiennent 20 € de TVA."
+  - q: "Quels sont les taux de TVA en France ?"
+    a: "En métropole : 20 % (taux normal), 10 % (taux intermédiaire, par exemple la restauration et certains travaux dans les logements), 5,5 % (taux réduit, par exemple la plupart des produits alimentaires) et 2,1 % (taux particulier, par exemple les médicaments remboursables et la presse). La Corse et les départements d’outre-mer ont leurs propres taux."
+  - q: "Un micro-entrepreneur doit-il calculer la TVA ?"
+    a: "Pas tant qu’il bénéficie de la franchise en base de TVA : il facture alors en HT, sans TVA, avec la mention d’exonération sur ses factures. S’il dépasse les seuils, il doit facturer la TVA comme une entreprise classique."
+---
+import HtTtcCalculator from '../../../components/HtTtcCalculator.astro';
+import Callout from '../../../components/Callout.astro';
+import AffLink from '../../../components/AffLink.astro';
+import EmbedCode from '../../../components/EmbedCode.astro';
+
+Un devis à chiffrer, un prix fournisseur à comparer, une étiquette à afficher : tu passes ton temps à convertir du HT en TTC et l’inverse. Saisis un montant HT, TTC ou de TVA : les deux autres se calculent tout seuls, au taux de ton choix.
+
+<HtTtcCalculator />
+
+## Les formules
+
+| Tu connais | Tu cherches | Formule | Exemple à 20 % |
+|---|---|---|---|
+| Le prix HT | Le prix TTC | HT × (1 + taux) | 100 € × 1,2 = 120 € |
+| Le prix TTC | Le prix HT | TTC ÷ (1 + taux) | 120 € ÷ 1,2 = 100 € |
+| Le prix HT | La TVA | HT × taux | 100 € × 0,2 = 20 € |
+| Le prix TTC | La TVA | TTC − TTC ÷ (1 + taux) | 120 € − 100 € = 20 € |
+| La TVA | Le prix HT | TVA ÷ taux | 20 € ÷ 0,2 = 100 € |
+
+## Les coefficients à retenir
+
+| Taux | HT → TTC (multiplier par) | TTC → HT (diviser par) | Part de TVA dans un prix TTC |
+|---|---|---|---|
+| 20 % | 1,2 | 1,2 | 1/6, soit 16,67 % |
+| 10 % | 1,1 | 1,1 | 1/11, soit 9,09 % |
+| 5,5 % | 1,055 | 1,055 | 5,21 % |
+| 2,1 % | 1,021 | 1,021 | 2,06 % |
+
+<Callout title="L’erreur la plus fréquente">
+  <p>Pour retrouver le HT, on ne retire pas 20 % du prix TTC. 120 € TTC moins 20 % donnent 96 €, alors que le bon prix HT est 100 €. La TVA se calcule sur le HT : il faut donc diviser le TTC par 1,2.</p>
+</Callout>
+
+## Quel taux de TVA appliquer ?
+
+| Taux | Exemples d’application en métropole |
+|---|---|
+| 20 % | La majorité des ventes de biens et des prestations de services |
+| 10 % | Restauration sur place et à emporter de plats préparés, hébergement hôtelier, transport de voyageurs, certains travaux d’amélioration dans les logements de plus de 2 ans |
+| 5,5 % | La plupart des produits alimentaires, livres, travaux de rénovation énergétique dans les logements |
+| 2,1 % | Médicaments remboursables par la Sécurité sociale, presse, certains spectacles |
+
+Les règles détaillent de nombreux cas particuliers : vérifie le taux de ton activité sur [impots.gouv.fr](https://www.impots.gouv.fr/professionnel/questions/quels-sont-les-taux-de-tva-en-vigueur-en-france-et-dans-lunion-europeenne) avant de facturer. La Corse applique des taux spécifiques. En Guadeloupe, Martinique et à La Réunion, le taux normal est de 8,5 % et le taux réduit de 2,1 %. La Guyane et Mayotte n’appliquent pas la TVA.
+
+## Sur une facture : arrondis et mentions
+
+- **Calcule la TVA ligne par ligne ou sur le total HT par taux**, puis arrondis au centime. Les deux méthodes peuvent donner un centime d’écart : reste cohérent d’une facture à l’autre.
+- **Indique pour chaque taux** le total HT, le taux et le montant de TVA, puis le total TTC. C’est une des [mentions obligatoires d’une facture](/facturation/mentions-obligatoires-facture/).
+- **En franchise en base de TVA**, ne facture pas de TVA et porte la mention d’exonération. Le [simulateur de seuil de TVA](/outils/simulateur-seuil-tva/) te dit si tu y as encore droit.
+
+Pour fixer ton prix de vente à partir de ton coût d’achat, utilise ensuite notre [calculateur de marge](/outils/calcul-marge/), qui donne aussi le coefficient à appliquer pour passer directement du coût HT au prix TTC.
+
+Sources : [service-public.fr, taux de TVA](https://entreprendre.service-public.gouv.fr/vosdroits/F23567), [impots.gouv.fr](https://www.impots.gouv.fr/). Vérifié en octobre 2026.
+
+<p style="display:flex;gap:8px;flex-wrap:wrap"><AffLink slug="abby" label="Facturer avec la TVA calculée automatiquement" /> <AffLink slug="tiime" variant="ghost" label="Tiime" /></p>
+
+<p data-maillage>Pour éditer une facture conforme sans calcul : notre <a href="/outils/modele-facture-gratuit/">modèle de facture gratuit</a> ou un <a href="/facturation/logiciel-de-facturation/">logiciel de facturation</a>. Pour les micro-entrepreneurs : <a href="/facturation/tva-auto-entrepreneur/">TVA auto-entrepreneur</a>.</p>
+
+<EmbedCode tool="ht-ttc" />
