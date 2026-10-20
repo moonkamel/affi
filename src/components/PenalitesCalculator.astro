@@ -43,7 +43,7 @@
       const forfait = pro && v('pen-jours') > 0 ? 40 : 0;
       document.getElementById('pen-r').textContent = eur(pen + forfait);
       document.getElementById('pen-d').innerHTML =
-        `Pénalités de retard : <strong>${eur(pen)}</strong> (${v('pen-montant')} × ${v('pen-taux').toLocaleString('fr-FR')} % × ${v('pen-jours')} j ÷ 365)` +
+        `Pénalités de retard : <strong>${eur(pen)}</strong> (${eur(v('pen-montant'))} × ${v('pen-taux').toLocaleString('fr-FR')} % × ${v('pen-jours').toLocaleString('fr-FR')} j ÷ 365)` +
         (pro ? ` · Indemnité forfaitaire de recouvrement : <strong>${eur(forfait)}</strong>` : '<br>Avec un particulier : intérêts au taux légal (6,84 % au 2nd semestre 2026), sans indemnité de 40 €.') +
         `<br>Total dû : <strong>${eur(v('pen-montant') + pen + forfait)}</strong>`;
     };

@@ -50,7 +50,8 @@
       const d = Math.max(0, parseFloat(String(document.getElementById('ik-km').value).replace(',', '.')) || 0);
       const [a, b, c, e] = B[document.getElementById('ik-cv').value];
       let ik = d <= 5000 ? d * a : d <= 20000 ? d * b + c : d * e;
-      const formule = d <= 5000 ? `${d} × ${a}` : d <= 20000 ? `(${d} × ${b}) + ${c}` : `${d} × ${e}`;
+      const fr = (n) => n.toLocaleString('fr-FR', { maximumFractionDigits: 3 });
+      const formule = d <= 5000 ? `${fr(d)} × ${fr(a)}` : d <= 20000 ? `(${fr(d)} × ${fr(b)}) + ${fr(c)}` : `${fr(d)} × ${fr(e)}`;
       const elec = document.getElementById('ik-elec').value === '1';
       if (elec) ik *= 1.2;
       document.getElementById('ik-r').textContent = eur(ik);

@@ -5,6 +5,7 @@
 //    lien de partage d'un calcul (valeurs dans l'adresse).
 // 3. Recherche dans le site (Pagefind, chargée à la première ouverture) : bouton, touche « / » ou Ctrl+K.
 // 4. Bouton « Haut de page » et mise en avant du résultat qui change.
+// 5. Résultat flottant pendant la saisie, en-tête qui se replie sur mobile quand on descend.
 
 const lire = (k: string) => { try { return JSON.parse(localStorage.getItem(k) || 'null'); } catch { return null; } };
 const ecrire = (k: string, v: unknown) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch { /* stockage indisponible */ } };
@@ -155,3 +156,51 @@ if (haut) {
   maj();
   haut.addEventListener('click', () => scrollTo({ top: 0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' }));
 }
+
+// ───────── 5. Résultat flottant et en-tête mobile ─────────
+// Sur un long formulaire, le résultat sort de l'écran : une pastille le rappelle et y ramène d'un geste.
+const pastille = document.createElement('button');
+pastille.type = 'button';
+pastille.className = 'sim-flottant';
+pastille.hidden = true;
+pastille.innerHTML = '<span></span><b></b>';
+document.body.appendChild(pastille);
+let cible: HTMLElement | null = null;
+const formsVisibles = new Set<Element>();
+const sortis = new Set<Element>();
+const majPastille = () => {
+  const f = [...formsVisibles].find((x) => { const o = x.querySelector('.sim-out'); return o && sortis.has(o) && x.contains(document.activeElement); });
+  const big = f?.querySelector<HTMLElement>('.sim-out .big');
+  const txt = big?.textContent?.trim();
+  if (!f || !big || !txt || txt === '–') { pastille.hidden = true; return; }
+  cible = f.querySelector<HTMLElement>('.sim-out');
+  const lib = cible?.querySelector(':scope > div:first-child:not(.big)')?.textContent?.trim() || 'Résultat';
+  pastille.querySelector('span')!.textContent = lib.length > 28 ? 'Résultat' : lib;
+  pastille.querySelector('b')!.textContent = txt;
+  pastille.hidden = false;
+};
+const obsForm = new IntersectionObserver((es) => { es.forEach((e) => (e.isIntersecting ? formsVisibles.add(e.target) : formsVisibles.delete(e.target))); majPastille(); });
+const obsOut = new IntersectionObserver((es) => { es.forEach((e) => (e.isIntersecting ? sortis.delete(e.target) : sortis.add(e.target))); majPastille(); });
+document.querySelectorAll<HTMLElement>('form.sim').forEach((f) => {
+  const out = f.querySelector('.sim-out');
+  if (!out || !f.querySelector('.sim-out .big')) return;
+  obsForm.observe(f); obsOut.observe(out);
+  f.addEventListener('input', () => requestAnimationFrame(majPastille));
+});
+document.addEventListener('focusin', majPastille);
+document.addEventListener('focusout', () => setTimeout(majPastille, 150));
+pastille.addEventListener('click', () => {
+  (document.activeElement as HTMLElement | null)?.blur();
+  cible?.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'center' });
+  pastille.hidden = true;
+});
+
+// En-tête : replié quand on descend, de retour dès qu'on remonte (mobile seulement, via le CSS).
+let dernierY = scrollY;
+addEventListener('scroll', () => {
+  const y = scrollY;
+  if (Math.abs(y - dernierY) < 8) return;
+  document.documentElement.classList.toggle('entete-cachee', y > dernierY && y > 160 && !document.querySelector('dialog[open]'));
+  dernierY = y;
+}, { passive: true });
+document.addEventListener('focusin', (e) => { if ((e.target as Element).closest?.('.site-header')) document.documentElement.classList.remove('entete-cachee'); });

@@ -428,6 +428,24 @@ tbody tr:hover { background: color-mix(in srgb, var(--accent-soft) 45%, transpar
 @keyframes maj { 0% { transform: scale(.97); opacity: .55; } 100% { transform: none; opacity: 1; } }
 .sim input[aria-invalid="true"] { border-color: var(--bad); }
 
+/* Confort au doigt et au clavier : champs à 16 px sur mobile (pas de zoom automatique sur iPhone),
+   boutons d'au moins 44 px, champ actif jamais caché sous l'en-tête. */
+:where(input, select, textarea) { scroll-margin: 110px 0 90px; }
+:where(.sim, .gen-form, .dossier, .mx, form) :where(input, select, textarea):focus-visible { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+@media (pointer: coarse) {
+  .btn { min-height: 44px; }
+  :where(.sim, .gen-form, .dossier, .mx, form) :where(input, select, textarea) { font-size: 16px !important; }
+}
+.site-header { transition: transform .25s ease; }
+@media (max-width: 760px) { html.entete-cachee .site-header { transform: translateY(-100%); } }
+
+/* Résultat flottant : visible pendant la saisie quand le résultat est hors de l'écran. */
+.sim-flottant { position: fixed; left: 50%; bottom: 16px; z-index: 45; transform: translate(-50%, 0); max-width: calc(100vw - 96px); display: flex; align-items: center; gap: 10px; padding: 9px 16px; min-height: 46px; border: 0; border-radius: 999px; background: var(--accent); color: var(--accent-ink); font: inherit; font-weight: 700; box-shadow: 0 8px 24px var(--shadow); cursor: pointer; transition: opacity .2s, transform .2s; }
+.sim-flottant span { font-weight: 500; opacity: .85; white-space: nowrap; }
+.sim-flottant b { font-family: var(--display); font-size: 1.05rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sim-flottant[hidden] { display: flex; visibility: hidden; opacity: 0; transform: translate(-50%, 20px); pointer-events: none; transition: opacity .2s, transform .2s, visibility 0s .2s; }
+@media (prefers-reduced-motion: reduce) { .sim-flottant, .site-header { transition: none; } }
+
 /* Recherche */
 .btn-recherche { display: inline-grid; place-items: center; width: 40px; height: 40px; padding: 0; color: var(--muted); background: var(--paper-2); border: 1.5px solid var(--line); border-radius: 50%; cursor: pointer; transition: border-color .2s, color .2s; }
 .btn-recherche:hover, .btn-recherche:focus-visible { color: var(--ink); border-color: var(--accent); }
@@ -466,7 +484,8 @@ kbd { font-family: var(--mono); font-size: .85em; padding: 1px 6px; border: 1px 
 /* Impression d'une page de facture ou de devis : seule la facture est imprimée, sans pages blanches.
    Limité aux pages qui contiennent le générateur (.gen), pour ne pas masquer les autres outils imprimables. */
 @media print {
-  .sim-barre, .haut-de-page, .recherche, .btn-recherche, .voisins { display: none !important; }
+  .sim-barre, .haut-de-page, .recherche, .btn-recherche, .voisins, .sim-flottant { display: none !important; }
+  .site-header { transform: none !important; }
   @page { margin: 14mm; }
   body { background: #fff; }
   body::before { display: none; }

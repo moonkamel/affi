@@ -43,6 +43,37 @@ const fixTableAnchors = {
   },
 };
 
+// Typographie française : espace insécable avant « : ; ! ? » et %, à l'intérieur des guillemets et dans les
+// nombres (1 800 €), pour qu'un signe ne se retrouve jamais seul en début de ligne. Texte seulement
+// (pas les attributs, scripts, styles, code ni zones de saisie).
+const typoFr = {
+  name: 'typographie-fr',
+  hooks: {
+    'astro:build:done': ({ dir }) => {
+      const IGNORE = /^<(script|style|pre|code|textarea)\b/i;
+      for (const f of walk(dir.pathname).filter((f) => f.endsWith('.html'))) {
+        const html = readFileSync(f, 'utf8');
+        let ignore = null;
+        const out = html.split(/(<[^>]+>)/).map((part) => {
+          if (part.startsWith('<')) {
+            const m = part.match(IGNORE);
+            if (m && !ignore) ignore = m[1].toLowerCase();
+            else if (ignore && part.toLowerCase().startsWith(`</${ignore}`)) ignore = null;
+            return part;
+          }
+          if (ignore || !part.trim()) return part;
+          return part
+            .replace(/ ([:;!?»%])/g, '\u00a0$1')
+            .replace(/« /g, '«\u00a0')
+            .replace(/(\d) (?=\d{3}(?!\d))/g, '$1\u00a0')
+            .replace(/(\d) (€|h\b|j\b|km\b|ans?\b|mois\b)/g, '$1\u00a0$2');
+        }).join('');
+        if (out !== html) writeFileSync(f, out);
+      }
+    },
+  },
+};
+
 // Sitemap enrichi : date de mise à jour (frontmatter `updated`) et infographies (Google Images).
 const ARTICLES = new URL('./src/content/articles/', import.meta.url).pathname;
 const walk = (d) => readdirSync(d).flatMap((f) => (statSync(join(d, f)).isDirectory() ? walk(join(d, f)) : [join(d, f)]));
@@ -94,6 +125,7 @@ export default defineConfig({
     mdx({ rehypePlugins: [rehypeWrapTables] }),
     affiliateRedirects,
     fixTableAnchors,
+    typoFr,
     sitemap({
       // Les pages de redirection affiliées, les simulateurs intégrables et la 404 ne doivent jamais être indexées.
       filter: (page) => !/\/(go|embed|404|mentions-legales)\//.test(page),
