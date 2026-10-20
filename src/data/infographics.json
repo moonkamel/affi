@@ -96,7 +96,7 @@
         "rows": [
           [
             "Sous le seuil de base",
-            "Franchise : « TVA non applicable, art. 293 B du CGI »"
+            "Franchise : « TVA non applicable, art. 293 B du CGI » (art. L. 233-3 du CIBS dès 2027)"
           ],
           [
             "Seuil de base dépassé",
@@ -163,7 +163,7 @@
           [
             "Vente",
             "1 %",
-            "0,1 %"
+            "0,1 % (0,3 % artisan)"
           ],
           [
             "Services BIC",
@@ -442,7 +442,7 @@
       }
     ],
     "note": "<b>d</b> = distance professionnelle sur l’année. <b>+20 %</b> pour les véhicules 100 % électriques. Barème inchangé depuis 2023.",
-    "asOf": "Barème publié en octobre 2026"
+    "asOf": "Barème 2023, en vigueur en octobre 2026"
   },
   {
     "slug": "penalites-de-retard-2026",

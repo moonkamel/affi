@@ -157,7 +157,7 @@ const DOCS = [
         ['p', `${salarie()} fait toujours partie de nos effectifs à la date de la présente attestation.`],
         ['p', 'Cette attestation est délivrée à la demande de l’intéressé(e) pour servir et valoir ce que de droit.'], signature()],
       solde: () => {
-        const sommes = [...root.querySelectorAll('[data-somme]')].filter((x) => parseFloat(x.value) > 0).map((x) => [x.dataset.somme, parseFloat(x.value)]);
+        const sommes = [...root.querySelectorAll('[data-somme]')].filter((x) => parseFloat(x.value.replace(',', '.')) > 0).map((x) => [x.dataset.somme, parseFloat(x.value.replace(',', '.'))]);
         const tot = sommes.reduce((t, [, m]) => t + m, 0);
         return [entete(), ['p', `${salarie()}\n${v('s-adr') || '[Adresse]'}`], ['titre', 'Reçu pour solde de tout compte'],
           ['p', `Je soussigné(e) ${salarie()}, employé${accord()} en qualité de ${min(v('poste')) || '[poste]'} du ${dateFr(v('entree'))} au ${dateFr(v('sortie'))}, reconnais avoir reçu de ${v('e-nom') || '[Raison sociale]'}, pour solde de tout compte, la somme de ${v('m-net') ? eur(v('m-net')) + ' net' : '[montant net]'}, versée par ${v('m-mode')}, en paiement des sommes suivantes :`],

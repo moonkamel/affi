@@ -273,7 +273,7 @@
       try { navigator.sendBeacon('/api/mesure/ca-vers-bp'); } catch (e) { /* sans importance */ }
     }
     let mesure = false;
-    f.addEventListener('input', () => { if (!mesure) { mesure = true; try { navigator.sendBeacon('/api/mesure/previsionnel'); } catch (e) { /* sans importance */ } } });
+    f.addEventListener('input', (ev) => { if (!mesure && ev.isTrusted) { mesure = true; try { navigator.sendBeacon('/api/mesure/previsionnel'); } catch (e) { /* sans importance */ } } });
     f.addEventListener('input', calc);
     calc();
   })();

@@ -80,7 +80,7 @@ const unAn = series[series.length - 5] ?? series[0];
         ligne(`Nouveau loyer ${libPer}`, eur(nouveau), 'tot'),
         ligne('Nouveau loyer annuel', eur(nouveau * parAn)),
       );
-      if (!compte && e) { compte = true; try { navigator.sendBeacon('/api/mesure/ilc'); } catch (err) { /* sans importance */ } }
+      if (!compte && e && e.isTrusted) { compte = true; try { navigator.sendBeacon('/api/mesure/ilc'); } catch (err) { /* sans importance */ } }
     };
     f.addEventListener('input', calc);
     f.addEventListener('change', calc);

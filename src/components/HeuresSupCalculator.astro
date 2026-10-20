@@ -56,7 +56,7 @@
         : num('heures') > 48 ? 'Attention : la durée maximale est de 48 heures sur une même semaine.'
         : `À ajouter au salaire de base. Côté salarié, ces heures bénéficient d’une réduction de cotisations et sont exonérées d’impôt sur le revenu dans une limite annuelle.`;
       $('tab').replaceChildren(...lignes);
-      if (!compte && e) { compte = true; try { navigator.sendBeacon('/api/mesure/heures-sup'); } catch (err) { /* sans importance */ } }
+      if (!compte && e && e.isTrusted) { compte = true; try { navigator.sendBeacon('/api/mesure/heures-sup'); } catch (err) { /* sans importance */ } }
     };
     f.addEventListener('input', calc);
     f.addEventListener('change', calc);

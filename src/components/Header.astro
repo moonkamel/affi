@@ -1,6 +1,7 @@
 ---
 import { SITE } from '../data/site';
 const path = Astro.url.pathname;
+// Lien actif : le plus précis qui correspond (« Étude de marché » plutôt que « Créer » sur sa page).
 const links = [
   { href: '/facturation/', label: 'Facturation' },
   { href: '/comptabilite/', label: 'Compta' },
@@ -12,6 +13,7 @@ const links = [
   { href: '/creer/etude-de-marche/', label: 'Étude de marché' },
   { href: '/outils/', label: 'Outils gratuits' },
 ];
+const actif = links.filter((l) => path.startsWith(l.href)).sort((a, b) => b.href.length - a.href.length)[0]?.href;
 ---
 <header class="site-header">
   <div class="container">
@@ -21,8 +23,17 @@ const links = [
     </a>
     <nav class="nav" aria-label="Navigation principale">
       {links.map((l) => (
-        <a href={l.href} aria-current={path.startsWith(l.href) ? 'page' : undefined}>{l.label}</a>
+        <a href={l.href} aria-current={l.href === actif ? 'page' : undefined}>{l.label}</a>
       ))}
     </nav>
+    <button type="button" class="btn-recherche" data-ouvrir-recherche aria-label="Rechercher dans le site (raccourci : /)">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M15.5 15.5L21 21" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+      <span>Rechercher</span>
+    </button>
   </div>
 </header>
+<dialog id="recherche" class="recherche" aria-label="Rechercher dans le site">
+  <div class="recherche-tete"><strong>Rechercher</strong><form method="dialog"><button class="btn btn-ghost btn-sm" aria-label="Fermer la recherche">Fermer</button></form></div>
+  <div id="recherche-ui"></div>
+  <p class="small muted">Astuce : appuie sur <kbd>/</kbd> depuis n’importe quelle page.</p>
+</dialog>

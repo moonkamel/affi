@@ -418,9 +418,55 @@ tbody tr:hover { background: color-mix(in srgb, var(--accent-soft) 45%, transpar
 .doc-em { font-family: var(--display); }
 .doc-sign { margin-top: 24px; border: 1px dashed #9ca3af; border-radius: 8px; height: 90px; padding: 8px; }
 
+/* Barre des calculateurs : mémoire, partage, valeurs par défaut (ajoutée par ameliorations.ts). */
+.sim-barre { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 14px; margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--line); font-size: .86rem; }
+.sim-barre-info { color: var(--muted); margin-right: auto; min-height: 1.2em; }
+.sim-lien { font: inherit; font-weight: 600; color: var(--accent); background: none; border: 0; padding: 8px 2px; min-height: 40px; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+.sim-lien:hover { color: var(--accent-deep); text-decoration-thickness: 2px; }
+.sim-lien[hidden] { display: none; }
+.sim-out .big.maj { animation: maj .45s ease-out; }
+@keyframes maj { 0% { transform: scale(.97); opacity: .55; } 100% { transform: none; opacity: 1; } }
+.sim input[aria-invalid="true"] { border-color: var(--bad); }
+
+/* Recherche */
+.btn-recherche { display: inline-grid; place-items: center; width: 40px; height: 40px; padding: 0; color: var(--muted); background: var(--paper-2); border: 1.5px solid var(--line); border-radius: 50%; cursor: pointer; transition: border-color .2s, color .2s; }
+.btn-recherche:hover, .btn-recherche:focus-visible { color: var(--ink); border-color: var(--accent); }
+.btn-recherche svg { width: 18px; height: 18px; }
+.btn-recherche span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+@media (max-width: 760px) { .btn-recherche { margin-left: auto; } }
+.recherche { width: min(680px, calc(100vw - 24px)); max-height: min(80vh, 720px); margin: 8vh auto auto; padding: 18px 20px 14px; border: 1.5px solid var(--line); border-radius: var(--radius); background: var(--card); color: var(--ink); box-shadow: 0 24px 60px var(--shadow); overflow: auto; overscroll-behavior: contain; }
+.recherche::backdrop { background: rgba(8, 10, 18, .7); backdrop-filter: blur(3px); }
+.recherche-tete { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; font-family: var(--display); font-size: 1.1rem; }
+.recherche-tete form { margin: 0; }
+#recherche-ui {
+  --pagefind-ui-scale: .9; --pagefind-ui-primary: var(--accent); --pagefind-ui-text: var(--ink); --pagefind-ui-background: var(--paper);
+  --pagefind-ui-border: var(--line); --pagefind-ui-tag: var(--paper-2); --pagefind-ui-border-width: 1.5px; --pagefind-ui-border-radius: 10px; --pagefind-ui-font: var(--font);
+  min-height: 60px;
+}
+#recherche-ui mark { background: var(--sun-soft); color: var(--ink); padding: 0 2px; border-radius: 3px; }
+#recherche-ui .pagefind-ui__result-link { color: var(--ink); }
+#recherche-ui .pagefind-ui__result-link:hover { color: var(--accent); }
+kbd { font-family: var(--mono); font-size: .85em; padding: 1px 6px; border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 5px; background: var(--paper-2); }
+
+/* Haut de page */
+.haut-de-page { position: fixed; right: 16px; bottom: 16px; z-index: 40; width: 46px; height: 46px; display: grid; place-items: center; border-radius: 50%; border: 1.5px solid var(--line); background: var(--card); color: var(--ink); box-shadow: 0 6px 18px var(--shadow); cursor: pointer; font-size: 1.2rem; transition: transform .2s, border-color .2s; }
+.haut-de-page:hover { border-color: var(--accent); transform: translateY(-2px); }
+.haut-de-page[hidden] { display: none; }
+
+/* Autres outils du même groupe, en bas des pages d'outils */
+.voisins { margin: 44px 0 10px; }
+.voisins h2 { font-size: 1.25rem; margin-bottom: 12px; }
+.voisins-grille { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
+.voisin { display: block; padding: 12px 14px; border: 1.5px solid var(--line); border-radius: var(--radius-sm); background: var(--card); color: var(--ink); text-decoration: none; font-weight: 600; line-height: 1.35; transition: border-color .2s, transform .2s; }
+.voisin:hover { border-color: var(--accent); color: var(--ink); transform: translateY(-2px); }
+.voisin span { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; font-weight: 400; font-size: .86rem; color: var(--muted); margin-top: 4px; }
+.haut-de-page svg { width: 22px; height: 22px; }
+@media (prefers-reduced-motion: reduce) { .voisin, .haut-de-page { transition: none; } .voisin:hover, .haut-de-page:hover { transform: none; } }
+
 /* Impression d'une page de facture ou de devis : seule la facture est imprimée, sans pages blanches.
    Limité aux pages qui contiennent le générateur (.gen), pour ne pas masquer les autres outils imprimables. */
 @media print {
+  .sim-barre, .haut-de-page, .recherche, .btn-recherche, .voisins { display: none !important; }
   @page { margin: 14mm; }
   body { background: #fff; }
   body::before { display: none; }

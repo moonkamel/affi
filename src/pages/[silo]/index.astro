@@ -81,7 +81,7 @@ const jsonLd = graph(
 );
 ---
 <BaseLayout title={info.seoTitle} description={info.description} jsonLd={jsonLd}>
-  <div class="container">
+  <div class="container" data-pagefind-body>
     <Breadcrumbs items={crumbs} />
     <div class="hub-head">
       <SiloIcon silo={silo} class="hub-icon" />

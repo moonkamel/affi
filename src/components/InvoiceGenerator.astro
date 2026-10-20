@@ -7,7 +7,7 @@ const isDevis = mode === 'devis';
 const today = new Date().toISOString().slice(0, 10);
 ---
 <div class="gen" data-mode={mode}>
-  <form class="sim gen-form" id="gen-form" onsubmit="return false" aria-label={isDevis ? 'Créer un devis' : 'Créer une facture'}>
+  <form class="sim gen-form" id="gen-form" data-sans-memoire onsubmit="return false" aria-label={isDevis ? 'Créer un devis' : 'Créer une facture'}>
     <strong>1. Toi (émetteur)</strong>
     <label for="g-em-nom">Nom ou raison sociale</label>
     <input id="g-em-nom" data-save placeholder="Julie Martin EI" />

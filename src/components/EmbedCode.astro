@@ -8,7 +8,7 @@ const e = getEmbed(Astro.props.tool);
 const origin = new URL(SITE.url).origin;
 const data = { slug: e.slug, src: abs(`/embed/${e.slug}/`), page: abs(e.page), title: e.title, height: e.height, origin, name: SITE.name };
 ---
-<section class="embed-box" aria-labelledby={`integrer-${e.slug}`} data-embed={JSON.stringify(data)}>
+<section class="embed-box" data-pagefind-ignore aria-labelledby={`integrer-${e.slug}`} data-embed={JSON.stringify(data)}>
   <h2 id={`integrer-${e.slug}`} style="margin-top:0">Intègre ce simulateur sur ton site</h2>
   <p>Tu as un blog, un cabinet comptable ou un site pour entrepreneurs ? Ajoute ce simulateur gratuitement : copie le code ci-dessous et colle-le dans ta page (bloc HTML). Il reste à jour automatiquement.</p>
   <div class="row">

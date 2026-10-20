@@ -2,7 +2,7 @@
 // Numéro de TVA intracommunautaire, SIREN et SIRET : contrôle la clé du numéro saisi, calcule le numéro de TVA
 // et, si possible, interroge l'API publique Recherche d'entreprises (directement, puis via notre relais).
 ---
-<form class="sim" id="sim-ident" aria-labelledby="ident-titre" onsubmit="return false">
+<form class="sim" id="sim-ident" data-sans-memoire aria-labelledby="ident-titre" onsubmit="return false">
   <strong id="ident-titre">Numéro de TVA intracommunautaire, SIREN, SIRET</strong>
   <label for="ident-q">SIREN (9 chiffres), SIRET (14 chiffres) ou nom de l’entreprise</label>
   <div class="ident-bar">

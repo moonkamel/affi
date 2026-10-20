@@ -59,7 +59,7 @@ const CONTRIBUTION = 0.4;
       $('fin-h').hidden = type === 'rupture';
       const debut = new Date($('entree').value), fin = new Date($('fin').value);
       if (isNaN(debut) || isNaN(fin) || fin <= debut) { $('r').textContent = '–'; $('d').textContent = 'Renseigne des dates valides.'; $('tab').replaceChildren(); return; }
-      if (!compte && e) { compte = true; try { navigator.sendBeacon(`/api/mesure/indemnite-${type}`); } catch (err) { /* sans importance */ } }
+      if (!compte && e && e.isTrusted) { compte = true; try { navigator.sendBeacon(`/api/mesure/indemnite-${type}`); } catch (err) { /* sans importance */ } }
       const m = anciennete(debut, fin), ans = m / 12;
       const ref = Math.max(num('s12'), num('s3'));
       const legale = ref * (Math.min(ans, 10) / 4 + Math.max(ans - 10, 0) / 3);

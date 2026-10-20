@@ -1,0 +1,157 @@
+// Améliorations communes à toutes les pages (chargées par BaseLayout).
+// 1. Champs numériques : clavier numérique sans les défauts de <input type="number"> (molette qui change la
+//    valeur, virgule refusée, flèches), espaces et symboles retirés à la sortie du champ.
+// 2. Calculateurs (form.sim[id]) : dernières valeurs gardées sur l'appareil, bouton « Valeurs par défaut »,
+//    lien de partage d'un calcul (valeurs dans l'adresse).
+// 3. Recherche dans le site (Pagefind, chargée à la première ouverture) : bouton, touche « / » ou Ctrl+K.
+// 4. Bouton « Haut de page » et mise en avant du résultat qui change.
+
+const lire = (k: string) => { try { return JSON.parse(localStorage.getItem(k) || 'null'); } catch { return null; } };
+const ecrire = (k: string, v: unknown) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch { /* stockage indisponible */ } };
+const signaler = (el: Element) => { el.dispatchEvent(new Event('input', { bubbles: true })); el.dispatchEvent(new Event('change', { bubbles: true })); };
+
+// ───────── 1. Champs numériques ─────────
+const champNumerique = (i: HTMLInputElement) => {
+  if (i.dataset.num) return;
+  i.dataset.num = '1';
+  if (i.type === 'number') {
+    const entier = i.getAttribute('inputmode') === 'numeric' || (i.step && !i.step.includes('.') && i.step !== 'any' && Number(i.step) >= 1 && !(Number(i.min) % 1));
+    i.type = 'text';
+    i.inputMode = entier ? 'numeric' : 'decimal';
+  }
+  i.autocomplete = 'off';
+  i.setAttribute('enterkeyhint', 'done');
+  i.setAttribute('spellcheck', 'false');
+  // Sélectionne le contenu au premier clic : on remplace la valeur d'exemple sans devoir l'effacer.
+  i.addEventListener('focus', () => setTimeout(() => { try { i.select(); } catch { /* champ non sélectionnable */ } }, 0));
+  // Nettoyage à la sortie : « 1 200 € » ou « 12 % » deviennent « 1200 » et « 12 ».
+  i.addEventListener('blur', () => {
+    const propre = i.value.replace(/[\s  €%]/g, '').replace(/\.(?=\d{3}(\D|$))/g, '');
+    if (propre !== i.value) { i.value = propre; signaler(i); }
+  });
+};
+const preparerChamps = (racine: ParentNode) => {
+  racine.querySelectorAll<HTMLInputElement>('input[type="number"], input[inputmode="decimal"], input[inputmode="numeric"]').forEach(champNumerique);
+};
+preparerChamps(document);
+new MutationObserver((m) => m.forEach((r) => r.addedNodes.forEach((n) => { if (n instanceof Element) preparerChamps(n); })))
+  .observe(document.body, { childList: true, subtree: true });
+// Entrée dans un champ d'un calculateur : ferme le clavier au lieu de recharger la page.
+document.addEventListener('keydown', (e) => {
+  const t = e.target as HTMLElement;
+  if (e.key === 'Enter' && t instanceof HTMLInputElement && t.closest('.sim') && t.type !== 'submit') { e.preventDefault(); t.blur(); }
+});
+
+// ───────── 2. Mémoire et partage des calculateurs ─────────
+const champsDe = (f: HTMLElement) => [...f.querySelectorAll<HTMLInputElement | HTMLSelectElement>('input[id], select[id]')]
+  .filter((c) => !(c instanceof HTMLInputElement && ['file', 'button', 'submit', 'hidden'].includes(c.type)));
+const valeurs = (f: HTMLElement) => Object.fromEntries(champsDe(f).map((c) => [c.id, c instanceof HTMLInputElement && c.type === 'checkbox' ? (c.checked ? '1' : '') : c.value]));
+const appliquer = (f: HTMLElement, v: Record<string, string>) => {
+  // Les listes d'abord (elles peuvent afficher ou masquer d'autres champs), puis les champs.
+  const champs = champsDe(f).sort((a, b) => Number(b instanceof HTMLSelectElement) - Number(a instanceof HTMLSelectElement));
+  for (const c of champs) {
+    if (!(c.id in v)) continue;
+    if (c instanceof HTMLInputElement && c.type === 'checkbox') c.checked = v[c.id] === '1';
+    else c.value = v[c.id];
+    signaler(c);
+  }
+};
+const lienPartage = (f: HTMLElement) => {
+  const p = new URLSearchParams(Object.entries(valeurs(f)).filter(([, x]) => x !== ''));
+  return `${location.origin}${location.pathname}#calcul=${encodeURIComponent(p.toString())}`;
+};
+
+document.querySelectorAll<HTMLFormElement>('form.sim[id]:not([data-sans-memoire])').forEach((f) => {
+  const cle = `logimalin-calcul:${location.pathname}:${f.id}`;
+  const defauts = valeurs(f);
+  const barre = document.createElement('div');
+  barre.className = 'sim-barre';
+  barre.innerHTML = '<span class="sim-barre-info" aria-live="polite"></span><button type="button" class="sim-lien" data-action="partager">Copier le lien de ce calcul</button><button type="button" class="sim-lien" data-action="defauts" hidden>Valeurs par défaut</button>';
+  f.appendChild(barre);
+  const info = barre.querySelector<HTMLElement>('.sim-barre-info')!;
+  const btnDefauts = barre.querySelector<HTMLButtonElement>('[data-action="defauts"]')!;
+
+  // Priorité : valeurs partagées dans l'adresse, puis dernières valeurs de ce visiteur (sauf paramètres d'URL,
+  // utilisés par certains outils pour pré-remplir, comme le business plan repris de l'étude de marché).
+  const hash = new URLSearchParams(location.hash.replace(/^#/, ''));
+  const partage = hash.get('calcul');
+  if (partage) {
+    appliquer(f, Object.fromEntries(new URLSearchParams(partage)));
+    info.textContent = 'Calcul partagé chargé.';
+    btnDefauts.hidden = false;
+  } else if (!location.search) {
+    const memo = lire(cle);
+    if (memo && JSON.stringify(memo) !== JSON.stringify(defauts)) {
+      appliquer(f, memo);
+      info.textContent = 'Tes dernières valeurs ont été reprises.';
+      btnDefauts.hidden = false;
+    }
+  }
+  let minuteur = 0;
+  const memoriser = () => { clearTimeout(minuteur); minuteur = window.setTimeout(() => { ecrire(cle, valeurs(f)); btnDefauts.hidden = JSON.stringify(valeurs(f)) === JSON.stringify(defauts); }, 400); };
+  f.addEventListener('input', memoriser);
+  f.addEventListener('change', memoriser);
+  barre.addEventListener('click', async (e) => {
+    const b = (e.target as HTMLElement).closest('button');
+    if (!b) return;
+    if (b.dataset.action === 'defauts') {
+      appliquer(f, defauts);
+      try { localStorage.removeItem(cle); } catch { /* sans importance */ }
+      info.textContent = 'Valeurs par défaut rétablies.';
+      btnDefauts.hidden = true;
+    } else {
+      const url = lienPartage(f);
+      try { await navigator.clipboard.writeText(url); info.textContent = 'Lien copié : il ouvre ce calcul avec tes valeurs.'; }
+      catch { window.prompt('Copie ce lien :', url); }
+      try { navigator.sendBeacon('/api/mesure/partage-calcul'); } catch { /* sans importance */ }
+    }
+  });
+});
+
+// Résultat qui change : petite mise en avant (désactivée si l'utilisateur limite les animations).
+if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  document.querySelectorAll<HTMLElement>('.sim-out .big').forEach((el) => {
+    let avant = el.textContent;
+    new MutationObserver(() => {
+      if (el.textContent === avant) return;
+      avant = el.textContent;
+      el.classList.remove('maj'); void el.offsetWidth; el.classList.add('maj');
+    }).observe(el, { childList: true, characterData: true, subtree: true });
+  });
+}
+
+// ───────── 3. Recherche ─────────
+const dialogue = document.getElementById('recherche') as HTMLDialogElement | null;
+let rechercheChargee = false;
+const ouvrirRecherche = async () => {
+  if (!dialogue) return;
+  dialogue.showModal();
+  if (!rechercheChargee) {
+    rechercheChargee = true;
+    try {
+      const css = document.createElement('link'); css.rel = 'stylesheet'; css.href = '/pagefind/pagefind-ui.css'; document.head.appendChild(css);
+      await new Promise<void>((ok, ko) => { const s = document.createElement('script'); s.src = '/pagefind/pagefind-ui.js'; s.onload = () => ok(); s.onerror = () => ko(); document.head.appendChild(s); });
+      // @ts-expect-error PagefindUI est fourni par le script chargé ci-dessus.
+      new window.PagefindUI({ element: '#recherche-ui', showSubResults: true, showImages: false, resetStyles: false, autofocus: true, translations: { clear_search: 'Effacer', placeholder: 'Rechercher un outil, un guide, un logiciel…', zero_results: 'Aucun résultat pour [SEARCH_TERM]. Essaie un autre mot, ou ouvre la page des outils.' } });
+    } catch {
+      document.getElementById('recherche-ui')!.innerHTML = '<p>La recherche n’est pas disponible pour le moment. <a href="/outils/">Voir tous les outils</a></p>';
+    }
+  }
+  setTimeout(() => dialogue.querySelector<HTMLInputElement>('input')?.focus(), 50);
+};
+document.querySelectorAll('[data-ouvrir-recherche]').forEach((b) => b.addEventListener('click', ouvrirRecherche));
+document.addEventListener('keydown', (e) => {
+  const t = e.target as HTMLElement;
+  const saisie = t instanceof HTMLInputElement || t instanceof HTMLTextAreaElement || t instanceof HTMLSelectElement || t.isContentEditable;
+  if ((e.key === '/' && !saisie) || ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k')) { e.preventDefault(); ouvrirRecherche(); }
+});
+dialogue?.addEventListener('click', (e) => { if (e.target === dialogue) dialogue.close(); });
+
+// ───────── 4. Haut de page ─────────
+const haut = document.getElementById('haut-de-page');
+if (haut) {
+  const maj = () => { haut.hidden = scrollY < innerHeight * 1.5; };
+  addEventListener('scroll', maj, { passive: true });
+  maj();
+  haut.addEventListener('click', () => scrollTo({ top: 0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' }));
+}

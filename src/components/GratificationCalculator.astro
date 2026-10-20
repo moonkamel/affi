@@ -7,8 +7,8 @@ const SEUIL_HEURES = 308;
 <form class="sim" id="sim-grat" aria-labelledby="grat-titre" onsubmit="return false">
   <strong id="grat-titre">Calcul de la gratification de stage</strong>
   <div class="row">
-    <div><label for="grat-debut">Début du stage</label><input id="grat-debut" type="date" value="2027-01-04" /></div>
-    <div><label for="grat-fin">Fin du stage</label><input id="grat-fin" type="date" value="2027-06-25" /></div>
+    <div><label for="grat-debut">Début du stage</label><input id="grat-debut" type="date" value="2026-01-05" /></div>
+    <div><label for="grat-fin">Fin du stage</label><input id="grat-fin" type="date" value="2026-06-26" /></div>
     <div><label for="grat-hj">Heures de présence par jour</label><input id="grat-hj" type="number" min="1" max="10" step="0.5" value="7" inputmode="decimal" /></div>
     <div><label for="grat-js">Jours de présence par semaine</label><input id="grat-js" type="number" min="1" max="6" step="1" value="5" inputmode="numeric" /></div>
     <div><label for="grat-taux">Taux horaire (€, minimum légal {String(TAUX).replace('.', ',')} €)</label><input id="grat-taux" type="number" min={TAUX} step="0.05" value={TAUX} inputmode="decimal" /></div>
@@ -51,7 +51,7 @@ const SEUIL_HEURES = 308;
         ligne('Taux horaire', eur(taux)), ligne('Gratification totale', eur(obligatoire ? total : 0), 'tot'),
         ligne(`Versement lissé sur ${mois} mois`, eur(obligatoire ? total / mois : 0)),
       );
-      if (!compte && e) { compte = true; try { navigator.sendBeacon('/api/mesure/gratification'); } catch (err) { /* sans importance */ } }
+      if (!compte && e && e.isTrusted) { compte = true; try { navigator.sendBeacon('/api/mesure/gratification'); } catch (err) { /* sans importance */ } }
     };
     f.addEventListener('input', calc);
     f.addEventListener('change', calc);

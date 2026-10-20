@@ -84,6 +84,10 @@ const ogImage = abs(image);
       <slot />
     </main>
     <Footer />
+    <button type="button" id="haut-de-page" class="haut-de-page" aria-label="Revenir en haut de la page" hidden>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 14l6-6 6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <script>import '../scripts/ameliorations.ts';</script>
     <script is:inline>
       // Suivi des clics affiliés : /go/<slug>/ devient /go/<slug>/<page d'origine>/, compté dans les stats
       // serveur Cloudflare (voir docs/AFFILIATION.md). Le HTML garde l'URL courte ; les robots sans JS ne sont pas comptés ici.

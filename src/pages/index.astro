@@ -6,6 +6,7 @@ import { SITE, SILOS, type Silo } from '../data/site';
 import { graph, organization, website } from '../lib/schema';
 import { articlePath, getArticles, siloOf } from '../lib/articles';
 import { OUTILS_ACCUEIL } from '../data/outils';
+import { SOFTWARE } from '../data/software';
 
 const articles = await getArticles();
 const featured = [
@@ -33,7 +34,7 @@ const outilsAccueil = OUTILS_ACCUEIL.filter((o) => articles.some((a) => a.id ===
   description="Facturation, comptabilité, site internet, terminal de paiement, CRM : les meilleurs logiciels pour TPE et indépendants comparés, avec les prix 2026."
   jsonLd={graph(organization(), website())}
 >
-  <div class="container">
+  <div class="container" data-pagefind-body>
     <section class="hero">
       <div>
         <span class="sticker">Prix vérifiés · {SITE.pricesChecked}</span>
@@ -45,7 +46,7 @@ const outilsAccueil = OUTILS_ACCUEIL.filter((o) => articles.some((a) => a.id ===
         </div>
         <div class="proof">
           <span><b>{count}</b> guides et comparatifs</span>
-          <span><b>30</b> logiciels notés</span>
+          <span><b>{SOFTWARE.length}</b> logiciels notés</span>
           <span><b>{nbOutils}</b> outils gratuits</span>
         </div>
       </div>

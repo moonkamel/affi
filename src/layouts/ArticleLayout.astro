@@ -14,6 +14,7 @@ import TestedBox from '../components/TestedBox.astro';
 import Infographic from '../components/Infographic.astro';
 import { autoForPage } from '../data/infographics';
 import NewsletterBox from '../components/NewsletterBox.astro';
+import { GROUPES_OUTILS } from '../data/outils';
 // Articles où l'on propose la check-list facture électronique.
 const NEWS_PAGES = /facture-electronique|e-reporting|factur-x|plateforme-agreee|annuaire-facturation|mentions-obligatoires|facture-excel|logiciel-facturation-auto-entrepreneur|logiciel-de-facturation/;
 import { article, breadcrumbs, faqPage, graph, itemList, review } from '../lib/schema';
@@ -43,6 +44,10 @@ const explicit = d.related
 const sameSilo = all.filter((a) => siloOf(a) === silo && a.id !== entry.id && !explicit.includes(a));
 const related = [...explicit, ...sameSilo].slice(0, 4).map(toTile);
 
+// Pages outils : les autres outils de la même famille, pour enchaîner sans repasser par le menu.
+const groupe = d.type === 'outil' ? GROUPES_OUTILS.find((g) => g.outils.includes(entry.id)) : undefined;
+const voisins = groupe ? groupe.outils.filter((id) => id !== entry.id && !d.related.includes(id)).map((id) => all.find((a) => a.id === id)).filter((a): a is Article => Boolean(a)).slice(0, 4) : [];
+
 // Image de partage propre à l'article si elle a été générée (npm run og), sinon l'image par défaut.
 const ogFile = `/og/${entry.id.replace(/\//g, '--')}.jpg`;
 const ogImage = existsSync(join(process.cwd(), 'public', ogFile)) ? ogFile : '/og-default.png';
@@ -68,8 +73,8 @@ const showDisclosure = true; // Mention obligatoire dès qu'une page peut conten
   image={ogImage}
 >
   <article class="container">
-    <div class="prose">
-      <Breadcrumbs items={crumbs} />
+    <div class="prose" data-pagefind-body>
+      <div data-pagefind-ignore><Breadcrumbs items={crumbs} /></div>
       <header class="article-head">
         <a class="silo-pill" href={`/${silo}/`}><SiloIcon silo={silo} />{SILOS[silo].label}</a>
         <h1>{d.title}</h1>
@@ -79,7 +84,7 @@ const showDisclosure = true; // Mention obligatoire dès qu'une page peut conten
         </div>
       </header>
       {showDisclosure && (
-        <p class="disclosure">Transparence : certains liens de cette page sont affiliés. Si tu t’abonnes via ces liens, nous touchons parfois une commission, sans surcoût pour toi. Les classements restent indépendants. <a href="/transparence-affiliation/">En savoir plus</a>.</p>
+        <p class="disclosure" data-pagefind-ignore>Transparence : certains liens de cette page sont affiliés. Si tu t’abonnes via ces liens, nous touchons parfois une commission, sans surcoût pour toi. Les classements restent indépendants. <a href="/transparence-affiliation/">En savoir plus</a>.</p>
       )}
       {d.tested && <TestedBox tested={d.tested} product={d.review?.product} />}
       {d.tldr.length > 0 && (
@@ -89,9 +94,22 @@ const showDisclosure = true; // Mention obligatoire dès qu'une page peut conten
       <slot />
       {autoForPage(entry.id).map((g) => <Infographic slug={g.slug} heading="L’infographie à retenir" />)}
       {NEWS_PAGES.test(entry.id) && <NewsletterBox />}
+      {voisins.length > 0 && (
+        <section class="voisins" aria-labelledby="voisins-titre" data-pagefind-ignore>
+          <h2 id="voisins-titre">Les autres outils « {groupe!.titre} »</h2>
+          <div class="voisins-grille">
+            {voisins.map((a) => (
+              <a class="voisin" href={articlePath(a)}>
+                <strong>{a.data.title.split(' : ')[0]}</strong>
+                <span>{a.data.description}</span>
+              </a>
+            ))}
+          </div>
+          <p class="small"><a href={`/outils/#${groupe!.id}`}>Voir tous les outils gratuits</a></p>
+        </section>
+      )}
       <Faq items={d.faq} />
-      <AuthorBox />
-      <Related items={related} />
+      <div data-pagefind-ignore><AuthorBox /><Related items={related} /></div>
     </div>
   </article>
 </BaseLayout>
