@@ -274,10 +274,10 @@ const jsonLd = graph(
         vide.hidden = n > 0; vide.querySelector('span').textContent = q.value.trim();
         compte.textContent = n === items.length ? '' : `${n} outil${n > 1 ? 's' : ''} sur ${items.length}`;
       };
-      q.addEventListener('input', filtrer);
+      q.addEventListener('input', () => { filtrer(); window.mesure?.('filtre-outils'); });
       const boutons = [...document.querySelectorAll('[data-type]')].filter((b) => b.tagName === 'BUTTON');
       boutons.forEach((b) => b.addEventListener('click', () => {
-        type = b.dataset.type; boutons.forEach((x) => x.setAttribute('aria-pressed', String(x === b))); filtrer();
+        window.mesure?.('filtre-outils'); type = b.dataset.type; boutons.forEach((x) => x.setAttribute('aria-pressed', String(x === b))); filtrer();
       }));
       document.querySelector('[data-tout]').addEventListener('click', () => { q.value = ''; boutons[0].click(); q.focus(); });
       const init = new URLSearchParams(location.search).get('q');
@@ -299,7 +299,7 @@ const jsonLd = graph(
         if (!liste.length) return;
         zone.querySelector('ul').replaceChildren(...liste.map(([p, d]) => {
           const li = document.createElement('li');
-          const a = document.createElement('a'); a.href = p; a.className = 'out-reprise-carte';
+          const a = document.createElement('a'); a.href = p; a.className = 'out-reprise-carte'; a.addEventListener('click', () => window.mesure?.('reprise'));
           const t = document.createElement('strong'); t.textContent = titres[p];
           const s = document.createElement('span'); s.textContent = d.r ? `Dernier résultat : ${d.r}` : 'Tes valeurs sont gardées';
           const r = document.createElement('b'); r.textContent = 'Reprendre';

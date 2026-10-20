@@ -142,6 +142,8 @@ let n = 0;
     cases.forEach((c) => c.addEventListener('change', () => {
       coches[c.id] = c.checked;
       try { localStorage.setItem(CLE, JSON.stringify(coches)); } catch { /* sans importance */ }
+      if (c.checked) window.mesure?.('checklist-coche');
+      if (cases.every((x) => x.checked)) window.mesure?.('checklist-complete');
       maj(true);
     }));
     document.querySelector('[data-cl="raz"]').addEventListener('click', () => {

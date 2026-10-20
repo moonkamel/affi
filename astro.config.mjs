@@ -118,8 +118,9 @@ export default defineConfig({
   trailingSlash: 'always',
   build: {
     format: 'directory',
-    // Tout le CSS inline : zéro requête bloquante, meilleur LCP.
-    inlineStylesheets: 'always',
+    // CSS dans des fichiers /_astro/ (cache d'un an, voir public/_headers) : téléchargé une fois pour toutes
+    // les pages au lieu d'être recopié dans chaque page (plus de 100 Ko).
+    inlineStylesheets: 'never',
   },
   compressHTML: true,
   prefetch: { prefetchAll: false, defaultStrategy: 'hover' },

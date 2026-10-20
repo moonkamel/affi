@@ -64,7 +64,7 @@ const eur = (n: number) => n.toLocaleString('fr-FR', { style: 'currency', curren
       if (auto && visible && !survol) minuteur = setTimeout(() => montrer(actuel + 1), 3600);
     };
     onglets.forEach((b, i) => {
-      b.addEventListener('click', () => { auto = false; v.classList.remove('vit-joue'); montrer(i); clearTimeout(minuteur); });
+      b.addEventListener('click', () => { window.mesure?.('vitrine'); auto = false; v.classList.remove('vit-joue'); montrer(i); clearTimeout(minuteur); });
       b.addEventListener('keydown', (e) => {
         const d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
         if (d) { e.preventDefault(); auto = false; montrer(actuel + d, true); clearTimeout(minuteur); }

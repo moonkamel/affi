@@ -125,7 +125,7 @@ const fr = (n: number) => n.toLocaleString('fr-FR', { minimumFractionDigits: 1, 
       formule.textContent = curseurs.map((c) => `${fr(Number(c.value))} × ${c.dataset.poids} %`).join(' + ');
       note.classList.remove('maj'); void note.offsetWidth; note.classList.add('maj');
     };
-    curseurs.forEach((c) => c.addEventListener('input', calc));
+    curseurs.forEach((c) => c.addEventListener('input', (e) => { calc(); if (e.isTrusted) window.mesure?.('note-simulee'); }));
     calc();
 
     // Survol de la légende ou d'un curseur : l'arc du critère ressort

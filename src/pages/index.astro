@@ -248,7 +248,7 @@ const index = Object.entries(OUTILS_INFO).filter(([id]) => existe(id)).map(([id,
       if (focus) b.focus();
     };
     onglets.forEach((b, i) => {
-      b.addEventListener('click', () => choisir(b));
+      b.addEventListener('click', () => { choisir(b); window.mesure?.('situation'); });
       b.addEventListener('keydown', (e) => {
         const d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
         if (d) { e.preventDefault(); choisir(onglets[(i + d + onglets.length) % onglets.length], true); }
@@ -269,7 +269,7 @@ const index = Object.entries(OUTILS_INFO).filter(([id]) => existe(id)).map(([id,
       res.replaceChildren(...trouves.map((o, i) => {
         const li = document.createElement('li');
         li.setAttribute('role', 'option'); li.id = `acc-o${i}`;
-        const a = document.createElement('a'); a.href = o.u; a.tabIndex = -1;
+        const a = document.createElement('a'); a.href = o.u; a.tabIndex = -1; a.addEventListener('click', () => window.mesure?.('recherche-rapide'));
         const t = document.createElement('span'); t.className = 'acc-type'; t.textContent = o.y;
         const s = document.createElement('strong'); s.textContent = o.t;
         a.append(t, s); li.append(a); return li;
@@ -297,6 +297,7 @@ const index = Object.entries(OUTILS_INFO).filter(([id]) => existe(id)).map(([id,
     form.addEventListener('submit', (e) => {
       e.preventDefault();
       const cible = trouves[actif >= 0 ? actif : 0];
+      window.mesure?.('recherche-rapide');
       if (cible) { location.href = cible.u; return; }
       // Pas d'outil : recherche complète dans le site.
       const ouvrir = document.querySelector('[data-ouvrir-recherche]');

@@ -120,8 +120,8 @@ const jsonLd = graph(
       });
       compte.textContent = n === items.length ? '' : `${n} modèle${n > 1 ? 's' : ''} sur ${items.length}`;
     };
-    boutons.forEach((b) => b.addEventListener('click', () => { cat = b.dataset.cat; boutons.forEach((x) => x.setAttribute('aria-pressed', String(x === b))); filtrer(); }));
-    enLigne.addEventListener('change', filtrer);
+    boutons.forEach((b) => b.addEventListener('click', () => { window.mesure?.('filtre-modeles'); cat = b.dataset.cat; boutons.forEach((x) => x.setAttribute('aria-pressed', String(x === b))); filtrer(); }));
+    enLigne.addEventListener('change', () => { filtrer(); window.mesure?.('filtre-modeles'); });
 
     // Apparition des cartes au défilement (désactivée si l'utilisateur limite les animations).
     if (matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;

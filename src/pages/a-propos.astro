@@ -121,10 +121,11 @@ const rubriques = (['facturation', 'comptabilite', 'encaissement', 'site-interne
 <script is:inline>
   (() => {
     // Cartes à retourner (clic ou toucher ; survol à la souris géré en CSS)
-    document.querySelectorAll('.ap-carte').forEach((c) => c.addEventListener('click', () => c.setAttribute('aria-pressed', String(c.getAttribute('aria-pressed') !== 'true'))));
+    document.querySelectorAll('.ap-carte').forEach((c) => c.addEventListener('click', () => { c.setAttribute('aria-pressed', String(c.getAttribute('aria-pressed') !== 'true')); window.mesure?.('carte-methode'); }));
     // Copier l'adresse
     const b = document.querySelector('[data-copier]');
     b?.addEventListener('click', async () => {
+      window.mesure?.('copie-email');
       try { await navigator.clipboard.writeText(b.dataset.copier); b.textContent = 'Adresse copiée ✓'; }
       catch { window.prompt('Copie cette adresse :', b.dataset.copier); }
     });

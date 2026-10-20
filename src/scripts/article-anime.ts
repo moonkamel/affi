@@ -15,6 +15,7 @@ if (prose && barre) {
   const suite = document.querySelector<HTMLElement>('[data-suite]');
   let suiteFermee = false;
   try { suiteFermee = sessionStorage.getItem('logimalin-suite-fermee') === '1'; } catch { /* sans importance */ }
+  suite?.querySelector('a')?.addEventListener('click', () => (window as unknown as { mesure?: (e: string) => void }).mesure?.('suite-lire'));
   suite?.querySelector('.suite-fermer')?.addEventListener('click', () => {
     suite.hidden = true; suiteFermee = true;
     try { sessionStorage.setItem('logimalin-suite-fermee', '1'); } catch { /* sans importance */ }

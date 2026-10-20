@@ -31,4 +31,5 @@ if (scenes.length && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
   addEventListener('scroll', demander, { passive: true });
   addEventListener('resize', demander, { passive: true });
   maj();
+  document.querySelectorAll('[data-passer]').forEach((a) => a.addEventListener('click', () => (window as unknown as { mesure?: (e: string) => void }).mesure?.('journee-passer')));
 }

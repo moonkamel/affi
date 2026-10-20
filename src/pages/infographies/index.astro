@@ -143,7 +143,7 @@ const jsonLd = graph(
       v.querySelector('.ig-v-compte').textContent = `${vis.indexOf(i) + 1} / ${vis.length}`;
     };
     const pas = (d) => { const vis = visibles(); const k = vis.indexOf(actuelle); montrer(vis[(k + d + vis.length) % vis.length]); };
-    document.querySelectorAll('[data-ouvrir]').forEach((b) => b.addEventListener('click', () => { montrer(Number(b.dataset.ouvrir)); v.showModal(); }));
+    document.querySelectorAll('[data-ouvrir]').forEach((b) => b.addEventListener('click', () => { montrer(Number(b.dataset.ouvrir)); v.showModal(); window.mesure?.('visionneuse'); }));
     v.querySelectorAll('[data-pas]').forEach((b) => b.addEventListener('click', () => pas(Number(b.dataset.pas))));
     v.addEventListener('keydown', (e) => { if (e.key === 'ArrowRight') pas(1); if (e.key === 'ArrowLeft') pas(-1); });
     v.addEventListener('click', (e) => { if (e.target === v) v.close(); });
