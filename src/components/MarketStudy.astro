@@ -56,6 +56,19 @@ const activites = ACTIVITES.map((a) => a.naf.join(','));
         <ul id="mk-comp" class="mk-comp"></ul>
         <p class="small" id="mk-more"></p>
       </div>
+      <div id="mk-zone" class="mk-evo" hidden>
+        <strong>Ta zone de chalandise</strong>
+        <p class="small">Toutes les communes dont le centre est à moins de :</p>
+        <div class="mk-rayons" role="group" aria-label="Rayon de la zone de chalandise">
+          <button type="button" class="btn btn-ghost btn-sm" data-r="5">5 km</button>
+          <button type="button" class="btn btn-ghost btn-sm" data-r="10">10 km</button>
+          <button type="button" class="btn btn-ghost btn-sm" data-r="20">20 km</button>
+          <button type="button" class="btn btn-ghost btn-sm" data-r="30">30 km</button>
+        </div>
+        <p id="mk-zone-txt"></p>
+        <p id="mk-zone-verdict" class="mk-verdict"></p>
+        <p id="mk-zone-com" class="small"></p>
+      </div>
       <div id="mk-evo" class="mk-evo" hidden>
         <strong>L’évolution du marché sur 5 ans</strong>
         <p id="mk-evo-status" class="small"></p>
@@ -94,7 +107,7 @@ const activites = ACTIVITES.map((a) => a.naf.join(','));
     const charger = () => {
       if (!chargement) chargement = fetch('/data/communes-2026.json').then((r) => r.json()).then((d) => {
         epcis = d.e.map((e) => ({ code: e[0], nom: e[1], pop: e[2] }));
-        communes = d.c.map((c) => ({ code: c[0], nom: c[1], cp: c[2], dep: c[3], pop: c[4], epci: c[5] >= 0 ? epcis[c[5]] : null, cps: c[6], n: norm(c[1]) }));
+        communes = d.c.map((c) => ({ code: c[0], nom: c[1], cp: c[2], dep: c[3], pop: c[4], epci: c[5] >= 0 ? epcis[c[5]] : null, lat: c[6], lon: c[7], cps: c[8], arr: c[9], n: norm(c[1]) }));
       });
       return chargement;
     };
@@ -226,6 +239,46 @@ const activites = ACTIVITES.map((a) => a.naf.join(','));
       }
     };
 
+    // ---------- Zone de chalandise (rayon autour du centre de la commune) ----------
+    const distanceKm = (a, b) => {
+      const R = 6371, rad = Math.PI / 180;
+      const dLat = (b.lat - a.lat) * rad, dLon = (b.lon - a.lon) * rad;
+      const h = Math.sin(dLat / 2) ** 2 + Math.cos(a.lat * rad) * Math.cos(b.lat * rad) * Math.sin(dLon / 2) ** 2;
+      return 2 * R * Math.asin(Math.sqrt(h));
+    };
+    let zoneCtx = null, zoneEnCours = 0;
+    const calculerZone = async (rayon) => {
+      if (!zoneCtx) return;
+      const { c, naf, densFr } = zoneCtx;
+      const id = ++zoneEnCours;
+      root.querySelectorAll('.mk-rayons button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.r === String(rayon))));
+      const txt = $('mk-zone-txt');
+      if (c.lat == null) { txt.textContent = 'Les coordonnées de cette commune ne sont pas disponibles : la zone de chalandise ne peut pas être calculée.'; return; }
+      const dans = communes.filter((x) => x.lat != null && (x === c || distanceKm(c, x) <= rayon)).sort((a, b) => b.pop - a.pop);
+      const codes = dans.flatMap((x) => (x.arr ? [x.code, ...x.arr] : [x.code]));
+      const pop = dans.reduce((t, x) => t + x.pop, 0);
+      txt.textContent = `Calcul sur ${fmt(dans.length)} commune${dans.length > 1 ? 's' : ''}…`;
+      $('mk-zone-verdict').textContent = '';
+      try {
+        const r = await appel({ activite_principale: naf, code_commune: codes.join(','), per_page: '1' });
+        if (id !== zoneEnCours) return;
+        const n = r.total_results || 0;
+        const dens = pop ? (n / pop) * 10000 : 0;
+        const ratio = densFr ? Math.round((dens / densFr) * 10) / 10 : 0;
+        txt.innerHTML = `Dans un rayon de <strong>${rayon} km</strong> autour de ${c.nom} : <strong>${fmt(dans.length)}</strong> commune${dans.length > 1 ? 's' : ''}, <strong>${fmt(pop)}</strong> habitants et <strong>${fmt(n)}</strong> concurrent${n > 1 ? 's' : ''}, soit ${fmt1(dens)} pour 10 000 habitants (moyenne nationale : ${fmt1(densFr)}) et un concurrent pour ${n ? fmt(pop / n) : '–'} habitants.`;
+        $('mk-zone-verdict').textContent = !n
+          ? '🟢 Aucun concurrent déclaré dans cette zone : vérifie qu’il y a bien une demande (et que l’activité n’est pas exercée sous un autre code).'
+          : ratio < 0.7 ? `📉 Zone peu équipée : ${fmt1(ratio)} fois la densité nationale de concurrents.`
+          : ratio <= 1.3 ? `⚖️ Zone dans la moyenne nationale (${fmt1(ratio)} fois la densité).`
+          : `📈 Zone très concurrentielle : ${fmt1(ratio)} fois la densité nationale.`;
+        const autres = dans.filter((x) => x !== c).slice(0, 8).map((x) => `${x.nom} (${fmt(x.pop)} hab., ${fmt1(distanceKm(c, x))} km)`);
+        $('mk-zone-com').textContent = autres.length ? `Principales communes de la zone : ${autres.join(', ')}${dans.length > 9 ? '…' : '.'}` : '';
+      } catch (err) {
+        if (id === zoneEnCours) txt.textContent = 'Le calcul de la zone n’a pas abouti (répertoire public indisponible). Réessaie dans quelques minutes.';
+      }
+    };
+    root.querySelectorAll('.mk-rayons button').forEach((b) => b.addEventListener('click', () => calculerZone(Number(b.dataset.r))));
+
     // ---------- Analyse ----------
     $('mk-go').addEventListener('click', async () => {
       const i = $('mk-act').value;
@@ -279,7 +332,7 @@ const activites = ACTIVITES.map((a) => a.naf.join(','));
         const petite = c.pop < 3000;
         const ref = petite ? (zEpci || zDep) : zones[0];
         const dFr = zFr.n / zFr.pop;
-        const ratio = ref.pop && dFr ? (ref.n / ref.pop) / dFr : 0;
+        const ratio = ref.pop && dFr ? Math.round(((ref.n / ref.pop) / dFr) * 10) / 10 : 0;
         const zone = petite ? (zEpci ? zEpci.nom : 'ton département') : c.nom;
         const Zone = zone.charAt(0).toUpperCase() + zone.slice(1);
         let verdict;
@@ -331,6 +384,10 @@ const activites = ACTIVITES.map((a) => a.naf.join(','));
         status.textContent = '';
         $('mk-res').hidden = false;
         btn.disabled = false;
+        zoneCtx = { c, naf, densFr: zFr.pop ? (zFr.n / zFr.pop) * 10000 : 0 };
+        $('mk-zone').hidden = false;
+        await calculerZone(c.pop >= 100000 ? 5 : 10);
+        await pause(160);
         await evolution(naf, lieu, zones[0].n, c.nom, ++analyseEnCours);
       } catch (err) {
         status.textContent = 'Le répertoire public des entreprises ne répond pas pour le moment. Réessaie dans quelques minutes.';
@@ -361,6 +418,9 @@ const activites = ACTIVITES.map((a) => a.naf.join(','));
   .mk-ca p { margin: 8px 0; }
   .mk-evo { margin: 16px 0; padding: 14px 16px; border-radius: 12px; background: var(--card); border: 1.5px solid var(--line); }
   .mk-evo .md-table { margin: 10px 0; }
+  .mk-rayons { display: flex; flex-wrap: wrap; gap: 8px; margin: 6px 0 10px; }
+  .mk-rayons .btn { margin: 0; }
+  .mk-rayons .btn[aria-pressed='true'] { background: var(--accent); color: var(--accent-ink, #fff); }
   :global(.mk-bar-col) { width: 34%; }
   .mk-leg { display: inline-block; width: 10px; height: 10px; border-radius: 3px; vertical-align: middle; }
   .mk-leg-c { background: var(--accent); }
