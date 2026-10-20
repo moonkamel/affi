@@ -152,13 +152,17 @@
       const a = document.getElementById('qr-affiche')!;
       const el = (tag: string, cls: string, txt?: string) => { const e = document.createElement(tag); e.className = cls; if (txt) e.textContent = txt; return e; };
       const img = el('div', 'qr-a-img'); img.innerHTML = svg;
-      a.replaceChildren(
+      // Carte « papier découpé » aux couleurs de Logimalin (sans logo ni lien).
+      const carte = el('div', 'qr-a-carte');
+      carte.append(
+        el('span', 'pdf-bande'),
         ...(mode === 'avis' ? [el('p', 'qr-a-etoiles', '★★★★★')] : []),
         el('p', 'qr-a-titre', $('qr-txt').value.trim()),
         img,
         el('p', 'qr-a-sous', mode === 'avis' ? 'Scannez avec l’appareil photo de votre téléphone' : mode === 'wifi' ? `Réseau : ${$('qr-ssid').value}` : 'Scannez avec l’appareil photo de votre téléphone'),
         ...($('qr-nom').value.trim() ? [el('p', 'qr-a-nom', $('qr-nom').value.trim())] : []),
       );
+      a.replaceChildren(carte);
       const place = a.nextSibling, parent = a.parentNode!;
       a.hidden = false; document.body.appendChild(a);
       document.documentElement.classList.add('print-qr');
@@ -190,13 +194,15 @@
   @media print {
     @page { size: A5 portrait; margin: 12mm; }
     :global(html.print-qr body > *:not(.qr-affiche)) { display: none !important; }
-    :global(html.print-qr), :global(html.print-qr body) { background: #fff !important; color: #111 !important; color-scheme: light; }
-    :global(html.print-qr .qr-affiche) { display: flex !important; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: 180mm; font-family: var(--display, sans-serif); color: #111; }
-    :global(.qr-a-etoiles) { font-size: 26pt; color: #f4b400; margin: 0; letter-spacing: 4pt; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    :global(.qr-a-titre) { font-size: 20pt; font-weight: 800; margin: 4mm 0 6mm; line-height: 1.2; }
-    :global(.qr-a-img) { width: 85mm; height: 85mm; }
+    :global(html.print-qr), :global(html.print-qr body) { background: #fff !important; color: #161a2b !important; color-scheme: light; }
+    :global(html.print-qr .qr-affiche) { display: flex !important; align-items: center; justify-content: center; min-height: 182mm; }
+    :global(.qr-a-carte) { width: 112mm; padding: 7mm 8mm 9mm; text-align: center; border: 0.5mm solid #dde1ec; border-radius: 6mm; background: #fff; box-shadow: 3mm 3.5mm 0 -0.5mm #e3e9ff; font-family: var(--font); color: #161a2b; }
+    :global(.qr-a-carte .pdf-bande) { margin-bottom: 6mm; }
+    :global(.qr-a-etoiles) { font-size: 24pt; color: #f2b632; margin: 0; letter-spacing: 4pt; }
+    :global(.qr-a-titre) { font-family: var(--display); font-size: 19pt; font-weight: 800; letter-spacing: -.01em; margin: 3mm 0 6mm; line-height: 1.2; }
+    :global(.qr-a-img) { width: 78mm; height: 78mm; margin: 0 auto; padding: 3mm; border: 0.6mm solid #3d5afe; border-radius: 4mm; background: #fff; }
     :global(.qr-a-img svg) { width: 100%; height: 100%; }
-    :global(.qr-a-sous) { font-size: 11pt; color: #444; margin: 5mm 0 0; }
-    :global(.qr-a-nom) { font-size: 14pt; font-weight: 700; margin: 6mm 0 0; }
+    :global(.qr-a-sous) { font-size: 10.5pt; color: #5a6175; margin: 5mm 0 0; }
+    :global(.qr-a-nom) { font-family: var(--display); font-size: 14pt; font-weight: 800; color: #2438b8; margin: 4mm 0 0; }
   }
 </style>

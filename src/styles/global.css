@@ -375,6 +375,7 @@ tbody tr:hover { background: color-mix(in srgb, var(--accent-soft) 45%, transpar
 .sim .row { display: grid; grid-template-columns: 1fr 1fr; gap: 0 16px; }
 @media (max-width: 600px) { .sim .row { grid-template-columns: 1fr; } }
 .sim-out { display: block; margin-top: 20px; background: var(--sun-soft); border-radius: 12px; padding: 16px 20px; }
+.sim-out[hidden] { display: none; }
 .sim-out .big { font-family: var(--display); font-size: 2.4rem; font-weight: 800; color: var(--ink); letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
 .sim-tab { width: 100%; border-collapse: collapse; margin-top: 14px; font-variant-numeric: tabular-nums; font-size: .92rem; }
 .sim-tab th, .sim-tab td { padding: 6px 8px; border-bottom: 1px solid var(--line); text-align: left; }
@@ -396,27 +397,31 @@ tbody tr:hover { background: color-mix(in srgb, var(--accent-soft) 45%, transpar
 .l-x:hover { border-color: var(--bad); color: var(--bad); }
 .doc { background: #fff; color: #111; border: 1.5px solid var(--line); border-radius: var(--radius); padding: 26px; font-size: .9rem; line-height: 1.45; position: sticky; top: 90px; box-shadow: 7px 8px 0 -2px var(--peach); }
 .doc-head { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
-.doc-kind { font-family: var(--display); font-size: 1.6rem; font-weight: 800; letter-spacing: .06em; color: #2747d8; }
+.doc-kind { font-family: var(--display); font-size: 1.6rem; font-weight: 800; letter-spacing: .06em; color: #3d5afe; }
 .doc-title { text-align: right; }
 .doc-em { font-weight: 700; }
 .doc-small { font-size: .8rem; color: #374151; }
 .doc-label { text-transform: uppercase; letter-spacing: .05em; }
-.doc-client { margin: 20px 0; padding: 12px; background: #f6f4ef; border-radius: 8px; }
+.doc-client { margin: 20px 0; padding: 12px 14px; background: #f6f7fb; border-radius: 10px; border-left: 4px solid #f2b632; }
 .doc .doc-table { min-width: 0; font-size: .85rem; margin-bottom: 12px; }
-.doc .doc-table th { background: #f6f4ef; color: #111; }
-.doc .doc-table th, .doc .doc-table td { padding: 6px 8px; border-color: #e5e1d8; }
+.doc .doc-table th { background: #e6eaff; color: #2438b8; font-family: var(--display); }
+.doc .doc-table th, .doc .doc-table td { padding: 6px 8px; border-color: #dde1ec; }
 .doc .doc-table tbody tr:hover { background: transparent; }
 .doc-table td:nth-child(n+2), .doc-table th:nth-child(n+2) { text-align: right; white-space: nowrap; }
 .doc-totals { text-align: right; margin: 12px 0 18px; }
+.doc-totals .doc-em { display: inline-block; margin-top: 6px; padding: 6px 12px; background: #fff4d6; border-radius: 8px; font-size: 1.05rem; color: #161a2b; }
+.doc { font-family: var(--font); }
+.doc-em { font-family: var(--display); }
 .doc-sign { margin-top: 24px; border: 1px dashed #9ca3af; border-radius: 8px; height: 90px; padding: 8px; }
 
-/* Impression : seule la facture est imprimée, sans pages blanches. */
+/* Impression d'une page de facture ou de devis : seule la facture est imprimée, sans pages blanches.
+   Limité aux pages qui contiennent le générateur (.gen), pour ne pas masquer les autres outils imprimables. */
 @media print {
   @page { margin: 14mm; }
   body { background: #fff; }
   body::before { display: none; }
-  .site-header, .site-footer, .skip, .gen-form, .prose > :not(.gen) { display: none !important; }
-  .container, .prose { max-width: none; padding: 0; margin: 0; }
+  body:has(.gen) :is(.site-header, .site-footer, .skip, .gen-form, .prose > :not(.gen)) { display: none !important; }
+  body:has(.gen) :is(.container, .prose) { max-width: none; padding: 0; margin: 0; }
   .gen { display: block !important; width: auto !important; transform: none !important; left: auto !important; margin: 0; }
   .doc { position: static; border: 0; padding: 0; box-shadow: none; }
 }
@@ -452,6 +457,37 @@ img.avatar { object-fit: cover; padding: 0; }
   --sun: #f2b632; --sun-soft: #fff4d6; --sky: #e3e9ff; --shadow: rgba(20, 24, 40, .12);
   color-scheme: light;
 }
+/* ───────── Charte des PDF ─────────
+   Tous les documents imprimés ou enregistrés en PDF reprennent la direction artistique de Logimalin
+   (palette claire, cobalt + souci, Bricolage et Figtree, papier découpé), sans logo ni lien vers le site. */
+@media print {
+  :root {
+    --paper: #ffffff; --paper-2: #f6f7fb; --card: #ffffff; --ink: #161a2b; --muted: #5a6175; --line: #dde1ec;
+    --accent: #3d5afe; --accent-ink: #ffffff; --accent-deep: #2438b8; --accent-soft: #e6eaff;
+    --sun: #f2b632; --sun-soft: #fff4d6; --sky: #e3e9ff; --mint: #e4f5ec; --peach: #fdece6;
+    --good: #1f9d63; --bad: #d64545; --shadow: transparent;
+    color-scheme: light;
+  }
+  html, body { background: #fff !important; color: var(--ink); }
+  body::before, body::after { display: none !important; }
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+/* Filet de marque en tête de document : bande cobalt terminée par une touche de souci. */
+.pdf-bande { display: block; height: 6px; border-radius: 3px; margin: 0 0 18px; background: linear-gradient(90deg, #3d5afe 0 82%, #f2b632 82% 100%); }
+/* Outil imprimé tel quel (prévisionnel, étude de marché) : il passe sous <body> le temps de l'impression
+   (voir imprimerOutil dans les composants), avec un en-tête de marque visible uniquement à l'impression. */
+.pdf-entete { display: none; }
+@media print {
+  html.print-outil body > *:not(.print-cible) { display: none !important; }
+  html.print-outil .print-cible { margin: 0 !important; padding: 0 !important; border: 0 !important; box-shadow: none !important; background: #fff !important; }
+  html.print-outil .print-cible .pdf-entete { display: block; }
+  html.print-outil .print-cible .btn { display: none !important; }
+}
+/* Titre d'un document imprimé, sous le sur-titre */
+.pdf-titre { font-family: var(--display); font-size: 20pt; font-weight: 800; letter-spacing: -.02em; line-height: 1.15; color: #161a2b; margin: 0 0 6mm; }
+/* Sur-titre en capitales cobalt, au-dessus du titre d'un document */
+.pdf-kicker { font-family: var(--display); font-size: .78rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #3d5afe; margin: 0 0 4px; }
+
 /* Pages intégrables : pas d'en-tête, pas de grain, fond neutre */
 body.embed { background: var(--paper); padding: 0; }
 body.embed::before, body.embed::after { display: none; }

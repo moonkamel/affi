@@ -222,7 +222,8 @@ const DOCS = [
       const type = $('type').value;
       root.dataset.doc = type;
       root.querySelectorAll('[data-docs]').forEach((x) => { x.hidden = !x.dataset.docs.split(' ').includes(type); });
-      $('doc').replaceChildren(...rendre(DOCS[type]()));
+      const bande = document.createElement('span'); bande.className = 'pdf-bande';
+      $('doc').replaceChildren(bande, ...rendre(DOCS[type]()));
       const g = {}; root.querySelectorAll('[data-garde]').forEach((x) => { g[x.id] = x.value; });
       try { localStorage.setItem(STOCK, JSON.stringify(g)); } catch (e) { /* stockage indisponible */ }
     };
@@ -251,17 +252,19 @@ const DOCS = [
   .demp-check { display: flex !important; gap: 8px; align-items: flex-start; font-weight: 500 !important; }
   .demp-check input { width: auto !important; margin-top: 4px; }
   .demp-actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 16px; }
-  .demp-doc { background: #fff; color: #1a1a1a; border-radius: 10px; padding: 28px 30px; font-size: .92rem; line-height: 1.55; border: 1px solid var(--line); }
+  /* Charte Logimalin (cobalt + souci, Bricolage / Figtree), sobre, sans logo ni lien. */
+  .demp-doc { background: #fff; color: #161a2b; border-radius: 10px; padding: 28px 30px; font: .92rem/1.55 var(--font); border: 1px solid var(--line); }
   .demp-doc :global(.demp-ent) { font-size: .85rem; margin-bottom: 22px; }
-  .demp-doc :global(.demp-ent div:first-child) { font-weight: 700; }
-  .demp-doc :global(.demp-titre) { text-align: center; font-size: 1.2rem; text-transform: uppercase; letter-spacing: .04em; margin: 18px 0; color: #1a1a1a; }
-  .demp-doc :global(h3) { font-size: 1rem; margin: 16px 0 6px; color: #1a1a1a; }
+  .demp-doc :global(.demp-ent div:first-child) { font-family: var(--display); font-weight: 800; font-size: 1rem; }
+  .demp-doc :global(.demp-titre) { font-family: var(--display); text-align: center; font-size: 1.3rem; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; margin: 18px auto 22px; color: #2438b8; width: fit-content; padding-bottom: 6px; border-bottom: 3px solid #f2b632; }
+  .demp-doc :global(h3) { font-family: var(--display); font-size: 1rem; margin: 16px 0 6px; color: #2438b8; }
   .demp-doc :global(p) { white-space: pre-line; margin: 0 0 10px; }
   .demp-doc :global(.demp-tab) { width: 100%; border-collapse: collapse; margin: 8px 0 14px; }
-  .demp-doc :global(.demp-tab td) { border: 1px solid #ddd; padding: 5px 8px; }
+  .demp-doc :global(.demp-tab td) { border: 1px solid #dde1ec; padding: 5px 8px; }
+  .demp-doc :global(.demp-tab td:first-child) { background: #f6f7fb; }
   .demp-doc :global(.demp-tab td:last-child) { text-align: right; white-space: nowrap; }
-  .demp-doc :global(.demp-tab tr.tot td) { font-weight: 700; }
-  .demp-doc :global(.demp-petit) { font-size: .8rem; color: #555; }
+  .demp-doc :global(.demp-tab tr.tot td) { font-weight: 800; background: #fff4d6; }
+  .demp-doc :global(.demp-petit) { font-size: .8rem; color: #5a6175; }
   .demp-doc :global(.demp-sig) { margin-top: 26px; }
   .demp-doc :global(.demp-sig-g) { display: flex; justify-content: space-between; gap: 20px; margin-top: 8px; }
   .demp-doc :global(.demp-sig-g div) { white-space: pre-line; min-height: 70px; }
@@ -269,7 +272,7 @@ const DOCS = [
   @media print {
     @page { size: A4; margin: 20mm 18mm; }
     :global(html.print-emp body > *:not(.demp-doc)) { display: none !important; }
-    :global(html.print-emp), :global(html.print-emp body) { background: #fff !important; color: #1a1a1a !important; color-scheme: light; }
+    :global(html.print-emp), :global(html.print-emp body) { background: #fff !important; color: #161a2b !important; color-scheme: light; }
     :global(html.print-emp .demp-doc) { border: 0; padding: 0; font-size: 11pt; }
   }
 </style>

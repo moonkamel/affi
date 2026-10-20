@@ -124,7 +124,8 @@ const slug = type;
       const doc = $('doc');
       doc.replaceChildren();
       const h = el('header', 'mx-doc-h');
-      h.append(el('h1', null, `${c.titre}${$('nom').value.trim() ? ' : ' + $('nom').value.trim() : ''}`), el('p', null, `Établie le ${new Date().toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}`));
+      const projet = $('nom').value.trim();
+      h.append(el('span', 'pdf-bande'), el('p', 'pdf-kicker', projet ? c.titre : 'Diagnostic stratégique'), el('h1', null, projet || c.titre), el('p', null, `Établie le ${new Date().toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}`));
       doc.appendChild(h);
       const g = el('div', `mx-doc-g mx-doc-g-${slug}`);
       c.cases.forEach((x) => {
@@ -135,7 +136,6 @@ const slug = type;
         cell.appendChild(ul); g.appendChild(cell);
       });
       doc.appendChild(g);
-      doc.appendChild(el('p', 'mx-doc-f', 'Réalisée avec le générateur gratuit de logi-malin.fr'));
       return doc;
     };
     $('pdf').addEventListener('click', () => {
@@ -176,21 +176,23 @@ const slug = type;
   @media print {
     @page { size: A4 landscape; margin: 12mm; }
     :global(html.print-matrice body > *:not(.mx-doc)) { display: none !important; }
-    :global(html.print-matrice), :global(html.print-matrice body) { background: #fff !important; color: #1a1a1a !important; color-scheme: light; }
-    :global(html.print-matrice .mx-doc) { display: block !important; font-family: var(--body, sans-serif); color: #1a1a1a; }
-    :global(.mx-doc-h h1) { font-size: 20pt; margin: 0; color: #1a1a1a; }
-    :global(.mx-doc-h p) { margin: 2px 0 10px; color: #666; font-size: 9pt; }
+    /* Charte Logimalin (cobalt + souci, Bricolage / Figtree, papier découpé), sans logo ni lien. */
+    :global(html.print-matrice), :global(html.print-matrice body) { background: #fff !important; color: #161a2b !important; color-scheme: light; }
+    :global(html.print-matrice .mx-doc) { display: block !important; font-family: var(--font); color: #161a2b; }
+    :global(.mx-doc-h .pdf-bande) { margin-bottom: 4mm; }
+    :global(.mx-doc-h h1) { font-family: var(--display); font-size: 21pt; font-weight: 800; letter-spacing: -.02em; margin: 0; color: #161a2b; }
+    :global(.mx-doc-h p:not(.pdf-kicker)) { margin: 1mm 0 6mm; color: #5a6175; font-size: 9pt; }
     :global(.mx-doc-g) { display: grid; grid-template-columns: 1fr 1fr; gap: 6mm; }
     :global(.mx-doc-g-pestel) { grid-template-columns: 1fr 1fr 1fr; }
-    :global(.mx-doc-c) { border-radius: 4mm; padding: 4mm 5mm; min-height: 70mm; border: 1px solid #ddd; -webkit-print-color-adjust: exact; print-color-adjust: exact; break-inside: avoid; }
-    :global(.mx-doc-g-pestel .mx-doc-c) { min-height: 72mm; background: #fff8e6; }
-    :global(.mx-doc-c h2) { font-size: 13pt; margin: 0; color: #1a1a1a; }
-    :global(.mx-doc-s) { margin: 0 0 2mm; font-size: 8pt; color: #666; text-transform: uppercase; letter-spacing: .05em; }
+    :global(.mx-doc-c) { border-radius: 4mm; padding: 4mm 5mm; min-height: 66mm; border: 1.5px solid #dde1ec; box-shadow: 1.6mm 1.8mm 0 -0.3mm #e3e9ff; -webkit-print-color-adjust: exact; print-color-adjust: exact; break-inside: avoid; }
+    :global(.mx-doc-g-pestel .mx-doc-c) { min-height: 66mm; background: #fff; border-top: 2mm solid #3d5afe; }
+    :global(.mx-doc-g-pestel .mx-doc-c:nth-child(even)) { border-top-color: #f2b632; }
+    :global(.mx-doc-c h2) { font-family: var(--display); font-size: 14pt; font-weight: 800; margin: 0; color: #161a2b; }
+    :global(.mx-doc-s) { font-family: var(--display); margin: 0 0 2mm; font-size: 7.5pt; font-weight: 700; color: #3d5afe; text-transform: uppercase; letter-spacing: .08em; }
     :global(.mx-doc-c ul) { margin: 0; padding-left: 5mm; font-size: 10.5pt; line-height: 1.45; }
-    :global(.mx-doc .mx-forces) { background: #eaf7f0; }
-    :global(.mx-doc .mx-faiblesses) { background: #fdeeee; }
-    :global(.mx-doc .mx-opportunites) { background: #eef1ff; }
-    :global(.mx-doc .mx-menaces) { background: #fff4e5; }
-    :global(.mx-doc-f) { margin-top: 4mm; font-size: 8pt; color: #888; text-align: right; }
+    :global(.mx-doc .mx-forces) { background: #e4f5ec; }
+    :global(.mx-doc .mx-faiblesses) { background: #fdece6; }
+    :global(.mx-doc .mx-opportunites) { background: #e6eaff; }
+    :global(.mx-doc .mx-menaces) { background: #fff4d6; }
   }
 </style>

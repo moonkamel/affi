@@ -136,6 +136,7 @@ const swot = [
 
       // Couverture
       const couv = el('section', 'ds-partie ds-couv');
+      couv.appendChild(el('span', 'pdf-bande'));
       couv.appendChild(el('p', 'ds-sur', 'Dossier de présentation et de financement'));
       couv.appendChild(el('h1', null, nom));
       [
@@ -273,17 +274,17 @@ const swot = [
       add('line', { x1: x0, y1: b, x2: W - 10, y2: b, stroke: '#999' });
       ca.forEach((c, i) => {
         const cx = x0 + 40 + i * 180;
-        add('rect', { x: cx, y: y(c), width: 60, height: b - y(c), fill: '#5b6cff', rx: 3 });
+        add('rect', { x: cx, y: y(c), width: 60, height: b - y(c), fill: '#3d5afe', rx: 3 });
         add('text', { x: cx + 30, y: y(c) - 5, 'text-anchor': 'middle', 'font-size': 12, fill: '#1a1a1a' }, k(c));
-        add('rect', { x: cx + 66, y: y(res[i]), width: 40, height: b - y(res[i]), fill: res[i] >= 0 ? '#2e9e6b' : '#d64545', rx: 3 });
+        add('rect', { x: cx + 66, y: y(res[i]), width: 40, height: b - y(res[i]), fill: res[i] >= 0 ? '#f2b632' : '#d64545', rx: 3 });
         add('text', { x: cx + 86, y: y(res[i]) - 5, 'text-anchor': 'middle', 'font-size': 11, fill: '#1a1a1a' }, k(res[i]));
         add('text', { x: cx + 53, y: b + 16, 'text-anchor': 'middle', 'font-size': 12, fill: '#444' }, `Année ${i + 1}`);
       });
       if (seuil) {
-        add('line', { x1: x0, y1: y(seuil), x2: W - 10, y2: y(seuil), stroke: '#e0861a', 'stroke-width': 2, 'stroke-dasharray': '6 4' });
-        add('text', { x: x0 - 6, y: y(seuil) + 4, 'text-anchor': 'end', 'font-size': 11, fill: '#b5650a' }, 'Seuil');
+        add('line', { x1: x0, y1: y(seuil), x2: W - 10, y2: y(seuil), stroke: '#2438b8', 'stroke-width': 2, 'stroke-dasharray': '6 4' });
+        add('text', { x: x0 - 6, y: y(seuil) + 4, 'text-anchor': 'end', 'font-size': 11, fill: '#2438b8' }, 'Seuil');
       }
-      const lg = [['#5b6cff', 'Chiffre d’affaires'], ['#2e9e6b', 'Résultat avant impôt'], ['#e0861a', 'Seuil de rentabilité']];
+      const lg = [['#3d5afe', 'Chiffre d’affaires'], ['#f2b632', 'Résultat avant impôt'], ['#2438b8', 'Seuil de rentabilité']];
       lg.forEach(([c, t], i) => { add('rect', { x: x0 + i * 180, y: H - 12, width: 12, height: 10, fill: c }); add('text', { x: x0 + 18 + i * 180, y: H - 3, 'font-size': 11, fill: '#444' }, t); });
       const fig = el('figure', 'ds-fig'); fig.appendChild(svg); return fig;
     };
@@ -321,41 +322,43 @@ const swot = [
   .ds-src { padding: 10px 12px; border-radius: 10px; background: var(--sun-soft); font-size: .92rem; }
   .ds-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
 
-  .dossier-doc { margin: 30px 0; padding: 30px; background: #fff; color: #1a1a1a; border: 1px solid var(--line); border-radius: var(--radius); font-size: .95rem; }
-  .dossier-doc :global(h1) { font-size: 2rem; margin: 10px 0 24px; color: #1a1a1a; }
-  .dossier-doc :global(h2) { font-size: 1.35rem; margin: 0 0 12px; color: #1a1a1a; border-bottom: 2px solid #5b6cff; padding-bottom: 6px; }
-  .dossier-doc :global(h3) { font-size: 1.05rem; margin: 18px 0 8px; color: #1a1a1a; }
+  /* Charte Logimalin (palette claire, cobalt + souci, Bricolage / Figtree), sans logo ni lien. */
+  .dossier-doc { margin: 30px 0; padding: 30px; background: #fff; color: #161a2b; border: 1px solid var(--line); border-radius: var(--radius); font: .95rem/1.55 var(--font); }
+  .dossier-doc :global(h1) { font-family: var(--display); font-size: 2.2rem; font-weight: 800; letter-spacing: -.02em; margin: 6px 0 24px; color: #161a2b; }
+  .dossier-doc :global(h2) { font-family: var(--display); font-size: 1.35rem; font-weight: 750; margin: 0 0 12px; color: #161a2b; border-bottom: 2px solid #3d5afe; padding-bottom: 6px; }
+  .dossier-doc :global(h3) { font-family: var(--display); font-size: 1.05rem; margin: 18px 0 8px; color: #2438b8; }
   .dossier-doc :global(.ds-partie) { margin-bottom: 26px; }
   .dossier-doc :global(.ds-cles) { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 6px 0 22px; }
-  .dossier-doc :global(.ds-tuile) { border: 1px solid #dde0ff; background: #f6f7ff; border-radius: 8px; padding: 10px 12px; display: flex; flex-direction: column; gap: 2px; }
-  .dossier-doc :global(.ds-tk) { font-size: .75rem; color: #555; text-transform: uppercase; letter-spacing: .04em; }
-  .dossier-doc :global(.ds-tuile strong) { font-size: 1.25rem; color: #1a1a1a; }
-  .dossier-doc :global(.ds-td) { font-size: .78rem; color: #555; }
+  .dossier-doc :global(.ds-tuile) { border: 1.5px solid #dde1ec; background: #fff; border-radius: 12px; padding: 10px 12px; display: flex; flex-direction: column; gap: 2px; box-shadow: 4px 5px 0 -1px #e3e9ff; }
+  .dossier-doc :global(.ds-tk) { font-family: var(--display); font-size: .72rem; font-weight: 700; color: #3d5afe; text-transform: uppercase; letter-spacing: .06em; }
+  .dossier-doc :global(.ds-tuile strong) { font-family: var(--display); font-size: 1.3rem; font-weight: 800; color: #161a2b; }
+  .dossier-doc :global(.ds-td) { font-size: .78rem; color: #5a6175; }
   .dossier-doc :global(.ds-swot) { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 8px 0; break-inside: avoid; }
-  .dossier-doc :global(.ds-sw) { border-radius: 8px; padding: 8px 12px; font-size: .88rem; }
+  .dossier-doc :global(.ds-sw) { border-radius: 12px; padding: 8px 12px; font-size: .88rem; box-shadow: 4px 5px 0 -1px #e3e9ff; }
+  .dossier-doc :global(.ds-sw strong) { font-family: var(--display); }
   .dossier-doc :global(.ds-sw ul) { margin: 4px 0 0; padding-left: 18px; }
-  .dossier-doc :global(.ds-sw-forces) { background: #eaf7f0; }
-  .dossier-doc :global(.ds-sw-faiblesses) { background: #fdeeee; }
-  .dossier-doc :global(.ds-sw-opportunites) { background: #eef1ff; }
-  .dossier-doc :global(.ds-sw-menaces) { background: #fff4e5; }
+  .dossier-doc :global(.ds-sw-forces) { background: #e4f5ec; }
+  .dossier-doc :global(.ds-sw-faiblesses) { background: #fdece6; }
+  .dossier-doc :global(.ds-sw-opportunites) { background: #e6eaff; }
+  .dossier-doc :global(.ds-sw-menaces) { background: #fff4d6; }
   .dossier-doc :global(.ds-fig) { margin: 12px 0; break-inside: avoid; }
   .dossier-doc :global(.ds-graph) { width: 100%; height: auto; max-width: 640px; }
   @media (max-width: 600px) { .dossier-doc :global(.ds-cles) { grid-template-columns: 1fr 1fr; } }
-  .dossier-doc :global(.ds-sur) { text-transform: uppercase; letter-spacing: .08em; font-size: .8rem; color: #5b6cff; font-weight: 700; }
+  .dossier-doc :global(.ds-sur) { font-family: var(--display); text-transform: uppercase; letter-spacing: .1em; font-size: .8rem; color: #3d5afe; font-weight: 700; }
   .dossier-doc :global(.ds-meta) { margin: 4px 0; }
-  .dossier-doc :global(.ds-date) { margin: 18px 0; color: #666; font-size: .85rem; }
+  .dossier-doc :global(.ds-date) { margin: 18px 0; color: #5a6175; font-size: .85rem; }
   .dossier-doc :global(.ds-vide) { color: #999; font-style: italic; }
-  .dossier-doc :global(.ds-cle) { font-weight: 600; }
-  .dossier-doc :global(.ds-petit), .dossier-doc :global(.ds-source) { font-size: .8rem; color: #555; }
+  .dossier-doc :global(.ds-cle) { font-weight: 600; background: #fff4d6; border-left: 4px solid #f2b632; padding: 6px 10px; border-radius: 0 8px 8px 0; }
+  .dossier-doc :global(.ds-petit), .dossier-doc :global(.ds-source) { font-size: .8rem; color: #5a6175; }
   .dossier-doc :global(.ds-table) { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: .82rem; font-variant-numeric: tabular-nums; }
-  .dossier-doc :global(.ds-table th), .dossier-doc :global(.ds-table td) { border: 1px solid #ddd; padding: 5px 7px; text-align: left; }
-  .dossier-doc :global(.ds-table th) { background: #f2f3ff; }
+  .dossier-doc :global(.ds-table th), .dossier-doc :global(.ds-table td) { border: 1px solid #dde1ec; padding: 5px 7px; text-align: left; }
+  .dossier-doc :global(.ds-table th) { background: #e6eaff; color: #2438b8; font-family: var(--display); font-size: .74rem; text-transform: uppercase; letter-spacing: .03em; }
   .dossier-doc :global(.ds-table tbody tr:hover) { background: transparent; }
-  .dossier-doc :global(.ds-table caption) { text-align: left; font-size: .8rem; color: #555; padding-bottom: 4px; }
+  .dossier-doc :global(.ds-table caption) { text-align: left; font-size: .8rem; color: #5a6175; padding-bottom: 4px; }
   @media print {
     @page { size: A4; margin: 16mm 14mm; }
     :global(html.print-dossier body > *:not(#dossier-doc)) { display: none !important; }
-    :global(html.print-dossier), :global(html.print-dossier body) { background: #fff !important; color: #1a1a1a !important; color-scheme: light; }
+    :global(html.print-dossier), :global(html.print-dossier body) { background: #fff !important; color: #161a2b !important; color-scheme: light; }
     :global(html.print-dossier #dossier-doc) { display: block; margin: 0; padding: 0; border: 0; border-radius: 0; font-size: 10.5pt; }
     :global(html.print-dossier .ds-couv) { break-after: page; }
     :global(html.print-dossier .ds-saut) { break-before: page; }

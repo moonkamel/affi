@@ -3,6 +3,7 @@
 // plan de financement et trésorerie de fin d'année. JS inline, sans framework, rien n'est envoyé.
 ---
 <form class="sim bp" id="sim-bp" aria-labelledby="bp-titre" onsubmit="return false">
+  <div class="pdf-entete" aria-hidden="true"><span class="pdf-bande"></span><p class="pdf-kicker">Business plan</p><p class="pdf-titre">Prévisionnel sur 3 ans</p></div>
   <strong id="bp-titre">Ton prévisionnel sur 3 ans</strong>
   <p class="small muted">Montants hors taxe. Les calculs restent dans ton navigateur : rien n’est envoyé.</p>
   <p class="bp-src" id="bp-src" hidden></p>
@@ -128,8 +129,10 @@
   .bp-table td.neg { color: var(--bad); }
   .bp-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
   @media print {
-    .site-header, .site-footer, .toc, .related, .faq, .author-box, .bp fieldset, .bp-actions, .bp > p.small { display: none !important; }
+    .bp fieldset, .bp-actions, .bp > p.small { display: none !important; }
     .bp { box-shadow: none; border: 0; }
+    #bp-titre, .bp-src { display: none !important; }
+    .bp-table { break-inside: avoid; }
   }
   .bp-src { margin: 8px 0 0; padding: 10px 12px; border-radius: 10px; background: var(--sun-soft); font-size: .9rem; }
 </style>
@@ -251,7 +254,14 @@
       a.click();
       URL.revokeObjectURL(a.href);
     };
-    document.getElementById('bp-print').onclick = () => window.print();
+    // Impression : le prévisionnel passe sous <body> le temps de l'impression, le reste de la page est masqué.
+    document.getElementById('bp-print').onclick = () => {
+      const place = f.nextSibling, parent = f.parentNode;
+      document.body.appendChild(f); f.classList.add('print-cible'); document.documentElement.classList.add('print-outil');
+      const remettre = () => { document.documentElement.classList.remove('print-outil'); f.classList.remove('print-cible'); parent.insertBefore(f, place); window.removeEventListener('afterprint', remettre); };
+      window.addEventListener('afterprint', remettre);
+      window.print();
+    };
     // Pré-remplissage depuis l'étude de marché locale (?ca=…&source=…)
     const qs = new URLSearchParams(location.search);
     const caEtude = Number(qs.get('ca'));

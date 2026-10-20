@@ -7,6 +7,7 @@ const groupes = [...new Set(ACTIVITES.map((a) => a.groupe))];
 const activites = ACTIVITES.map((a) => a.naf.join(','));
 ---
 <div class="sim market" id="market-tool">
+  <div class="pdf-entete" aria-hidden="true"><span class="pdf-bande"></span><p class="pdf-kicker">Étude de marché locale</p><p class="pdf-titre" id="mk-pdf-titre"></p></div>
   <strong>Combien de concurrents près de chez toi ?</strong>
   <div class="row">
     <div>
@@ -28,7 +29,8 @@ const activites = ACTIVITES.map((a) => a.naf.join(','));
   </div>
   <button type="button" class="btn" id="mk-go">Analyser mon marché local</button>
 
-  <output class="sim-out" id="mk-out" aria-live="polite" hidden>
+  <!-- div plutôt que <output> : Chrome ne coupe pas un <output> entre deux pages imprimées. -->
+  <div class="sim-out" id="mk-out" role="status" aria-live="polite" hidden>
     <div id="mk-status"></div>
     <div id="mk-res" hidden>
       <div class="mk-kpis">
@@ -86,7 +88,7 @@ const activites = ACTIVITES.map((a) => a.naf.join(','));
       <p class="mk-actions"><button type="button" class="btn btn-ghost btn-sm" id="mk-print">Imprimer ou enregistrer en PDF</button></p>
       <p class="mk-next">Étape suivante : transforme ces chiffres en chiffre d’affaires prévisionnel avec notre <a href="/creer/business-plan/">business plan gratuit</a> (seuil de rentabilité, plan de financement, trésorerie sur 3 ans), puis assemble ton <a href="/creer/dossier-de-financement/">dossier de financement en PDF</a>.</p>
     </div>
-  </output>
+  </div>
   <p class="small">Sources : répertoire Sirene de l’INSEE via l’<a href="https://recherche-entreprises.api.gouv.fr/" rel="noopener">API Recherche d’entreprises</a> (entreprises actives dont c’est l’activité principale déclarée), populations légales de l’INSEE en vigueur en 2026. Les chiffres comptent des entreprises, pas des points de vente : une enseigne nationale compte une seule fois. C’est une estimation à compléter par ta visite du terrain.</p>
 </div>
 
@@ -169,9 +171,14 @@ const activites = ACTIVITES.map((a) => a.naf.join(','));
 
     // ---------- Impression (seul le bloc de l'outil est imprimé) ----------
     $('mk-print').addEventListener('click', () => {
-      document.documentElement.classList.add('print-mk');
+      const act = $('mk-act'), com = $('mk-com').value.trim();
+      $('mk-pdf-titre').textContent = [act.value ? act.options[act.selectedIndex].text : '', com].filter(Boolean).join(' · ');
+      const t = $('market-tool'), place = t.nextSibling, parent = t.parentNode;
+      document.body.appendChild(t); t.classList.add('print-cible');
+      document.documentElement.classList.add('print-mk', 'print-outil');
+      const remettre = () => { document.documentElement.classList.remove('print-mk', 'print-outil'); t.classList.remove('print-cible'); parent.insertBefore(t, place); window.removeEventListener('afterprint', remettre); };
+      window.addEventListener('afterprint', remettre);
       window.print();
-      setTimeout(() => document.documentElement.classList.remove('print-mk'), 500);
     });
 
     // ---------- Évolution du marché (créations et fermetures par année) ----------
@@ -459,10 +466,10 @@ const activites = ACTIVITES.map((a) => a.naf.join(','));
   :global(.mk-bar-f) { background: var(--muted); opacity: .6; }
   @media (max-width: 600px) { :global(.mk-bar-col) { display: none; } }
   @media print {
-    :global(html.print-mk body *) { visibility: hidden; }
-    :global(html.print-mk #market-tool), :global(html.print-mk #market-tool *) { visibility: visible; }
-    :global(html.print-mk #market-tool) { position: absolute; left: 0; top: 0; width: 100%; box-shadow: none; border: 0; }
     :global(html.print-mk #market-tool .btn), :global(html.print-mk .mk-commune input), :global(html.print-mk #mk-act) { display: none; }
+    :global(html.print-mk #market-tool > strong:first-of-type), :global(html.print-mk #market-tool > .row), :global(html.print-mk .mk-next) { display: none !important; }
+    :global(html.print-mk #market-tool table) { break-inside: avoid; }
+    :global(html.print-mk #market-tool .mk-evo) { break-inside: avoid; }
   }
   .mk-next { margin: 14px 0 0; padding-top: 12px; border-top: 1px solid var(--line); }
   .mk-comp { margin: 8px 0; padding-left: 18px; font-size: .9rem; }
