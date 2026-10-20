@@ -12,6 +12,7 @@ Décision du 20/10/2026, après mesure des volumes (docs/recherche/volumes-outil
   - impression ou enregistrement en PDF du résultat ;
   - chiffre d'affaires médian et fourchette (25 % à 75 %) des concurrents qui publient leurs comptes, dans la commune ou à défaut le département (champ `finances` de l'API, 3 entreprises au minimum) ;
   - bouton qui pré-remplit le chiffre d'affaires du business plan (`/creer/business-plan/?ca=…&source=…`) ;
+  - évolution du marché sur 5 ans dans la commune : créations et fermetures par année, solde, taux de fermeture annuel, survie des entreprises créées il y a 3 à 5 ans (dates de création et de fermeture Sirene ; toutes les entreprises actives et fermées sont lues, 25 par appel). Au-delà de 500 entreprises actives ou fermées, le calcul est renvoyé au dossier complet (à faire côté serveur) ;
   - densité pour 10 000 habitants et verdict (moins de 0,7 fois la moyenne nationale, dans la moyenne, plus de 1,3 fois) ;
   - liste des 10 premières entreprises de la commune ;
   - lien vers le business plan gratuit.
@@ -22,7 +23,7 @@ Décision du 20/10/2026, après mesure des volumes (docs/recherche/volumes-outil
 ## Phase 2 : payante (39 à 49 €, paiement unique)
 
 Contenu du dossier :
-1. **Étude de marché locale complète** : zone de chalandise (communes à 5, 10 et 20 km, à partir des coordonnées des communes), liste complète des concurrents exportable, évolution des créations et fermetures sur 5 ans, revenus des ménages de la zone (INSEE Filosofi).
+1. **Étude de marché locale complète** : zone de chalandise en rayon de 5, 10 ou 20 km (l'API propose une recherche `near_point` avec `lat`, `long` et `radius`), liste complète des concurrents exportable, évolution des créations et fermetures pour les grandes villes (calcul côté serveur), revenus des ménages de la zone (INSEE Filosofi).
 2. **Prévisionnel sur 3 ans mois par mois** : reprise du `BusinessPlanBuilder` avec BFR, TVA, emprunt et amortissements détaillés.
 3. **Plan de financement et trésorerie** au format attendu par les banques et les réseaux (Initiative France, Réseau Entreprendre).
 4. **Dossier PDF** mis en page, avec la trame des 8 parties du business plan pré-remplie par les réponses.

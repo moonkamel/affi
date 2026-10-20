@@ -56,6 +56,20 @@ const activites = ACTIVITES.map((a) => a.naf.join(','));
         <ul id="mk-comp" class="mk-comp"></ul>
         <p class="small" id="mk-more"></p>
       </div>
+      <div id="mk-evo" class="mk-evo" hidden>
+        <strong>L’évolution du marché sur 5 ans</strong>
+        <p id="mk-evo-status" class="small"></p>
+        <div id="mk-evo-res" hidden>
+          <div class="md-table">
+            <table>
+              <thead><tr><th>Année</th><th>Créations</th><th>Fermetures</th><th>Solde</th><th class="mk-bar-col">Créations <span class="mk-leg mk-leg-c"></span> / fermetures <span class="mk-leg mk-leg-f"></span></th></tr></thead>
+              <tbody id="mk-evo-tab"></tbody>
+            </table>
+          </div>
+          <p id="mk-evo-verdict" class="mk-verdict"></p>
+          <p class="small">Sources : répertoire Sirene (dates de création et de fermeture des entreprises de l’activité ayant un établissement dans la commune). Une fermeture peut être une cessation d’activité, une radiation, un départ à la retraite ou un changement de statut : ce n’est pas toujours un échec.</p>
+        </div>
+      </div>
       <p class="mk-actions"><button type="button" class="btn btn-ghost btn-sm" id="mk-print">Imprimer ou enregistrer en PDF</button></p>
       <p class="mk-next">Étape suivante : transforme ces chiffres en chiffre d’affaires prévisionnel avec notre <a href="/creer/business-plan/">business plan gratuit</a> (seuil de rentabilité, plan de financement, trésorerie sur 3 ans).</p>
     </div>
@@ -143,6 +157,74 @@ const activites = ACTIVITES.map((a) => a.naf.join(','));
       window.print();
       setTimeout(() => document.documentElement.classList.remove('print-mk'), 500);
     });
+
+    // ---------- Évolution du marché (créations et fermetures par année) ----------
+    let analyseEnCours = 0; // ignore les résultats d'une analyse relancée entre-temps
+    const PLAFOND = 500; // au-delà, trop d'appels pour un calcul dans le navigateur
+    const toutRecuperer = async (params, total) => {
+      const res = [];
+      const pages = Math.ceil(Math.min(total, PLAFOND) / 25);
+      for (let page = 1; page <= pages; page++) {
+        const r = await appel({ ...params, per_page: '25', page: String(page) });
+        res.push(...(r.results || []));
+        await pause(160);
+      }
+      return res;
+    };
+    const evolution = async (naf, lieu, nActives, nomCommune, id) => {
+      const bloc = $('mk-evo'), status = $('mk-evo-status');
+      bloc.hidden = false; $('mk-evo-res').hidden = true;
+      status.textContent = 'Calcul des créations et fermetures des 5 dernières années…';
+      try {
+        const premFermees = await appel({ activite_principale: naf, etat_administratif: 'C', per_page: '25', page: '1', ...lieu });
+        const nFermees = premFermees.total_results || 0;
+        if (nActives > PLAFOND || nFermees > PLAFOND) {
+          status.textContent = `${nomCommune} compte trop d’entreprises de cette activité (${fmt(nActives)} actives, ${fmt(nFermees)} fermées) pour le calcul détaillé ici. Il sera disponible dans le dossier complet.`;
+          return;
+        }
+        await pause(160);
+        const actives = nActives ? await toutRecuperer({ activite_principale: naf, ...lieu }, nActives) : [];
+        const fermees = (premFermees.results || []).concat(nFermees > 25 ? (await toutRecuperer({ activite_principale: naf, etat_administratif: 'C', ...lieu }, nFermees)).slice(25) : []);
+        const an = new Date().getFullYear();
+        const annees = [an - 5, an - 4, an - 3, an - 2, an - 1];
+        const annee = (d) => Number(String(d || '').slice(0, 4)) || 0;
+        const ligne = (y) => ({
+          y,
+          crea: actives.filter((e) => annee(e.date_creation) === y).length + fermees.filter((e) => annee(e.date_creation) === y).length,
+          ferm: fermees.filter((e) => annee(e.date_fermeture) === y).length,
+        });
+        if (id !== analyseEnCours) return;
+        const lignes = annees.map(ligne);
+        const max = Math.max(1, ...lignes.map((l) => Math.max(l.crea, l.ferm)));
+        const tab = $('mk-evo-tab');
+        tab.innerHTML = '';
+        lignes.forEach((l) => {
+          const tr = tab.insertRow();
+          [String(l.y), fmt(l.crea), fmt(l.ferm), (l.crea - l.ferm > 0 ? '+' : '') + fmt(l.crea - l.ferm)].forEach((v) => { tr.insertCell().textContent = v; });
+          const td = tr.insertCell();
+          td.className = 'mk-bar-col';
+          td.innerHTML = `<span class="mk-bar mk-bar-c" style="width:${(l.crea / max) * 100}%"></span><span class="mk-bar mk-bar-f" style="width:${(l.ferm / max) * 100}%"></span>`;
+        });
+        const crea = lignes.reduce((t, l) => t + l.crea, 0), ferm = lignes.reduce((t, l) => t + l.ferm, 0);
+        // Survie : entreprises créées il y a 3 à 5 ans encore actives aujourd'hui
+        const cohorte = (e) => { const y = annee(e.date_creation); return y >= an - 5 && y <= an - 3; };
+        const nCohorte = actives.filter(cohorte).length + fermees.filter(cohorte).length;
+        const survie = nCohorte ? actives.filter(cohorte).length / nCohorte : null;
+        const tauxFerm = nActives ? (ferm / 5) / nActives : 0;
+        let txt = crea - ferm > 0
+          ? `📈 Le marché grandit : ${fmt(crea)} créations pour ${fmt(ferm)} fermetures sur 5 ans (${an - 5} à ${an - 1}), soit un solde de +${fmt(crea - ferm)} entreprises.`
+          : crea - ferm < 0
+            ? `📉 Le marché se contracte : ${fmt(ferm)} fermetures pour ${fmt(crea)} créations sur 5 ans (${an - 5} à ${an - 1}), soit un solde de ${fmt(crea - ferm)} entreprises.`
+            : `⚖️ Le marché est stable : autant de créations que de fermetures (${fmt(crea)}) sur 5 ans.`;
+        if (nActives) txt += ` Chaque année, environ ${fmt1(tauxFerm * 100)} % des entreprises de l’activité ferment.`;
+        if (survie !== null && nCohorte >= 5) txt += ` Parmi celles créées entre ${an - 5} et ${an - 3}, ${fmt(survie * 100)} % sont encore en activité.`;
+        $('mk-evo-verdict').textContent = txt;
+        status.textContent = '';
+        $('mk-evo-res').hidden = false;
+      } catch (err) {
+        status.textContent = 'Le calcul de l’évolution n’a pas abouti (répertoire public indisponible). Relance l’analyse dans quelques minutes.';
+      }
+    };
 
     // ---------- Analyse ----------
     $('mk-go').addEventListener('click', async () => {
@@ -248,6 +330,8 @@ const activites = ACTIVITES.map((a) => a.naf.join(','));
         $('mk-more').textContent = zones[0].n > 10 ? `Les 10 premières sur ${fmt(zones[0].n)}. Retrouve-les toutes sur l’annuaire des entreprises (annuaire-entreprises.data.gouv.fr), puis va voir les principales sur place.` : '';
         status.textContent = '';
         $('mk-res').hidden = false;
+        btn.disabled = false;
+        await evolution(naf, lieu, zones[0].n, c.nom, ++analyseEnCours);
       } catch (err) {
         status.textContent = 'Le répertoire public des entreprises ne répond pas pour le moment. Réessaie dans quelques minutes.';
       } finally {
@@ -264,8 +348,8 @@ const activites = ACTIVITES.map((a) => a.naf.join(','));
   .market .small { font-size: .85rem; color: var(--muted); }
   .mk-commune { position: relative; }
   .mk-list { position: absolute; z-index: 5; left: 0; right: 0; margin: 4px 0 0; padding: 4px; list-style: none; background: var(--card); border: 1.5px solid var(--line); border-radius: 10px; box-shadow: 0 8px 20px rgba(0,0,0,.12); max-height: 280px; overflow-y: auto; }
-  .mk-list li { padding: 8px 10px; border-radius: 8px; cursor: pointer; font-size: .92rem; }
-  .mk-list li:hover, .mk-list li:focus { background: var(--accent-soft); outline: none; }
+  :global(.mk-list li) { padding: 8px 10px; border-radius: 8px; cursor: pointer; font-size: .92rem; }
+  :global(.mk-list li:hover), :global(.mk-list li:focus) { background: var(--accent-soft); outline: none; }
   .mk-kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 6px 0 14px; }
   .mk-kpis div { display: flex; flex-direction: column; }
   .mk-kpis .big { font-size: 2rem; }
@@ -275,6 +359,16 @@ const activites = ACTIVITES.map((a) => a.naf.join(','));
   .mk-actions { margin: 10px 0 0; }
   .mk-ca { margin: 16px 0; padding: 14px 16px; border-radius: 12px; background: var(--card); border: 1.5px solid var(--line); }
   .mk-ca p { margin: 8px 0; }
+  .mk-evo { margin: 16px 0; padding: 14px 16px; border-radius: 12px; background: var(--card); border: 1.5px solid var(--line); }
+  .mk-evo .md-table { margin: 10px 0; }
+  :global(.mk-bar-col) { width: 34%; }
+  .mk-leg { display: inline-block; width: 10px; height: 10px; border-radius: 3px; vertical-align: middle; }
+  .mk-leg-c { background: var(--accent); }
+  .mk-leg-f { background: var(--muted); opacity: .6; }
+  :global(.mk-bar) { display: block; height: 7px; border-radius: 4px; margin: 3px 0; min-width: 2px; }
+  :global(.mk-bar-c) { background: var(--accent); }
+  :global(.mk-bar-f) { background: var(--muted); opacity: .6; }
+  @media (max-width: 600px) { :global(.mk-bar-col) { display: none; } }
   @media print {
     :global(html.print-mk body *) { visibility: hidden; }
     :global(html.print-mk #market-tool), :global(html.print-mk #market-tool *) { visibility: visible; }
@@ -283,5 +377,5 @@ const activites = ACTIVITES.map((a) => a.naf.join(','));
   }
   .mk-next { margin: 14px 0 0; padding-top: 12px; border-top: 1px solid var(--line); }
   .mk-comp { margin: 8px 0; padding-left: 18px; font-size: .9rem; }
-  .mk-comp li { margin: 4px 0; }
+  :global(.mk-comp li) { margin: 4px 0; }
 </style>
