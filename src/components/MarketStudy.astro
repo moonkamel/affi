@@ -1,0 +1,235 @@
+---
+// Étude de marché locale : compte les entreprises concurrentes (répertoire Sirene, API Recherche d'entreprises)
+// dans la commune, le département et la France, et compare leur densité pour 10 000 habitants
+// (populations légales INSEE en vigueur en 2026, fichier public/data/communes-2026.json).
+import { ACTIVITES } from '../data/activites-naf';
+const groupes = [...new Set(ACTIVITES.map((a) => a.groupe))];
+const activites = ACTIVITES.map((a) => a.naf.join(','));
+---
+<div class="sim market" id="market-tool">
+  <strong>Combien de concurrents près de chez toi ?</strong>
+  <div class="row">
+    <div>
+      <label for="mk-act">Ton activité</label>
+      <select id="mk-act">
+        <option value="">Choisis une activité…</option>
+        {groupes.map((g) => (
+          <optgroup label={g}>
+            {ACTIVITES.map((a, i) => a.groupe === g && <option value={String(i)}>{a.label}</option>)}
+          </optgroup>
+        ))}
+      </select>
+    </div>
+    <div class="mk-commune">
+      <label for="mk-com">Ta commune ou ton code postal</label>
+      <input id="mk-com" type="text" autocomplete="off" placeholder="Ex. : Nantes ou 44000" role="combobox" aria-expanded="false" aria-controls="mk-list" aria-autocomplete="list" />
+      <ul id="mk-list" class="mk-list" role="listbox" hidden></ul>
+    </div>
+  </div>
+  <button type="button" class="btn" id="mk-go">Analyser mon marché local</button>
+
+  <output class="sim-out" id="mk-out" aria-live="polite" hidden>
+    <div id="mk-status"></div>
+    <div id="mk-res" hidden>
+      <div class="mk-kpis">
+        <div><span class="big" id="mk-n-com">–</span><span id="mk-l-com">dans la commune</span></div>
+        <div><span class="big" id="mk-n-dep">–</span><span id="mk-l-dep">dans le département</span></div>
+        <div><span class="big" id="mk-n-fr">–</span><span>en France</span></div>
+      </div>
+      <div class="md-table">
+        <table>
+          <thead><tr><th>Zone</th><th>Habitants</th><th>Concurrents</th><th>Pour 10 000 habitants</th><th>Habitants par concurrent</th></tr></thead>
+          <tbody id="mk-tab"></tbody>
+        </table>
+      </div>
+      <p id="mk-verdict" class="mk-verdict"></p>
+      <p id="mk-note" class="small"></p>
+      <div id="mk-list-wrap" hidden>
+        <strong>Les entreprises de ton activité dans la commune</strong>
+        <ul id="mk-comp" class="mk-comp"></ul>
+        <p class="small" id="mk-more"></p>
+      </div>
+      <p class="mk-next">Étape suivante : transforme ces chiffres en chiffre d’affaires prévisionnel avec notre <a href="/creer/business-plan/">business plan gratuit</a> (seuil de rentabilité, plan de financement, trésorerie sur 3 ans).</p>
+    </div>
+  </output>
+  <p class="small">Sources : répertoire Sirene de l’INSEE via l’<a href="https://recherche-entreprises.api.gouv.fr/" rel="noopener">API Recherche d’entreprises</a> (entreprises actives dont c’est l’activité principale déclarée), populations légales de l’INSEE en vigueur en 2026. Les chiffres comptent des entreprises, pas des points de vente : une enseigne nationale compte une seule fois. C’est une estimation à compléter par ta visite du terrain.</p>
+</div>
+
+<script is:inline define:vars={{ activites }}>
+  (() => {
+    const root = document.getElementById('market-tool');
+    if (!root) return;
+    const $ = (id) => document.getElementById(id);
+    const API_DIRECT = 'https://recherche-entreprises.api.gouv.fr/search';
+    const API_RELAIS = '/api/entreprises';
+    let viaRelais = false;
+    let communes = null, chargement = null, choix = null;
+    const fmt = (n) => Math.round(n).toLocaleString('fr-FR');
+    const fmt1 = (n) => n.toLocaleString('fr-FR', { maximumFractionDigits: 1 });
+    const norm = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[-'’]/g, ' ').replace(/\bsaint\b/g, 'st').replace(/\s+/g, ' ').trim();
+
+    // ---------- Communes ----------
+    const charger = () => {
+      if (!chargement) chargement = fetch('/data/communes-2026.json').then((r) => r.json()).then((d) => {
+        communes = d.map((c) => ({ code: c[0], nom: c[1], cp: c[2], dep: c[3], pop: c[4], cps: c[5], n: norm(c[1]) }));
+      });
+      return chargement;
+    };
+    const input = $('mk-com'), list = $('mk-list');
+    const fermer = () => { list.hidden = true; input.setAttribute('aria-expanded', 'false'); };
+    const proposer = async () => {
+      await charger();
+      const q = norm(input.value);
+      choix = null;
+      if (q.length < 2) { fermer(); return; }
+      const res = /^\d{2,5}$/.test(q)
+        ? communes.filter((c) => c.cp.startsWith(q) || (c.cps || []).some((p) => p.startsWith(q))).slice(0, 8)
+        : communes.filter((c) => c.n.startsWith(q)).slice(0, 8).concat(communes.filter((c) => !c.n.startsWith(q) && c.n.includes(q)).slice(0, 3));
+      list.innerHTML = '';
+      res.forEach((c) => {
+        const li = document.createElement('li');
+        li.setAttribute('role', 'option');
+        li.tabIndex = -1;
+        li.textContent = `${c.nom} (${c.cp || c.dep}) · ${fmt(c.pop)} hab.`;
+        li.addEventListener('mousedown', (e) => { e.preventDefault(); choisir(c); });
+        li.addEventListener('keydown', (e) => { if (e.key === 'Enter') choisir(c); });
+        list.appendChild(li);
+      });
+      list.hidden = !res.length;
+      input.setAttribute('aria-expanded', String(!!res.length));
+    };
+    const choisir = (c) => { choix = c; input.value = `${c.nom} (${c.cp || c.dep})`; fermer(); };
+    input.addEventListener('focus', charger, { once: true });
+    input.addEventListener('input', proposer);
+    input.addEventListener('blur', () => setTimeout(fermer, 150));
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowDown' && !list.hidden) { e.preventDefault(); list.firstChild?.focus(); }
+      if (e.key === 'Enter' && !list.hidden && list.firstChild) { e.preventDefault(); list.firstChild.dispatchEvent(new MouseEvent('mousedown')); }
+    });
+    list.addEventListener('keydown', (e) => {
+      const el = document.activeElement;
+      if (e.key === 'ArrowDown') { e.preventDefault(); (el.nextSibling || el).focus(); }
+      if (e.key === 'ArrowUp') { e.preventDefault(); (el.previousSibling || input).focus(); }
+    });
+
+    // ---------- API ----------
+    const pause = (ms) => new Promise((r) => setTimeout(r, ms));
+    const appel = async (params, essai = 0) => {
+      const qs = new URLSearchParams({ etat_administratif: 'A', minimal: 'true', ...params });
+      let res;
+      try {
+        res = await fetch(`${viaRelais ? API_RELAIS : API_DIRECT}?${qs}`, { headers: { Accept: 'application/json' } });
+      } catch (err) {
+        if (!viaRelais) { viaRelais = true; return appel(params, essai); }
+        throw err;
+      }
+      if (res.status === 429 && essai < 3) { await pause(1200 * (essai + 1)); return appel(params, essai + 1); }
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      return res.json();
+    };
+
+    // ---------- Analyse ----------
+    $('mk-go').addEventListener('click', async () => {
+      const i = $('mk-act').value;
+      const out = $('mk-out'), status = $('mk-status');
+      out.hidden = false;
+      if (i === '') { status.textContent = 'Choisis d’abord ton activité.'; $('mk-res').hidden = true; return; }
+      await charger();
+      if (!choix) {
+        const q = norm(input.value.replace(/\(.*\)/, ''));
+        choix = communes.find((c) => c.n === q) || communes.find((c) => c.cp === q) || null;
+        if (choix) choisir(choix);
+      }
+      if (!choix) { status.textContent = 'Choisis ta commune dans la liste proposée.'; $('mk-res').hidden = true; return; }
+      const c = choix, naf = activites[Number(i)];
+      const btn = $('mk-go');
+      btn.disabled = true;
+      status.textContent = 'Recherche dans le répertoire des entreprises…';
+      $('mk-res').hidden = true;
+      try {
+        const lieu = c.cps ? { code_postal: c.cps.join(',') } : { code_commune: c.code };
+        const rCom = await appel({ activite_principale: naf, per_page: '10', include: 'matching_etablissements', limite_matching_etablissements: '1', ...lieu });
+        await pause(200);
+        const rDep = await appel({ activite_principale: naf, departement: c.dep, per_page: '1' });
+        await pause(200);
+        const rFr = await appel({ activite_principale: naf, per_page: '1' });
+        const popDep = communes.filter((x) => x.dep === c.dep).reduce((s, x) => s + x.pop, 0);
+        const popFr = communes.reduce((s, x) => s + x.pop, 0);
+        const zones = [
+          { nom: c.nom, pop: c.pop, n: rCom.total_results || 0 },
+          { nom: `Département (${c.dep})`, pop: popDep, n: rDep.total_results || 0 },
+          { nom: 'France', pop: popFr, n: rFr.total_results || 0 },
+        ];
+        $('mk-n-com').textContent = fmt(zones[0].n);
+        $('mk-l-com').textContent = `à ${c.nom}`;
+        $('mk-n-dep').textContent = fmt(zones[1].n);
+        $('mk-n-fr').textContent = fmt(zones[2].n);
+        const tab = $('mk-tab');
+        tab.innerHTML = '';
+        zones.forEach((z) => {
+          const tr = tab.insertRow();
+          const dens = z.pop ? (z.n / z.pop) * 10000 : 0;
+          [z.nom, fmt(z.pop), fmt(z.n), fmt1(dens), z.n ? fmt(z.pop / z.n) : '–'].forEach((v) => { tr.insertCell().textContent = v; });
+        });
+        // Verdict : densité locale comparée à la moyenne nationale
+        const petite = c.pop < 3000;
+        const ref = petite ? zones[1] : zones[0];
+        const dFr = zones[2].n / zones[2].pop;
+        const ratio = ref.pop && dFr ? (ref.n / ref.pop) / dFr : 0;
+        const zone = petite ? 'ton département' : c.nom;
+        const Zone = zone.charAt(0).toUpperCase() + zone.slice(1);
+        let verdict;
+        if (!zones[2].n) verdict = 'Aucune entreprise trouvée pour cette activité : vérifie le choix de l’activité.';
+        else if (ratio < 0.7) verdict = `📉 ${Zone} compte environ ${fmt1(ratio)} fois la densité nationale de concurrents. Soit la demande est mal servie (une opportunité), soit elle est plus faible qu’ailleurs : c’est ce que ton enquête de terrain doit trancher.`;
+        else if (ratio <= 1.3) verdict = `⚖️ La densité de concurrents à ${zone} est proche de la moyenne nationale (${fmt1(ratio)} fois). Ni désert ni marché saturé : ta différence se jouera sur l’offre, le prix et l’emplacement.`;
+        else verdict = `📈 ${Zone} compte ${fmt1(ratio)} fois plus de concurrents par habitant que la moyenne nationale. Le marché est disputé : il te faudra un positionnement clair et un vrai avantage.`;
+        $('mk-verdict').textContent = verdict;
+        const g = root.querySelector(`#mk-act option[value="${i}"]`)?.parentElement?.label || '';
+        $('mk-note').textContent = (petite ? 'Ta commune compte moins de 3 000 habitants : la comparaison se fait sur le département, plus représentatif de ta zone de chalandise. ' : '')
+          + (/Services et conseil|E-commerce/.test(g + ' ' + $('mk-act').selectedOptions[0].text) ? 'Pour cette activité, tes clients ne sont pas forcément locaux : regarde surtout les chiffres du département et de la France. ' : '');
+        // Liste des concurrents de la commune
+        const ul = $('mk-comp');
+        ul.innerHTML = '';
+        (rCom.results || []).forEach((e) => {
+          const et = (e.matching_etablissements || [])[0] || e.siege || {};
+          const li = document.createElement('li');
+          const b = document.createElement('strong');
+          b.textContent = e.nom_complet || e.nom_raison_sociale || 'Entreprise';
+          li.appendChild(b);
+          const adr = et.adresse || [et.code_postal, et.libelle_commune].filter(Boolean).join(' ');
+          const annee = (e.date_creation || '').slice(0, 4);
+          li.appendChild(document.createTextNode(` · ${adr}${annee ? ` · créée en ${annee}` : ''}`));
+          ul.appendChild(li);
+        });
+        $('mk-list-wrap').hidden = !(rCom.results || []).length;
+        $('mk-more').textContent = zones[0].n > 10 ? `Les 10 premières sur ${fmt(zones[0].n)}. Retrouve-les toutes sur l’annuaire des entreprises (annuaire-entreprises.data.gouv.fr), puis va voir les principales sur place.` : '';
+        status.textContent = '';
+        $('mk-res').hidden = false;
+      } catch (err) {
+        status.textContent = 'Le répertoire public des entreprises ne répond pas pour le moment. Réessaie dans quelques minutes.';
+      } finally {
+        btn.disabled = false;
+      }
+    });
+  })();
+</script>
+
+<style>
+  .market .row { grid-template-columns: 1fr 1fr; }
+  @media (max-width: 600px) { .market .row { grid-template-columns: 1fr; } }
+  .market .btn { margin-top: 14px; }
+  .market .small { font-size: .85rem; color: var(--muted); }
+  .mk-commune { position: relative; }
+  .mk-list { position: absolute; z-index: 5; left: 0; right: 0; margin: 4px 0 0; padding: 4px; list-style: none; background: var(--card); border: 1.5px solid var(--line); border-radius: 10px; box-shadow: 0 8px 20px rgba(0,0,0,.12); max-height: 280px; overflow-y: auto; }
+  .mk-list li { padding: 8px 10px; border-radius: 8px; cursor: pointer; font-size: .92rem; }
+  .mk-list li:hover, .mk-list li:focus { background: var(--accent-soft); outline: none; }
+  .mk-kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 6px 0 14px; }
+  .mk-kpis div { display: flex; flex-direction: column; }
+  .mk-kpis .big { font-size: 2rem; }
+  @media (max-width: 600px) { .mk-kpis .big { font-size: 1.4rem; } .mk-kpis span:not(.big) { font-size: .82rem; } }
+  .market .md-table { background: var(--card); margin: 12px 0; }
+  .mk-verdict { font-weight: 600; }
+  .mk-next { margin: 14px 0 0; padding-top: 12px; border-top: 1px solid var(--line); }
+  .mk-comp { margin: 8px 0; padding-left: 18px; font-size: .9rem; }
+  .mk-comp li { margin: 4px 0; }
+</style>
