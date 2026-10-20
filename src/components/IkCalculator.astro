@@ -47,7 +47,7 @@
     };
     const eur = (n) => n.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 });
     const calc = () => {
-      const d = Math.max(0, parseFloat(String(document.getElementById('ik-km').value).replace(',', '.')) || 0);
+      const d = Math.max(0, parseFloat(String(document.getElementById('ik-km').value).replace(/[\s\u00a0\u202f€%]/g, '').replace(',', '.')) || 0);
       const [a, b, c, e] = B[document.getElementById('ik-cv').value];
       let ik = d <= 5000 ? d * a : d <= 20000 ? d * b + c : d * e;
       const fr = (n) => n.toLocaleString('fr-FR', { maximumFractionDigits: 3 });

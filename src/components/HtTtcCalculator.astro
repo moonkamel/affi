@@ -48,7 +48,7 @@
     const f = document.getElementById('sim-htttc');
     if (!f) return;
     const $ = (id) => document.getElementById(id);
-    const num = (id) => { const x = parseFloat(String($(id).value).replace(',', '.')); return Number.isFinite(x) && x >= 0 ? x : null; };
+    const num = (id) => { const x = parseFloat(String($(id).value).replace(/[\s\u00a0\u202f€%]/g, '').replace(',', '.')); return Number.isFinite(x) && x >= 0 ? x : null; };
     const eur = (n) => n.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR', minimumFractionDigits: 2, maximumFractionDigits: 2 });
     const pct = (t) => `${String(t).replace('.', ',')} %`;
     const arr = (n) => Math.round(n * 100) / 100;

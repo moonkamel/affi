@@ -35,7 +35,7 @@
   (() => {
     const f = document.getElementById('sim-pen');
     if (!f) return;
-    const v = (id) => Math.max(0, parseFloat(String(document.getElementById(id).value).replace(',', '.')) || 0);
+    const v = (id) => Math.max(0, parseFloat(String(document.getElementById(id).value).replace(/[\s\u00a0\u202f€%]/g, '').replace(',', '.')) || 0);
     const eur = (n) => n.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR', minimumFractionDigits: 2 });
     const calc = () => {
       const pro = document.getElementById('pen-pro').value === '1';

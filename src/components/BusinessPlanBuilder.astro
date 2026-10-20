@@ -141,7 +141,7 @@
   (() => {
     const f = document.getElementById('sim-bp');
     if (!f) return;
-    const v = (id) => parseFloat(String(document.getElementById(id).value).replace(',', '.')) || 0;
+    const v = (id) => parseFloat(String(document.getElementById(id).value).replace(/[\s\u00a0\u202f€%]/g, '').replace(',', '.')) || 0;
     const pos = (id) => Math.max(0, v(id));
     const eur = (n) => n.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 });
     let rows = [];

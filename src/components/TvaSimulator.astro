@@ -36,7 +36,7 @@
     const f = document.getElementById('sim-tva');
     if (!f) return;
     const S = { services: [37500, 41250], vente: [85000, 93500] };
-    const v = (id) => Math.max(0, parseFloat(String(document.getElementById(id).value).replace(',', '.')) || 0);
+    const v = (id) => Math.max(0, parseFloat(String(document.getElementById(id).value).replace(/[\s\u00a0\u202f€%]/g, '').replace(',', '.')) || 0);
     const eur = (n) => n.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 });
     const calc = () => {
       const [base, maj] = S[document.getElementById('tva-act').value];

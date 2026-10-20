@@ -19,6 +19,8 @@ const affiliateRedirects = {
         const to = s.affiliateUrl ?? s.website;
         return [`/go/${s.slug}/ ${to} 302`, `/go/${s.slug}/* ${to} 302`];
       });
+      // Ancienne page « transparence » fusionnée dans la méthodologie.
+      lines.push('/transparence-affiliation/ /methodologie/ 301');
       writeFileSync(new URL('_redirects', dir), lines.join('\n') + '\n');
     },
   },

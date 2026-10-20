@@ -97,7 +97,7 @@ const today = new Date().toISOString().slice(0, 10);
     if (!form) return;
     const KEY = 'logimalin-generateur-emetteur';
     const eur = (n) => n.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' });
-    const num = (v) => Math.max(0, parseFloat(String(v).replace(',', '.')) || 0);
+    const num = (v) => Math.max(0, parseFloat(String(v).replace(/[\s\u00a0\u202f€%]/g, '').replace(',', '.')) || 0);
     const fmtDate = (s) => (s ? new Date(s + 'T12:00:00').toLocaleDateString('fr-FR') : '');
     const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
 

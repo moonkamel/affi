@@ -49,7 +49,7 @@ const unAn = series[series.length - 5] ?? series[0];
     const f = document.getElementById('sim-ilc');
     if (!f) return;
     const $ = (id) => document.getElementById(id);
-    const num = (id) => { const x = parseFloat(String($(id).value).replace(',', '.')); return Number.isFinite(x) && x > 0 ? x : null; };
+    const num = (id) => { const x = parseFloat(String($(id).value).replace(/[\s\u00a0\u202f€%]/g, '').replace(',', '.')); return Number.isFinite(x) && x > 0 ? x : null; };
     const eur = (n) => n.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR', minimumFractionDigits: 2, maximumFractionDigits: 2 });
     const pc = (n) => `${n > 0 ? '+' : ''}${n.toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} %`;
     const ligne = (k, v, cls) => { const tr = document.createElement('tr'); if (cls) tr.className = cls; const th = document.createElement('th'); th.textContent = k; const td = document.createElement('td'); td.textContent = v; tr.append(th, td); return tr; };

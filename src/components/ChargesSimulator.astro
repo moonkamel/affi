@@ -62,7 +62,7 @@
       bnc: { cot: 25.6, vl: 2.2, cfp: 0.2 },
       cipav: { cot: 23.2, vl: 2.2, cfp: 0.2 },
     };
-    const v = (id) => Math.max(0, parseFloat(String(document.getElementById(id).value).replace(',', '.')) || 0);
+    const v = (id) => Math.max(0, parseFloat(String(document.getElementById(id).value).replace(/[\s\u00a0\u202f€%]/g, '').replace(',', '.')) || 0);
     const eur = (n) => n.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 });
     const calc = () => {
       const t = T[document.getElementById('ch-act').value];

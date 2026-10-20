@@ -6,7 +6,7 @@ import SiloIcon from '../../components/SiloIcon.astro';
 import { SILOS, type Silo } from '../../data/site';
 import { abs, breadcrumbs, graph } from '../../lib/schema';
 import { articlePath, getArticles, siloOf } from '../../lib/articles';
-import { GROUPES_OUTILS } from '../../data/outils';
+import { GROUPES_OUTILS, OUTILS_INFO, STOCKAGES_OUTILS, TYPES_OUTIL, type TypeOutil } from '../../data/outils';
 
 export async function getStaticPaths() {
   // Pas de page hub vide (contenu mince = mauvais signal pour Google).
@@ -29,6 +29,11 @@ const classes = new Set(groupes.flatMap((g) => g.items.map((a) => a.id)));
 const autres = tousOutils.filter((a) => !classes.has(a.id));
 if (autres.length) groupes.push({ id: 'autres', titre: 'Autres outils', intro: '', outils: [], items: autres });
 const path = `/${silo}/`;
+// Page des outils : type, accroche et titre court de chaque outil, filtres par type.
+const infoOutil = (a: (typeof all)[number]) => OUTILS_INFO[a.id] ?? { titre: a.data.title.split(' : ')[0], type: 'calculateur' as TypeOutil, accroche: a.data.description };
+const typesPresents = (Object.keys(TYPES_OUTIL) as TypeOutil[]).map((t) => ({ t, n: tousOutils.filter((a) => infoOutil(a).type === t).length })).filter((x) => x.n);
+const reprise = silo === 'outils' ? Object.fromEntries(tousOutils.map((a) => [articlePath(a), infoOutil(a).titre])) : {};
+const stockages = Object.fromEntries(Object.entries(STOCKAGES_OUTILS).map(([k, id]) => [k, `/${id}/`]));
 const crumbs = [{ name: 'Accueil', path: '/' }, { name: info.label, path }];
 
 const intros: Record<Silo, string> = {
@@ -55,7 +60,7 @@ const intros: Record<Silo, string> = {
   creer:
     'Créer son entreprise, puis la faire tourner sans mauvaise surprise : business plan, choix du statut, aides à la création, déclarations URSSAF, impôt et CFE. Nos guides s’appuient sur les sources officielles (URSSAF, impots.gouv, France Travail, Bpifrance) et indiquent la date de leur dernière vérification.',
   outils:
-    'Des outils gratuits, sans inscription, pour les tâches que tu fais une fois par mois ou une fois par an : facturer, convertir la TVA, fixer tes prix, calculer ton seuil de rentabilité, préparer ton dossier pour la banque ou rédiger les documents d’un salarié. Tout reste dans ton navigateur.',
+    'Calculateurs, modèles PDF et générateurs pour facturer, convertir la TVA, fixer tes prix, préparer ton dossier pour la banque ou rédiger les documents d’un salarié. Sans inscription : tes données restent dans ton navigateur, et tes derniers calculs t’attendent quand tu reviens.',
 };
 
 const typeLabels: Record<string, string> = {
@@ -85,30 +90,57 @@ const jsonLd = graph(
     <Breadcrumbs items={crumbs} />
     <div class="hub-head">
       <SiloIcon silo={silo} class="hub-icon" />
-      <h1>{info.title}</h1>
+      <h1>{silo === 'outils' ? `${tousOutils.length} outils gratuits pour ta TPE` : info.title}</h1>
     </div>
     <p class="hub-intro">{intros[silo]}</p>
     {silo === 'outils' ? (
       <>
-        <nav class="hub-chips" aria-label="Catégories d’outils">
-          {groupes.map((g) => <a href={`#${g.id}`}>{g.titre}</a>)}
-        </nav>
-        {groupes.map((g) => (
-          <section aria-labelledby={g.id}>
-            <h2 class="hub-sub" id={g.id}>{g.titre}</h2>
-            {g.intro && <p class="hub-sub-intro">{g.intro}</p>}
-            <div class="grid">
-              {g.items.map((a) => (
-                <a class="tile" href={articlePath(a)}>
-                  <span class="kicker">Outil gratuit</span>
-                  <strong>{a.data.title}</strong>
-                  <span>{a.data.description}</span>
-                  <span class="tile-go">Ouvrir →</span>
-                </a>
-              ))}
+        <section class="out-reprise" data-reprise={JSON.stringify({ titres: reprise, stockages })} hidden aria-labelledby="out-reprise-titre">
+          <div class="out-reprise-tete"><h2 id="out-reprise-titre">Reprends où tu en étais</h2><span>Gardé sur cet appareil uniquement</span></div>
+          <ul class="out-reprise-liste"></ul>
+        </section>
+        <div class="out-barre">
+          <div class="out-barre-ligne">
+            <div class="out-filtre">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M15.5 15.5L21 21" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+              <label for="out-q" class="sr-only">Filtrer les outils</label>
+              <input id="out-q" type="search" autocomplete="off" enterkeyhint="search" placeholder="Filtrer : TVA, salarié, PDF…" />
             </div>
+            <div class="out-types" role="group" aria-label="Type d’outil">
+              <button type="button" aria-pressed="true" data-type="">Tous <span>{tousOutils.length}</span></button>
+              {typesPresents.map(({ t, n }) => <button type="button" aria-pressed="false" data-type={t}>{TYPES_OUTIL[t].pluriel} <span>{n}</span></button>)}
+            </div>
+            <span class="out-compte" aria-live="polite"></span>
+          </div>
+          <nav class="out-ancres" aria-label="Catégories d’outils">
+            {groupes.map((g) => <a href={`#${g.id}`}>{g.titre}</a>)}
+          </nav>
+        </div>
+        {groupes.map((g) => (
+          <section class="out-groupe" aria-labelledby={g.id} data-groupe>
+            <div class="out-groupe-tete"><h2 id={g.id}>{g.titre}</h2>{g.intro && <p>{g.intro}</p>}</div>
+            <ul class="out-grille">
+              {g.items.map((a) => {
+                const o = infoOutil(a);
+                return (
+                  <li data-outil data-type={o.type} data-cles={`${o.titre} ${o.cles ?? ''} ${o.accroche} ${g.titre} ${TYPES_OUTIL[o.type].label}`}>
+                    <a class={`acc-carte t-${o.type}`} href={articlePath(a)}>
+                      <span class="out-badges"><span class="acc-type">{TYPES_OUTIL[o.type].label}</span>{o.nouveau && <span class="out-nouveau">Nouveau</span>}</span>
+                      <strong>{o.titre}</strong>
+                      <span>{o.accroche}</span>
+                      <span class="out-action">{TYPES_OUTIL[o.type].action} →</span>
+                    </a>
+                  </li>
+                );
+              })}
+            </ul>
           </section>
         ))}
+        <div class="out-vide" hidden>
+          <strong>Aucun outil pour « <span></span> »</strong>
+          <p>Essaie un mot plus court, ou cherche dans les guides.</p>
+          <button type="button" class="btn" data-tout>Tout afficher</button>
+        </div>
       </>
     ) : (
     <div class="grid">
@@ -124,3 +156,62 @@ const jsonLd = graph(
     )}
   </div>
 </BaseLayout>
+
+{silo === 'outils' && (
+  <script is:inline>
+    (() => {
+      const q = document.getElementById('out-q');
+      if (!q) return;
+      const items = [...document.querySelectorAll('[data-outil]')];
+      const groupes = [...document.querySelectorAll('[data-groupe]')];
+      const vide = document.querySelector('.out-vide'), compte = document.querySelector('.out-compte');
+      const norm = (s) => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+      let type = '';
+      const filtrer = () => {
+        const mots = norm(q.value.trim()).split(/\s+/).filter(Boolean);
+        let n = 0;
+        items.forEach((li) => {
+          const ok = (!type || li.dataset.type === type) && mots.every((m) => norm(li.dataset.cles).includes(m));
+          li.hidden = !ok; if (ok) n++;
+        });
+        groupes.forEach((g) => { g.hidden = !g.querySelector('[data-outil]:not([hidden])'); });
+        vide.hidden = n > 0; vide.querySelector('span').textContent = q.value.trim();
+        compte.textContent = n === items.length ? '' : `${n} outil${n > 1 ? 's' : ''} sur ${items.length}`;
+      };
+      q.addEventListener('input', filtrer);
+      const boutons = [...document.querySelectorAll('[data-type]')].filter((b) => b.tagName === 'BUTTON');
+      boutons.forEach((b) => b.addEventListener('click', () => {
+        type = b.dataset.type; boutons.forEach((x) => x.setAttribute('aria-pressed', String(x === b))); filtrer();
+      }));
+      document.querySelector('[data-tout]').addEventListener('click', () => { q.value = ''; boutons[0].click(); q.focus(); });
+      const init = new URLSearchParams(location.search).get('q');
+      if (init) { q.value = init; filtrer(); }
+
+      // Reprends où tu en étais : outils utilisés sur cet appareil (mémoire des calculateurs et des modèles).
+      const zone = document.querySelector('[data-reprise]');
+      try {
+        const { titres, stockages } = JSON.parse(zone.dataset.reprise);
+        const derniers = JSON.parse(localStorage.getItem('logimalin-reprise') || '{}');
+        const vus = new Map();
+        for (let i = 0; i < localStorage.length; i++) {
+          const k = localStorage.key(i);
+          const m = k && k.match(/^logimalin-calcul:([^:]+):/);
+          const p = m ? m[1] : stockages[k];
+          if (p && titres[p] && !vus.has(p)) vus.set(p, derniers[p] || { t: 0 });
+        }
+        const liste = [...vus.entries()].sort((a, b) => (b[1].t || 0) - (a[1].t || 0)).slice(0, 4);
+        if (!liste.length) return;
+        zone.querySelector('ul').replaceChildren(...liste.map(([p, d]) => {
+          const li = document.createElement('li');
+          const a = document.createElement('a'); a.href = p; a.className = 'out-reprise-carte';
+          const t = document.createElement('strong'); t.textContent = titres[p];
+          const s = document.createElement('span'); s.textContent = d.r ? `Dernier résultat : ${d.r}` : 'Tes valeurs sont gardées';
+          const r = document.createElement('b'); r.textContent = 'Reprendre';
+          const txt = document.createElement('span'); txt.className = 'out-reprise-texte'; txt.append(t, s);
+          a.append(txt, r); li.append(a); return li;
+        }));
+        zone.hidden = false;
+      } catch { /* stockage indisponible */ }
+    })();
+  </script>
+)}

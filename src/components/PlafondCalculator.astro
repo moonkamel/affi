@@ -37,7 +37,7 @@
     const calc = () => {
       const act = document.getElementById('pl-act').value;
       const d = document.getElementById('pl-debut').value;
-      const ca = Math.max(0, parseFloat(String(document.getElementById('pl-ca').value).replace(',', '.')) || 0);
+      const ca = Math.max(0, parseFloat(String(document.getElementById('pl-ca').value).replace(/[\s\u00a0\u202f€%]/g, '').replace(',', '.')) || 0);
       let jours = 365;
       if (d && d.startsWith('2026-')) {
         const debut = new Date(d + 'T00:00:00Z');

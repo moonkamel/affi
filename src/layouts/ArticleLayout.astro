@@ -61,7 +61,6 @@ if (d.review) nodes.push(review(path, getSoftware(d.review.product), d.review.ra
 if (d.faq.length) nodes.push(faqPage(d.faq));
 
 const fmt = (x: Date) => x.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
-const showDisclosure = true; // Mention obligatoire dès qu'une page peut contenir un lien affilié.
 ---
 <BaseLayout
   title={d.seoTitle}
@@ -83,8 +82,11 @@ const showDisclosure = true; // Mention obligatoire dès qu'une page peut conten
           <span>Mis à jour le <time datetime={d.updated.toISOString()}>{fmt(d.updated)}</time></span>
         </div>
       </header>
-      {showDisclosure && (
-        <p class="disclosure" data-pagefind-ignore>Transparence : certains liens de cette page sont affiliés. Si tu t’abonnes via ces liens, nous touchons parfois une commission, sans surcoût pour toi. Les classements restent indépendants. <a href="/transparence-affiliation/">En savoir plus</a>.</p>
+      {d.type === 'outil' && (
+        <a class="aller-outil" data-aller-outil data-pagefind-ignore hidden>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Accéder directement à l’outil
+        </a>
       )}
       {d.tested && <TestedBox tested={d.tested} product={d.review?.product} />}
       {d.tldr.length > 0 && (

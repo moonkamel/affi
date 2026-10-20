@@ -30,7 +30,7 @@
     const f = document.getElementById('sim-hs');
     if (!f) return;
     const $ = (id) => document.getElementById(`hs-${id}`);
-    const num = (id) => { const x = parseFloat(String($(id).value).replace(',', '.')); return Number.isFinite(x) && x >= 0 ? x : 0; };
+    const num = (id) => { const x = parseFloat(String($(id).value).replace(/[\s\u00a0\u202f€%]/g, '').replace(',', '.')); return Number.isFinite(x) && x >= 0 ? x : 0; };
     const eur = (n) => n.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR', minimumFractionDigits: 2, maximumFractionDigits: 2 });
     const h = (n) => `${n.toLocaleString('fr-FR', { maximumFractionDigits: 2 })} h`;
     const ligne = (k, v, cls) => { const tr = document.createElement('tr'); if (cls) tr.className = cls; const th = document.createElement('th'); th.textContent = k; const td = document.createElement('td'); td.textContent = v; tr.append(th, td); return tr; };

@@ -60,7 +60,7 @@
     const f = document.getElementById('sim-bfr');
     if (!f) return;
     const $ = (id) => document.getElementById(id);
-    const num = (id) => { const x = parseFloat(String($(id).value).replace(',', '.')); return Number.isFinite(x) ? x : null; };
+    const num = (id) => { const x = parseFloat(String($(id).value).replace(/[\s\u00a0\u202f€%]/g, '').replace(',', '.')); return Number.isFinite(x) ? x : null; };
     const pos = (id) => Math.max(0, num(id) ?? 0);
     const eur = (n) => n.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 });
     const ligne = (k, v, cls) => { const tr = document.createElement('tr'); if (cls) tr.className = cls; const th = document.createElement('th'); th.textContent = k; const td = document.createElement('td'); td.textContent = v; tr.append(th, td); return tr; };

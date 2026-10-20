@@ -84,6 +84,12 @@ const ogImage = abs(image);
       <slot />
     </main>
     <Footer />
+    <nav class="nav-mobile" aria-label="Navigation rapide">
+      <a href="/" aria-current={Astro.url.pathname === '/' ? 'page' : undefined}><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11l8-7 8 7v9h-5v-6H9v6H4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>Accueil</a>
+      <a href="/outils/" aria-current={Astro.url.pathname === '/outils/' ? 'page' : undefined}><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="7" height="7" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><rect x="13" y="4" width="7" height="7" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><rect x="4" y="13" width="7" height="7" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><rect x="13" y="13" width="7" height="7" rx="2" fill="none" stroke="currentColor" stroke-width="2"/></svg>Outils</a>
+      <button type="button" data-ouvrir-recherche><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M15.5 15.5L21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Rechercher</button>
+      <a href="/#logiciels"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h14v14H5z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M8 15l3-3 2 2 3-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Logiciels</a>
+    </nav>
     <button type="button" id="haut-de-page" class="haut-de-page" aria-label="Revenir en haut de la page" hidden>
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 14l6-6 6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </button>

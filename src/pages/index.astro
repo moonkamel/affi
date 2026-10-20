@@ -5,29 +5,30 @@ import WeeklyInfographic from '../components/WeeklyInfographic.astro';
 import { SITE, SILOS, type Silo } from '../data/site';
 import { graph, organization, website } from '../lib/schema';
 import { articlePath, getArticles, siloOf } from '../lib/articles';
-import { OUTILS_ACCUEIL } from '../data/outils';
+import { OUTILS_INFO, SITUATIONS, TYPES_OUTIL } from '../data/outils';
 import { SOFTWARE } from '../data/software';
 
 const articles = await getArticles();
+const existe = (id: string) => articles.some((a) => a.id === id);
+const lien = (id: string) => `/${id}/`;
+const count = articles.length;
+const nbOutils = articles.filter((a) => a.data.type === 'outil').length;
 const featured = [
   'facturation/facture-electronique-auto-entrepreneur',
-  'outils/modele-facture-gratuit',
-  'site-internet/creer-un-site-internet',
   'facturation/logiciel-de-facturation',
-  'encaissement/terminal-de-paiement',
   'comptabilite/logiciel-comptabilite',
+  'encaissement/terminal-de-paiement',
+  'site-internet/creer-un-site-internet',
+  'creer/statut-juridique',
 ]
   .map((id) => articles.find((a) => a.id === id))
   .filter((a) => a !== undefined);
-const needs = (['facturation', 'comptabilite', 'encaissement', 'site-internet', 'crm', 'equipe'] as const).filter((s) =>
-  articles.some((a) => siloOf(a) === s),
-);
-const metiers = articles.filter((a) => siloOf(a) === 'metiers' && a.id.includes('/logiciels-'));
-const creerOrder = ['creer/business-plan', 'creer/creer-micro-entreprise', 'creer/statut-juridique', 'creer/acre', 'creer/aides-creation-entreprise', 'creer/sasu-ou-eurl'];
-const creer = creerOrder.map((id) => articles.find((a) => a.id === id)).filter((a) => a !== undefined);
-const count = articles.length;
-const nbOutils = articles.filter((a) => a.data.type === 'outil').length;
-const outilsAccueil = OUTILS_ACCUEIL.filter((o) => articles.some((a) => a.id === o.id));
+const familles = (['facturation', 'comptabilite', 'encaissement', 'site-internet', 'crm', 'equipe', 'metiers', 'creer'] as const)
+  .map((s) => ({ s, n: articles.filter((a) => siloOf(a) === s).length }))
+  .filter((f) => f.n > 0);
+const situations = SITUATIONS.map((s) => ({ ...s, outils: s.outils.filter(existe) }));
+// Recherche rapide : uniquement les outils (la recherche complète du site s'ouvre avec Entrée).
+const index = Object.entries(OUTILS_INFO).filter(([id]) => existe(id)).map(([id, o]) => ({ u: lien(id), t: o.titre, y: TYPES_OUTIL[o.type].label, k: `${o.titre} ${o.cles ?? ''} ${o.accroche}` }));
 ---
 <BaseLayout
   title="Logimalin : logiciels pour TPE et indépendants comparés"
@@ -35,107 +36,266 @@ const outilsAccueil = OUTILS_ACCUEIL.filter((o) => articles.some((a) => a.id ===
   jsonLd={graph(organization(), website())}
 >
   <div class="container" data-pagefind-body>
-    <section class="hero">
-      <div>
-        <span class="sticker">Prix vérifiés · {SITE.pricesChecked}</span>
-        <h1>Les <span class="mark">bons logiciels</span> pour faire tourner ta TPE</h1>
-        <p>Facturer, encaisser, tenir ta compta, trouver des clients : on compare les outils avec les questions d’un vrai dirigeant. Combien ça coûte au final, combien de temps ça fait gagner, et pour qui c’est fait.</p>
-        <div class="actions">
-          <a class="btn" href="/facturation/facture-electronique-auto-entrepreneur/">Facture électronique : ce qui change</a>
-          <a class="btn btn-ghost" href="/outils/modele-facture-gratuit/">Créer une facture gratuite</a>
-        </div>
-        <div class="proof">
-          <span><b>{count}</b> guides et comparatifs</span>
-          <span><b>{SOFTWARE.length}</b> logiciels notés</span>
-          <span><b>{nbOutils}</b> outils gratuits</span>
+    <section class="acc-hero">
+      <div class="acc-hero-texte">
+        <span class="acc-badge"><i aria-hidden="true"></i>Prix vérifiés en {SITE.pricesChecked} · gratuit, sans inscription</span>
+        <h1>Tout ce qu’il faut pour faire tourner ta <span class="acc-tpe">TPE</span>.</h1>
+        <p class="acc-lead">Des calculateurs qui répondent en direct, des modèles prêts en PDF et des comparatifs de logiciels sans jargon. Dis-nous ce que tu veux faire.</p>
+
+        <form class="acc-cherche" role="search" action="/outils/" data-cherche={JSON.stringify(index)}>
+          <label for="acc-q" class="sr-only">Que veux-tu faire ?</label>
+          <div class="acc-champ">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M15.5 15.5L21 21" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+            <input id="acc-q" name="q" type="search" autocomplete="off" enterkeyhint="search" placeholder="Ex. : facture, marge, salarié…" role="combobox" aria-expanded="false" aria-controls="acc-res" aria-autocomplete="list" />
+            <button type="submit" class="acc-go">Voir les outils</button>
+          </div>
+          <ul id="acc-res" class="acc-res" role="listbox" aria-label="Outils correspondants" hidden></ul>
+        </form>
+        <div class="acc-sugg">
+          <span>Recherches fréquentes :</span>
+          {['facture', 'marge', 'TVA', 'salarié', 'business plan'].map((m) => <button type="button" data-sugg={m}>{m}</button>)}
         </div>
       </div>
-      <div class="collage" aria-hidden="true">
-        <div class="paper-sheet c-card"><div class="c-chip"></div><div class="c-num">•••• 2026</div></div>
-        <div class="paper-sheet c-invoice">
-          <div class="c-title">FACTURE</div>
-          <div class="c-bar" style="width:60%"></div>
-          <div class="c-line"><span>Création de logo</span><span>450 €</span></div>
-          <div class="c-line"><span>Cartes de visite</span><span>120 €</span></div>
-          <div class="c-total"><span>Total</span><span>570 €</span></div>
-          <div class="c-bar" style="width:80%"></div>
+
+      <div class="acc-essai" id="acc-essai">
+        <div class="acc-essai-tete"><strong>Essaie tout de suite</strong><span>Convertisseur HT ↔ TTC</span></div>
+        <label for="acc-ht">Montant hors taxe</label>
+        <div class="acc-montant"><input id="acc-ht" type="text" inputmode="decimal" value="1500" autocomplete="off" /><span aria-hidden="true">€</span></div>
+        <div class="acc-taux" role="radiogroup" aria-label="Taux de TVA">
+          {[20, 10, 5.5, 2.1].map((t, i) => <button type="button" role="radio" aria-checked={i === 0 ? 'true' : 'false'} data-taux={t}>{String(t).replace('.', ',')} %</button>)}
         </div>
-        <div class="paper-sheet c-chart"><div class="bars"><i style="height:35%"></i><i style="height:55%"></i><i style="height:45%"></i><i style="height:75%"></i><i style="height:95%"></i></div><div class="c-cap">Temps gagné / mois</div></div>
-        <span class="sticker c-sticker">Gratuit</span>
-        <span class="c-tape t1"></span>
-        <span class="c-tape t2"></span>
-        <svg class="c-spark" viewBox="0 0 24 24"><path d="M12 1.5l2.6 7.9 7.9 2.6-7.9 2.6L12 22.5l-2.6-7.9L1.5 12l7.9-2.6z" fill="currentColor"/></svg>
+        <div class="acc-resultat" role="status">
+          <span>Prix toutes taxes comprises</span>
+          <strong id="acc-ttc">1 800,00 €</strong>
+          <span>dont <b id="acc-tva">300,00 €</b> de TVA</span>
+        </div>
+        <a class="acc-fleche" href="/outils/calcul-ht-ttc/">Ouvrir le convertisseur complet <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
       </div>
     </section>
 
-    <div class="section-head"><h2 id="besoins">De quoi as-tu besoin ?</h2><p>Six familles d’outils, comparées sans jargon.</p></div>
-    <div class="grid">
-      {needs.map((s) => (
-        <a class="tile" href={`/${s}/`}>
-          <SiloIcon silo={s} class="tile-icon" />
-          <strong>{SILOS[s].title}</strong>
-          <span>{SILOS[s].description}</span>
-          <span class="tile-go">Voir les comparatifs →</span>
-        </a>
-      ))}
+    <div class="acc-chiffres">
+      <a href="/outils/"><b>{nbOutils}</b>outils gratuits</a>
+      <a href="/avis/"><b>{SOFTWARE.length}</b>logiciels notés</a>
+      <span><b>{count}</b>guides et comparatifs</span>
+      <span><b>0 €</b>aucun compte à créer</span>
     </div>
 
-    <div class="section-head"><h2 id="outils">Nos outils gratuits</h2><p>Sans inscription, tout reste dans ton navigateur. <a href="/outils/">Voir les {nbOutils} outils</a></p></div>
-    <div class="grid">
-      {outilsAccueil.map((o) => (
-        <a class="tile" href={`/${o.id}/`}>
-          <span class="kicker">Outil gratuit</span>
-          <strong>{o.titre}</strong>
-          <span>{o.accroche}</span>
-          <span class="tile-go">Ouvrir →</span>
-        </a>
+    <section class="acc-section" aria-labelledby="acc-sit-titre">
+      <div class="acc-tete">
+        <div><span class="acc-kicker">Par où commencer</span><h2 id="acc-sit-titre">Où en es-tu aujourd’hui ?</h2></div>
+        <p>Choisis ta situation : on te montre les outils dans l’ordre où tu en auras besoin.</p>
+      </div>
+      <div class="acc-onglets" role="tablist" aria-label="Ta situation">
+        {situations.map((s, i) => (
+          <button type="button" role="tab" id={`sit-t-${s.id}`} aria-controls={`sit-${s.id}`} aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1} data-sit={s.id}><i aria-hidden="true"></i>{s.label}</button>
+        ))}
+      </div>
+      {situations.map((s, i) => (
+        <div class="acc-sit" id={`sit-${s.id}`} role="tabpanel" aria-labelledby={`sit-t-${s.id}`} data-panneau={s.id} hidden={i !== 0}>
+          <div class="acc-sit-carte">
+            <span>{s.etape}</span>
+            <h3>{s.titre}</h3>
+            <p>{s.texte}</p>
+            <a href={lien(s.cta.id)}>{s.cta.label}</a>
+          </div>
+          <ol class="acc-sit-outils">
+            {s.outils.map((id, n) => (
+              <li><a href={lien(id)} class={`acc-carte t-${OUTILS_INFO[id].type}`}>
+                <span class="acc-type">{String(n + 1).padStart(2, '0')} · {TYPES_OUTIL[OUTILS_INFO[id].type].label}</span>
+                <strong>{OUTILS_INFO[id].titre}</strong>
+                <span>{OUTILS_INFO[id].accroche}</span>
+              </a></li>
+            ))}
+          </ol>
+        </div>
       ))}
-    </div>
+    </section>
 
-    <div class="section-head"><h2 id="populaires">Les guides les plus utiles en ce moment</h2><p>Réforme de la facture électronique oblige.</p></div>
-    <div class="grid">
-      {featured.map((a) => (
-        <a class="tile" href={articlePath(a)}>
-          <SiloIcon silo={siloOf(a) as Silo} class="tile-icon" />
-          <span class="kicker">{SILOS[siloOf(a)].label}</span>
-          <strong>{a.data.title}</strong>
-          <span>{a.data.description}</span>
+    <section class="acc-section" aria-labelledby="acc-phares-titre">
+      <div class="acc-tete">
+        <div><span class="acc-kicker">Les plus utilisés</span><h2 id="acc-phares-titre">Les outils que les patrons gardent en favori</h2></div>
+        <a href="/outils/" class="acc-lien">Voir les {nbOutils} outils →</a>
+      </div>
+      <div class="acc-bento">
+        <a href="/outils/modele-facture-gratuit/" class="acc-carte acc-grand t-modele">
+          <span class="acc-type">Modèle PDF · Facturer</span>
+          <strong>Ta facture conforme, prête en PDF</strong>
+          <span>Mentions obligatoires, TVA ou franchise, numérotation : tout est vérifié pendant que tu tapes.</span>
+          <div class="acc-facture" aria-hidden="true">
+            <div class="f-tete"><b>FACTURE F-2026-042</b><i>Ton entreprise</i></div>
+            <div class="f-l"><span>Prestation de conseil · 3 j</span><span>1 500,00 €</span></div>
+            <div class="f-l f-m"><span>TVA 20 %</span><span>300,00 €</span></div>
+            <div class="f-l f-t"><span>Total TTC</span><span>1 800,00 €</span></div>
+          </div>
         </a>
-      ))}
-    </div>
+        <a href="/outils/calcul-marge/" class="acc-carte t-calculateur">
+          <span class="acc-type">Calculateur</span>
+          <strong>Calcul de marge</strong>
+          <span>Taux de marge, de marque et coefficient.</span>
+          <div class="acc-barres" aria-hidden="true"><i style="height:40%"></i><i style="height:62%"></i><i style="height:100%"></i></div>
+        </a>
+        <a href="/creer/etude-de-marche/" class="acc-carte t-analyse">
+          <span class="acc-type">Analyse locale</span>
+          <strong>Étude de marché</strong>
+          <span>Tes concurrents dans ta commune, comptés en ligne.</span>
+          <div class="acc-radar" aria-hidden="true"><i></i><b></b><em style="left:12%;top:30px"></em><em style="left:62%;top:12px"></em><em style="left:80%;top:36px"></em></div>
+        </a>
+        <a href="/outils/calcul-seuil-de-rentabilite/" class="acc-carte t-calculateur">
+          <span class="acc-type">Calculateur</span>
+          <strong>Seuil de rentabilité</strong>
+          <span>Combien vendre, et à quelle date tu deviens rentable.</span>
+          <svg class="acc-courbe" viewBox="0 0 200 54" aria-hidden="true"><path d="M0 50 L200 6" stroke="var(--accent)" stroke-width="2.5" fill="none"/><path d="M0 30 L200 22" stroke="var(--muted)" stroke-width="2" stroke-dasharray="5 5" fill="none"/><circle cx="128" cy="25" r="5" fill="var(--sun)"/></svg>
+        </a>
+        <a href="/outils/lien-avis-google/" class="acc-carte t-generateur">
+          <span class="acc-type">Générateur</span>
+          <strong>QR code avis Google</strong>
+          <span>Ton lien d’avis et l’affichette à imprimer.</span>
+          <div class="acc-qr" aria-hidden="true">{[1,1,0,1,0,1,1,0,1,0,1,1,0,1,1,1,0,1].map((v) => <i class={v ? 'on' : ''}></i>)}</div>
+        </a>
+      </div>
+    </section>
+
+    <section class="acc-section" aria-labelledby="acc-logiciels-titre" id="logiciels">
+      <span class="acc-kicker">Choisir un logiciel</span>
+      <h2 id="acc-logiciels-titre">Les comparatifs, prix réels à l’appui</h2>
+      <div class="acc-familles">
+        {familles.map(({ s, n }) => (
+          <a href={`/${s}/`} class="acc-famille">
+            <SiloIcon silo={s} class="acc-famille-icone" />
+            <span class="acc-famille-texte"><strong>{SILOS[s].title}</strong><span>{SILOS[s].description}</span></span>
+            <span class="acc-compte">{n} guide{n > 1 ? 's' : ''}</span>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section class="acc-section" aria-labelledby="acc-guides-titre">
+      <div class="acc-tete">
+        <div><span class="acc-kicker">À lire en ce moment</span><h2 id="acc-guides-titre">Les guides les plus utiles</h2></div>
+        <p>Réforme de la facture électronique oblige.</p>
+      </div>
+      <ul class="acc-guides">
+        {featured.map((a) => (
+          <li><a href={articlePath(a)}>
+            <span class="acc-type">{SILOS[siloOf(a) as Silo].label}</span>
+            <strong>{a.data.title}</strong>
+          </a></li>
+        ))}
+      </ul>
+    </section>
 
     <WeeklyInfographic />
 
-    <div class="section-head"><h2 id="metiers">Le kit complet de ton métier</h2><p>Les outils indispensables et le budget mensuel.</p></div>
-    <div class="grid">
-      {metiers.map((a) => (
-        <a class="tile" href={articlePath(a)}>
-          <SiloIcon silo="metiers" class="tile-icon" />
-          <strong>{a.data.title}</strong>
-          <span>{a.data.description}</span>
-          <span class="tile-go">Voir le kit →</span>
-        </a>
-      ))}
-    </div>
+    <section class="acc-bande" aria-labelledby="acc-check-titre">
+      <div>
+        <h2 id="acc-check-titre">La check-list de la facture électronique</h2>
+        <p>Les 18 actions à faire avant le 1er septembre 2027, sur une page A4 à imprimer. Gratuit.</p>
+      </div>
+      <a class="acc-bande-btn" href="/ressources/checklist-facture-electronique-2027/">Recevoir la check-list</a>
+    </section>
 
-    <div class="section-head"><h2 id="creer">Tu te lances ?</h2><p>Business plan, statut, aides et déclarations, expliqués simplement.</p></div>
-    <div class="grid">
-      {creer.map((a) => (
-        <a class="tile" href={articlePath(a)}>
-          <SiloIcon silo="creer" class="tile-icon" />
-          <strong>{a.data.title}</strong>
-          <span>{a.data.description}</span>
-          <span class="tile-go">Lire le guide →</span>
-        </a>
-      ))}
-    </div>
-
-    <div class="section-head"><h2 id="pourquoi">Pourquoi nous faire confiance</h2></div>
-    <ul class="trust">
-      <li><strong>Un regard d’entrepreneur</strong><span>On juge les outils sur le temps gagné et le coût réel, pas sur la liste des fonctions. <a href="/a-propos/">Qui sommes-nous</a></span></li>
-      <li><strong>Une méthode publique</strong><span>Critères et pondérations expliqués noir sur blanc. <a href="/methodologie/">Notre méthodologie</a></span></li>
-      <li><strong>Des prix datés</strong><span>Chaque page affiche sa date de mise à jour et ses tarifs vérifiés.</span></li>
-      <li><strong>La transparence</strong><span>Les liens affiliés sont signalés et n’achètent pas les classements. <a href="/transparence-affiliation/">En savoir plus</a></span></li>
-    </ul>
+    <section class="acc-section" aria-labelledby="acc-confiance-titre">
+      <h2 id="acc-confiance-titre">Pourquoi nous faire confiance</h2>
+      <ul class="trust">
+        <li><strong>Un regard d’entrepreneur</strong><span>On juge les outils sur le temps gagné et le coût réel, pas sur la liste des fonctions. <a href="/a-propos/">Qui sommes-nous</a></span></li>
+        <li><strong>Une méthode publique</strong><span>Critères et pondérations expliqués noir sur blanc. <a href="/methodologie/">Notre méthodologie</a></span></li>
+        <li><strong>Des prix datés</strong><span>Chaque page affiche sa date de mise à jour et ses tarifs vérifiés.</span></li>
+      </ul>
+    </section>
   </div>
 </BaseLayout>
+
+<script is:inline>
+  (() => {
+    // Convertisseur express
+    const ht = document.getElementById('acc-ht');
+    if (ht) {
+      let taux = 20;
+      const eur = (n) => n.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' });
+      const maj = () => {
+        const v = parseFloat(ht.value.replace(/[\s  €]/g, '').replace(',', '.'));
+        const ok = Number.isFinite(v) && v >= 0;
+        document.getElementById('acc-ttc').textContent = ok ? eur(Math.round(v * (100 + taux)) / 100) : '–';
+        document.getElementById('acc-tva').textContent = ok ? eur(Math.round(v * taux) / 100) : '–';
+      };
+      ht.addEventListener('input', maj);
+      document.querySelectorAll('[data-taux]').forEach((b) => b.addEventListener('click', () => {
+        taux = parseFloat(b.dataset.taux);
+        document.querySelectorAll('[data-taux]').forEach((x) => x.setAttribute('aria-checked', String(x === b)));
+        maj();
+      }));
+      maj();
+    }
+
+    // Onglets « Où en es-tu ? » (flèches gauche/droite au clavier)
+    const onglets = [...document.querySelectorAll('[data-sit]')];
+    const choisir = (b, focus) => {
+      onglets.forEach((x) => { const on = x === b; x.setAttribute('aria-selected', String(on)); x.tabIndex = on ? 0 : -1; });
+      document.querySelectorAll('[data-panneau]').forEach((p) => { p.hidden = p.dataset.panneau !== b.dataset.sit; });
+      if (focus) b.focus();
+    };
+    onglets.forEach((b, i) => {
+      b.addEventListener('click', () => choisir(b));
+      b.addEventListener('keydown', (e) => {
+        const d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+        if (d) { e.preventDefault(); choisir(onglets[(i + d + onglets.length) % onglets.length], true); }
+      });
+    });
+
+    // Recherche rapide dans les outils
+    const form = document.querySelector('[data-cherche]');
+    if (!form) return;
+    const outils = JSON.parse(form.dataset.cherche);
+    const q = form.querySelector('input'), res = document.getElementById('acc-res');
+    const norm = (s) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+    let actif = -1, trouves = [];
+    const montrer = () => {
+      const m = norm(q.value.trim());
+      trouves = m ? outils.filter((o) => m.split(/\s+/).every((w) => norm(o.k).includes(w))).slice(0, 6) : [];
+      actif = -1;
+      res.replaceChildren(...trouves.map((o, i) => {
+        const li = document.createElement('li');
+        li.setAttribute('role', 'option'); li.id = `acc-o${i}`;
+        const a = document.createElement('a'); a.href = o.u; a.tabIndex = -1;
+        const t = document.createElement('span'); t.className = 'acc-type'; t.textContent = o.y;
+        const s = document.createElement('strong'); s.textContent = o.t;
+        a.append(t, s); li.append(a); return li;
+      }));
+      if (m && !trouves.length) {
+        const li = document.createElement('li'); li.className = 'acc-vide';
+        li.textContent = `Aucun outil pour « ${q.value.trim()} ». Appuie sur Entrée pour chercher dans tout le site.`;
+        res.append(li);
+      }
+      res.hidden = !m;
+      q.setAttribute('aria-expanded', String(!!m));
+    };
+    const surligner = () => {
+      res.querySelectorAll('[role=option]').forEach((li, i) => li.classList.toggle('on', i === actif));
+      q.setAttribute('aria-activedescendant', actif >= 0 ? `acc-o${actif}` : '');
+    };
+    q.addEventListener('input', montrer);
+    q.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+        if (!trouves.length) return;
+        e.preventDefault();
+        actif = (actif + (e.key === 'ArrowDown' ? 1 : -1) + trouves.length) % trouves.length; surligner();
+      } else if (e.key === 'Escape') { res.hidden = true; q.setAttribute('aria-expanded', 'false'); }
+    });
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const cible = trouves[actif >= 0 ? actif : 0];
+      if (cible) { location.href = cible.u; return; }
+      // Pas d'outil : recherche complète dans le site.
+      const ouvrir = document.querySelector('[data-ouvrir-recherche]');
+      if (ouvrir) {
+        ouvrir.click();
+        const texte = q.value;
+        const essai = (n) => { const i = document.querySelector('#recherche-ui input'); if (i) { i.value = texte; i.dispatchEvent(new Event('input', { bubbles: true })); } else if (n) setTimeout(() => essai(n - 1), 150); };
+        essai(20);
+      } else location.href = '/outils/';
+    });
+    document.addEventListener('click', (e) => { if (!form.contains(e.target)) { res.hidden = true; q.setAttribute('aria-expanded', 'false'); } });
+    q.addEventListener('focus', () => { if (q.value.trim()) montrer(); });
+    document.querySelectorAll('[data-sugg]').forEach((b) => b.addEventListener('click', () => { q.value = b.dataset.sugg; q.focus(); montrer(); }));
+  })();
+</script>

@@ -74,6 +74,7 @@ const Tool = COMPONENTS[embed.slug as keyof typeof COMPONENTS];
     <main class="embed-wrap">
       <h1>{embed.title}</h1>
       <Tool />
+      <script>import '../../scripts/champs.ts';</script>
       <p class="embed-credit">Simulateur gratuit proposé par <a href={abs(embed.page)} target="_blank" rel="noopener">{SITE.name}</a></p>
     </main>
     <script is:inline define:vars={{ slug: embed.slug }}>

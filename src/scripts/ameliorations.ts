@@ -12,36 +12,7 @@ const ecrire = (k: string, v: unknown) => { try { localStorage.setItem(k, JSON.s
 const signaler = (el: Element) => { el.dispatchEvent(new Event('input', { bubbles: true })); el.dispatchEvent(new Event('change', { bubbles: true })); };
 
 // ───────── 1. Champs numériques ─────────
-const champNumerique = (i: HTMLInputElement) => {
-  if (i.dataset.num) return;
-  i.dataset.num = '1';
-  if (i.type === 'number') {
-    const entier = i.getAttribute('inputmode') === 'numeric' || (i.step && !i.step.includes('.') && i.step !== 'any' && Number(i.step) >= 1 && !(Number(i.min) % 1));
-    i.type = 'text';
-    i.inputMode = entier ? 'numeric' : 'decimal';
-  }
-  i.autocomplete = 'off';
-  i.setAttribute('enterkeyhint', 'done');
-  i.setAttribute('spellcheck', 'false');
-  // Sélectionne le contenu au premier clic : on remplace la valeur d'exemple sans devoir l'effacer.
-  i.addEventListener('focus', () => setTimeout(() => { try { i.select(); } catch { /* champ non sélectionnable */ } }, 0));
-  // Nettoyage à la sortie : « 1 200 € » ou « 12 % » deviennent « 1200 » et « 12 ».
-  i.addEventListener('blur', () => {
-    const propre = i.value.replace(/[\s  €%]/g, '').replace(/\.(?=\d{3}(\D|$))/g, '');
-    if (propre !== i.value) { i.value = propre; signaler(i); }
-  });
-};
-const preparerChamps = (racine: ParentNode) => {
-  racine.querySelectorAll<HTMLInputElement>('input[type="number"], input[inputmode="decimal"], input[inputmode="numeric"]').forEach(champNumerique);
-};
-preparerChamps(document);
-new MutationObserver((m) => m.forEach((r) => r.addedNodes.forEach((n) => { if (n instanceof Element) preparerChamps(n); })))
-  .observe(document.body, { childList: true, subtree: true });
-// Entrée dans un champ d'un calculateur : ferme le clavier au lieu de recharger la page.
-document.addEventListener('keydown', (e) => {
-  const t = e.target as HTMLElement;
-  if (e.key === 'Enter' && t instanceof HTMLInputElement && t.closest('.sim') && t.type !== 'submit') { e.preventDefault(); t.blur(); }
-});
+import './champs';
 
 // ───────── 2. Mémoire et partage des calculateurs ─────────
 const champsDe = (f: HTMLElement) => [...f.querySelectorAll<HTMLInputElement | HTMLSelectElement>('input[id], select[id]')]
@@ -89,7 +60,15 @@ document.querySelectorAll<HTMLFormElement>('form.sim[id]:not([data-sans-memoire]
     }
   }
   let minuteur = 0;
-  const memoriser = () => { clearTimeout(minuteur); minuteur = window.setTimeout(() => { ecrire(cle, valeurs(f)); btnDefauts.hidden = JSON.stringify(valeurs(f)) === JSON.stringify(defauts); }, 400); };
+  const memoriser = () => { clearTimeout(minuteur); minuteur = window.setTimeout(() => {
+    ecrire(cle, valeurs(f));
+    btnDefauts.hidden = JSON.stringify(valeurs(f)) === JSON.stringify(defauts);
+    // Dernier résultat, affiché dans « Reprends où tu en étais » sur la page des outils.
+    const r = f.querySelector('.sim-out .big')?.textContent?.trim();
+    const reprise = lire('logimalin-reprise') || {};
+    reprise[location.pathname] = { r: r && r !== '–' && r.length < 40 ? r : '', t: Date.now() };
+    ecrire('logimalin-reprise', reprise);
+  }, 400); };
   f.addEventListener('input', memoriser);
   f.addEventListener('change', memoriser);
   barre.addEventListener('click', async (e) => {
@@ -194,6 +173,21 @@ pastille.addEventListener('click', () => {
   cible?.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'center' });
   pastille.hidden = true;
 });
+
+// Hauteur réelle de l'en-tête (barres collantes et ancres placées juste dessous).
+const entete = document.querySelector<HTMLElement>('.site-header');
+const mesurerEntete = () => { if (entete) document.documentElement.style.setProperty('--h-entete', `${entete.offsetHeight}px`); };
+mesurerEntete();
+addEventListener('resize', mesurerEntete, { passive: true });
+
+// Accès direct à l'outil depuis le haut de la page (l'outil vient après le résumé).
+const lienOutil = document.querySelector<HTMLAnchorElement>('[data-aller-outil]');
+const outil = document.querySelector<HTMLElement>('.prose :is(form.sim, .gen-form, .gen, .dossier, .mx, .sim)');
+if (lienOutil && outil) {
+  if (!outil.id) outil.id = 'outil';
+  lienOutil.href = `#${outil.id}`;
+  lienOutil.hidden = outil.getBoundingClientRect().top < innerHeight * 0.9;
+}
 
 // En-tête : replié quand on descend, de retour dès qu'on remonte (mobile seulement, via le CSS).
 let dernierY = scrollY;
