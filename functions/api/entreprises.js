@@ -1,7 +1,7 @@
 // Relais vers l'API publique Recherche d'entreprises (DINUM), utilisé par l'étude de marché locale
 // si l'appel direct depuis le navigateur est bloqué. Seuls les paramètres utiles sont transmis.
 const API = 'https://recherche-entreprises.api.gouv.fr/search';
-const ALLOWED = ['q', 'activite_principale', 'code_commune', 'code_postal', 'departement', 'etat_administratif', 'per_page', 'page', 'minimal', 'include', 'limite_matching_etablissements'];
+const ALLOWED = ['q', 'activite_principale', 'epci', 'code_commune', 'code_postal', 'departement', 'etat_administratif', 'per_page', 'page', 'minimal', 'include', 'limite_matching_etablissements'];
 
 export async function onRequestGet({ request }) {
   const incoming = new URL(request.url).searchParams;

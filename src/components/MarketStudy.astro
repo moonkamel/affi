@@ -1,6 +1,6 @@
 ---
 // Étude de marché locale : compte les entreprises concurrentes (répertoire Sirene, API Recherche d'entreprises)
-// dans la commune, le département et la France, et compare leur densité pour 10 000 habitants
+// dans la commune, l'intercommunalité, le département et la France, et compare leur densité pour 10 000 habitants
 // (populations légales INSEE en vigueur en 2026, fichier public/data/communes-2026.json).
 import { ACTIVITES } from '../data/activites-naf';
 const groupes = [...new Set(ACTIVITES.map((a) => a.groupe))];
@@ -33,6 +33,7 @@ const activites = ACTIVITES.map((a) => a.naf.join(','));
     <div id="mk-res" hidden>
       <div class="mk-kpis">
         <div><span class="big" id="mk-n-com">–</span><span id="mk-l-com">dans la commune</span></div>
+        <div><span class="big" id="mk-n-epci">–</span><span id="mk-l-epci">dans l’intercommunalité</span></div>
         <div><span class="big" id="mk-n-dep">–</span><span id="mk-l-dep">dans le département</span></div>
         <div><span class="big" id="mk-n-fr">–</span><span>en France</span></div>
       </div>
@@ -49,6 +50,7 @@ const activites = ACTIVITES.map((a) => a.naf.join(','));
         <ul id="mk-comp" class="mk-comp"></ul>
         <p class="small" id="mk-more"></p>
       </div>
+      <p class="mk-actions"><button type="button" class="btn btn-ghost btn-sm" id="mk-print">Imprimer ou enregistrer en PDF</button></p>
       <p class="mk-next">Étape suivante : transforme ces chiffres en chiffre d’affaires prévisionnel avec notre <a href="/creer/business-plan/">business plan gratuit</a> (seuil de rentabilité, plan de financement, trésorerie sur 3 ans).</p>
     </div>
   </output>
@@ -63,7 +65,7 @@ const activites = ACTIVITES.map((a) => a.naf.join(','));
     const API_DIRECT = 'https://recherche-entreprises.api.gouv.fr/search';
     const API_RELAIS = '/api/entreprises';
     let viaRelais = false;
-    let communes = null, chargement = null, choix = null;
+    let communes = null, epcis = null, chargement = null, choix = null;
     const fmt = (n) => Math.round(n).toLocaleString('fr-FR');
     const fmt1 = (n) => n.toLocaleString('fr-FR', { maximumFractionDigits: 1 });
     const norm = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[-'’]/g, ' ').replace(/\bsaint\b/g, 'st').replace(/\s+/g, ' ').trim();
@@ -71,7 +73,8 @@ const activites = ACTIVITES.map((a) => a.naf.join(','));
     // ---------- Communes ----------
     const charger = () => {
       if (!chargement) chargement = fetch('/data/communes-2026.json').then((r) => r.json()).then((d) => {
-        communes = d.map((c) => ({ code: c[0], nom: c[1], cp: c[2], dep: c[3], pop: c[4], cps: c[5], n: norm(c[1]) }));
+        epcis = d.e.map((e) => ({ code: e[0], nom: e[1], pop: e[2] }));
+        communes = d.c.map((c) => ({ code: c[0], nom: c[1], cp: c[2], dep: c[3], pop: c[4], epci: c[5] >= 0 ? epcis[c[5]] : null, cps: c[6], n: norm(c[1]) }));
       });
       return chargement;
     };
@@ -128,6 +131,13 @@ const activites = ACTIVITES.map((a) => a.naf.join(','));
       return res.json();
     };
 
+    // ---------- Impression (seul le bloc de l'outil est imprimé) ----------
+    $('mk-print').addEventListener('click', () => {
+      document.documentElement.classList.add('print-mk');
+      window.print();
+      setTimeout(() => document.documentElement.classList.remove('print-mk'), 500);
+    });
+
     // ---------- Analyse ----------
     $('mk-go').addEventListener('click', async () => {
       const i = $('mk-act').value;
@@ -150,6 +160,8 @@ const activites = ACTIVITES.map((a) => a.naf.join(','));
         const lieu = c.cps ? { code_postal: c.cps.join(',') } : { code_commune: c.code };
         const rCom = await appel({ activite_principale: naf, per_page: '10', include: 'matching_etablissements', limite_matching_etablissements: '1', ...lieu });
         await pause(200);
+        const rEpci = c.epci ? await appel({ activite_principale: naf, epci: c.epci.code, per_page: '1' }) : null;
+        if (rEpci) await pause(200);
         const rDep = await appel({ activite_principale: naf, departement: c.dep, per_page: '1' });
         await pause(200);
         const rFr = await appel({ activite_principale: naf, per_page: '1' });
@@ -157,13 +169,17 @@ const activites = ACTIVITES.map((a) => a.naf.join(','));
         const popFr = communes.reduce((s, x) => s + x.pop, 0);
         const zones = [
           { nom: c.nom, pop: c.pop, n: rCom.total_results || 0 },
+          ...(rEpci ? [{ nom: c.epci.nom, pop: c.epci.pop, n: rEpci.total_results || 0, epci: true }] : []),
           { nom: `Département (${c.dep})`, pop: popDep, n: rDep.total_results || 0 },
           { nom: 'France', pop: popFr, n: rFr.total_results || 0 },
         ];
+        const zDep = zones[zones.length - 2], zFr = zones[zones.length - 1], zEpci = rEpci ? zones[1] : null;
         $('mk-n-com').textContent = fmt(zones[0].n);
+        $('mk-n-epci').parentElement.hidden = !zEpci;
+        if (zEpci) { $('mk-n-epci').textContent = fmt(zEpci.n); $('mk-l-epci').textContent = `dans ${zEpci.nom}`; }
         $('mk-l-com').textContent = `à ${c.nom}`;
-        $('mk-n-dep').textContent = fmt(zones[1].n);
-        $('mk-n-fr').textContent = fmt(zones[2].n);
+        $('mk-n-dep').textContent = fmt(zDep.n);
+        $('mk-n-fr').textContent = fmt(zFr.n);
         const tab = $('mk-tab');
         tab.innerHTML = '';
         zones.forEach((z) => {
@@ -173,19 +189,19 @@ const activites = ACTIVITES.map((a) => a.naf.join(','));
         });
         // Verdict : densité locale comparée à la moyenne nationale
         const petite = c.pop < 3000;
-        const ref = petite ? zones[1] : zones[0];
-        const dFr = zones[2].n / zones[2].pop;
+        const ref = petite ? (zEpci || zDep) : zones[0];
+        const dFr = zFr.n / zFr.pop;
         const ratio = ref.pop && dFr ? (ref.n / ref.pop) / dFr : 0;
-        const zone = petite ? 'ton département' : c.nom;
+        const zone = petite ? (zEpci ? zEpci.nom : 'ton département') : c.nom;
         const Zone = zone.charAt(0).toUpperCase() + zone.slice(1);
         let verdict;
-        if (!zones[2].n) verdict = 'Aucune entreprise trouvée pour cette activité : vérifie le choix de l’activité.';
+        if (!zFr.n) verdict = 'Aucune entreprise trouvée pour cette activité : vérifie le choix de l’activité.';
         else if (ratio < 0.7) verdict = `📉 ${Zone} compte environ ${fmt1(ratio)} fois la densité nationale de concurrents. Soit la demande est mal servie (une opportunité), soit elle est plus faible qu’ailleurs : c’est ce que ton enquête de terrain doit trancher.`;
         else if (ratio <= 1.3) verdict = `⚖️ La densité de concurrents à ${zone} est proche de la moyenne nationale (${fmt1(ratio)} fois). Ni désert ni marché saturé : ta différence se jouera sur l’offre, le prix et l’emplacement.`;
         else verdict = `📈 ${Zone} compte ${fmt1(ratio)} fois plus de concurrents par habitant que la moyenne nationale. Le marché est disputé : il te faudra un positionnement clair et un vrai avantage.`;
         $('mk-verdict').textContent = verdict;
         const g = root.querySelector(`#mk-act option[value="${i}"]`)?.parentElement?.label || '';
-        $('mk-note').textContent = (petite ? 'Ta commune compte moins de 3 000 habitants : la comparaison se fait sur le département, plus représentatif de ta zone de chalandise. ' : '')
+        $('mk-note').textContent = (petite ? `Ta commune compte moins de 3 000 habitants : la comparaison se fait sur ${zEpci ? 'l’intercommunalité, plus représentative' : 'le département, plus représentatif'} de ta zone de chalandise. ` : '')
           + (/Services et conseil|E-commerce/.test(g + ' ' + $('mk-act').selectedOptions[0].text) ? 'Pour cette activité, tes clients ne sont pas forcément locaux : regarde surtout les chiffres du département et de la France. ' : '');
         // Liste des concurrents de la commune
         const ul = $('mk-comp');
@@ -223,12 +239,19 @@ const activites = ACTIVITES.map((a) => a.naf.join(','));
   .mk-list { position: absolute; z-index: 5; left: 0; right: 0; margin: 4px 0 0; padding: 4px; list-style: none; background: var(--card); border: 1.5px solid var(--line); border-radius: 10px; box-shadow: 0 8px 20px rgba(0,0,0,.12); max-height: 280px; overflow-y: auto; }
   .mk-list li { padding: 8px 10px; border-radius: 8px; cursor: pointer; font-size: .92rem; }
   .mk-list li:hover, .mk-list li:focus { background: var(--accent-soft); outline: none; }
-  .mk-kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 6px 0 14px; }
+  .mk-kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 6px 0 14px; }
   .mk-kpis div { display: flex; flex-direction: column; }
   .mk-kpis .big { font-size: 2rem; }
-  @media (max-width: 600px) { .mk-kpis .big { font-size: 1.4rem; } .mk-kpis span:not(.big) { font-size: .82rem; } }
+  @media (max-width: 600px) { .mk-kpis { grid-template-columns: 1fr 1fr; } .mk-kpis .big { font-size: 1.4rem; } .mk-kpis span:not(.big) { font-size: .82rem; } }
   .market .md-table { background: var(--card); margin: 12px 0; }
   .mk-verdict { font-weight: 600; }
+  .mk-actions { margin: 10px 0 0; }
+  @media print {
+    :global(html.print-mk body *) { visibility: hidden; }
+    :global(html.print-mk #market-tool), :global(html.print-mk #market-tool *) { visibility: visible; }
+    :global(html.print-mk #market-tool) { position: absolute; left: 0; top: 0; width: 100%; box-shadow: none; border: 0; }
+    :global(html.print-mk #market-tool .btn), :global(html.print-mk .mk-commune input), :global(html.print-mk #mk-act) { display: none; }
+  }
   .mk-next { margin: 14px 0 0; padding-top: 12px; border-top: 1px solid var(--line); }
   .mk-comp { margin: 8px 0; padding-left: 18px; font-size: .9rem; }
   .mk-comp li { margin: 4px 0; }

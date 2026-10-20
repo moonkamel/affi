@@ -17,7 +17,10 @@ export async function getStaticPaths() {
 
 const silo = Astro.params.silo as Silo;
 const info = SILOS[silo];
-const articles = (await getArticles()).filter((a) => siloOf(a) === silo);
+const all = await getArticles();
+const articles = all.filter((a) => siloOf(a) === silo);
+// La page Outils reprend aussi les outils publiés dans d'autres rubriques (étude de marché, business plan…).
+const autresOutils = silo === 'outils' ? all.filter((a) => siloOf(a) !== 'outils' && a.data.type === 'outil') : [];
 const path = `/${silo}/`;
 const crumbs = [{ name: 'Accueil', path: '/' }, { name: info.label, path }];
 
@@ -45,7 +48,7 @@ const intros: Record<Silo, string> = {
   creer:
     'Créer son entreprise, puis la faire tourner sans mauvaise surprise : business plan, choix du statut, aides à la création, déclarations URSSAF, impôt et CFE. Nos guides s’appuient sur les sources officielles (URSSAF, impots.gouv, France Travail, Bpifrance) et indiquent la date de leur dernière vérification.',
   outils:
-    'Des simulateurs gratuits pour chiffrer le coût réel de tes outils avant de signer : abonnement, matériel, frais de paiement, tout compris.',
+    'Des simulateurs gratuits pour chiffrer le coût réel de tes outils avant de signer (abonnement, matériel, frais de paiement), et des outils pour lancer ton entreprise : étude de marché locale, business plan, plafonds de la micro-entreprise.',
 };
 
 const typeLabels: Record<string, string> = {
@@ -65,7 +68,7 @@ const jsonLd = graph(
     description: info.description,
     url: abs(path),
     inLanguage: 'fr-FR',
-    hasPart: articles.map((a) => ({ '@type': 'Article', headline: a.data.title, url: abs(articlePath(a)) })),
+    hasPart: [...articles, ...autresOutils].map((a) => ({ '@type': 'Article', headline: a.data.title, url: abs(articlePath(a)) })),
   },
   breadcrumbs(crumbs),
 );
@@ -88,5 +91,20 @@ const jsonLd = graph(
         </a>
       ))}
     </div>
+    {autresOutils.length > 0 && (
+      <>
+        <h2 class="hub-sub">Outils pour créer ton entreprise</h2>
+        <div class="grid">
+          {autresOutils.map((a) => (
+            <a class="tile" href={articlePath(a)}>
+              <span class="kicker">Outil gratuit</span>
+              <strong>{a.data.title}</strong>
+              <span>{a.data.description}</span>
+              <span class="tile-go">Ouvrir →</span>
+            </a>
+          ))}
+        </div>
+      </>
+    )}
   </div>
 </BaseLayout>

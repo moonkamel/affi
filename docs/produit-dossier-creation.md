@@ -7,11 +7,14 @@ Décision du 20/10/2026, après mesure des volumes (docs/recherche/volumes-outil
 - **Étude de marché locale** sur /creer/etude-de-marche/ (composant `MarketStudy.astro`) :
   - 83 activités courantes de TPE avec leurs codes NAF (`src/data/activites-naf.ts`) ;
   - recherche de la commune par nom ou code postal (`public/data/communes-2026.json`, populations légales INSEE en vigueur en 2026, paquet @etalab/decoupage-administratif 6.0.0) ;
-  - nombre d'entreprises actives de l'activité dans la commune, le département et en France (API Recherche d'entreprises, `etat_administratif=A`) ;
+  - nombre d'entreprises actives de l'activité dans la commune, l'intercommunalité (EPCI, 1 255 groupements), le département et en France (API Recherche d'entreprises, `etat_administratif=A`) ;
+  - pour une commune de moins de 3 000 habitants, la comparaison se fait sur l'intercommunalité ;
+  - impression ou enregistrement en PDF du résultat ;
   - densité pour 10 000 habitants et verdict (moins de 0,7 fois la moyenne nationale, dans la moyenne, plus de 1,3 fois) ;
   - liste des 10 premières entreprises de la commune ;
   - lien vers le business plan gratuit.
 - **Appel direct** à l'API depuis le navigateur ; si le navigateur le bloque (CORS), bascule automatique sur le relais Cloudflare `functions/api/entreprises.js` (seul `/api/*` passe par une fonction, voir `public/_routes.json`).
+- **Accès** : menu principal (« Étude de marché »), page Outils gratuits (section « Outils pour créer ton entreprise »), pied de page.
 - **À mesurer** dans le relevé mensuel : visites de /creer/etude-de-marche/ et appels à /api/entreprises (Cloudflare).
 
 ## Phase 2 : payante (39 à 49 €, paiement unique)
