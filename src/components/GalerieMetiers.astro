@@ -1,0 +1,39 @@
+---
+// Galerie des kits par métier : défilement horizontal piloté par le défilement vertical (sur grand écran),
+// simple carrousel à faire glisser au doigt sur mobile.
+import { getArticles } from '../lib/articles';
+const all = await getArticles();
+const METIERS: [string, string, string][] = [
+  ['metiers/logiciels-restaurant', 'Restaurant', 'Caisse, réservation, planning : le kit complet de ton établissement.'],
+  ['metiers/logiciels-artisan-btp', 'Artisan du bâtiment', 'Devis sur chantier, situations de travaux et factures.'],
+  ['metiers/logiciels-freelance', 'Freelance et consultant', 'Facturation simple, CRM léger et compta sans prise de tête.'],
+  ['metiers/logiciel-boulangerie', 'Boulangerie', 'Une caisse rapide aux heures de pointe, et le suivi des ventes.'],
+  ['metiers/logiciel-coiffure', 'Coiffure et beauté', 'Agenda en ligne, rappels et encaissement au salon.'],
+  ['metiers/logiciel-garage-automobile', 'Garage automobile', 'Ordres de réparation, devis et suivi des véhicules.'],
+  ['metiers/logiciel-plombier', 'Plombier', 'Interventions, devis express et factures sur place.'],
+  ['metiers/logiciel-paysagiste', 'Paysagiste', 'Contrats d’entretien, planning des équipes et devis.'],
+];
+const cartes = METIERS.filter(([id]) => all.some((a) => a.id === id));
+---
+<section class="gm" data-scene="horizontal" aria-labelledby="gm-titre">
+  <div class="gm-colle">
+    <div class="gm-tete">
+      <span class="acc-kicker">Par métier</span>
+      <h2 id="gm-titre">Le kit complet de ton métier</h2>
+      <p>Les logiciels indispensables, dans l’ordre où tu en as besoin.</p>
+    </div>
+    <ol class="gm-piste">
+      {cartes.map(([id, titre, texte], i) => (
+        <li style={`--teinte:${[228, 42, 152, 18, 280, 200, 190, 110][i % 8]}`}>
+          <a href={`/${id}/`} class="gm-carte">
+            <span class="gm-halo" aria-hidden="true"></span>
+            <span class="gm-num">{String(i + 1).padStart(2, '0')}</span>
+            <strong>{titre}</strong>
+            <span>{texte}</span>
+            <span class="gm-go">Voir le kit →</span>
+          </a>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>

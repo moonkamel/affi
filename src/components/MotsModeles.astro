@@ -1,0 +1,23 @@
+---
+// Bandeau animé de l'accueil : les noms des modèles défilent en sens opposés au rythme du défilement,
+// autour de l'étoile de la marque, et mènent à la bibliothèque de modèles.
+import { MODELES } from '../data/modeles';
+const lignes = [
+  ['Facture', 'Devis', 'Avoir', 'Reçu', 'Bon de commande', 'Relance'],
+  ['Business plan', 'SWOT', 'PESTEL', 'Dossier bancaire', 'Prévisionnel'],
+  ['Certificat de travail', 'Promesse d’embauche', 'Fiche de poste', 'Solde de tout compte'],
+];
+---
+<section class="mm" data-scene="flux" aria-labelledby="mm-titre">
+  <div class="mm-lignes" aria-hidden="true">
+    {lignes.map((l, i) => (
+      <div class={`mm-ligne mm-l${i}`}>{[...l, ...l, ...l].map((m) => <span>{m}<i>✦</i></span>)}</div>
+    ))}
+  </div>
+  <div class="mm-centre">
+    <svg class="mm-etoile" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5l2.6 7.9 7.9 2.6-7.9 2.6L12 22.5l-2.6-7.9L1.5 12l7.9-2.6z" fill="currentColor"/></svg>
+    <h2 id="mm-titre">{MODELES.length} modèles prêts à l’emploi</h2>
+    <p>Factures, courriers, documents RH, dossier pour la banque : remplis, télécharge, c’est fait.</p>
+    <a class="acc-bande-btn mm-btn" href="/modeles/">Ouvrir la bibliothèque</a>
+  </div>
+</section>

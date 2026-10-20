@@ -590,6 +590,142 @@ tbody tr:hover { background: color-mix(in srgb, var(--accent-soft) 45%, transpar
   .acc-essai { padding: 20px; box-shadow: 8px 10px 0 -3px var(--sky); }
 }
 
+/* ───────── Scènes animées de l'accueil (scripts/scenes.ts) ───────── */
+/* Une journée de patron : rendu simple par défaut, scène collée quand html.scenes est posé. */
+.jr { margin-top: 84px; }
+.jr-colle { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 48px; align-items: center; }
+.jr-texte h2 { font-size: clamp(1.9rem, 4vw, 2.75rem); letter-spacing: -.03em; line-height: 1.05; margin: 8px 0 22px; }
+.jr-horloge { display: none; }
+.jr-etapes { display: grid; gap: 22px; margin: 0; padding: 0; list-style: none; }
+.jr-num { font-family: var(--display); font-size: .8rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--sun); }
+.jr-etapes h3 { margin: 4px 0 6px; font-size: clamp(1.4rem, 2.6vw, 1.9rem); }
+.jr-etapes p { margin: 0 0 8px; color: var(--muted); max-width: 46ch; }
+.jr-etapes a { font-family: var(--display); font-weight: 700; text-decoration: none; display: inline-flex; min-height: 44px; align-items: center; }
+.jr-barre { display: none; }
+.jr-scene { position: relative; height: 460px; }
+.jr-halo { position: absolute; inset: 8% 4%; border-radius: 50%; background: radial-gradient(closest-side, color-mix(in srgb, var(--accent) 34%, transparent), transparent); filter: blur(20px); opacity: .7; }
+.jr-doc { position: absolute; left: 50%; top: 50%; width: min(330px, 78%); padding: 22px; border-radius: 14px; background: #fbfbfd; color: #161a2b; font-size: .82rem; box-shadow: 0 30px 70px rgba(0, 0, 0, .5); transform: translate(-50%, -50%) rotate(-2deg); transition: transform .8s cubic-bezier(.2, .8, .2, 1), opacity .6s; }
+.jr-doc-tete { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding-bottom: 10px; margin-bottom: 10px; border-bottom: 2px solid #3d5afe; }
+.jr-logo { width: 22px; height: 22px; border-radius: 6px; background: #3d5afe; flex: none; }
+.jr-intitule { display: grid; text-align: right; }
+.jr-intitule b { grid-area: 1 / 1; font-family: var(--display); font-weight: 800; letter-spacing: .04em; color: #2438b8; transition: opacity .4s, transform .4s; }
+.jr-intitule .t-devis { opacity: 0; }
+.jr-lignes > div { display: flex; justify-content: space-between; gap: 10px; padding: 5px 0; border-bottom: 1px solid #e8ebf3; }
+.jr-tva { color: #5a6175; }
+.jr-total { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; padding: 8px 10px; border-radius: 8px; background: #fff4d6; font-weight: 700; }
+.jr-total b { font-family: var(--display); font-size: 1.15rem; }
+.jr-pa { display: flex; align-items: center; gap: 6px; margin-top: 10px; font-size: .74rem; font-weight: 700; color: #1d7a52; transition: opacity .5s; }
+.jr-pa i { width: 8px; height: 8px; border-radius: 50%; background: #1fa774; }
+.jr-signature { display: grid; justify-items: end; margin-top: 12px; color: #5a6175; font-size: .72rem; transition: opacity .4s; opacity: 0; }
+.jr-signature svg { width: 120px; height: 30px; }
+.jr-signature path { stroke-dasharray: 260; stroke-dashoffset: 0; }
+.jr-tampon { position: absolute; right: 18px; top: 46%; padding: 4px 14px; border: 3px solid #1fa774; border-radius: 8px; color: #1fa774; font-family: var(--display); font-weight: 800; font-size: 1.3rem; letter-spacing: .1em; text-transform: uppercase; transform: rotate(-14deg) scale(1); opacity: 0; transition: opacity .3s, transform .45s cubic-bezier(.3, 1.6, .5, 1); }
+.jr-tpe { position: absolute; right: 2%; bottom: 4%; width: 150px; padding: 12px; border-radius: 22px; background: #1b1f2e; border: 1px solid #333a52; box-shadow: 0 24px 50px rgba(0, 0, 0, .55); opacity: 0; transform: translate(40px, 60px) rotate(8deg); transition: transform .8s cubic-bezier(.2, .8, .2, 1), opacity .5s; }
+.jr-ecran { position: relative; display: grid; gap: 2px; padding: 12px 10px; border-radius: 12px; background: #0f2a22; color: #dff7ec; font-size: .7rem; }
+.jr-ecran b { font-family: var(--display); font-size: 1.05rem; }
+.jr-ecran i { position: absolute; right: 8px; top: 8px; width: 22px; height: 22px; border-radius: 50%; background: #1fa774; color: #fff; display: grid; place-items: center; font-style: normal; font-weight: 800; }
+.jr-touches { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 10px; }
+.jr-touches i { height: 14px; border-radius: 5px; background: #2a3044; }
+.jr-tableau { position: absolute; left: 50%; top: 50%; width: min(340px, 82%); padding: 20px; border-radius: 18px; background: var(--card); border: 1px solid var(--line); box-shadow: 0 30px 70px rgba(0, 0, 0, .5); opacity: 0; transform: translate(-50%, -30%) scale(.92); transition: transform .8s cubic-bezier(.2, .8, .2, 1), opacity .5s; }
+.jr-tab-tete, .jr-tab-pied { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; color: var(--muted); font-size: .85rem; }
+.jr-tab-tete b { font-family: var(--display); font-size: 1.5rem; color: var(--sun); }
+.jr-tab-pied b { color: var(--good); }
+.jr-barres { display: flex; align-items: flex-end; gap: 8px; height: 120px; margin: 14px 0; }
+.jr-barres i { flex: 1; height: 8%; border-radius: 6px 6px 2px 2px; background: color-mix(in srgb, var(--accent) 70%, transparent); transition: height .7s cubic-bezier(.2, .8, .2, 1); }
+.jr-barres i:last-child { background: var(--sun); }
+.jr-barres i:nth-child(2) { transition-delay: .06s; } .jr-barres i:nth-child(3) { transition-delay: .12s; } .jr-barres i:nth-child(4) { transition-delay: .18s; } .jr-barres i:nth-child(5) { transition-delay: .24s; } .jr-barres i:nth-child(6) { transition-delay: .3s; }
+/* Sans animation : le document montré en facture payée, à côté des étapes */
+html:not(.scenes) .jr-tampon { opacity: 1; }
+html:not(.scenes) .jr-scene { height: 380px; }
+
+html.scenes .jr { height: 420vh; margin-top: 40px; }
+html.scenes .jr-colle { position: sticky; top: 0; height: 100vh; height: 100svh; }
+html.scenes .jr-etapes { display: grid; }
+html.scenes .jr-etapes li { grid-area: 1 / 1; opacity: 0; transform: translateY(18px); transition: opacity .45s, transform .45s; pointer-events: none; }
+html.scenes .jr-horloge { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; color: var(--ink); }
+html.scenes .jr-horloge svg { width: 48px; height: 48px; }
+html.scenes .jr-horloge span { display: grid; font-family: var(--display); font-weight: 800; font-size: 1.6rem; }
+html.scenes .jr-horloge b { grid-area: 1 / 1; opacity: 0; transition: opacity .3s; }
+.jr-aiguille-h { transform-origin: 24px 24px; transform: rotate(calc((8.5 + var(--p, 0) * 9.5) * 30deg)); }
+.jr-aiguille-m { transform-origin: 24px 24px; transform: rotate(calc(var(--p, 0) * 9.5 * 360deg)); }
+html.scenes .jr-barre { display: block; height: 4px; margin-top: 26px; border-radius: 4px; background: var(--line); max-width: 360px; overflow: hidden; }
+html.scenes .jr-barre i { display: block; height: 100%; width: calc(var(--p, 0) * 100%); background: linear-gradient(90deg, var(--accent), var(--sun)); }
+html.scenes .jr-signature path { stroke-dashoffset: calc(260px * (1 - min(1, var(--p, 0) * 6))); }
+html.scenes .jr-intitule .t-devis { opacity: 1; }
+html.scenes .jr-intitule .t-facture { opacity: 0; transform: translateY(6px); }
+html.scenes .jr-pa { opacity: 0; }
+html.scenes .jr-signature { opacity: 1; }
+html.scenes .jr-tampon { transform: rotate(-14deg) scale(2.2); }
+/* étape en cours */
+html.scenes .jr[data-etape="0"] [data-pour="0"], html.scenes .jr[data-etape="1"] [data-pour="1"], html.scenes .jr[data-etape="2"] [data-pour="2"], html.scenes .jr[data-etape="3"] [data-pour="3"] { opacity: 1 !important; transform: none !important; pointer-events: auto !important; }
+html.scenes .jr:is([data-etape="1"], [data-etape="2"], [data-etape="3"]) .t-devis { opacity: 0; transform: translateY(-6px); }
+html.scenes .jr:is([data-etape="1"], [data-etape="2"], [data-etape="3"]) .t-facture { opacity: 1; transform: none; }
+html.scenes .jr:is([data-etape="1"], [data-etape="2"], [data-etape="3"]) .jr-pa { opacity: 1; }
+html.scenes .jr:is([data-etape="1"], [data-etape="2"], [data-etape="3"]) .jr-signature { opacity: 0; }
+html.scenes .jr:is([data-etape="2"], [data-etape="3"]) .jr-tampon { opacity: 1; transform: rotate(-14deg) scale(1); }
+html.scenes .jr[data-etape="2"] .jr-doc { transform: translate(-62%, -54%) rotate(-5deg); }
+html.scenes .jr[data-etape="2"] .jr-tpe { opacity: 1; transform: none; }
+html.scenes .jr[data-etape="3"] .jr-doc { transform: translate(-80%, -70%) rotate(-8deg) scale(.82); opacity: .35; }
+html.scenes .jr[data-etape="3"] .jr-tpe { opacity: .35; transform: translate(10px, 30px) rotate(4deg) scale(.86); }
+html.scenes .jr[data-etape="3"] .jr-tableau { opacity: 1; transform: translate(-46%, -42%); }
+html.scenes .jr[data-etape="3"] .jr-barres i { height: var(--h); }
+@media (max-width: 900px) {
+  .jr-colle { grid-template-columns: minmax(0, 1fr); gap: 20px; }
+  html.scenes .jr-colle { align-content: center; }
+  html.scenes .jr-scene { order: -1; height: 40svh; min-height: 260px; }
+  .jr-doc { font-size: .72rem; padding: 16px; width: min(280px, 74%); }
+  .jr-tpe { width: 120px; }
+  html.scenes .jr-texte h2 { font-size: 1.5rem; margin-bottom: 10px; }
+  html.scenes .jr-horloge { margin-bottom: 8px; }
+  html.scenes .jr-horloge svg { width: 36px; height: 36px; }
+  html.scenes .jr-horloge span { font-size: 1.2rem; }
+  html.scenes .jr-etapes h3 { font-size: 1.25rem; }
+  html.scenes .jr-etapes p { font-size: .95rem; }
+  html.scenes .jr-barre { margin-top: 12px; }
+}
+
+/* Bandeau des modèles : lignes de mots qui glissent en sens opposés autour de l'étoile */
+.mm { position: relative; margin: 96px calc(50% - 50vw) 0; padding: 90px 0; overflow: hidden; background: radial-gradient(ellipse at 50% 50%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 62%), var(--paper-2); border-block: 1px solid var(--line); }
+.mm-lignes { display: grid; gap: 6px; }
+.mm-ligne { display: flex; gap: .4em; white-space: nowrap; font-family: var(--display); font-weight: 800; font-size: clamp(2.6rem, 8vw, 6.6rem); line-height: 1.05; letter-spacing: -.04em; color: color-mix(in srgb, var(--ink) 10%, transparent); will-change: transform; }
+.mm-ligne span { display: inline-flex; align-items: center; gap: .4em; }
+.mm-ligne i { font-style: normal; font-size: .45em; color: color-mix(in srgb, var(--sun) 50%, transparent); }
+.mm-l1 { color: transparent; -webkit-text-stroke: 1.5px color-mix(in srgb, var(--accent) 45%, transparent); }
+.mm-l0 { transform: translateX(calc(-5% - var(--p, .5) * 30%)); }
+.mm-l1 { transform: translateX(calc(-38% + var(--p, .5) * 30%)); }
+.mm-l2 { transform: translateX(calc(-12% - var(--p, .5) * 22%)); }
+.mm-centre::before { content: ""; position: absolute; z-index: -1; left: 50%; top: 50%; width: min(760px, 120vw); height: 340px; transform: translate(-50%, -50%); border-radius: 50%; background: radial-gradient(closest-side, var(--paper-2) 55%, transparent); }
+.mm-centre { isolation: isolate; position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 10px; padding: 24px; text-align: center; }
+.mm-etoile { width: 72px; height: 72px; color: var(--sun); filter: drop-shadow(0 0 24px color-mix(in srgb, var(--sun) 70%, transparent)); transform: rotate(calc(var(--p, 0) * 180deg)) scale(calc(.85 + var(--p, 0) * .4)); }
+.mm-centre h2 { margin: 6px 0 0; font-size: clamp(2rem, 5vw, 3.4rem); letter-spacing: -.035em; text-shadow: 0 4px 30px var(--paper); }
+.mm-centre p { margin: 0 0 8px; max-width: 46ch; color: var(--ink); text-shadow: 0 2px 16px var(--paper); }
+.mm-btn { background: var(--sun); color: #1b1608; }
+.mm-btn:hover { background: #ffd47a; color: #1b1608; }
+
+/* Galerie des métiers : défilement horizontal piloté par le défilement vertical sur grand écran */
+.gm { margin-top: 96px; }
+.gm-tete h2 { font-size: clamp(1.9rem, 4vw, 2.75rem); letter-spacing: -.03em; line-height: 1.05; margin: 8px 0 8px; }
+.gm-tete p { margin: 0 0 24px; color: var(--muted); }
+.gm-piste { display: flex; gap: 16px; margin: 0 -16px; padding: 6px 16px 18px; list-style: none; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
+.gm-piste::-webkit-scrollbar { display: none; }
+.gm-piste li { flex: none; width: min(320px, 78vw); scroll-snap-align: start; }
+.gm-carte { position: relative; isolation: isolate; display: flex; flex-direction: column; gap: 8px; height: 100%; min-height: 360px; padding: 26px; overflow: hidden; border-radius: 26px; background: var(--card); border: 1px solid var(--line); color: var(--ink); text-decoration: none; transition: transform .3s, border-color .3s; }
+.gm-carte:hover { color: var(--ink); transform: translateY(-6px); border-color: hsl(var(--teinte) 80% 65%); }
+.gm-halo { position: absolute; z-index: -1; width: 260px; height: 260px; right: -80px; top: -60px; border-radius: 50%; background: radial-gradient(closest-side, hsl(var(--teinte) 85% 62% / .55), transparent); filter: blur(10px); transition: transform .6s; }
+.gm-carte:hover .gm-halo { transform: translate(-30px, 30px) scale(1.15); }
+.gm-num { font-family: var(--display); font-weight: 800; font-size: .9rem; color: hsl(var(--teinte) 85% 72%); }
+.gm-carte strong { margin-top: auto; font-family: var(--display); font-size: clamp(1.6rem, 2.6vw, 2rem); line-height: 1.05; letter-spacing: -.02em; }
+.gm-carte > span:not(.gm-num):not(.gm-halo):not(.gm-go) { color: var(--muted); }
+.gm-go { font-family: var(--display); font-weight: 700; color: hsl(var(--teinte) 85% 74%); }
+@media (min-width: 901px) {
+  html.scenes .gm { height: calc(100vh + var(--decalage, 1400px)); }
+  html.scenes .gm-colle { position: sticky; top: 0; height: 100vh; display: flex; flex-direction: column; justify-content: center; overflow: hidden; margin-inline: calc(50% - 50vw); padding-inline: max(16px, calc(50vw - var(--wide) / 2 + 16px)); }
+  html.scenes .gm-piste { margin: 0; padding-inline: 0; }
+  html.scenes .gm-piste { overflow: visible; scroll-snap-type: none; transform: translateX(calc(var(--p, 0) * var(--decalage, 0px) * -1)); will-change: transform; }
+  html.scenes .gm-piste li { width: 360px; }
+  html.scenes .gm-carte { min-height: 420px; }
+}
+
 /* ───────── Page des outils ───────── */
 .out-reprise { margin: 28px 0 0; }
 .out-reprise[hidden] { display: none; }
@@ -843,7 +979,7 @@ kbd { font-family: var(--mono); font-size: .85em; padding: 1px 6px; border: 1px 
 /* Impression d'une page de facture ou de devis : seule la facture est imprimée, sans pages blanches.
    Limité aux pages qui contiennent le générateur (.gen), pour ne pas masquer les autres outils imprimables. */
 @media print {
-  .sim-barre, .haut-de-page, .recherche, .btn-recherche, .voisins, .sim-flottant, .nav-mobile, .aller-outil { display: none !important; }
+  .sim-barre, .haut-de-page, .recherche, .btn-recherche, .voisins, .sim-flottant, .nav-mobile, .aller-outil, .jr, .mm, .gm { display: none !important; }
   .site-header { transform: none !important; }
   @page { margin: 14mm; }
   body { background: #fff; }

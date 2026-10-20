@@ -2,6 +2,9 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SiloIcon from '../components/SiloIcon.astro';
 import WeeklyInfographic from '../components/WeeklyInfographic.astro';
+import Journee from '../components/Journee.astro';
+import MotsModeles from '../components/MotsModeles.astro';
+import GalerieMetiers from '../components/GalerieMetiers.astro';
 import { SITE, SILOS, type Silo } from '../data/site';
 import { graph, organization, website } from '../lib/schema';
 import { articlePath, getArticles, siloOf } from '../lib/articles';
@@ -82,6 +85,8 @@ const index = Object.entries(OUTILS_INFO).filter(([id]) => existe(id)).map(([id,
       <span><b>0 €</b>aucun compte à créer</span>
     </div>
 
+    <Journee />
+
     <section class="acc-section" aria-labelledby="acc-sit-titre">
       <div class="acc-tete">
         <div><span class="acc-kicker">Par où commencer</span><h2 id="acc-sit-titre">Où en es-tu aujourd’hui ?</h2></div>
@@ -157,6 +162,10 @@ const index = Object.entries(OUTILS_INFO).filter(([id]) => existe(id)).map(([id,
       </div>
     </section>
 
+    <MotsModeles />
+
+    <GalerieMetiers />
+
     <section class="acc-section" aria-labelledby="acc-logiciels-titre" id="logiciels">
       <span class="acc-kicker">Choisir un logiciel</span>
       <h2 id="acc-logiciels-titre">Les comparatifs, prix réels à l’appui</h2>
@@ -206,6 +215,8 @@ const index = Object.entries(OUTILS_INFO).filter(([id]) => existe(id)).map(([id,
     </section>
   </div>
 </BaseLayout>
+
+<script>import '../scripts/scenes.ts';</script>
 
 <script is:inline>
   (() => {

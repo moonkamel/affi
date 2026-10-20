@@ -1,0 +1,62 @@
+---
+// « Une journée de patron » : scène qui se joue au défilement sur l'accueil. Un même document passe de devis
+// à facture, se fait payer puis devient un tableau de bord. Sans JavaScript ou si l'utilisateur limite les
+// animations, les quatre étapes s'affichent simplement les unes sous les autres.
+const etapes = [
+  { heure: '8 h 30', titre: 'Le devis part', texte: 'Tu chiffres la prestation et tu l’envoies avant le café. Mentions, validité, zone de signature : tout y est.', lien: '/outils/modele-devis-gratuit/', cta: 'Faire un devis' },
+  { heure: '11 h', titre: 'Il devient facture', texte: 'Le client a signé : le devis devient facture, numérotée, avec la bonne mention de TVA et prête pour la facture électronique.', lien: '/outils/modele-facture-gratuit/', cta: 'Faire une facture' },
+  { heure: '15 h', titre: 'Le client paie', texte: 'Terminal, lien de paiement ou virement : tu encaisses au meilleur coût, et tu sais quoi réclamer en cas de retard.', lien: '/encaissement/', cta: 'Comparer les solutions d’encaissement' },
+  { heure: '18 h', titre: 'Tu sais où tu en es', texte: 'Marge, seuil de rentabilité, trésorerie : tes chiffres en direct, sans attendre le bilan.', lien: '/outils/calcul-marge/', cta: 'Calculer ma marge' },
+];
+---
+<section class="jr" data-scene="pinned" data-etapes={etapes.length} aria-labelledby="jr-titre">
+  <div class="jr-colle">
+    <div class="jr-texte">
+      <span class="acc-kicker">Une journée avec Logimalin</span>
+      <h2 id="jr-titre">Du devis à la marge, sans paperasse</h2>
+      <div class="jr-horloge" aria-hidden="true">
+        <svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="2.5"/><path class="jr-aiguille-h" d="M24 24V13" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><path class="jr-aiguille-m" d="M24 24V8" stroke="var(--sun)" stroke-width="2" stroke-linecap="round"/></svg>
+        <span>{etapes.map((e, i) => <b data-pour={i}>{e.heure}</b>)}</span>
+      </div>
+      <ol class="jr-etapes">
+        {etapes.map((e, i) => (
+          <li data-pour={i}>
+            <span class="jr-num">{String(i + 1).padStart(2, '0')} · {e.heure}</span>
+            <h3>{e.titre}</h3>
+            <p>{e.texte}</p>
+            <a href={e.lien}>{e.cta} →</a>
+          </li>
+        ))}
+      </ol>
+      <div class="jr-barre" aria-hidden="true"><i></i></div>
+    </div>
+
+    <div class="jr-scene" aria-hidden="true">
+      <div class="jr-halo"></div>
+      <div class="jr-doc">
+        <div class="jr-doc-tete">
+          <span class="jr-logo"></span>
+          <span class="jr-intitule"><b class="t-devis">DEVIS D-2026-018</b><b class="t-facture">FACTURE F-2026-042</b></span>
+        </div>
+        <div class="jr-lignes">
+          <div><span>Création du site vitrine</span><span>1 200,00 €</span></div>
+          <div><span>Séance photo produits</span><span>300,00 €</span></div>
+          <div class="jr-tva"><span>TVA 20 %</span><span>300,00 €</span></div>
+        </div>
+        <div class="jr-total"><span>Total TTC</span><b>1 800,00 €</b></div>
+        <div class="jr-pa"><i></i>Envoyée via une plateforme agréée</div>
+        <span class="jr-signature">Bon pour accord<svg viewBox="0 0 120 30"><path d="M4 22c12-14 18-16 22-8s6 10 12 0 10-12 14-2 8 8 14-2 12-6 18 2 12 6 30-4" fill="none" stroke="#3d5afe" stroke-width="2.4" stroke-linecap="round"/></svg></span>
+        <span class="jr-tampon">Payée</span>
+      </div>
+      <div class="jr-tpe">
+        <div class="jr-ecran"><span>Paiement accepté</span><b>1 800,00 €</b><i>✓</i></div>
+        <div class="jr-touches">{Array.from({ length: 12 }).map(() => <i></i>)}</div>
+      </div>
+      <div class="jr-tableau">
+        <div class="jr-tab-tete"><span>Ce mois-ci</span><b>Marge 42 %</b></div>
+        <div class="jr-barres">{[38, 52, 46, 64, 58, 80].map((h) => <i style={`--h:${h}%`}></i>)}</div>
+        <div class="jr-tab-pied"><span>Seuil de rentabilité</span><b>atteint le 19</b></div>
+      </div>
+    </div>
+  </div>
+</section>
