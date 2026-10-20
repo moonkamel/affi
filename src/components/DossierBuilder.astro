@@ -11,6 +11,12 @@ const sections = [
   { id: 'moyens', titre: 'Les moyens', aide: 'Statut juridique, local, matériel, logiciels, fournisseurs, recrutements prévus.' },
   { id: 'calendrier', titre: 'Le calendrier', aide: 'Les grandes étapes : immatriculation, travaux, ouverture, premiers clients, embauches.' },
 ];
+const swot = [
+  { id: 'forces', titre: 'Forces', aide: 'Ton expérience, ton emplacement, ton savoir-faire…' },
+  { id: 'faiblesses', titre: 'Faiblesses', aide: 'Ce qui te manque encore : notoriété, trésorerie, compétence…' },
+  { id: 'opportunites', titre: 'Opportunités', aide: 'Ce qui joue en ta faveur : quartier qui se développe, tendance, concurrent qui part…' },
+  { id: 'menaces', titre: 'Menaces', aide: 'Ce qui peut te freiner : nouvelle enseigne, hausse des prix, saisonnalité…' },
+];
 ---
 <div class="sim dossier" id="dossier-tool">
   <strong>Ton dossier de financement</strong>
@@ -51,6 +57,16 @@ const sections = [
     ))}
   </fieldset>
 
+  <fieldset>
+    <legend>Forces, faiblesses, opportunités, menaces (facultatif)</legend>
+    <p class="small">Une à trois idées par case, une par ligne. Les financeurs apprécient ce tableau : il montre que tu connais aussi les risques.</p>
+    <div class="row">
+      {swot.map((s) => (
+        <div><label for={`ds-${s.id}`}>{s.titre}</label><textarea id={`ds-${s.id}`} rows="3" placeholder={s.aide}></textarea></div>
+      ))}
+    </div>
+  </fieldset>
+
   <div class="ds-actions">
     <button type="button" class="btn" id="ds-go">Générer et enregistrer mon dossier en PDF</button>
     <button type="button" class="btn btn-ghost" id="ds-apercu">Aperçu</button>
@@ -60,7 +76,7 @@ const sections = [
 
 <article id="dossier-doc" class="dossier-doc" hidden aria-label="Aperçu du dossier"></article>
 
-<script is:inline define:vars={{ sections }}>
+<script is:inline define:vars={{ sections, swot }}>
   (() => {
     const root = document.getElementById('dossier-tool');
     if (!root) return;
@@ -68,7 +84,7 @@ const sections = [
     const lire = (k) => { try { return JSON.parse(localStorage.getItem(k) || 'null'); } catch (e) { return null; } };
     const dateFr = (iso) => new Date(iso).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
     const eur = (n) => Number(n).toLocaleString('fr-FR', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 });
-    const champs = ['nom', 'porteur', 'ville', 'statut', 'debut', 'contact', ...sections.map((s) => s.id)];
+    const champs = ['nom', 'porteur', 'ville', 'statut', 'debut', 'contact', ...sections.map((s) => s.id), ...swot.map((s) => s.id)];
 
     // ---------- Brouillon ----------
     const brouillon = lire('logimalin-dossier') || {};
@@ -119,7 +135,7 @@ const sections = [
       const nom = v('nom') || 'Mon projet';
 
       // Couverture
-      const couv = el('section', 'ds-page ds-couv');
+      const couv = el('section', 'ds-partie ds-couv');
       couv.appendChild(el('p', 'ds-sur', 'Dossier de présentation et de financement'));
       couv.appendChild(el('h1', null, nom));
       [
@@ -128,13 +144,34 @@ const sections = [
         ['Activité', etude ? etude.activite : ''], ['Contact', v('contact')],
       ].filter(([, x]) => x).forEach(([k, x]) => { const p = el('p', 'ds-meta'); p.appendChild(el('strong', null, `${k} : `)); p.appendChild(document.createTextNode(x)); couv.appendChild(p); });
       couv.appendChild(el('p', 'ds-date', `Document établi le ${dateFr(new Date().toISOString())}`));
+      const ligneCr = (re) => (bp && bp.cr.find((r) => re.test(r[0]))) || null;
+      const cles = [];
+      if (bp) {
+        const apport = bp.ress.find((r) => /^Apport/.test(r[0]));
+        cles.push(['Besoin de financement', eur(bp.totB), apport && bp.totB ? `dont ${Math.round((apport[1] / bp.totB) * 100)} % d’apport personnel` : '']);
+        cles.push(['Chiffre d’affaires visé', eur(bp.hypotheses.ca1), 'en première année']);
+        const res = ligneCr(/^Résultat/);
+        if (res) cles.push(['Résultat avant impôt', eur(res[3]), `en 3e année (${eur(res[1])} la 1re)`]);
+        if (bp.seuil) cles.push(['Seuil de rentabilité', eur(bp.seuil), bp.hypotheses.ca1 >= bp.seuil ? 'atteint dès la 1re année' : 'visé en 2e année']);
+      }
+      if (etude && etude.zones && etude.zones[0]) {
+        const z = etude.zones[0], fr = etude.zones[etude.zones.length - 1];
+        cles.push(['Concurrents dans la commune', z[2], `${z[3]} pour 10 000 habitants (France : ${fr[3]})`]);
+      }
+      if (etude && etude.ca) { const mCa = etude.ca.match(/médian : ([\d\s  ]+€)/); if (mCa) cles.push(['CA médian des concurrents', mCa[1], 'comptes publiés']); }
+      if (cles.length) {
+        couv.appendChild(el('h2', null, 'Le projet en chiffres'));
+        const g = el('div', 'ds-cles');
+        cles.forEach(([k, x, d]) => { const c = el('div', 'ds-tuile'); c.appendChild(el('span', 'ds-tk', k)); c.appendChild(el('strong', null, x)); if (d) c.appendChild(el('span', 'ds-td', d)); g.appendChild(c); });
+        couv.appendChild(g);
+      }
       const som = el('ol', 'ds-sommaire');
       ['Résumé du projet', 'Le porteur de projet', 'L’offre', 'Le marché et la clientèle', 'La stratégie commerciale', 'Les moyens', 'Les prévisions financières', 'Le calendrier'].forEach((x) => som.appendChild(el('li', null, x)));
       couv.appendChild(el('h2', null, 'Sommaire'));
       couv.appendChild(som);
       doc.appendChild(couv);
 
-      const partie = (n, titre) => { const s = el('section', 'ds-page'); s.appendChild(el('h2', null, `${n}. ${titre}`)); doc.appendChild(s); return s; };
+      const partie = (n, titre, saut) => { const s = el('section', saut ? 'ds-partie ds-saut' : 'ds-partie'); s.appendChild(el('h2', null, `${n}. ${titre}`)); doc.appendChild(s); return s; };
 
       // 1 à 3
       paragraphes(partie(1, 'Résumé du projet'), v('resume'));
@@ -163,12 +200,24 @@ const sections = [
         }
         m.appendChild(el('p', 'ds-source', 'Sources : répertoire Sirene de l’INSEE (API Recherche d’entreprises), populations légales INSEE en vigueur en 2026, comptes annuels publiés. Calculs : Logimalin, étude de marché locale.'));
       }
+      if (swot.some((x) => v(x.id))) {
+        m.appendChild(el('h3', null, 'Forces, faiblesses, opportunités et menaces'));
+        const g = el('div', 'ds-swot');
+        swot.forEach((x) => {
+          const c = el('div', `ds-sw ds-sw-${x.id}`);
+          c.appendChild(el('strong', null, x.titre));
+          const ul = el('ul');
+          (v(x.id) || 'À compléter.').split(/\n/).map((l) => l.replace(/^[-•*]\s*/, '').trim()).filter(Boolean).forEach((l) => ul.appendChild(el('li', null, l)));
+          c.appendChild(ul); g.appendChild(c);
+        });
+        m.appendChild(g);
+      }
 
       paragraphes(partie(5, 'La stratégie commerciale'), sectionsTexte('strategie'));
       paragraphes(partie(6, 'Les moyens'), [v('statut') ? `Forme juridique envisagée : ${v('statut')}.` : '', sectionsTexte('moyens')].filter(Boolean).join('\n'));
 
       // 7. Chiffres
-      const f = partie(7, 'Les prévisions financières');
+      const f = partie(7, 'Les prévisions financières', true);
       if (bp) {
         const h = bp.hypotheses;
         f.appendChild(el('h3', null, 'Hypothèses'));
@@ -183,6 +232,8 @@ const sections = [
         ].forEach((x) => ul.appendChild(el('li', null, x)));
         f.appendChild(ul);
         tableau(f, bp.cr[0].map((x, i) => (i ? x : 'Compte de résultat prévisionnel')), bp.cr.slice(1).map((r) => [r[0] === 'Ta rémunération' ? 'Rémunération du dirigeant' : r[0], ...r.slice(1).map(eur)]));
+        const caL = ligneCr(/^Chiffre/), resL = ligneCr(/^Résultat/);
+        if (caL && resL) f.appendChild(graphique(caL.slice(1), resL.slice(1), bp.seuil));
         f.appendChild(el('h3', null, 'Plan de financement initial'));
         const n = Math.max(bp.besoins.length, bp.ress.length);
         tableau(f, ['Besoins', 'Montant', 'Ressources', 'Montant'], [
@@ -207,6 +258,35 @@ const sections = [
       return doc;
     };
     const sectionsTexte = (id) => $(`ds-${id}`).value;
+
+    // Barres du chiffre d'affaires et du résultat sur 3 ans, avec la ligne du seuil de rentabilité (SVG).
+    const graphique = (ca, res, seuil) => {
+      const NS = 'http://www.w3.org/2000/svg';
+      const svg = document.createElementNS(NS, 'svg');
+      const W = 640, H = 230, b = 190, haut = 160, x0 = 70;
+      svg.setAttribute('viewBox', `0 0 ${W} ${H}`); svg.setAttribute('class', 'ds-graph'); svg.setAttribute('role', 'img');
+      svg.setAttribute('aria-label', 'Chiffre d’affaires et résultat sur 3 ans');
+      const max = Math.max(...ca, seuil || 0, 1);
+      const y = (n) => b - (Math.max(n, 0) / max) * haut;
+      const add = (tag, at, txt) => { const e = document.createElementNS(NS, tag); Object.entries(at).forEach(([k, x]) => e.setAttribute(k, x)); if (txt != null) e.textContent = txt; svg.appendChild(e); return e; };
+      const k = (n) => `${Math.round(n / 1000).toLocaleString('fr-FR')} k€`;
+      add('line', { x1: x0, y1: b, x2: W - 10, y2: b, stroke: '#999' });
+      ca.forEach((c, i) => {
+        const cx = x0 + 40 + i * 180;
+        add('rect', { x: cx, y: y(c), width: 60, height: b - y(c), fill: '#5b6cff', rx: 3 });
+        add('text', { x: cx + 30, y: y(c) - 5, 'text-anchor': 'middle', 'font-size': 12, fill: '#1a1a1a' }, k(c));
+        add('rect', { x: cx + 66, y: y(res[i]), width: 40, height: b - y(res[i]), fill: res[i] >= 0 ? '#2e9e6b' : '#d64545', rx: 3 });
+        add('text', { x: cx + 86, y: y(res[i]) - 5, 'text-anchor': 'middle', 'font-size': 11, fill: '#1a1a1a' }, k(res[i]));
+        add('text', { x: cx + 53, y: b + 16, 'text-anchor': 'middle', 'font-size': 12, fill: '#444' }, `Année ${i + 1}`);
+      });
+      if (seuil) {
+        add('line', { x1: x0, y1: y(seuil), x2: W - 10, y2: y(seuil), stroke: '#e0861a', 'stroke-width': 2, 'stroke-dasharray': '6 4' });
+        add('text', { x: x0 - 6, y: y(seuil) + 4, 'text-anchor': 'end', 'font-size': 11, fill: '#b5650a' }, 'Seuil');
+      }
+      const lg = [['#5b6cff', 'Chiffre d’affaires'], ['#2e9e6b', 'Résultat avant impôt'], ['#e0861a', 'Seuil de rentabilité']];
+      lg.forEach(([c, t], i) => { add('rect', { x: x0 + i * 180, y: H - 12, width: 12, height: 10, fill: c }); add('text', { x: x0 + 18 + i * 180, y: H - 3, 'font-size': 11, fill: '#444' }, t); });
+      const fig = el('figure', 'ds-fig'); fig.appendChild(svg); return fig;
+    };
 
     const mesurer = (e) => { try { navigator.sendBeacon(`/api/mesure/${e}`); } catch (err) { /* sans importance */ } };
     $('ds-apercu').addEventListener('click', () => { mesurer('dossier-apercu'); construire().scrollIntoView({ behavior: 'smooth' }); });
@@ -245,7 +325,22 @@ const sections = [
   .dossier-doc :global(h1) { font-size: 2rem; margin: 10px 0 24px; color: #1a1a1a; }
   .dossier-doc :global(h2) { font-size: 1.35rem; margin: 0 0 12px; color: #1a1a1a; border-bottom: 2px solid #5b6cff; padding-bottom: 6px; }
   .dossier-doc :global(h3) { font-size: 1.05rem; margin: 18px 0 8px; color: #1a1a1a; }
-  .dossier-doc :global(.ds-page) { margin-bottom: 28px; }
+  .dossier-doc :global(.ds-partie) { margin-bottom: 26px; }
+  .dossier-doc :global(.ds-cles) { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 6px 0 22px; }
+  .dossier-doc :global(.ds-tuile) { border: 1px solid #dde0ff; background: #f6f7ff; border-radius: 8px; padding: 10px 12px; display: flex; flex-direction: column; gap: 2px; }
+  .dossier-doc :global(.ds-tk) { font-size: .75rem; color: #555; text-transform: uppercase; letter-spacing: .04em; }
+  .dossier-doc :global(.ds-tuile strong) { font-size: 1.25rem; color: #1a1a1a; }
+  .dossier-doc :global(.ds-td) { font-size: .78rem; color: #555; }
+  .dossier-doc :global(.ds-swot) { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 8px 0; break-inside: avoid; }
+  .dossier-doc :global(.ds-sw) { border-radius: 8px; padding: 8px 12px; font-size: .88rem; }
+  .dossier-doc :global(.ds-sw ul) { margin: 4px 0 0; padding-left: 18px; }
+  .dossier-doc :global(.ds-sw-forces) { background: #eaf7f0; }
+  .dossier-doc :global(.ds-sw-faiblesses) { background: #fdeeee; }
+  .dossier-doc :global(.ds-sw-opportunites) { background: #eef1ff; }
+  .dossier-doc :global(.ds-sw-menaces) { background: #fff4e5; }
+  .dossier-doc :global(.ds-fig) { margin: 12px 0; break-inside: avoid; }
+  .dossier-doc :global(.ds-graph) { width: 100%; height: auto; max-width: 640px; }
+  @media (max-width: 600px) { .dossier-doc :global(.ds-cles) { grid-template-columns: 1fr 1fr; } }
   .dossier-doc :global(.ds-sur) { text-transform: uppercase; letter-spacing: .08em; font-size: .8rem; color: #5b6cff; font-weight: 700; }
   .dossier-doc :global(.ds-meta) { margin: 4px 0; }
   .dossier-doc :global(.ds-date) { margin: 18px 0; color: #666; font-size: .85rem; }
@@ -255,13 +350,16 @@ const sections = [
   .dossier-doc :global(.ds-table) { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: .82rem; font-variant-numeric: tabular-nums; }
   .dossier-doc :global(.ds-table th), .dossier-doc :global(.ds-table td) { border: 1px solid #ddd; padding: 5px 7px; text-align: left; }
   .dossier-doc :global(.ds-table th) { background: #f2f3ff; }
+  .dossier-doc :global(.ds-table tbody tr:hover) { background: transparent; }
   .dossier-doc :global(.ds-table caption) { text-align: left; font-size: .8rem; color: #555; padding-bottom: 4px; }
   @media print {
     @page { size: A4; margin: 16mm 14mm; }
     :global(html.print-dossier body > *:not(#dossier-doc)) { display: none !important; }
     :global(html.print-dossier), :global(html.print-dossier body) { background: #fff !important; color: #1a1a1a !important; color-scheme: light; }
     :global(html.print-dossier #dossier-doc) { display: block; margin: 0; padding: 0; border: 0; border-radius: 0; font-size: 10.5pt; }
-    :global(html.print-dossier .ds-page) { break-after: page; }
+    :global(html.print-dossier .ds-couv) { break-after: page; }
+    :global(html.print-dossier .ds-saut) { break-before: page; }
+    :global(html.print-dossier .ds-cles), :global(html.print-dossier .ds-tuile) { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     :global(html.print-dossier .ds-table) { break-inside: avoid; }
     :global(html.print-dossier #dossier-doc h3), :global(html.print-dossier #dossier-doc h4) { break-after: avoid; padding-top: 3px; }
   }
