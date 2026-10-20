@@ -1,0 +1,69 @@
+---
+// Capacité d'autofinancement (méthode additive, à partir du résultat net), autofinancement disponible
+// après remboursement des emprunts et capacité de remboursement.
+---
+<form class="sim" id="sim-caf" aria-labelledby="caf-titre" onsubmit="return false">
+  <strong id="caf-titre">Calcul de la CAF (capacité d’autofinancement)</strong>
+  <div class="row">
+    <div><label for="caf-rn">Résultat net de l’exercice (€)</label><input id="caf-rn" type="number" step="100" value="22000" inputmode="decimal" /><p class="hint">Négatif en cas de perte.</p></div>
+    <div><label for="caf-dot">Dotations aux amortissements et provisions (€)</label><input id="caf-dot" type="number" min="0" step="100" value="15000" inputmode="decimal" /></div>
+    <div><label for="caf-rep">Reprises sur amortissements et provisions (€)</label><input id="caf-rep" type="number" min="0" step="100" value="0" inputmode="decimal" /></div>
+    <div><label for="caf-pc">Prix de cession d’immobilisations vendues (€)</label><input id="caf-pc" type="number" min="0" step="100" value="0" inputmode="decimal" /></div>
+    <div><label for="caf-vnc">Valeur nette comptable des immobilisations vendues (€)</label><input id="caf-vnc" type="number" min="0" step="100" value="0" inputmode="decimal" /></div>
+    <div><label for="caf-qp">Quote-part de subventions d’investissement virée au résultat (€)</label><input id="caf-qp" type="number" min="0" step="100" value="0" inputmode="decimal" /></div>
+  </div>
+  <fieldset>
+    <legend>Emprunts (facultatif)</legend>
+    <div class="row">
+      <div><label for="caf-remb">Remboursement annuel du capital des emprunts (€)</label><input id="caf-remb" type="number" min="0" step="100" inputmode="decimal" placeholder="Ex. : 12000" /></div>
+      <div><label for="caf-dette">Dettes financières restant dues (€)</label><input id="caf-dette" type="number" min="0" step="100" inputmode="decimal" placeholder="Ex. : 60000" /></div>
+    </div>
+  </fieldset>
+  <output class="sim-out" aria-live="polite">
+    <div>Capacité d’autofinancement</div>
+    <div class="big" id="caf-r">–</div>
+    <div id="caf-d" class="small"></div>
+  </output>
+  <table class="sim-tab"><tbody id="caf-tab"></tbody></table>
+</form>
+
+<script is:inline>
+  (() => {
+    const f = document.getElementById('sim-caf');
+    if (!f) return;
+    const $ = (id) => document.getElementById(id);
+    const num = (id) => { const x = parseFloat(String($(id).value).replace(',', '.')); return Number.isFinite(x) ? x : null; };
+    const pos = (id) => Math.max(0, num(id) ?? 0);
+    const eur = (n) => n.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 });
+    const ligne = (k, v, cls) => { const tr = document.createElement('tr'); if (cls) tr.className = cls; const th = document.createElement('th'); th.textContent = k; const td = document.createElement('td'); td.textContent = v; tr.append(th, td); return tr; };
+
+    const calc = () => {
+      const rn = num('caf-rn') ?? 0, dot = pos('caf-dot'), rep = pos('caf-rep'), pc = pos('caf-pc'), vnc = pos('caf-vnc'), qp = pos('caf-qp');
+      const caf = rn + dot - rep - pc + vnc - qp;
+      $('caf-r').textContent = eur(caf);
+      const lignes = [
+        ligne('Résultat net', eur(rn)), ligne('+ Dotations aux amortissements et provisions', eur(dot)), ligne('− Reprises', eur(rep)),
+        ligne('− Prix de cession des immobilisations', eur(pc)), ligne('+ Valeur nette comptable des immobilisations cédées', eur(vnc)),
+        ligne('− Quote-part des subventions d’investissement', eur(qp)), ligne('= CAF', eur(caf), 'tot'),
+      ];
+      let d = caf > 0
+        ? `Ton activité a généré ${eur(caf)} de ressources propres sur l’exercice, disponibles pour rembourser tes emprunts, investir ou te verser des dividendes.`
+        : `CAF négative : l’exploitation n’a pas généré de ressources. L’entreprise doit puiser dans sa trésorerie ou emprunter pour rembourser ses dettes.`;
+      const remb = num('caf-remb'), dette = num('caf-dette');
+      if (remb !== null) {
+        const dispo = caf - remb;
+        lignes.push(ligne('− Remboursement du capital des emprunts', eur(remb)), ligne('= Autofinancement disponible', eur(dispo), 'tot'));
+        d += dispo >= 0 ? ` Après remboursement des emprunts, il reste ${eur(dispo)} pour investir.` : ` Elle ne couvre pas le remboursement des emprunts : il manque ${eur(-dispo)}.`;
+      }
+      if (dette !== null && caf > 0) {
+        const ans = dette / caf;
+        lignes.push(ligne('Capacité de remboursement (dettes ÷ CAF)', `${ans.toLocaleString('fr-FR', { maximumFractionDigits: 1 })} ${ans < 2 ? 'an' : 'ans'}`));
+        d += ans <= 3 ? ' Endettement confortable : moins de 3 années de CAF.' : ans <= 4 ? ' Endettement à surveiller : entre 3 et 4 années de CAF, la limite souvent retenue par les banques.' : ' Endettement élevé : plus de 4 années de CAF, un nouveau prêt sera difficile à obtenir.';
+      }
+      $('caf-d').textContent = d;
+      $('caf-tab').replaceChildren(...lignes);
+    };
+    f.addEventListener('input', calc);
+    calc();
+  })();
+</script>

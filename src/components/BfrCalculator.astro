@@ -1,0 +1,103 @@
+---
+// Besoin en fonds de roulement : à partir des délais (création, prévisionnel) ou des montants du bilan,
+// puis fonds de roulement et trésorerie nette.
+---
+<form class="sim" id="sim-bfr" aria-labelledby="bfr-titre" onsubmit="return false">
+  <strong id="bfr-titre">Calcul du BFR et du fonds de roulement</strong>
+  <div>
+    <label for="bfr-mode">Méthode</label>
+    <select id="bfr-mode">
+      <option value="delais" selected>À partir des délais de paiement (création, prévisionnel)</option>
+      <option value="bilan">À partir des montants du bilan</option>
+    </select>
+  </div>
+
+  <fieldset id="bfr-delais">
+    <legend>Ton activité</legend>
+    <div class="row">
+      <div><label for="bfr-ca">Chiffre d’affaires annuel HT (€)</label><input id="bfr-ca" type="number" min="0" step="1000" value="240000" inputmode="decimal" /></div>
+      <div><label for="bfr-dc">Délai de paiement des clients (jours)</label><input id="bfr-dc" type="number" min="0" step="1" value="45" inputmode="numeric" /><p class="hint">0 pour un commerce payé au comptant.</p></div>
+      <div><label for="bfr-ach">Achats annuels HT (€)</label><input id="bfr-ach" type="number" min="0" step="1000" value="120000" inputmode="decimal" /></div>
+      <div><label for="bfr-df">Délai de paiement des fournisseurs (jours)</label><input id="bfr-df" type="number" min="0" step="1" value="30" inputmode="numeric" /></div>
+      <div><label for="bfr-ds">Stock moyen (jours d’achats)</label><input id="bfr-ds" type="number" min="0" step="1" value="20" inputmode="numeric" /><p class="hint">0 pour une activité de services sans stock.</p></div>
+      <div>
+        <label for="bfr-tva">TVA sur les ventes et les achats</label>
+        <select id="bfr-tva"><option value="20" selected>20 %</option><option value="10">10 %</option><option value="5.5">5,5 %</option><option value="0">Pas de TVA (franchise)</option></select>
+      </div>
+    </div>
+  </fieldset>
+
+  <fieldset id="bfr-bilan" hidden>
+    <legend>Montants du bilan (€)</legend>
+    <div class="row">
+      <div><label for="bfr-st">Stocks</label><input id="bfr-st" type="number" min="0" step="100" value="8000" inputmode="decimal" /></div>
+      <div><label for="bfr-cl">Créances clients</label><input id="bfr-cl" type="number" min="0" step="100" value="35000" inputmode="decimal" /></div>
+      <div><label for="bfr-ac">Autres créances d’exploitation (TVA déductible…)</label><input id="bfr-ac" type="number" min="0" step="100" value="3000" inputmode="decimal" /></div>
+      <div><label for="bfr-fo">Dettes fournisseurs</label><input id="bfr-fo" type="number" min="0" step="100" value="12000" inputmode="decimal" /></div>
+      <div><label for="bfr-fs">Dettes fiscales et sociales</label><input id="bfr-fs" type="number" min="0" step="100" value="9000" inputmode="decimal" /></div>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Fonds de roulement (facultatif)</legend>
+    <div class="row">
+      <div><label for="bfr-cp">Capitaux propres (capital, réserves, résultat)</label><input id="bfr-cp" type="number" step="100" inputmode="decimal" placeholder="Ex. : 30000" /></div>
+      <div><label for="bfr-dlt">Emprunts à plus d’un an</label><input id="bfr-dlt" type="number" min="0" step="100" inputmode="decimal" placeholder="Ex. : 40000" /></div>
+      <div><label for="bfr-imm">Immobilisations nettes (matériel, travaux, fonds…)</label><input id="bfr-imm" type="number" min="0" step="100" inputmode="decimal" placeholder="Ex. : 45000" /></div>
+    </div>
+  </fieldset>
+
+  <output class="sim-out" aria-live="polite">
+    <div>Besoin en fonds de roulement</div>
+    <div class="big" id="bfr-r">–</div>
+    <div id="bfr-d" class="small"></div>
+  </output>
+  <table class="sim-tab"><tbody id="bfr-tab"></tbody></table>
+</form>
+
+<script is:inline>
+  (() => {
+    const f = document.getElementById('sim-bfr');
+    if (!f) return;
+    const $ = (id) => document.getElementById(id);
+    const num = (id) => { const x = parseFloat(String($(id).value).replace(',', '.')); return Number.isFinite(x) ? x : null; };
+    const pos = (id) => Math.max(0, num(id) ?? 0);
+    const eur = (n) => n.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 });
+    const ligne = (k, v, cls) => { const tr = document.createElement('tr'); if (cls) tr.className = cls; const th = document.createElement('th'); th.textContent = k; const td = document.createElement('td'); td.textContent = v; tr.append(th, td); return tr; };
+
+    const calc = () => {
+      const delais = $('bfr-mode').value === 'delais';
+      $('bfr-delais').hidden = !delais; $('bfr-bilan').hidden = delais;
+      let bfr, lignes = [], ca = null;
+      if (delais) {
+        ca = pos('bfr-ca');
+        const t = parseFloat($('bfr-tva').value) / 100, ach = pos('bfr-ach');
+        // Les créances et les dettes fournisseurs sont TTC, le stock est valorisé HT.
+        const clients = (ca * (1 + t) * pos('bfr-dc')) / 365, stock = (ach * pos('bfr-ds')) / 365, fourn = (ach * (1 + t) * pos('bfr-df')) / 365;
+        bfr = clients + stock - fourn;
+        lignes = [ligne('Créances clients (TTC)', eur(clients)), ligne('+ Stock moyen (HT)', eur(stock)), ligne('− Dettes fournisseurs (TTC)', eur(fourn)), ligne('= BFR', eur(bfr), 'tot')];
+      } else {
+        const st = pos('bfr-st'), cl = pos('bfr-cl'), ac = pos('bfr-ac'), fo = pos('bfr-fo'), fs = pos('bfr-fs');
+        bfr = st + cl + ac - fo - fs;
+        lignes = [ligne('Stocks', eur(st)), ligne('+ Créances clients', eur(cl)), ligne('+ Autres créances d’exploitation', eur(ac)), ligne('− Dettes fournisseurs', eur(fo)), ligne('− Dettes fiscales et sociales', eur(fs)), ligne('= BFR', eur(bfr), 'tot')];
+      }
+      $('bfr-r').textContent = eur(bfr);
+      let d = bfr > 0
+        ? `Ton cycle d’exploitation immobilise ${eur(bfr)} : c’est l’argent à avancer en permanence, à financer par ton apport, un prêt ou une facilité de caisse.`
+        : `BFR négatif : tes clients te paient avant que tu règles tes fournisseurs. Ton activité dégage de la trésorerie (cas fréquent du commerce et de la restauration).`;
+      if (ca) d += ` Soit ${Math.round((bfr / ca) * 365)} jours de chiffre d’affaires HT.`;
+
+      const cp = num('bfr-cp'), dlt = num('bfr-dlt'), imm = num('bfr-imm');
+      if (cp !== null || dlt !== null || imm !== null) {
+        const fr = (cp ?? 0) + (dlt ?? 0) - (imm ?? 0), treso = fr - bfr;
+        lignes.push(ligne('Fonds de roulement (capitaux propres + emprunts − immobilisations)', eur(fr)), ligne('Trésorerie nette (FR − BFR)', eur(treso), 'tot'));
+        d += treso >= 0 ? ` Ton fonds de roulement couvre ce besoin : trésorerie nette de ${eur(treso)}.` : ` Ton fonds de roulement ne couvre pas ce besoin : il manque ${eur(-treso)}, qui pèsera sur ton compte courant.`;
+      }
+      $('bfr-d').textContent = d;
+      $('bfr-tab').replaceChildren(...lignes);
+    };
+    f.addEventListener('input', calc);
+    f.addEventListener('change', calc);
+    calc();
+  })();
+</script>

@@ -1,0 +1,80 @@
+---
+// Seuil de rentabilité : chiffre d'affaires à partir duquel la marge sur coûts variables couvre les charges fixes,
+// avec le point mort (date à laquelle il est atteint) et la marge de sécurité.
+---
+<form class="sim" id="sim-seuil" aria-labelledby="seuil-titre" onsubmit="return false">
+  <strong id="seuil-titre">Calcul du seuil de rentabilité</strong>
+  <div class="row">
+    <div>
+      <label for="seuil-ca">Chiffre d’affaires annuel HT (€)</label>
+      <input id="seuil-ca" type="number" min="0" step="100" value="120000" inputmode="decimal" />
+    </div>
+    <div>
+      <label for="seuil-cv">Charges variables annuelles HT (€)</label>
+      <input id="seuil-cv" type="number" min="0" step="100" value="48000" inputmode="decimal" />
+      <p class="hint">Achats de marchandises, matières, sous-traitance, commissions : ce qui augmente avec les ventes.</p>
+    </div>
+    <div>
+      <label for="seuil-cf">Charges fixes annuelles (€)</label>
+      <input id="seuil-cf" type="number" min="0" step="100" value="54000" inputmode="decimal" />
+      <p class="hint">Loyer, salaires, ta rémunération, assurances, logiciels, intérêts d’emprunt : ce que tu paies même sans vendre.</p>
+    </div>
+    <div>
+      <label for="seuil-debut">Début de l’exercice</label>
+      <input id="seuil-debut" type="date" />
+    </div>
+    <div>
+      <label for="seuil-panier">Prix de vente moyen HT (€, facultatif)</label>
+      <input id="seuil-panier" type="number" min="0" step="0.5" inputmode="decimal" placeholder="Ex. : 45" />
+    </div>
+  </div>
+  <output class="sim-out" for="seuil-ca seuil-cv seuil-cf seuil-debut seuil-panier" aria-live="polite">
+    <div>Seuil de rentabilité</div>
+    <div class="big" id="seuil-r">–</div>
+    <div id="seuil-d" class="small"></div>
+  </output>
+  <table class="sim-tab"><tbody id="seuil-tab"></tbody></table>
+</form>
+
+<script is:inline>
+  (() => {
+    const f = document.getElementById('sim-seuil');
+    if (!f) return;
+    const $ = (id) => document.getElementById(id);
+    const num = (id) => { const x = parseFloat(String($(id).value).replace(',', '.')); return Number.isFinite(x) && x >= 0 ? x : 0; };
+    const eur = (n) => n.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 });
+    const pc = (n) => `${n.toLocaleString('fr-FR', { maximumFractionDigits: 1 })} %`;
+    const ligne = (k, v, cls) => { const tr = document.createElement('tr'); if (cls) tr.className = cls; const th = document.createElement('th'); th.textContent = k; const td = document.createElement('td'); td.textContent = v; tr.append(th, td); return tr; };
+    if (!$('seuil-debut').value) $('seuil-debut').value = `${new Date().getFullYear()}-01-01`;
+
+    const calc = () => {
+      const ca = num('seuil-ca'), cv = num('seuil-cv'), cf = num('seuil-cf'), panier = num('seuil-panier');
+      const mcv = ca - cv, taux = ca ? mcv / ca : 0;
+      if (!ca || taux <= 0) {
+        $('seuil-r').textContent = '–';
+        $('seuil-d').textContent = ca ? 'Tes charges variables dépassent ton chiffre d’affaires : chaque vente te coûte de l’argent, aucun seuil n’est atteignable. Revois tes prix ou tes coûts d’achat.' : 'Renseigne ton chiffre d’affaires annuel.';
+        $('seuil-tab').replaceChildren(); return;
+      }
+      const seuil = cf / taux, jours = (seuil / ca) * 365;
+      const debut = new Date($('seuil-debut').value || `${new Date().getFullYear()}-01-01`);
+      const date = new Date(debut.getTime() + jours * 86400000);
+      const atteint = seuil <= ca;
+      $('seuil-r').textContent = eur(seuil);
+      $('seuil-d').textContent = atteint
+        ? `Point mort atteint le ${date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }).replace(/^1 /, '1er ')}, après ${Math.round(jours)} jours d’activité. Au-delà, chaque vente dégage ${pc(taux * 100)} de son montant en bénéfice.`
+        : `Ton chiffre d’affaires prévu est inférieur de ${eur(seuil - ca)} au seuil : l’année se termine en perte (${eur(mcv - cf)}). Il faut vendre plus, plus cher, ou réduire les charges fixes.`;
+      const lignes = [
+        ligne('Marge sur coûts variables', eur(mcv)),
+        ligne('Taux de marge sur coûts variables', pc(taux * 100)),
+        ligne('Seuil de rentabilité par mois', eur(seuil / 12)),
+        ligne('Résultat prévu (marge − charges fixes)', eur(mcv - cf), 'tot'),
+        ligne('Marge de sécurité (CA − seuil)', eur(ca - seuil)),
+        ligne('Indice de sécurité (marge de sécurité ÷ CA)', pc(((ca - seuil) / ca) * 100)),
+      ];
+      if (panier) lignes.splice(3, 0, ligne(`Ventes nécessaires à ${eur(panier)} HT`, `${Math.ceil(seuil / panier).toLocaleString('fr-FR')} par an, ${Math.ceil(seuil / panier / 12).toLocaleString('fr-FR')} par mois`));
+      $('seuil-tab').replaceChildren(...lignes);
+    };
+    f.addEventListener('input', calc);
+    calc();
+  })();
+</script>

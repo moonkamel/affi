@@ -1,0 +1,81 @@
+---
+title: "Calcul du BFR (besoin en fonds de roulement) et du fonds de roulement"
+seoTitle: "Calcul du BFR : besoin en fonds de roulement, formule"
+description: "Calcule ton besoin en fonds de roulement à partir de tes délais de paiement ou de ton bilan, puis ton fonds de roulement et ta trésorerie nette. Gratuit."
+keyword: "bfr"
+secondaryKeywords:
+  - "calcul bfr"
+  - "besoin en fonds de roulement"
+  - "bfr calcul"
+  - "fonds de roulement"
+  - "calcul fonds de roulement"
+  - "calcul besoin en fonds de roulement"
+  - "trésorerie nette"
+type: outil
+published: 2026-10-20
+updated: 2026-10-20
+related:
+  - outils/calcul-seuil-de-rentabilite
+  - creer/business-plan
+  - outils/calcul-caf
+  - facturation/relance-facture-impayee
+tldr:
+  - "<strong>BFR</strong> = stocks + créances clients − dettes fournisseurs (et dettes fiscales et sociales)."
+  - "<strong>Fonds de roulement</strong> = capitaux propres + emprunts à long terme − immobilisations. <strong>Trésorerie nette</strong> = fonds de roulement − BFR."
+  - "<strong>Un BFR élevé</strong> n’est pas un problème s’il est financé : c’est l’argent à avancer avant d’être payé."
+faq:
+  - q: "Comment calculer le BFR ?"
+    a: "BFR = stocks + créances clients + autres créances d’exploitation − dettes fournisseurs − dettes fiscales et sociales. Pour une entreprise en création, on l’estime à partir des délais : chiffre d’affaires TTC × délai clients ÷ 365, plus le stock moyen, moins les achats TTC × délai fournisseurs ÷ 365."
+  - q: "Qu’est-ce qu’un BFR négatif ?"
+    a: "C’est une situation où les clients paient avant que l’entreprise ne règle ses fournisseurs : la grande distribution, la restauration ou le commerce payé comptant. L’activité finance elle-même son cycle et dégage de la trésorerie."
+  - q: "Comment calculer le fonds de roulement ?"
+    a: "Fonds de roulement = ressources stables (capitaux propres + emprunts à plus d’un an) − emplois stables (immobilisations nettes). Il doit couvrir le BFR : la différence est la trésorerie nette."
+  - q: "Comment réduire son BFR ?"
+    a: "Facturer plus vite et réduire les délais clients (acompte à la commande, relances systématiques, paiement par lien), négocier des délais fournisseurs plus longs dans la limite légale de 60 jours, et réduire le stock dormant."
+  - q: "Où mettre le BFR dans un business plan ?"
+    a: "Dans le plan de financement initial, côté besoins, souvent sous le nom de « trésorerie de départ » ou « besoin en fonds de roulement ». Il doit être financé par l’apport, un prêt ou un prêt d’honneur, au même titre que les investissements."
+---
+import BfrCalculator from '../../../components/BfrCalculator.astro';
+import Callout from '../../../components/Callout.astro';
+import EmbedCode from '../../../components/EmbedCode.astro';
+
+Tu peux être rentable et manquer d’argent. Entre le moment où tu paies tes fournisseurs et celui où tes clients te paient, il faut avancer de la trésorerie : c’est le besoin en fonds de roulement (BFR). Calcule-le à partir de tes délais de paiement (idéal pour une création) ou des montants de ton bilan, puis vérifie que ton fonds de roulement le couvre.
+
+<BfrCalculator />
+
+## Les formules
+
+| Indicateur | Formule |
+|---|---|
+| BFR (bilan) | Stocks + créances clients + autres créances d’exploitation − dettes fournisseurs − dettes fiscales et sociales |
+| BFR (estimation par les délais) | CA TTC × délai clients ÷ 365 + achats HT × jours de stock ÷ 365 − achats TTC × délai fournisseurs ÷ 365 |
+| BFR en jours de chiffre d’affaires | BFR ÷ CA HT × 365 |
+| Fonds de roulement | Capitaux propres + emprunts à plus d’un an − immobilisations nettes |
+| Trésorerie nette | Fonds de roulement − BFR |
+
+**Exemple** (réglages par défaut du calculateur) : 240 000 € de chiffre d’affaires HT payés à 45 jours, 120 000 € d’achats payés à 30 jours, 20 jours de stock, TVA à 20 %. Créances clients : 35 507 €, stock : 6 575 €, dettes fournisseurs : 11 836 €. Le BFR est d’environ 30 250 €, soit 46 jours de chiffre d’affaires.
+
+## Lire son BFR selon son activité
+
+| Activité | BFR habituel | Pourquoi |
+|---|---|---|
+| Commerce de détail, restauration | Faible ou négatif | Clients payés comptant, fournisseurs à 30 jours |
+| Prestataire de services, freelance | Moyen | Pas de stock, mais clients professionnels payés à 30 ou 60 jours |
+| Artisan du bâtiment | Élevé | Matériaux avancés, paiement à la fin du chantier, retenue de garantie |
+| Industrie, négoce | Élevé | Stocks importants et délais clients longs |
+
+<Callout title="Le piège de la croissance">
+  <p>Le BFR suit le chiffre d’affaires. Si tes ventes doublent, ton BFR double aussi : une entreprise en forte croissance peut manquer de trésorerie alors que ses carnets de commandes sont pleins. Anticipe-le dans ton <a href="/creer/business-plan/">prévisionnel</a>.</p>
+</Callout>
+
+## Cinq façons de réduire ton BFR
+
+1. **Demander un acompte** à la commande, surtout pour les chantiers et les prestations longues.
+2. **Facturer le jour même** de la livraison ou de la fin de prestation, pas en fin de mois.
+3. **Relancer systématiquement** les factures en retard : notre guide de [relance de facture impayée](/facturation/relance-facture-impayee/) donne les modèles, et le [calcul des pénalités de retard](/outils/calcul-penalites-de-retard/) les montants à réclamer.
+4. **Faciliter le paiement** avec un [lien de paiement](/encaissement/lien-de-paiement/) envoyé avec la facture.
+5. **Négocier tes délais fournisseurs**, dans la limite légale de 60 jours à compter de la facture (ou 45 jours fin de mois).
+
+<p data-maillage>Pour mesurer la rentabilité : le <a href="/outils/calcul-seuil-de-rentabilite/">seuil de rentabilité</a>, l’<a href="/outils/calcul-ebe/">EBE</a> et la <a href="/outils/calcul-caf/">capacité d’autofinancement</a>. Pour financer ton BFR au démarrage : le <a href="/creer/pret-d-honneur/">prêt d’honneur</a>.</p>
+
+<EmbedCode tool="bfr" />

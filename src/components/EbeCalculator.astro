@@ -1,0 +1,48 @@
+---
+// Excédent brut d'exploitation : valeur ajoutée + subventions − impôts et taxes − charges de personnel.
+---
+<form class="sim" id="sim-ebe" aria-labelledby="ebe-titre" onsubmit="return false">
+  <strong id="ebe-titre">Calcul de l’EBE (excédent brut d’exploitation)</strong>
+  <div class="row">
+    <div><label for="ebe-ca">Chiffre d’affaires HT (€)</label><input id="ebe-ca" type="number" min="0" step="1000" value="300000" inputmode="decimal" /></div>
+    <div><label for="ebe-ach">Achats consommés (€)</label><input id="ebe-ach" type="number" min="0" step="1000" value="105000" inputmode="decimal" /><p class="hint">Marchandises et matières, corrigées de la variation de stock.</p></div>
+    <div><label for="ebe-ext">Charges externes (€)</label><input id="ebe-ext" type="number" min="0" step="1000" value="48000" inputmode="decimal" /><p class="hint">Loyer, énergie, assurances, honoraires, sous-traitance, publicité, logiciels, téléphone.</p></div>
+    <div><label for="ebe-imp">Impôts et taxes (€)</label><input id="ebe-imp" type="number" min="0" step="100" value="4000" inputmode="decimal" /><p class="hint">CFE, taxe foncière, taxes sur les salaires. Pas l’impôt sur les bénéfices.</p></div>
+    <div><label for="ebe-per">Salaires et charges sociales (€)</label><input id="ebe-per" type="number" min="0" step="1000" value="95000" inputmode="decimal" /><p class="hint">Y compris la rémunération du dirigeant et ses cotisations sociales.</p></div>
+    <div><label for="ebe-sub">Subventions d’exploitation (€)</label><input id="ebe-sub" type="number" min="0" step="100" value="0" inputmode="decimal" /></div>
+  </div>
+  <output class="sim-out" aria-live="polite">
+    <div>Excédent brut d’exploitation</div>
+    <div class="big" id="ebe-r">–</div>
+    <div id="ebe-d" class="small"></div>
+  </output>
+  <table class="sim-tab"><tbody id="ebe-tab"></tbody></table>
+</form>
+
+<script is:inline>
+  (() => {
+    const f = document.getElementById('sim-ebe');
+    if (!f) return;
+    const $ = (id) => document.getElementById(id);
+    const num = (id) => { const x = parseFloat(String($(id).value).replace(',', '.')); return Number.isFinite(x) && x >= 0 ? x : 0; };
+    const eur = (n) => n.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 });
+    const pc = (n) => `${n.toLocaleString('fr-FR', { maximumFractionDigits: 1 })} %`;
+    const ligne = (k, v, cls) => { const tr = document.createElement('tr'); if (cls) tr.className = cls; const th = document.createElement('th'); th.textContent = k; const td = document.createElement('td'); td.textContent = v; tr.append(th, td); return tr; };
+
+    const calc = () => {
+      const ca = num('ebe-ca'), ach = num('ebe-ach'), ext = num('ebe-ext'), imp = num('ebe-imp'), per = num('ebe-per'), sub = num('ebe-sub');
+      const va = ca - ach - ext, ebe = va + sub - imp - per;
+      $('ebe-r').textContent = eur(ebe);
+      $('ebe-d').textContent = !ca ? 'Renseigne ton chiffre d’affaires.' : ebe >= 0
+        ? `Ton activité dégage ${eur(ebe)} avant amortissements, frais financiers et impôt sur les bénéfices, soit ${pc((ebe / ca) * 100)} du chiffre d’affaires. C’est avec cette somme que tu rembourses tes emprunts et que tu investis.`
+        : `EBE négatif : ton exploitation consomme ${eur(-ebe)} de trésorerie avant même les remboursements d’emprunts. Il faut agir sur les prix, les achats ou les charges.`;
+      const lignes = [ligne('Chiffre d’affaires HT', eur(ca)), ligne('− Achats consommés', eur(ach)), ligne('− Charges externes', eur(ext)), ligne('= Valeur ajoutée', eur(va), 'tot')];
+      if (ca) lignes.push(ligne('Taux de valeur ajoutée (VA ÷ CA)', pc((va / ca) * 100)));
+      lignes.push(ligne('+ Subventions d’exploitation', eur(sub)), ligne('− Impôts et taxes', eur(imp)), ligne('− Salaires et charges sociales', eur(per)), ligne('= EBE', eur(ebe), 'tot'));
+      if (ca) lignes.push(ligne('Taux de marge d’EBE (EBE ÷ CA)', pc((ebe / ca) * 100)));
+      $('ebe-tab').replaceChildren(...lignes);
+    };
+    f.addEventListener('input', calc);
+    calc();
+  })();
+</script>

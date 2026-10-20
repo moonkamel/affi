@@ -1,0 +1,74 @@
+---
+title: "Calcul de l’EBE (excédent brut d’exploitation) : simulateur, formule et exemple"
+seoTitle: "Calcul de l’EBE : excédent brut d’exploitation, formule"
+description: "Calcule ton excédent brut d’exploitation et ta valeur ajoutée en 1 minute. Formule, exemple chiffré, différence avec l’EBITDA et le résultat, taux d’EBE."
+keyword: "ebe"
+secondaryKeywords:
+  - "excédent brut d’exploitation"
+  - "calcul ebe"
+  - "calcul ebitda"
+  - "valeur ajoutée"
+  - "taux de marge ebe"
+  - "ebe formule"
+type: outil
+published: 2026-10-20
+updated: 2026-10-20
+related:
+  - outils/calcul-caf
+  - outils/calcul-seuil-de-rentabilite
+  - outils/calcul-bfr
+  - creer/business-plan
+tldr:
+  - "<strong>EBE</strong> = valeur ajoutée + subventions d’exploitation − impôts et taxes − salaires et charges sociales."
+  - "<strong>Valeur ajoutée</strong> = chiffre d’affaires − achats consommés − charges externes."
+  - "<strong>L’EBE</strong> mesure ce que rapporte l’activité elle-même, avant les amortissements, les frais financiers et l’impôt sur les bénéfices."
+faq:
+  - q: "Comment calculer l’EBE ?"
+    a: "Calcule d’abord la valeur ajoutée : chiffre d’affaires − achats consommés − charges externes. Puis EBE = valeur ajoutée + subventions d’exploitation − impôts et taxes − salaires et charges sociales. Exemple : 300 000 − 105 000 − 48 000 = 147 000 € de valeur ajoutée ; 147 000 − 4 000 − 95 000 = 48 000 € d’EBE."
+  - q: "Quelle différence entre EBE et EBITDA ?"
+    a: "Ils sont très proches. L’EBITDA, d’usage international, part du résultat d’exploitation auquel on rajoute les dotations aux amortissements et provisions ; il peut inclure certains autres produits et charges d’exploitation que l’EBE français exclut. Pour une petite entreprise, la différence est souvent faible."
+  - q: "Quelle différence entre EBE et résultat net ?"
+    a: "Le résultat net retire encore de l’EBE les dotations aux amortissements et provisions, les charges financières (intérêts d’emprunt), les éléments exceptionnels et l’impôt sur les bénéfices. Une entreprise peut avoir un EBE positif et un résultat négatif si elle a beaucoup investi ou emprunté."
+  - q: "Qu’est-ce qu’un bon EBE ?"
+    a: "Tout dépend du secteur. On le compare au chiffre d’affaires (taux de marge d’EBE) et aux remboursements d’emprunts : l’EBE doit couvrir les échéances de prêt, les investissements courants et la rémunération des associés. Compare-toi aux entreprises de ton secteur avec ton expert-comptable ou les données de ta fédération professionnelle."
+  - q: "La rémunération du dirigeant est-elle dans l’EBE ?"
+    a: "En société, la rémunération du dirigeant et ses cotisations sont des charges de personnel : elles sont déduites avant l’EBE. En entreprise individuelle au réel, la rémunération de l’exploitant n’est pas une charge : l’EBE inclut donc sa rémunération, ce qu’il faut garder en tête pour comparer deux entreprises."
+---
+import EbeCalculator from '../../../components/EbeCalculator.astro';
+import Callout from '../../../components/Callout.astro';
+import EmbedCode from '../../../components/EmbedCode.astro';
+
+L’excédent brut d’exploitation (EBE) est l’indicateur préféré des banquiers et des repreneurs : il dit combien ton activité rapporte, avant tout choix de financement ou d’investissement. Renseigne les grandes lignes de ton compte de résultat : le simulateur calcule la valeur ajoutée, l’EBE et leur poids dans ton chiffre d’affaires.
+
+<EbeCalculator />
+
+## La formule de l’EBE
+
+| Étape | Formule | Exemple |
+|---|---|---|
+| Valeur ajoutée | CA − achats consommés − charges externes | 300 000 − 105 000 − 48 000 = 147 000 € |
+| EBE | Valeur ajoutée + subventions − impôts et taxes − charges de personnel | 147 000 + 0 − 4 000 − 95 000 = 48 000 € |
+| Taux de marge d’EBE | EBE ÷ CA | 48 000 ÷ 300 000 = 16 % |
+
+Tu peux aussi le retrouver à partir de ton résultat : EBE = résultat d’exploitation + dotations aux amortissements et provisions − reprises sur provisions (avec quelques retraitements d’autres produits et charges).
+
+## Ce qui entre dans chaque ligne
+
+- **Achats consommés** : marchandises et matières premières achetées, corrigées de la variation de stock (stock de début − stock de fin).
+- **Charges externes** : loyer, énergie, assurances, honoraires de l’expert-comptable, sous-traitance générale, publicité, déplacements, téléphone et logiciels.
+- **Impôts et taxes** : CFE, taxe foncière, taxe sur les véhicules, taxe d’apprentissage. L’impôt sur les sociétés n’y figure pas.
+- **Charges de personnel** : salaires bruts, cotisations patronales, et en société la rémunération du dirigeant.
+
+<Callout title="EBE positif ne veut pas dire trésorerie positive">
+  <p>L’EBE ne tient compte ni des remboursements d’emprunts, ni des investissements, ni du décalage de paiement de tes clients. Pour savoir ce qu’il te reste vraiment, regarde ta <a href="/outils/calcul-caf/">capacité d’autofinancement</a> et ton <a href="/outils/calcul-bfr/">besoin en fonds de roulement</a>.</p>
+</Callout>
+
+## À quoi sert l’EBE
+
+1. **Obtenir un prêt** : la banque vérifie que l’EBE couvre largement les échéances de remboursement.
+2. **Vendre ou racheter une entreprise** : la valeur d’un fonds de commerce ou d’une société s’exprime souvent en multiple de l’EBE.
+3. **Piloter ton activité** : un taux d’EBE qui baisse d’une année sur l’autre signale des prix trop bas ou des charges qui dérapent, avant même que le résultat ne devienne négatif.
+
+<p data-maillage>Autres indicateurs : le <a href="/outils/calcul-seuil-de-rentabilite/">seuil de rentabilité</a>, la <a href="/outils/calcul-marge/">marge</a> et la <a href="/outils/calcul-caf/">CAF</a>. Pour suivre tes chiffres toute l’année : un <a href="/comptabilite/logiciel-comptabilite/">logiciel de comptabilité</a>.</p>
+
+<EmbedCode tool="ebe" />

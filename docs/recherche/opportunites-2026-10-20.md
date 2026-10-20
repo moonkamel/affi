@@ -38,7 +38,7 @@ Attention aux volumes : Google Ads regroupe les variantes proches. « calcul tva
 
 1. ✅ Convertisseur HT ↔ TTC : /outils/calcul-ht-ttc/ (20/10/2026).
 2. ✅ Calculateur de marge : /outils/calcul-marge/ (20/10/2026).
-3. Les 4 indicateurs financiers (seuil, BFR, EBE, CAF), en reprenant le moteur du prévisionnel.
+3. ✅ Les 4 indicateurs financiers : /outils/calcul-seuil-de-rentabilite/, /outils/calcul-bfr/, /outils/calcul-ebe/, /outils/calcul-caf/ (20/10/2026).
 4. Numéro de TVA intracommunautaire calculé depuis le SIREN (formule publique), avec les guides SIRET et avis de situation.
 5. Générateur SWOT et PESTEL exportable en PDF, en reprenant la matrice du dossier de financement.
 

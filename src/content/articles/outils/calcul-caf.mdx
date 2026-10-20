@@ -1,0 +1,73 @@
+---
+title: "Calcul de la CAF (capacité d’autofinancement) : simulateur et formule"
+seoTitle: "Calcul de la CAF : capacité d’autofinancement, formule"
+description: "Calcule ta capacité d’autofinancement à partir de ton résultat net, ton autofinancement disponible et ta capacité de remboursement. Gratuit, avec exemple."
+keyword: "calcul caf"
+secondaryKeywords:
+  - "capacité d’autofinancement"
+  - "caf calcul"
+  - "calcul capacité d’autofinancement"
+  - "autofinancement"
+  - "capacité de remboursement"
+type: outil
+published: 2026-10-20
+updated: 2026-10-20
+related:
+  - outils/calcul-ebe
+  - outils/calcul-bfr
+  - creer/business-plan
+  - creer/dossier-de-financement
+tldr:
+  - "<strong>CAF</strong> = résultat net + dotations aux amortissements et provisions − reprises − plus-values de cession."
+  - "<strong>Autofinancement disponible</strong> = CAF − remboursement du capital des emprunts."
+  - "<strong>Capacité de remboursement</strong> = dettes financières ÷ CAF : les banques regardent souvent un seuil de 3 à 4 ans."
+faq:
+  - q: "Comment calculer la capacité d’autofinancement ?"
+    a: "Par la méthode additive : CAF = résultat net + dotations aux amortissements et provisions − reprises sur amortissements et provisions − prix de cession des immobilisations vendues + valeur nette comptable de ces immobilisations − quote-part des subventions d’investissement virée au résultat."
+  - q: "Quelle différence entre CAF et résultat net ?"
+    a: "Le résultat net déduit des charges qui ne sortent pas de la trésorerie, surtout les amortissements. La CAF les rajoute : elle mesure l’argent réellement généré par l’activité. Une entreprise avec 22 000 € de résultat et 15 000 € d’amortissements a une CAF de 37 000 €."
+  - q: "Qu’est-ce qu’une bonne capacité de remboursement ?"
+    a: "On divise les dettes financières par la CAF. Moins de 3 ans est confortable ; au-delà de 3 à 4 ans, la plupart des banques jugent l’entreprise trop endettée pour un nouveau prêt. Ce repère varie selon les secteurs et les établissements."
+  - q: "La CAF est-elle de la trésorerie disponible ?"
+    a: "Pas tout à fait : elle ne tient pas compte des décalages de paiement (variation du besoin en fonds de roulement). Une entreprise qui croît vite peut avoir une bonne CAF et une trésorerie tendue, car ses créances clients augmentent."
+  - q: "Peut-on calculer la CAF à partir de l’EBE ?"
+    a: "Oui, c’est la méthode soustractive : EBE + autres produits d’exploitation − autres charges d’exploitation + produits financiers encaissables − charges financières décaissables + produits exceptionnels encaissables − charges exceptionnelles décaissables − participation des salariés − impôt sur les bénéfices. Les deux méthodes donnent le même résultat."
+---
+import CafCalculator from '../../../components/CafCalculator.astro';
+import Callout from '../../../components/Callout.astro';
+import EmbedCode from '../../../components/EmbedCode.astro';
+
+La capacité d’autofinancement (CAF) mesure l’argent que ton activité a réellement généré sur l’année, une fois retirées les charges qui ne se paient pas, comme les amortissements. C’est elle qui rembourse tes emprunts et finance tes investissements. Renseigne ton résultat net et tes amortissements : le simulateur calcule ta CAF, ce qu’il reste après les échéances de prêt et ton niveau d’endettement.
+
+<CafCalculator />
+
+## La formule de la CAF (méthode additive)
+
+| Ligne | Sens | Exemple |
+|---|---|---|
+| Résultat net | + | 22 000 € |
+| Dotations aux amortissements et provisions | + | 15 000 € |
+| Reprises sur amortissements et provisions | − | 0 € |
+| Prix de cession des immobilisations vendues | − | 0 € |
+| Valeur nette comptable des immobilisations cédées | + | 0 € |
+| Quote-part des subventions d’investissement virée au résultat | − | 0 € |
+| **Capacité d’autofinancement** | **=** | **37 000 €** |
+
+Avec 12 000 € de capital d’emprunt remboursé dans l’année, l’autofinancement disponible est de 25 000 €. Avec 60 000 € de dettes financières, la capacité de remboursement est de 1,6 an : l’entreprise peut encore emprunter.
+
+<Callout title="Pourquoi rajouter les amortissements ?">
+  <p>Quand tu achètes un four à 30 000 € amorti sur 5 ans, la charge de 6 000 € par an diminue ton résultat, mais aucun argent ne sort cette année-là : il est sorti le jour de l’achat. La CAF neutralise cette charge pour mesurer les flux réels.</p>
+</Callout>
+
+## À quoi sert la CAF
+
+- **Rembourser les emprunts** : la CAF doit couvrir chaque année le capital remboursé. Sinon, l’entreprise puise dans sa trésorerie.
+- **Investir sans emprunter** : l’autofinancement disponible finance le renouvellement du matériel ou un développement.
+- **Convaincre une banque** : le ratio dettes ÷ CAF fait partie des premiers indicateurs étudiés. Dans un [dossier de financement](/creer/dossier-de-financement/), la CAF prévisionnelle figure dans le compte de résultat sur 3 ans.
+- **Verser des dividendes** : une CAF régulière permet de rémunérer les associés sans fragiliser l’entreprise.
+
+Notre [prévisionnel sur 3 ans](/creer/business-plan/) calcule ta CAF prévisionnelle année par année, à partir de ton chiffre d’affaires, de tes charges et de ton plan de financement.
+
+<p data-maillage>Avant la CAF, calcule ton <a href="/outils/calcul-ebe/">excédent brut d’exploitation</a>. Pour la trésorerie au quotidien : le <a href="/outils/calcul-bfr/">besoin en fonds de roulement</a>. Pour savoir quand ton activité devient rentable : le <a href="/outils/calcul-seuil-de-rentabilite/">seuil de rentabilité</a>.</p>
+
+<EmbedCode tool="caf" />

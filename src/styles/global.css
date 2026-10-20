@@ -376,6 +376,14 @@ tbody tr:hover { background: color-mix(in srgb, var(--accent-soft) 45%, transpar
 @media (max-width: 600px) { .sim .row { grid-template-columns: 1fr; } }
 .sim-out { display: block; margin-top: 20px; background: var(--sun-soft); border-radius: 12px; padding: 16px 20px; }
 .sim-out .big { font-family: var(--display); font-size: 2.4rem; font-weight: 800; color: var(--ink); letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
+.sim-tab { width: 100%; border-collapse: collapse; margin-top: 14px; font-variant-numeric: tabular-nums; font-size: .92rem; }
+.sim-tab th, .sim-tab td { padding: 6px 8px; border-bottom: 1px solid var(--line); text-align: left; }
+.sim-tab th { font-weight: 500; color: var(--muted); }
+.sim-tab td { text-align: right; font-weight: 700; white-space: nowrap; }
+.sim-tab tr.tot th, .sim-tab tr.tot td { color: var(--ink); font-weight: 800; border-top: 2px solid var(--line); }
+.sim fieldset { border: 0; padding: 0; margin: 14px 0 0; }
+.sim legend { font-family: var(--display); font-weight: 700; font-size: .95rem; padding: 0; color: var(--accent); }
+.sim .hint { font-size: .82rem; color: var(--muted); margin: 2px 0 0; }
 
 /* ───────── Générateur de facture / devis ───────── */
 .gen { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 22px; align-items: start; margin: 26px 0; }

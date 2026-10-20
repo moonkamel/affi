@@ -1,0 +1,83 @@
+---
+title: "Calcul du seuil de rentabilité : simulateur gratuit, formule et point mort"
+seoTitle: "Seuil de rentabilité : calcul, formule et point mort"
+description: "Calcule ton seuil de rentabilité et la date de ton point mort en 30 secondes. Formule, exemple chiffré, marge de sécurité et leviers pour l’atteindre plus tôt."
+keyword: "seuil de rentabilité"
+secondaryKeywords:
+  - "calcul seuil de rentabilité"
+  - "seuil de rentabilité formule"
+  - "calcul du seuil de rentabilité"
+  - "point mort"
+  - "calcul point mort"
+  - "marge sur coûts variables"
+type: outil
+published: 2026-10-20
+updated: 2026-10-20
+related:
+  - outils/calcul-marge
+  - creer/business-plan
+  - outils/calcul-bfr
+  - outils/calcul-ebe
+tldr:
+  - "<strong>Seuil de rentabilité</strong> = charges fixes ÷ taux de marge sur coûts variables."
+  - "<strong>Point mort</strong> : la date à laquelle tu atteins ce seuil dans l’année. Plus il arrive tôt, plus ton activité est solide."
+  - "<strong>Exemple</strong> : 54 000 € de charges fixes et 60 % de marge sur coûts variables donnent un seuil de 90 000 € de chiffre d’affaires."
+faq:
+  - q: "Comment calculer le seuil de rentabilité ?"
+    a: "Divise tes charges fixes annuelles par ton taux de marge sur coûts variables. Ce taux vaut (chiffre d’affaires − charges variables) ÷ chiffre d’affaires. Avec 120 000 € de chiffre d’affaires, 48 000 € de charges variables et 54 000 € de charges fixes : taux de 60 %, seuil de 54 000 ÷ 0,6 = 90 000 €."
+  - q: "Quelle différence entre seuil de rentabilité et point mort ?"
+    a: "Le seuil de rentabilité est un montant de chiffre d’affaires. Le point mort est la date à laquelle ce montant est atteint dans l’année : seuil ÷ chiffre d’affaires annuel × 365 jours. Dans l’exemple, 90 000 ÷ 120 000 × 365 = 274 jours, soit début octobre pour un exercice qui commence le 1er janvier."
+  - q: "Quelles charges sont fixes et lesquelles sont variables ?"
+    a: "Les charges variables évoluent avec les ventes : achats de marchandises et de matières, sous-traitance, commissions, frais de livraison. Les charges fixes restent dues même sans vente : loyer, salaires, ta rémunération, assurances, abonnements, intérêts d’emprunt, comptable."
+  - q: "Faut-il inclure sa rémunération dans les charges fixes ?"
+    a: "Oui, si tu veux connaître le chiffre d’affaires qui te permet de te payer. Sans elle, le seuil indique seulement le niveau à partir duquel l’entreprise ne perd pas d’argent, sans rémunérer son dirigeant."
+  - q: "Comment baisser son seuil de rentabilité ?"
+    a: "Trois leviers : augmenter tes prix (le taux de marge sur coûts variables monte), négocier tes achats (les charges variables baissent) ou réduire tes charges fixes (local plus petit, abonnements inutiles, matériel en location)."
+---
+import SeuilCalculator from '../../../components/SeuilCalculator.astro';
+import Callout from '../../../components/Callout.astro';
+import EmbedCode from '../../../components/EmbedCode.astro';
+
+Combien faut-il vendre pour ne plus perdre d’argent ? C’est la première question d’un banquier devant un projet, et la meilleure façon de savoir si tes prix tiennent la route. Renseigne ton chiffre d’affaires, tes charges variables et tes charges fixes : le simulateur donne ton seuil de rentabilité, la date de ton point mort et ta marge de sécurité.
+
+<SeuilCalculator />
+
+## La formule du seuil de rentabilité
+
+| Étape | Formule | Exemple |
+|---|---|---|
+| 1. Marge sur coûts variables | Chiffre d’affaires − charges variables | 120 000 − 48 000 = 72 000 € |
+| 2. Taux de marge sur coûts variables | Marge sur coûts variables ÷ chiffre d’affaires | 72 000 ÷ 120 000 = 60 % |
+| 3. Seuil de rentabilité | Charges fixes ÷ taux de marge sur coûts variables | 54 000 ÷ 0,6 = 90 000 € |
+| 4. Point mort (en jours) | Seuil ÷ chiffre d’affaires × 365 | 90 000 ÷ 120 000 × 365 = 274 jours |
+| 5. Marge de sécurité | Chiffre d’affaires − seuil | 120 000 − 90 000 = 30 000 € |
+
+Lecture de l’exemple : l’entreprise couvre toutes ses charges début octobre. Ses ventes pourraient baisser de 25 % (30 000 ÷ 120 000) avant qu’elle ne passe en perte.
+
+<Callout title="Attention à la saisonnalité">
+  <p>Le calcul du point mort suppose des ventes régulières tout au long de l’année. Un commerce qui fait 30 % de son chiffre d’affaires en décembre atteindra son point mort plus tard que la date affichée. Dans ce cas, raisonne mois par mois avec un <a href="/creer/business-plan/">prévisionnel</a>.</p>
+</Callout>
+
+## Classer ses charges : fixes ou variables
+
+| Charges variables (suivent les ventes) | Charges fixes (dues même sans vente) |
+|---|---|
+| Achats de marchandises et de matières premières | Loyer et charges locatives |
+| Sous-traitance liée aux commandes | Salaires et cotisations, ta rémunération |
+| Commissions sur ventes, frais de paiement par carte | Assurances, expert-comptable, banque |
+| Emballages, frais de livraison | Logiciels et abonnements |
+| Énergie de production (en partie) | Intérêts d’emprunt, location de matériel |
+
+Certaines charges sont mixtes, comme l’électricité d’un restaurant ou le carburant d’un artisan. Range-les du côté où elles pèsent le plus : l’important est d’être cohérent d’une année sur l’autre.
+
+## Trois leviers pour l’atteindre plus tôt
+
+1. **Augmenter tes prix** : avec 60 % de marge sur coûts variables, une hausse de 5 % des prix fait passer ce taux à près de 62 % et le seuil de 90 000 € à environ 87 200 €.
+2. **Négocier tes achats** : chaque point de charges variables gagné améliore directement ton taux de marge. Notre [calculateur de marge](/outils/calcul-marge/) te montre l’effet d’un changement de fournisseur.
+3. **Alléger tes charges fixes** : un abonnement inutile de 100 € par mois coûte 2 000 € de chiffre d’affaires supplémentaire avec un taux de marge de 60 %.
+
+Pour aller plus loin, notre [prévisionnel sur 3 ans](/creer/business-plan/) calcule le seuil année par année, avec tes emprunts et tes amortissements, et le [calcul du BFR](/outils/calcul-bfr/) te dit combien de trésorerie prévoir en attendant d’atteindre ce seuil.
+
+<p data-maillage>Autres indicateurs à suivre : l’<a href="/outils/calcul-ebe/">excédent brut d’exploitation</a> et la <a href="/outils/calcul-caf/">capacité d’autofinancement</a>. Pour présenter tes chiffres à une banque : le <a href="/creer/dossier-de-financement/">dossier de financement</a>.</p>
+
+<EmbedCode tool="seuil-rentabilite" />

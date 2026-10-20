@@ -17,6 +17,10 @@ export const EMBEDS: Embed[] = [
   { slug: 'penalites-de-retard', title: 'Calcul des pénalités de retard', page: '/outils/calcul-penalites-de-retard/', height: 580 },
   { slug: 'ht-ttc', title: 'Convertisseur HT TTC', page: '/outils/calcul-ht-ttc/', height: 620 },
   { slug: 'marge', title: 'Calcul de marge et de prix de vente', page: '/outils/calcul-marge/', height: 780 },
+  { slug: 'seuil-rentabilite', title: 'Calcul du seuil de rentabilité', page: '/outils/calcul-seuil-de-rentabilite/', height: 760 },
+  { slug: 'bfr', title: 'Calcul du BFR et du fonds de roulement', page: '/outils/calcul-bfr/', height: 980 },
+  { slug: 'ebe', title: 'Calcul de l’EBE', page: '/outils/calcul-ebe/', height: 860 },
+  { slug: 'caf', title: 'Calcul de la capacité d’autofinancement', page: '/outils/calcul-caf/', height: 900 },
   { slug: 'cout-caisse', title: 'Simulateur de coût de caisse enregistreuse', page: '/outils/simulateur-cout-caisse-enregistreuse/', height: 820 },
 ];
 

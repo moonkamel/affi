@@ -13,6 +13,10 @@ import PenalitesCalculator from '../../components/PenalitesCalculator.astro';
 import CaisseSimulator from '../../components/CaisseSimulator.astro';
 import HtTtcCalculator from '../../components/HtTtcCalculator.astro';
 import MargeCalculator from '../../components/MargeCalculator.astro';
+import SeuilCalculator from '../../components/SeuilCalculator.astro';
+import BfrCalculator from '../../components/BfrCalculator.astro';
+import EbeCalculator from '../../components/EbeCalculator.astro';
+import CafCalculator from '../../components/CafCalculator.astro';
 
 export function getStaticPaths() {
   return EMBEDS.map((e) => ({ params: { tool: e.slug }, props: { embed: e } }));
@@ -27,6 +31,10 @@ const COMPONENTS = {
   'cout-caisse': CaisseSimulator,
   'ht-ttc': HtTtcCalculator,
   marge: MargeCalculator,
+  'seuil-rentabilite': SeuilCalculator,
+  bfr: BfrCalculator,
+  ebe: EbeCalculator,
+  caf: CafCalculator,
 } as const;
 const Tool = COMPONENTS[embed.slug as keyof typeof COMPONENTS];
 ---
