@@ -1,0 +1,202 @@
+---
+// Lien et QR code pour recevoir des avis Google, plus QR codes « lien » et « Wi-Fi ».
+// Le QR code est calculé dans le navigateur (bibliothèque qrcode-generator, MIT) : rien n'est envoyé.
+---
+<div class="sim qr" id="qr-tool">
+  <strong>Ton QR code et ton lien d’avis Google</strong>
+  <div class="qr-tabs" role="tablist" aria-label="Type de QR code">
+    <button type="button" role="tab" aria-selected="true" data-mode="avis">Avis Google</button>
+    <button type="button" role="tab" aria-selected="false" data-mode="lien">Lien (site, menu…)</button>
+    <button type="button" role="tab" aria-selected="false" data-mode="wifi">Wi-Fi</button>
+  </div>
+
+  <div data-pane="avis">
+    <label for="qr-avis">Ton lien « Demander des avis » ou ton identifiant d’établissement (Place ID)</label>
+    <input id="qr-avis" type="text" autocomplete="off" placeholder="Ex. : https://g.page/r/CaBcDeFgHiJkEBM/review ou ChIJ…" />
+    <p class="hint">Où le trouver : cherche ton entreprise sur Google en étant connecté au compte qui la gère, clique sur « Demander des avis » et copie le lien. <a href="#trouver-le-lien">Le pas-à-pas</a>.</p>
+  </div>
+  <div data-pane="lien" hidden>
+    <label for="qr-url">Adresse à ouvrir</label>
+    <input id="qr-url" type="url" autocomplete="off" placeholder="https://www.ton-site.fr/menu" />
+  </div>
+  <div data-pane="wifi" hidden>
+    <div class="row">
+      <div><label for="qr-ssid">Nom du réseau Wi-Fi</label><input id="qr-ssid" type="text" autocomplete="off" /></div>
+      <div><label for="qr-pass">Mot de passe</label><input id="qr-pass" type="text" autocomplete="off" /></div>
+      <div>
+        <label for="qr-sec">Sécurité</label>
+        <select id="qr-sec"><option value="WPA" selected>WPA / WPA2 / WPA3</option><option value="WEP">WEP</option><option value="nopass">Réseau ouvert</option></select>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div><label for="qr-nom">Nom affiché sur l’affichette</label><input id="qr-nom" type="text" placeholder="Ex. : Boulangerie du Port" /></div>
+    <div><label for="qr-txt">Phrase d’accroche</label><input id="qr-txt" type="text" value="Vous avez aimé ? Laissez-nous un avis !" /></div>
+  </div>
+
+  <output class="sim-out qr-out" aria-live="polite">
+    <div class="qr-img" id="qr-img" aria-label="QR code"></div>
+    <div class="qr-info">
+      <div id="qr-etat" class="small">Renseigne ton lien pour générer le QR code.</div>
+      <p id="qr-final" class="qr-final"></p>
+      <div class="qr-actions">
+        <button type="button" class="btn btn-sm" id="qr-png" disabled>Télécharger en PNG</button>
+        <button type="button" class="btn btn-sm btn-ghost" id="qr-svg" disabled>SVG (impression grand format)</button>
+        <button type="button" class="btn btn-sm btn-ghost" id="qr-print" disabled>Imprimer l’affichette</button>
+        <button type="button" class="btn btn-sm btn-ghost" id="qr-copy" disabled>Copier le lien</button>
+      </div>
+    </div>
+  </output>
+
+  <div id="qr-msgs" class="qr-msgs" hidden>
+    <strong>Messages prêts à envoyer</strong>
+    <div class="qr-msg"><p id="qr-sms"></p><button type="button" class="btn btn-sm btn-ghost" data-copy="qr-sms">Copier le SMS</button></div>
+    <div class="qr-msg"><p id="qr-mail"></p><button type="button" class="btn btn-sm btn-ghost" data-copy="qr-mail">Copier l’e-mail</button></div>
+  </div>
+</div>
+
+<article class="qr-affiche" id="qr-affiche" hidden aria-hidden="true"></article>
+
+<script>
+  import qrcode from 'qrcode-generator';
+
+  const root = document.getElementById('qr-tool');
+  if (root) {
+    const $ = (id: string) => document.getElementById(id) as HTMLInputElement;
+    // Encodage UTF-8 (accents dans un nom de réseau Wi-Fi, par exemple).
+    qrcode.stringToBytes = (s: string) => Array.from(new TextEncoder().encode(s));
+    let mode = 'avis', contenu = '', svg = '';
+    const mesurer = (e: string) => { try { navigator.sendBeacon(`/api/mesure/${e}`); } catch { /* sans importance */ } };
+    let compte = false;
+
+    // Lien d'avis : lien court g.page/r/…/review, URL writereview?placeid=…, ou Place ID seul.
+    const lienAvis = (v: string): { url: string; note: string } => {
+      const t = v.trim();
+      if (!t) return { url: '', note: 'Renseigne ton lien pour générer le QR code.' };
+      const pid = t.match(/placeid=([A-Za-z0-9_-]{10,})/i);
+      if (pid) return { url: `https://search.google.com/local/writereview?placeid=${pid[1]}`, note: 'Lien direct vers le formulaire d’avis de ton établissement.' };
+      if (/^ChI[A-Za-z0-9_-]{15,}$/.test(t)) return { url: `https://search.google.com/local/writereview?placeid=${t}`, note: 'Lien construit à partir de ton Place ID : il ouvre directement le formulaire d’avis.' };
+      const g = t.match(/g\.page\/r\/([A-Za-z0-9_-]+)/i);
+      if (g) return { url: `https://g.page/r/${g[1]}/review`, note: 'Lien « Demander des avis » de Google : il ouvre directement le formulaire d’avis.' };
+      if (/^https?:\/\//i.test(t) && /(google\.[a-z.]+\/maps|maps\.app\.goo\.gl|goo\.gl\/maps|g\.co\/kgs)/i.test(t)) {
+        return { url: t, note: '⚠️ Ce lien ouvre ta fiche Google, pas directement le formulaire d’avis : tes clients devront chercher le bouton « Donner un avis ». Utilise plutôt le lien « Demander des avis » (voir plus bas).' };
+      }
+      if (/^https?:\/\//i.test(t)) return { url: t, note: '⚠️ Ce lien ne ressemble pas à un lien d’avis Google. Vérifie qu’il ouvre bien le formulaire d’avis avant d’imprimer.' };
+      return { url: '', note: 'Format non reconnu : colle le lien complet copié depuis Google (il commence par https://) ou ton Place ID (il commence par ChIJ).' };
+    };
+    const echapWifi = (s: string) => s.replace(/([\\;,:"])/g, '\\$1');
+
+    const dessiner = () => {
+      let note = '';
+      if (mode === 'avis') ({ url: contenu, note } = lienAvis($('qr-avis').value));
+      else if (mode === 'lien') {
+        const u = $('qr-url').value.trim();
+        contenu = u ? (/^[a-z]+:/i.test(u) ? u : `https://${u}`) : '';
+        note = contenu ? 'Teste le QR code avec ton téléphone avant de l’imprimer.' : 'Renseigne l’adresse à ouvrir.';
+      } else {
+        const ssid = $('qr-ssid').value, sec = $('qr-sec').value;
+        contenu = ssid ? `WIFI:T:${sec};S:${echapWifi(ssid)};${sec === 'nopass' ? '' : `P:${echapWifi($('qr-pass').value)};`};` : '';
+        note = contenu ? 'Tes clients se connectent en scannant le code, sans saisir le mot de passe.' : 'Renseigne le nom du réseau.';
+      }
+      $('qr-etat').textContent = note;
+      $('qr-final').textContent = mode === 'wifi' ? '' : contenu;
+      ['qr-png', 'qr-svg', 'qr-print', 'qr-copy'].forEach((id) => { ($(id) as unknown as HTMLButtonElement).disabled = !contenu; });
+      ($('qr-copy') as unknown as HTMLButtonElement).hidden = mode === 'wifi';
+      if (!contenu) { $('qr-img').replaceChildren(); svg = ''; $('qr-msgs').hidden = true; return; }
+      const q = qrcode(0, 'M');
+      q.addData(contenu, 'Byte');
+      q.make();
+      svg = q.createSvgTag({ cellSize: 8, margin: 4, scalable: true });
+      $('qr-img').innerHTML = svg;
+      if (!compte) { compte = true; mesurer(`qr-${mode}`); }
+      // Messages types (avis uniquement)
+      $('qr-msgs').hidden = mode !== 'avis';
+      if (mode === 'avis') {
+        const nom = $('qr-nom').value.trim() || 'notre entreprise';
+        $('qr-sms').textContent = `Bonjour, merci pour votre confiance ! Si vous êtes satisfait(e), un avis Google aiderait beaucoup ${nom} : ${contenu} Merci et à bientôt !`;
+        $('qr-mail').textContent = `Objet : Votre avis compte pour nous\n\nBonjour,\n\nMerci d’avoir fait appel à ${nom}. Votre retour nous aide à nous améliorer et à nous faire connaître. Pourriez-vous prendre une minute pour laisser un avis sur Google ?\n${contenu}\n\nMerci beaucoup,\n${$('qr-nom').value.trim() || 'L’équipe'}`;
+      }
+    };
+
+    root.querySelectorAll<HTMLButtonElement>('[data-mode]').forEach((b) => b.addEventListener('click', () => {
+      mode = b.dataset.mode || 'avis'; compte = false;
+      root.querySelectorAll<HTMLButtonElement>('[data-mode]').forEach((x) => x.setAttribute('aria-selected', String(x === b)));
+      root.querySelectorAll<HTMLElement>('[data-pane]').forEach((p) => { p.hidden = p.dataset.pane !== mode; });
+      $('qr-txt').value = mode === 'avis' ? 'Vous avez aimé ? Laissez-nous un avis !' : mode === 'wifi' ? 'Wi-Fi gratuit : scannez pour vous connecter' : 'Scannez pour découvrir notre carte';
+      dessiner();
+    }));
+    root.addEventListener('input', dessiner);
+    root.addEventListener('change', dessiner);
+
+    const telecharger = (href: string, nom: string) => { const a = document.createElement('a'); a.href = href; a.download = nom; document.body.appendChild(a); a.click(); a.remove(); };
+    $('qr-svg').addEventListener('click', () => {
+      const blob = new Blob([svg.includes('xmlns=') ? svg : svg.replace('<svg ', '<svg xmlns="http://www.w3.org/2000/svg" ')], { type: 'image/svg+xml' });
+      const u = URL.createObjectURL(blob); telecharger(u, `qr-code-${mode}.svg`); setTimeout(() => URL.revokeObjectURL(u), 1000);
+    });
+    $('qr-png').addEventListener('click', () => {
+      const q = qrcode(0, 'M'); q.addData(contenu, 'Byte'); q.make();
+      const n = q.getModuleCount(), marge = 4, taille = 1024, cell = Math.floor(taille / (n + marge * 2));
+      const c = document.createElement('canvas'); c.width = c.height = cell * (n + marge * 2);
+      const ctx = c.getContext('2d')!; ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, c.width, c.height); ctx.fillStyle = '#000';
+      for (let r = 0; r < n; r++) for (let k = 0; k < n; k++) if (q.isDark(r, k)) ctx.fillRect((k + marge) * cell, (r + marge) * cell, cell, cell);
+      telecharger(c.toDataURL('image/png'), `qr-code-${mode}.png`);
+      mesurer('qr-telechargement');
+    });
+    const copier = async (t: string, b: HTMLElement) => { try { await navigator.clipboard.writeText(t); const o = b.textContent; b.textContent = 'Copié !'; setTimeout(() => { b.textContent = o; }, 1500); } catch { /* copie impossible */ } };
+    $('qr-copy').addEventListener('click', (e) => copier(contenu, e.currentTarget as HTMLElement));
+    root.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach((b) => b.addEventListener('click', () => copier($(b.dataset.copy!).textContent || '', b)));
+
+    // Affichette A5 : passe sous <body> le temps de l'impression, le reste de la page est masqué.
+    $('qr-print').addEventListener('click', () => {
+      const a = document.getElementById('qr-affiche')!;
+      const el = (tag: string, cls: string, txt?: string) => { const e = document.createElement(tag); e.className = cls; if (txt) e.textContent = txt; return e; };
+      const img = el('div', 'qr-a-img'); img.innerHTML = svg;
+      a.replaceChildren(
+        ...(mode === 'avis' ? [el('p', 'qr-a-etoiles', '★★★★★')] : []),
+        el('p', 'qr-a-titre', $('qr-txt').value.trim()),
+        img,
+        el('p', 'qr-a-sous', mode === 'avis' ? 'Scannez avec l’appareil photo de votre téléphone' : mode === 'wifi' ? `Réseau : ${$('qr-ssid').value}` : 'Scannez avec l’appareil photo de votre téléphone'),
+        ...($('qr-nom').value.trim() ? [el('p', 'qr-a-nom', $('qr-nom').value.trim())] : []),
+      );
+      const place = a.nextSibling, parent = a.parentNode!;
+      a.hidden = false; document.body.appendChild(a);
+      document.documentElement.classList.add('print-qr');
+      const remettre = () => { document.documentElement.classList.remove('print-qr'); a.hidden = true; parent.insertBefore(a, place); window.removeEventListener('afterprint', remettre); };
+      window.addEventListener('afterprint', remettre);
+      mesurer('qr-affiche');
+      window.print();
+    });
+    dessiner();
+  }
+</script>
+
+<style>
+  .qr-tabs { display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0 4px; }
+  .qr-tabs button { font: inherit; font-size: .9rem; font-weight: 600; padding: 7px 12px; border-radius: 999px; border: 1.5px solid var(--line); background: var(--paper); color: var(--ink); cursor: pointer; }
+  .qr-tabs button[aria-selected='true'] { background: var(--accent); border-color: var(--accent); color: #fff; }
+  #qr-tool [hidden] { display: none !important; }
+  .qr-out { display: grid !important; grid-template-columns: 200px 1fr; gap: 18px; align-items: center; }
+  @media (max-width: 560px) { .qr-out { grid-template-columns: 1fr; justify-items: center; text-align: center; } .qr-actions { justify-content: center; } }
+  .qr-img { width: 200px; height: 200px; background: #fff; border-radius: 10px; display: grid; place-items: center; }
+  .qr-img :global(svg) { width: 100%; height: 100%; }
+  .qr-final { word-break: break-all; font-size: .85rem; color: var(--muted); margin: 6px 0; }
+  .qr-actions { display: flex; flex-wrap: wrap; gap: 6px; }
+  .qr-msgs { margin-top: 16px; display: grid; gap: 10px; }
+  .qr-msg { border: 1.5px solid var(--line); border-radius: 10px; padding: 10px 12px; }
+  .qr-msg p { white-space: pre-line; margin: 0 0 8px; font-size: .92rem; }
+  .qr-affiche[hidden] { display: none !important; }
+
+  @media print {
+    @page { size: A5 portrait; margin: 12mm; }
+    :global(html.print-qr body > *:not(.qr-affiche)) { display: none !important; }
+    :global(html.print-qr), :global(html.print-qr body) { background: #fff !important; color: #111 !important; color-scheme: light; }
+    :global(html.print-qr .qr-affiche) { display: flex !important; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: 180mm; font-family: var(--display, sans-serif); color: #111; }
+    :global(.qr-a-etoiles) { font-size: 26pt; color: #f4b400; margin: 0; letter-spacing: 4pt; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    :global(.qr-a-titre) { font-size: 20pt; font-weight: 800; margin: 4mm 0 6mm; line-height: 1.2; }
+    :global(.qr-a-img) { width: 85mm; height: 85mm; }
+    :global(.qr-a-img svg) { width: 100%; height: 100%; }
+    :global(.qr-a-sous) { font-size: 11pt; color: #444; margin: 5mm 0 0; }
+    :global(.qr-a-nom) { font-size: 14pt; font-weight: 700; margin: 6mm 0 0; }
+  }
+</style>

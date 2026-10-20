@@ -24,6 +24,7 @@ export const EMBEDS: Embed[] = [
   { slug: 'tva-intracom', title: 'Numéro de TVA intracommunautaire et SIRET', page: '/outils/numero-tva-intracommunautaire/', height: 640 },
   { slug: 'swot', title: 'Générateur de matrice SWOT', page: '/creer/analyse-swot/', height: 900 },
   { slug: 'pestel', title: 'Générateur d’analyse PESTEL', page: '/creer/analyse-pestel/', height: 900 },
+  { slug: 'qr-avis-google', title: 'Générateur de QR code avis Google', page: '/outils/lien-avis-google/', height: 760 },
   { slug: 'cout-caisse', title: 'Simulateur de coût de caisse enregistreuse', page: '/outils/simulateur-cout-caisse-enregistreuse/', height: 820 },
 ];
 

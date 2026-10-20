@@ -20,6 +20,7 @@ import CafCalculator from '../../components/CafCalculator.astro';
 import IdentifiantsEntreprise from '../../components/IdentifiantsEntreprise.astro';
 import SwotBuilder from '../../components/SwotBuilder.astro';
 import PestelBuilder from '../../components/PestelBuilder.astro';
+import QrAvisGoogle from '../../components/QrAvisGoogle.astro';
 
 export function getStaticPaths() {
   return EMBEDS.map((e) => ({ params: { tool: e.slug }, props: { embed: e } }));
@@ -41,6 +42,7 @@ const COMPONENTS = {
   'tva-intracom': IdentifiantsEntreprise,
   swot: SwotBuilder,
   pestel: PestelBuilder,
+  'qr-avis-google': QrAvisGoogle,
 } as const;
 const Tool = COMPONENTS[embed.slug as keyof typeof COMPONENTS];
 ---
