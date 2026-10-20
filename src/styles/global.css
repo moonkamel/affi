@@ -859,7 +859,6 @@ html.mod-anime .mod-grille li.vu { opacity: 1; transform: none; }
 .mod-manque { margin-top: 72px; }
 @media (max-width: 900px) { .mod-hero { grid-template-columns: minmax(0, 1fr); } .mod-pile { height: 280px; } .mod-pile .mod-feuille { width: 180px; height: 250px; } }
 @media (max-width: 560px) {
-  .mod-pile { display: none; }
   .mod-grille { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 12px; }
   .mod-cadre { border-radius: 14px; }
   .mod-infos { padding-top: 10px; }
@@ -871,6 +870,51 @@ html.mod-anime .mod-grille li.vu { opacity: 1; transform: none; }
 @media (hover: none) { .mod-cadre .mod-feuille { animation: defile 9s ease-in-out infinite alternate; animation-play-state: paused; } .mod-grille li.vu .mod-feuille { animation-play-state: running; } }
 @keyframes defile { 0%, 20% { transform: rotate(-1.5deg); } 80%, 100% { transform: rotate(0) translateY(-38%); } }
 @media (prefers-reduced-motion: reduce) { .mod-cadre .mod-feuille, .mod-pile .mod-feuille { transition: none; animation: none !important; } }
+
+/* Démo « le document se remplit tout seul » et scène des trois gestes */
+.dm { position: relative; height: 380px; display: grid; place-items: center; }
+.dm-ombre { position: absolute; width: 70%; height: 70%; border-radius: 50%; background: radial-gradient(closest-side, color-mix(in srgb, var(--accent) 32%, transparent), transparent); filter: blur(16px); }
+.dm-feuille { position: relative; width: min(320px, 86%); padding: 22px 22px 26px; border-radius: 14px; background: #fbfbfd; color: #161a2b; font-size: .82rem; box-shadow: 0 30px 70px rgba(0, 0, 0, .5); transform: rotate(-2deg); transition: transform .45s cubic-bezier(.2, .8, .2, 1), opacity .35s; display: grid; gap: 8px; }
+.dm.dm-sort .dm-feuille { opacity: 0; transform: rotate(-6deg) translateY(30px) scale(.95); }
+.dm-tete { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding-bottom: 10px; margin-bottom: 4px; border-bottom: 2px solid #3d5afe; }
+.dm-tete > span:last-child { display: grid; text-align: right; }
+.dm-tete b { font-family: var(--display); font-weight: 800; letter-spacing: .04em; color: #2438b8; }
+.dm-tete i { font-style: normal; color: #5a6175; font-size: .74rem; }
+.dm-logo { width: 22px; height: 22px; border-radius: 6px; background: #3d5afe; flex: none; }
+.dm-champ { display: grid; gap: 2px; padding: 6px 8px; border-radius: 6px; background: #f0f2f8; }
+.dm-champ span { font-size: .68rem; text-transform: uppercase; letter-spacing: .06em; color: #5a6175; font-weight: 700; }
+.dm-champ b { min-height: 1.3em; font-weight: 700; }
+.dm-champ:last-of-type { background: #fff4d6; }
+.dm-curseur::after { content: ""; display: inline-block; width: 2px; height: 1em; margin-left: 1px; vertical-align: -2px; background: #3d5afe; animation: clignote .8s steps(1) infinite; }
+@keyframes clignote { 50% { opacity: 0; } }
+.dm-l { display: block; height: 4px; border-radius: 2px; background: #dde1ec; }
+.dm-sign { justify-self: end; width: 46%; padding: 14px 6px 4px; border: 1px dashed #9aa3ba; border-radius: 6px; color: #5a6175; text-align: center; font-size: .7rem; }
+.dm-pdf { position: absolute; right: 6%; bottom: 10%; display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; border-radius: 999px; background: var(--good); color: #0b2a1d; font-family: var(--display); font-weight: 800; box-shadow: 0 14px 30px rgba(0, 0, 0, .4); opacity: 0; transform: translateY(14px) scale(.8); transition: opacity .3s, transform .45s cubic-bezier(.3, 1.6, .5, 1); }
+.dm-pdf svg { width: 18px; height: 18px; }
+.dm.dm-pret .dm-pdf { opacity: 1; transform: none; }
+.mod-gestes { margin-top: 96px; text-align: center; }
+.mod-gestes h2 { font-size: clamp(1.9rem, 4vw, 2.75rem); letter-spacing: -.03em; line-height: 1.05; margin: 8px 0 34px; }
+.mod-trait { position: relative; height: 3px; margin: 0 16.66% -34px; border-radius: 3px; background: var(--line); }
+.mod-trait i { position: absolute; inset: 0 auto 0 0; width: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--accent), var(--sun)); }
+.mod-etapes { position: relative; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; margin: 0; padding: 0; list-style: none; }
+.mod-etapes li { display: grid; justify-items: center; gap: 8px; }
+.mod-pastille { display: grid; place-items: center; width: 68px; height: 68px; border-radius: 22px; background: var(--card); border: 1.5px solid var(--line); color: var(--accent); }
+.mod-pastille svg { width: 28px; height: 28px; }
+.mod-etapes strong { font-family: var(--display); font-size: 1.35rem; }
+.mod-etapes li > span:last-child { color: var(--muted); max-width: 28ch; }
+html.scenes .mod-trait i { width: calc(min(1, max(0, (var(--p, 0) - .2) * 3.2)) * 100%); }
+html.scenes .mod-etapes li { --a: min(1, max(0, (var(--p, 0) - .2 - var(--i) * .09) * 7)); opacity: calc(.2 + var(--a) * .8); transform: translateY(calc((1 - var(--a)) * 24px)); }
+html.scenes .mod-etapes li .mod-pastille { transform: scale(calc(.85 + var(--a) * .15)); border-color: color-mix(in srgb, var(--accent) calc(var(--a) * 100%), var(--line)); }
+@media (hover: hover) and (pointer: fine) {
+  .mod-grille .mod-cadre { transform: perspective(800px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); transition: transform .25s ease, border-color .25s; }
+  .mod-grille .mod-cadre::after { content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none; background: radial-gradient(260px circle at var(--mx, 50%) var(--my, 0%), rgba(255, 255, 255, .12), transparent 70%); opacity: 0; transition: opacity .25s; }
+  .mod-carte:hover .mod-cadre::after { opacity: 1; }
+}
+@media (max-width: 700px) {
+  .mod-trait { display: none; }
+  .mod-etapes { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+}
+@media (max-width: 560px) { .dm { height: 320px; } }
 
 /* Miniatures de documents (papier clair, comme le PDF final) */
 .ma { height: 100%; background: #fbfbfd; color: #161a2b; padding: 9% 9% 0; display: flex; flex-direction: column; gap: 5px; font-family: var(--font); font-size: 7.5px; line-height: 1.3; }
@@ -1021,7 +1065,7 @@ kbd { font-family: var(--mono); font-size: .85em; padding: 1px 6px; border: 1px 
 /* Impression d'une page de facture ou de devis : seule la facture est imprimée, sans pages blanches.
    Limité aux pages qui contiennent le générateur (.gen), pour ne pas masquer les autres outils imprimables. */
 @media print {
-  .sim-barre, .haut-de-page, .recherche, .btn-recherche, .voisins, .sim-flottant, .nav-mobile, .aller-outil, .jr, .mm, .gm, .vit, .out-fin { display: none !important; }
+  .sim-barre, .haut-de-page, .recherche, .btn-recherche, .voisins, .sim-flottant, .nav-mobile, .aller-outil, .jr, .mm, .gm, .vit, .out-fin, .dm, .mod-gestes { display: none !important; }
   .site-header { transform: none !important; }
   @page { margin: 14mm; }
   body { background: #fff; }

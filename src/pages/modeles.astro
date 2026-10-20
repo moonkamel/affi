@@ -4,6 +4,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
 import ModeleApercu from '../components/ModeleApercu.astro';
+import ModeleDemo from '../components/ModeleDemo.astro';
 import { SITE } from '../data/site';
 import { CATEGORIES_MODELES, FORMATS_MODELES, MODELES, type CategorieModele, type FormatModele } from '../data/modeles';
 import { abs, breadcrumbs, graph } from '../lib/schema';
@@ -48,11 +49,7 @@ const jsonLd = graph(
           <span><b>0 €</b>aucun compte à créer</span>
         </div>
       </div>
-      <div class="mod-pile" aria-hidden="true">
-        <div class="mod-feuille f1"><ModeleApercu type="lettre" titre="Relance" /></div>
-        <div class="mod-feuille f2"><ModeleApercu type="devis" titre="Devis" /></div>
-        <div class="mod-feuille f3"><ModeleApercu type="facture" titre="Facture" /></div>
-      </div>
+      <ModeleDemo />
     </section>
 
     <div class="out-barre mod-barre">
@@ -85,6 +82,17 @@ const jsonLd = graph(
       ))}
     </ul>
 
+    <section class="mod-gestes" data-scene="flux" aria-labelledby="mod-gestes-titre">
+      <span class="acc-kicker">Comment ça marche</span>
+      <h2 id="mod-gestes-titre">Trois gestes, et c’est envoyé</h2>
+      <div class="mod-trait" aria-hidden="true"><i></i></div>
+      <ol class="mod-etapes">
+        <li style="--i:0"><span class="mod-pastille" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><rect x="13" y="4" width="7" height="7" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><rect x="4" y="13" width="7" height="7" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><rect x="13" y="13" width="7" height="7" rx="2" fill="none" stroke="currentColor" stroke-width="2"/></svg></span><strong>Choisis</strong><span>Le modèle qu’il te faut, parmi les {n} de la bibliothèque.</span></li>
+        <li style="--i:1"><span class="mod-pastille" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M13 7l4 4" stroke="currentColor" stroke-width="2"/></svg></span><strong>Remplis</strong><span>Les mentions obligatoires sont déjà là : tu n’ajoutes que tes informations.</span></li>
+        <li style="--i:2"><span class="mod-pastille" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 4v11M7 10l5 5 5-5M5 20h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><strong>Télécharge</strong><span>En PDF, prêt à imprimer, à signer ou à envoyer par e-mail.</span></li>
+      </ol>
+    </section>
+
     <section class="acc-bande mod-manque" aria-labelledby="mod-manque-titre">
       <div>
         <h2 id="mod-manque-titre">Il te manque un modèle ?</h2>
@@ -94,6 +102,8 @@ const jsonLd = graph(
     </section>
   </div>
 </BaseLayout>
+
+<script>import '../scripts/scenes.ts'; import '../scripts/outils-anime.ts';</script>
 
 <script is:inline>
   (() => {

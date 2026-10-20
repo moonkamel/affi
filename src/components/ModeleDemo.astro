@@ -1,0 +1,55 @@
+---
+// Démo de la page des modèles : un document se remplit tout seul (frappe), devient « PDF prêt », puis laisse
+// la place au suivant. Sans animation (ou sans JavaScript), le premier document s'affiche déjà rempli.
+const docs = [
+  { type: 'FACTURE', ref: 'F-2026-042', champs: [['Client', 'Boulangerie du Port'], ['Prestation', 'Création du site vitrine'], ['Total TTC', '1 440,00 €']] },
+  { type: 'CERTIFICAT DE TRAVAIL', ref: '', champs: [['Salariée', 'Julie Martin'], ['Emploi occupé', 'Vendeuse'], ['Période', 'du 1er mars 2024 au 31 août 2026']] },
+  { type: 'LETTRE DE RELANCE', ref: 'J+15', champs: [['Objet', 'Facture n° 2026-042'], ['Échéance dépassée', 'depuis le 15 octobre'], ['Montant dû', '1 800,00 €']] },
+];
+---
+<div class="dm" data-demo={JSON.stringify(docs)} aria-hidden="true">
+  <div class="dm-ombre"></div>
+  <div class="dm-feuille">
+    <div class="dm-tete"><span class="dm-logo"></span><span><b data-dm="type">{docs[0].type}</b><i data-dm="ref">{docs[0].ref}</i></span></div>
+    {docs[0].champs.map(([l, v], i) => (
+      <div class="dm-champ"><span data-dm={`l${i}`}>{l}</span><b data-dm={`v${i}`}>{v}</b></div>
+    ))}
+    <span class="dm-l" style="width:92%"></span><span class="dm-l" style="width:78%"></span><span class="dm-l" style="width:86%"></span>
+    <span class="dm-sign">Signature</span>
+  </div>
+  <span class="dm-pdf"><svg viewBox="0 0 24 24"><path d="M12 4v11M7 10l5 5 5-5M5 20h14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>PDF prêt</span>
+</div>
+
+<script is:inline>
+  (() => {
+    const d = document.querySelector('[data-demo]');
+    if (!d || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const docs = JSON.parse(d.dataset.demo);
+    const $ = (k) => d.querySelector(`[data-dm="${k}"]`);
+    const attendre = (ms) => new Promise((ok) => setTimeout(ok, ms));
+    let visible = true, n = 0;
+    new IntersectionObserver(([e]) => { visible = e.isIntersecting; }).observe(d);
+    const taper = async (el, texte) => {
+      el.textContent = ''; el.classList.add('dm-curseur');
+      for (const c of texte) { el.textContent += c; await attendre(c === ' ' ? 20 : 38); }
+      el.classList.remove('dm-curseur');
+    };
+    const jouer = async () => {
+      for (;;) {
+        while (!visible) await attendre(400);
+        const doc = docs[n % docs.length];
+        d.classList.remove('dm-pret'); d.classList.add('dm-sort');
+        await attendre(350);
+        $('type').textContent = doc.type; $('ref').textContent = doc.ref;
+        doc.champs.forEach(([l], i) => { $(`l${i}`).textContent = l; $(`v${i}`).textContent = ''; });
+        d.classList.remove('dm-sort');
+        await attendre(450);
+        for (let i = 0; i < doc.champs.length; i++) await taper($(`v${i}`), doc.champs[i][1]);
+        d.classList.add('dm-pret');
+        await attendre(2200);
+        n++;
+      }
+    };
+    jouer();
+  })();
+</script>

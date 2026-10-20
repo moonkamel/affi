@@ -1,4 +1,4 @@
-// Page des outils : cartes qui apparaissent en cascade, légère inclinaison sous le pointeur,
+// Pages des outils et des modèles : cartes qui apparaissent en cascade, légère inclinaison sous le pointeur,
 // compteurs du bandeau final. Rien de tout cela si l'utilisateur limite les animations.
 if (!matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window) {
   const cartes = [...document.querySelectorAll<HTMLElement>('.out-grille > li')];
@@ -12,7 +12,7 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObse
 
   // Inclinaison 3D au survol (souris uniquement).
   if (matchMedia('(hover: hover) and (pointer: fine)').matches) {
-    document.querySelectorAll<HTMLElement>('.out-grille .acc-carte').forEach((c) => {
+    document.querySelectorAll<HTMLElement>('.out-grille .acc-carte, .mod-grille .mod-cadre').forEach((c) => {
       c.addEventListener('pointermove', (e) => {
         const r = c.getBoundingClientRect();
         c.style.setProperty('--rx', `${((e.clientY - r.top) / r.height - 0.5) * -8}deg`);
