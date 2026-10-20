@@ -84,7 +84,7 @@ const activites = ACTIVITES.map((a) => a.naf.join(','));
         </div>
       </div>
       <p class="mk-actions"><button type="button" class="btn btn-ghost btn-sm" id="mk-print">Imprimer ou enregistrer en PDF</button></p>
-      <p class="mk-next">Étape suivante : transforme ces chiffres en chiffre d’affaires prévisionnel avec notre <a href="/creer/business-plan/">business plan gratuit</a> (seuil de rentabilité, plan de financement, trésorerie sur 3 ans).</p>
+      <p class="mk-next">Étape suivante : transforme ces chiffres en chiffre d’affaires prévisionnel avec notre <a href="/creer/business-plan/">business plan gratuit</a> (seuil de rentabilité, plan de financement, trésorerie sur 3 ans), puis assemble ton <a href="/creer/dossier-de-financement/">dossier de financement en PDF</a>.</p>
     </div>
   </output>
   <p class="small">Sources : répertoire Sirene de l’INSEE via l’<a href="https://recherche-entreprises.api.gouv.fr/" rel="noopener">API Recherche d’entreprises</a> (entreprises actives dont c’est l’activité principale déclarée), populations légales de l’INSEE en vigueur en 2026. Les chiffres comptent des entreprises, pas des points de vente : une enseigne nationale compte une seule fois. C’est une estimation à compléter par ta visite du terrain.</p>
@@ -234,9 +234,30 @@ const activites = ACTIVITES.map((a) => a.naf.join(','));
         $('mk-evo-verdict').textContent = txt;
         status.textContent = '';
         $('mk-evo-res').hidden = false;
+        sauverEtude();
       } catch (err) {
         status.textContent = 'Le calcul de l’évolution n’a pas abouti (répertoire public indisponible). Relance l’analyse dans quelques minutes.';
       }
+    };
+
+    // ---------- Sauvegarde locale pour le dossier de financement ----------
+    const sauverEtude = () => {
+      try {
+        const lignes = (sel) => [...root.querySelectorAll(sel)].map((tr) => [...tr.cells].filter((td) => !td.classList.contains('mk-bar-col')).map((td) => td.textContent.trim()));
+        const visible = (id) => !$(id).hidden;
+        localStorage.setItem('logimalin-etude', JSON.stringify({
+          date: new Date().toISOString(),
+          activite: $('mk-act').selectedOptions[0].text,
+          commune: zoneCtx ? `${zoneCtx.c.nom} (${zoneCtx.c.cp || zoneCtx.c.dep})` : input.value,
+          zones: lignes('#mk-tab tr'),
+          verdict: $('mk-verdict').textContent,
+          note: $('mk-note').textContent,
+          ca: visible('mk-ca') ? $('mk-ca-txt').textContent : null,
+          zone: visible('mk-zone') && /rayon/.test($('mk-zone-txt').textContent) ? { texte: $('mk-zone-txt').textContent, verdict: $('mk-zone-verdict').textContent, communes: $('mk-zone-com').textContent } : null,
+          evolution: visible('mk-evo') && !$('mk-evo-res').hidden ? { lignes: lignes('#mk-evo-tab tr'), verdict: $('mk-evo-verdict').textContent } : null,
+          concurrents: [...root.querySelectorAll('#mk-comp li')].map((li) => li.textContent),
+        }));
+      } catch (e) { /* stockage indisponible */ }
     };
 
     // ---------- Zone de chalandise (rayon autour du centre de la commune) ----------
@@ -272,6 +293,7 @@ const activites = ACTIVITES.map((a) => a.naf.join(','));
           : ratio <= 1.3 ? `⚖️ Zone dans la moyenne nationale (${fmt1(ratio)} fois la densité).`
           : `📈 Zone très concurrentielle : ${fmt1(ratio)} fois la densité nationale.`;
         const autres = dans.filter((x) => x !== c).slice(0, 8).map((x) => `${x.nom} (${fmt(x.pop)} hab., ${fmt1(distanceKm(c, x))} km)`);
+        setTimeout(sauverEtude, 0);
         $('mk-zone-com').textContent = autres.length ? `Principales communes de la zone : ${autres.join(', ')}${dans.length > 9 ? '…' : '.'}` : '';
       } catch (err) {
         if (id === zoneEnCours) txt.textContent = 'Le calcul de la zone n’a pas abouti (répertoire public indisponible). Réessaie dans quelques minutes.';
@@ -385,6 +407,7 @@ const activites = ACTIVITES.map((a) => a.naf.join(','));
         $('mk-res').hidden = false;
         btn.disabled = false;
         zoneCtx = { c, naf, densFr: zFr.pop ? (zFr.n / zFr.pop) * 10000 : 0 };
+        sauverEtude();
         $('mk-zone').hidden = false;
         await calculerZone(c.pop >= 100000 ? 5 : 10);
         await pause(160);

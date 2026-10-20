@@ -1,0 +1,265 @@
+---
+// Dossier de financement : assemble l'étude de marché locale et le prévisionnel (sauvegardés dans le navigateur
+// par MarketStudy et BusinessPlanBuilder) avec les parties rédigées du business plan, puis imprime un document A4.
+// Rien n'est envoyé : les textes sont gardés en brouillon dans le navigateur (localStorage).
+const sections = [
+  { id: 'resume', titre: 'Résumé du projet', aide: 'Le projet en 5 lignes : ce que tu vends, à qui, où, le besoin de financement et le chiffre d’affaires visé. Écris-le en dernier.' },
+  { id: 'parcours', titre: 'Le porteur de projet', aide: 'Ton parcours, tes compétences, ton expérience dans le métier, ce qui te rend crédible.' },
+  { id: 'offre', titre: 'L’offre', aide: 'Tes produits ou services, tes prix, le problème que tu règles pour tes clients, ce qui te différencie.' },
+  { id: 'marche', titre: 'Le marché et la clientèle', aide: 'Tes clients cibles, leurs besoins, tes concurrents principaux et ton positionnement. Les chiffres de ton étude de marché sont ajoutés automatiquement.' },
+  { id: 'strategie', titre: 'La stratégie commerciale', aide: 'Comment tu trouves tes clients : emplacement, site internet, réseaux sociaux, prospection, partenaires, budget.' },
+  { id: 'moyens', titre: 'Les moyens', aide: 'Statut juridique, local, matériel, logiciels, fournisseurs, recrutements prévus.' },
+  { id: 'calendrier', titre: 'Le calendrier', aide: 'Les grandes étapes : immatriculation, travaux, ouverture, premiers clients, embauches.' },
+];
+---
+<div class="sim dossier" id="dossier-tool">
+  <strong>Ton dossier de financement</strong>
+  <p class="small">Tes textes restent dans ton navigateur (brouillon enregistré automatiquement). Rien n’est envoyé.</p>
+
+  <div class="ds-sources">
+    <div id="ds-src-etude" class="ds-src"></div>
+    <div id="ds-src-bp" class="ds-src"></div>
+  </div>
+
+  <fieldset>
+    <legend>Le projet</legend>
+    <div class="row">
+      <div><label for="ds-nom">Nom du projet ou de l’entreprise</label><input id="ds-nom" type="text" placeholder="Ex. : Boulangerie du Port" /></div>
+      <div><label for="ds-porteur">Porteur(s) du projet</label><input id="ds-porteur" type="text" placeholder="Prénom Nom" /></div>
+      <div><label for="ds-ville">Ville</label><input id="ds-ville" type="text" /></div>
+      <div>
+        <label for="ds-statut">Forme juridique envisagée</label>
+        <select id="ds-statut">
+          <option value="">À définir</option>
+          <option>Micro-entreprise</option><option>Entreprise individuelle (régime réel)</option>
+          <option>EURL</option><option>SASU</option><option>SARL</option><option>SAS</option>
+        </select>
+      </div>
+      <div><label for="ds-debut">Date de démarrage prévue</label><input id="ds-debut" type="month" /></div>
+      <div><label for="ds-contact">Contact (e-mail ou téléphone)</label><input id="ds-contact" type="text" /></div>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Les parties rédigées</legend>
+    {sections.map((s) => (
+      <div class="ds-sec">
+        <label for={`ds-${s.id}`}>{s.titre}</label>
+        <p class="small">{s.aide}</p>
+        <textarea id={`ds-${s.id}`} rows="5"></textarea>
+      </div>
+    ))}
+  </fieldset>
+
+  <div class="ds-actions">
+    <button type="button" class="btn" id="ds-go">Générer et enregistrer mon dossier en PDF</button>
+    <button type="button" class="btn btn-ghost" id="ds-apercu">Aperçu</button>
+  </div>
+  <p class="small">Dans la fenêtre d’impression, choisis « Enregistrer au format PDF » comme imprimante.</p>
+</div>
+
+<article id="dossier-doc" class="dossier-doc" hidden aria-label="Aperçu du dossier"></article>
+
+<script is:inline define:vars={{ sections }}>
+  (() => {
+    const root = document.getElementById('dossier-tool');
+    if (!root) return;
+    const $ = (id) => document.getElementById(id);
+    const lire = (k) => { try { return JSON.parse(localStorage.getItem(k) || 'null'); } catch (e) { return null; } };
+    const dateFr = (iso) => new Date(iso).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+    const eur = (n) => Number(n).toLocaleString('fr-FR', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 });
+    const champs = ['nom', 'porteur', 'ville', 'statut', 'debut', 'contact', ...sections.map((s) => s.id)];
+
+    // ---------- Brouillon ----------
+    const brouillon = lire('logimalin-dossier') || {};
+    champs.forEach((k) => { if (brouillon[k] != null) $(`ds-${k}`).value = brouillon[k]; });
+    root.addEventListener('input', () => {
+      const d = {};
+      champs.forEach((k) => { d[k] = $(`ds-${k}`).value; });
+      try { localStorage.setItem('logimalin-dossier', JSON.stringify(d)); } catch (e) { /* stockage indisponible */ }
+    });
+
+    // ---------- Sources disponibles ----------
+    const etude = lire('logimalin-etude');
+    const bp = lire('logimalin-bp');
+    if (etude && !$('ds-ville').value) $('ds-ville').value = (etude.commune || '').replace(/\s*\(.*\)$/, '');
+    $('ds-src-etude').innerHTML = etude
+      ? `✅ <strong>Étude de marché</strong> : ${etude.activite} à ${etude.commune}, le ${dateFr(etude.date)}. <a href="/creer/etude-de-marche/">Refaire</a>`
+      : '⬜ <strong>Étude de marché</strong> : pas encore faite. <a href="/creer/etude-de-marche/">Lancer l’étude gratuite</a>';
+    $('ds-src-bp').innerHTML = bp
+      ? `✅ <strong>Prévisionnel</strong> : chiffre d’affaires de 1re année ${eur(bp.hypotheses.ca1)}, le ${dateFr(bp.date)}. <a href="/creer/business-plan/">Modifier</a>`
+      : '⬜ <strong>Prévisionnel</strong> : pas encore fait. <a href="/creer/business-plan/">Faire le prévisionnel</a>';
+
+    // ---------- Construction du document (DOM, sans HTML injecté) ----------
+    const el = (tag, cls, txt) => { const e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; };
+    const paragraphes = (parent, texte, vide) => {
+      const t = (texte || '').trim();
+      if (!t) { parent.appendChild(el('p', 'ds-vide', vide || 'À compléter.')); return; }
+      t.split(/\n\s*\n|\n/).filter(Boolean).forEach((p) => parent.appendChild(el('p', null, p.trim())));
+    };
+    const tableau = (parent, entete, lignes, legende) => {
+      const t = el('table', 'ds-table');
+      if (legende) t.appendChild(el('caption', null, legende));
+      const h = t.createTHead().insertRow();
+      entete.forEach((x) => h.appendChild(el('th', null, x)));
+      const b = t.createTBody();
+      lignes.forEach((l) => { const r = b.insertRow(); l.forEach((x) => { r.insertCell().textContent = x; }); });
+      parent.appendChild(t);
+    };
+    // Textes repris des outils (écrits au « tu ») rendus neutres pour un document destiné à un financeur.
+    const neutre = (t) => {
+      let x = String(t || '').replace(/^[^\p{L}\d]+/u, '').trim();
+      x = x.split(/ : vérifie| : il te faudra|\. Soit la demande|\. Le marché est disputé|\. Ni désert/)[0];
+      return x && !/[.!?)]$/.test(x) ? x + '.' : x;
+    };
+    const construire = () => {
+      const doc = $('dossier-doc');
+      doc.replaceChildren();
+      const v = (k) => $(`ds-${k}`).value.trim();
+      const nom = v('nom') || 'Mon projet';
+
+      // Couverture
+      const couv = el('section', 'ds-page ds-couv');
+      couv.appendChild(el('p', 'ds-sur', 'Dossier de présentation et de financement'));
+      couv.appendChild(el('h1', null, nom));
+      [
+        ['Porteur du projet', v('porteur')], ['Ville', v('ville')], ['Forme juridique envisagée', v('statut')],
+        ['Démarrage prévu', v('debut') ? new Date(v('debut') + '-01').toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' }) : ''],
+        ['Activité', etude ? etude.activite : ''], ['Contact', v('contact')],
+      ].filter(([, x]) => x).forEach(([k, x]) => { const p = el('p', 'ds-meta'); p.appendChild(el('strong', null, `${k} : `)); p.appendChild(document.createTextNode(x)); couv.appendChild(p); });
+      couv.appendChild(el('p', 'ds-date', `Document établi le ${dateFr(new Date().toISOString())}`));
+      const som = el('ol', 'ds-sommaire');
+      ['Résumé du projet', 'Le porteur de projet', 'L’offre', 'Le marché et la clientèle', 'La stratégie commerciale', 'Les moyens', 'Les prévisions financières', 'Le calendrier'].forEach((x) => som.appendChild(el('li', null, x)));
+      couv.appendChild(el('h2', null, 'Sommaire'));
+      couv.appendChild(som);
+      doc.appendChild(couv);
+
+      const partie = (n, titre) => { const s = el('section', 'ds-page'); s.appendChild(el('h2', null, `${n}. ${titre}`)); doc.appendChild(s); return s; };
+
+      // 1 à 3
+      paragraphes(partie(1, 'Résumé du projet'), v('resume'));
+      paragraphes(partie(2, 'Le porteur de projet'), sectionsTexte('parcours'));
+      paragraphes(partie(3, 'L’offre'), sectionsTexte('offre'));
+
+      // 4. Marché
+      const m = partie(4, 'Le marché et la clientèle');
+      paragraphes(m, sectionsTexte('marche'), 'Clientèle cible et positionnement à compléter.');
+      if (etude) {
+        m.appendChild(el('h3', null, `Étude de marché locale : ${etude.activite}`));
+        tableau(m, ['Zone', 'Habitants', 'Concurrents', 'Pour 10 000 habitants', 'Habitants par concurrent'], etude.zones, `Entreprises actives de l’activité (répertoire Sirene, ${dateFr(etude.date)})`);
+        if (etude.verdict) m.appendChild(el('p', 'ds-cle', neutre(etude.verdict).replace(/^Ton département/, 'Le département')));
+        if (etude.zone) { m.appendChild(el('h3', null, 'Zone de chalandise')); m.appendChild(el('p', null, etude.zone.texte)); if (etude.zone.verdict) m.appendChild(el('p', 'ds-cle', neutre(etude.zone.verdict))); if (etude.zone.communes) m.appendChild(el('p', 'ds-petit', etude.zone.communes)); }
+        if (etude.ca) { m.appendChild(el('h3', null, 'Chiffre d’affaires des concurrents')); m.appendChild(el('p', null, etude.ca)); }
+        if (etude.evolution) {
+          m.appendChild(el('h3', null, 'Évolution du marché sur 5 ans'));
+          tableau(m, ['Année', 'Créations', 'Fermetures', 'Solde'], etude.evolution.lignes);
+          m.appendChild(el('p', 'ds-cle', neutre(etude.evolution.verdict)));
+        }
+        if (etude.concurrents && etude.concurrents.length) {
+          m.appendChild(el('h3', null, 'Principaux concurrents identifiés'));
+          const ul = el('ul', 'ds-petit');
+          etude.concurrents.forEach((x) => ul.appendChild(el('li', null, x)));
+          m.appendChild(ul);
+        }
+        m.appendChild(el('p', 'ds-source', 'Sources : répertoire Sirene de l’INSEE (API Recherche d’entreprises), populations légales INSEE en vigueur en 2026, comptes annuels publiés. Calculs : Logimalin, étude de marché locale.'));
+      }
+
+      paragraphes(partie(5, 'La stratégie commerciale'), sectionsTexte('strategie'));
+      paragraphes(partie(6, 'Les moyens'), [v('statut') ? `Forme juridique envisagée : ${v('statut')}.` : '', sectionsTexte('moyens')].filter(Boolean).join('\n'));
+
+      // 7. Chiffres
+      const f = partie(7, 'Les prévisions financières');
+      if (bp) {
+        const h = bp.hypotheses;
+        f.appendChild(el('h3', null, 'Hypothèses'));
+        const ul = el('ul');
+        [
+          `Chiffre d’affaires de la 1re année : ${eur(h.ca1)}, puis ${h.croissance} % de croissance par an`,
+          `Achats et coûts variables : ${h.coutsVariables} % du chiffre d’affaires`,
+          `Charges fixes : ${eur(h.fixesMois)} par mois`,
+          `Rémunération du dirigeant : ${eur(h.remuMois)} par mois${h.salairesMois ? `, salaires : ${eur(h.salairesMois)} par mois` : ''}`,
+          `Investissements : ${eur(h.investissements)}, amortis sur ${h.dureeAmort} ans`,
+          h.pret ? `Prêt bancaire : ${eur(h.pret)} sur ${h.dureePret} ans à ${h.taux} %` : 'Pas de prêt bancaire',
+        ].forEach((x) => ul.appendChild(el('li', null, x)));
+        f.appendChild(ul);
+        tableau(f, bp.cr[0].map((x, i) => (i ? x : 'Compte de résultat prévisionnel')), bp.cr.slice(1).map((r) => [r[0] === 'Ta rémunération' ? 'Rémunération du dirigeant' : r[0], ...r.slice(1).map(eur)]));
+        f.appendChild(el('h3', null, 'Plan de financement initial'));
+        const n = Math.max(bp.besoins.length, bp.ress.length);
+        tableau(f, ['Besoins', 'Montant', 'Ressources', 'Montant'], [
+          ...Array.from({ length: n }, (_, i) => [bp.besoins[i] ? bp.besoins[i][0] : '', bp.besoins[i] ? eur(bp.besoins[i][1]) : '', bp.ress[i] ? bp.ress[i][0] : '', bp.ress[i] ? eur(bp.ress[i][1]) : '']),
+          ['Total', eur(bp.totB), 'Total', eur(bp.totR)],
+        ]);
+        f.appendChild(el('h3', null, 'Seuil de rentabilité'));
+        f.appendChild(el('p', 'ds-cle', bp.seuil
+          ? `${eur(bp.seuil)} de chiffre d’affaires par an, soit ${eur(bp.seuil / 12)} par mois, rémunération du dirigeant comprise. ` + (h.ca1 >= bp.seuil ? 'Le prévisionnel l’atteint dès la première année.' : `Le chiffre d’affaires de première année est inférieur de ${eur(bp.seuil - h.ca1)} : le seuil est visé à partir de la deuxième année.`)
+          : 'Seuil non calculable : les coûts variables représentent 100 % du chiffre d’affaires.'));
+        const treso = (bp.cr.find((r) => /^Trésorerie/.test(r[0])) || []).slice(1);
+        const constats = [];
+        if (bp.totR < bp.totB) constats.push(`Besoin de financement restant à couvrir : ${eur(bp.totB - bp.totR)}.`);
+        if (treso.length && Math.min(...treso) < 0) constats.push('La trésorerie devient négative sur la période : le montage financier doit être renforcé.');
+        if (!constats.length) constats.push('Le financement couvre les besoins de départ et la trésorerie reste positive sur les 3 ans.');
+        constats.forEach((x) => f.appendChild(el('p', null, x)));
+        f.appendChild(el('p', 'ds-source', 'Prévisionnel établi par le porteur de projet à partir de ses hypothèses (montants hors taxe).'));
+      } else paragraphes(f, '', 'Prévisionnel à réaliser.');
+
+      paragraphes(partie(8, 'Le calendrier'), sectionsTexte('calendrier'));
+      doc.hidden = false;
+      return doc;
+    };
+    const sectionsTexte = (id) => $(`ds-${id}`).value;
+
+    $('ds-apercu').addEventListener('click', () => { construire().scrollIntoView({ behavior: 'smooth' }); });
+    $('ds-go').addEventListener('click', () => {
+      const doc = construire();
+      // Le dossier passe directement sous <body> le temps de l'impression : tout le reste est masqué (display: none),
+      // ce qui laisse le navigateur découper le document en pages A4.
+      const place = doc.nextSibling, parent = doc.parentNode;
+      document.body.appendChild(doc);
+      document.documentElement.classList.add('print-dossier');
+      const remettre = () => {
+        document.documentElement.classList.remove('print-dossier');
+        parent.insertBefore(doc, place);
+        window.removeEventListener('afterprint', remettre);
+      };
+      window.addEventListener('afterprint', remettre);
+      window.print();
+    });
+  })();
+</script>
+
+<style>
+  .dossier fieldset { border: 0; padding: 0; margin: 14px 0 0; }
+  .dossier legend { font-family: var(--display); font-weight: 700; font-size: .95rem; padding: 0; margin-top: 8px; color: var(--accent); }
+  .dossier .row { grid-template-columns: 1fr 1fr; }
+  @media (max-width: 600px) { .dossier .row { grid-template-columns: 1fr; } }
+  .dossier textarea { width: 100%; font: inherit; font-size: .95rem; padding: 9px 12px; border: 1.5px solid var(--line); border-radius: 10px; background: var(--paper); color: var(--ink); }
+  .dossier .small { font-size: .85rem; color: var(--muted); margin: 2px 0 6px; }
+  .ds-sec { margin-top: 12px; }
+  .ds-sources { display: grid; gap: 8px; margin: 10px 0; }
+  .ds-src { padding: 10px 12px; border-radius: 10px; background: var(--sun-soft); font-size: .92rem; }
+  .ds-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+
+  .dossier-doc { margin: 30px 0; padding: 30px; background: #fff; color: #1a1a1a; border: 1px solid var(--line); border-radius: var(--radius); font-size: .95rem; }
+  .dossier-doc :global(h1) { font-size: 2rem; margin: 10px 0 24px; color: #1a1a1a; }
+  .dossier-doc :global(h2) { font-size: 1.35rem; margin: 0 0 12px; color: #1a1a1a; border-bottom: 2px solid #5b6cff; padding-bottom: 6px; }
+  .dossier-doc :global(h3) { font-size: 1.05rem; margin: 18px 0 8px; color: #1a1a1a; }
+  .dossier-doc :global(.ds-page) { margin-bottom: 28px; }
+  .dossier-doc :global(.ds-sur) { text-transform: uppercase; letter-spacing: .08em; font-size: .8rem; color: #5b6cff; font-weight: 700; }
+  .dossier-doc :global(.ds-meta) { margin: 4px 0; }
+  .dossier-doc :global(.ds-date) { margin: 18px 0; color: #666; font-size: .85rem; }
+  .dossier-doc :global(.ds-vide) { color: #999; font-style: italic; }
+  .dossier-doc :global(.ds-cle) { font-weight: 600; }
+  .dossier-doc :global(.ds-petit), .dossier-doc :global(.ds-source) { font-size: .8rem; color: #555; }
+  .dossier-doc :global(.ds-table) { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: .82rem; font-variant-numeric: tabular-nums; }
+  .dossier-doc :global(.ds-table th), .dossier-doc :global(.ds-table td) { border: 1px solid #ddd; padding: 5px 7px; text-align: left; }
+  .dossier-doc :global(.ds-table th) { background: #f2f3ff; }
+  .dossier-doc :global(.ds-table caption) { text-align: left; font-size: .8rem; color: #555; padding-bottom: 4px; }
+  @media print {
+    @page { size: A4; margin: 16mm 14mm; }
+    :global(html.print-dossier body > *:not(#dossier-doc)) { display: none !important; }
+    :global(html.print-dossier), :global(html.print-dossier body) { background: #fff !important; color: #1a1a1a !important; }
+    :global(html.print-dossier #dossier-doc) { display: block; margin: 0; padding: 0; border: 0; border-radius: 0; font-size: 10.5pt; }
+    :global(html.print-dossier .ds-page) { break-after: page; }
+    :global(html.print-dossier .ds-table) { break-inside: avoid; }
+  }
+</style>

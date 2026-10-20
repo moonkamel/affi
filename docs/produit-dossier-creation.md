@@ -21,6 +21,13 @@ Décision du 20/10/2026, après mesure des volumes (docs/recherche/volumes-outil
 - **Accès** : menu principal (« Étude de marché »), page Outils gratuits (section « Outils pour créer ton entreprise »), pied de page.
 - **À mesurer** dans le relevé mensuel : visites de /creer/etude-de-marche/ et appels à /api/entreprises (Cloudflare).
 
+- **Dossier de financement PDF** sur /creer/dossier-de-financement/ (composant `DossierBuilder.astro`) :
+  - l'étude de marché (`localStorage` « logimalin-etude ») et le prévisionnel (« logimalin-bp ») sont sauvegardés dans le navigateur à chaque calcul ;
+  - le dossier reprend ces données, ajoute l'identité du projet et 7 parties rédigées (brouillon enregistré dans « logimalin-dossier ») ;
+  - document A4 : couverture et sommaire, puis une partie par page (résumé, porteur, offre, marché avec tableaux de l'étude, stratégie, moyens, prévisions financières, calendrier) ;
+  - textes des outils rendus neutres (pas de tutoiement dans un document destiné à un financeur) ;
+  - impression : le dossier passe sous `<body>`, tout le reste est masqué ; testé à 10 pages A4.
+
 ## Phase 2 : payante (39 à 49 €, paiement unique)
 
 Contenu du dossier :

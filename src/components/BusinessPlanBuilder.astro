@@ -228,6 +228,19 @@
       if (Math.min(...treso) < 0) alertes.push('⚠ La trésorerie devient négative : prévois plus de fonds de départ, un prêt plus long ou des charges plus basses.');
       if (!alertes.length) alertes.push('✓ Le financement couvre les besoins de départ et la trésorerie reste positive sur 3 ans.');
       document.getElementById('bp-alerte').innerHTML = alertes.join('<br>');
+
+      // Sauvegarde locale pour le dossier de financement (reste dans le navigateur).
+      try {
+        localStorage.setItem('logimalin-bp', JSON.stringify({
+          date: new Date().toISOString(),
+          cr: rows.slice(0, 11),
+          besoins, ress, totB, totR,
+          seuil: isFinite(seuil) ? Math.round(seuil) : null,
+          seuilTexte: document.getElementById('bp-seuil-d').textContent,
+          alertes: document.getElementById('bp-alerte').textContent,
+          hypotheses: { ca1, croissance: v('bp-croiss'), coutsVariables: pos('bp-var'), fixesMois: fixeMois, remuMois: pos('bp-remu'), salairesMois: pos('bp-sal'), investissements: inv, dureeAmort: pos('bp-amort'), pret, dureePret: n, taux: pos('bp-taux') },
+        }));
+      } catch (e) { /* stockage indisponible : le dossier proposera de refaire le prévisionnel */ }
     };
 
     document.getElementById('bp-csv').onclick = () => {
