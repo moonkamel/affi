@@ -1,0 +1,275 @@
+---
+// Générateur de documents d'employeur : certificat de travail, attestation de travail, reçu pour solde de tout compte,
+// promesse d'embauche, fiche de poste. Aperçu en direct, PDF A4 par la fenêtre d'impression, copie en texte.
+// Les informations de l'entreprise sont gardées dans le navigateur pour le document suivant ; celles du salarié non.
+interface Props { doc?: 'certificat' | 'attestation' | 'solde' | 'promesse' | 'fiche' }
+const { doc = 'certificat' } = Astro.props;
+const DOCS = [
+  ['certificat', 'Certificat de travail'],
+  ['attestation', 'Attestation de travail'],
+  ['solde', 'Reçu pour solde de tout compte'],
+  ['promesse', 'Promesse d’embauche'],
+  ['fiche', 'Fiche de poste'],
+];
+---
+<div class="sim demp" id="demp" data-doc={doc}>
+  <strong>Générateur de documents employeur</strong>
+  <label for="demp-type">Document</label>
+  <select id="demp-type">
+    {DOCS.map(([v, l]) => <option value={v} selected={v === doc}>{l}</option>)}
+  </select>
+
+  <fieldset data-docs="certificat attestation solde promesse fiche">
+    <legend>L’entreprise</legend>
+    <div class="row">
+      <div><label for="demp-e-nom">Raison sociale ou nom</label><input id="demp-e-nom" type="text" data-garde placeholder="Ex. : SARL Boulangerie du Port" /></div>
+      <div><label for="demp-e-siret">SIRET</label><input id="demp-e-siret" type="text" data-garde inputmode="numeric" /></div>
+      <div><label for="demp-e-adr">Adresse</label><input id="demp-e-adr" type="text" data-garde /></div>
+      <div><label for="demp-e-ville">Ville de signature</label><input id="demp-e-ville" type="text" data-garde /></div>
+      <div data-docs="certificat attestation solde promesse"><label for="demp-e-sig">Signataire</label><input id="demp-e-sig" type="text" data-garde placeholder="Prénom Nom" /></div>
+      <div data-docs="certificat attestation solde promesse"><label for="demp-e-qual">Qualité du signataire</label><input id="demp-e-qual" type="text" data-garde value="Gérant" /></div>
+    </div>
+  </fieldset>
+
+  <fieldset data-docs="certificat attestation solde promesse">
+    <legend>Le salarié ou le candidat</legend>
+    <div class="row">
+      <div><label for="demp-civ">Civilité</label><select id="demp-civ"><option>Madame</option><option>Monsieur</option></select></div>
+      <div><label for="demp-s-nom">Prénom et nom</label><input id="demp-s-nom" type="text" /></div>
+      <div data-docs="solde promesse"><label for="demp-s-adr">Adresse</label><input id="demp-s-adr" type="text" /></div>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Le poste</legend>
+    <div class="row">
+      <div><label for="demp-poste">Intitulé du poste</label><input id="demp-poste" type="text" placeholder="Ex. : Vendeuse en boulangerie" /></div>
+      <div data-docs="certificat attestation solde promesse">
+        <label for="demp-contrat">Contrat</label>
+        <select id="demp-contrat"><option value="CDI">CDI</option><option value="CDD">CDD</option><option value="apprentissage">Contrat d’apprentissage</option><option value="professionnalisation">Contrat de professionnalisation</option></select>
+      </div>
+      <div data-docs="certificat attestation solde"><label for="demp-entree">Date d’entrée</label><input id="demp-entree" type="date" /></div>
+      <div data-docs="certificat solde"><label for="demp-sortie">Date de fin du contrat</label><input id="demp-sortie" type="date" /></div>
+      <div data-docs="attestation"><label for="demp-temps">Temps de travail</label><select id="demp-temps"><option value="complet">Temps complet</option><option value="partiel">Temps partiel</option></select></div>
+      <div data-docs="attestation promesse"><label for="demp-heures">Durée hebdomadaire (heures)</label><input id="demp-heures" type="number" min="1" max="48" step="0.5" value="35" /></div>
+    </div>
+    <div data-docs="certificat">
+      <label for="demp-emplois">Emplois successifs (facultatif, un par ligne : poste, du … au …)</label>
+      <textarea id="demp-emplois" rows="2" placeholder="Ex. : Vendeuse, du 1er mars 2024 au 31 août 2025"></textarea>
+      <label class="demp-check"><input id="demp-porta" type="checkbox" checked /> Le salarié bénéficie d’une mutuelle ou d’une prévoyance d’entreprise (mention de la portabilité)</label>
+    </div>
+  </fieldset>
+
+  <fieldset data-docs="solde">
+    <legend>Les sommes versées (€ brut, laisser vide si sans objet)</legend>
+    <div class="row">
+      <div><label for="demp-m-sal">Salaire du dernier mois</label><input id="demp-m-sal" type="number" min="0" step="0.01" data-somme="Salaire du dernier mois" /></div>
+      <div><label for="demp-m-cp">Indemnité compensatrice de congés payés</label><input id="demp-m-cp" type="number" min="0" step="0.01" data-somme="Indemnité compensatrice de congés payés" /></div>
+      <div><label for="demp-m-prea">Indemnité compensatrice de préavis</label><input id="demp-m-prea" type="number" min="0" step="0.01" data-somme="Indemnité compensatrice de préavis" /></div>
+      <div><label for="demp-m-rupt">Indemnité de licenciement ou de rupture conventionnelle</label><input id="demp-m-rupt" type="number" min="0" step="0.01" data-somme="Indemnité de rupture du contrat" /></div>
+      <div><label for="demp-m-prec">Indemnité de fin de contrat (CDD)</label><input id="demp-m-prec" type="number" min="0" step="0.01" data-somme="Indemnité de fin de contrat" /></div>
+      <div><label for="demp-m-autre">Autres sommes (primes, heures supplémentaires…)</label><input id="demp-m-autre" type="number" min="0" step="0.01" data-somme="Autres sommes (primes, heures supplémentaires)" /></div>
+      <div><label for="demp-m-net">Montant net versé</label><input id="demp-m-net" type="number" min="0" step="0.01" /></div>
+      <div><label for="demp-m-mode">Mode de paiement</label><select id="demp-m-mode"><option>virement</option><option>chèque</option></select></div>
+    </div>
+  </fieldset>
+
+  <fieldset data-docs="promesse">
+    <legend>La proposition</legend>
+    <div class="row">
+      <div><label for="demp-p-forme">Forme</label><select id="demp-p-forme"><option value="promesse">Promesse unilatérale de contrat de travail</option><option value="offre">Offre de contrat de travail</option></select></div>
+      <div><label for="demp-p-debut">Date d’entrée en fonction</label><input id="demp-p-debut" type="date" /></div>
+      <div><label for="demp-p-salaire">Salaire brut mensuel (€)</label><input id="demp-p-salaire" type="number" min="0" step="10" /></div>
+      <div><label for="demp-p-lieu">Lieu de travail</label><input id="demp-p-lieu" type="text" /></div>
+      <div><label for="demp-p-essai">Période d’essai</label><input id="demp-p-essai" type="text" value="2 mois" /></div>
+      <div><label for="demp-p-duree">Durée du CDD (si CDD)</label><input id="demp-p-duree" type="text" placeholder="Ex. : 6 mois" /></div>
+      <div><label for="demp-p-cc">Convention collective (facultatif)</label><input id="demp-p-cc" type="text" /></div>
+      <div><label for="demp-p-delai">Réponse attendue avant le</label><input id="demp-p-delai" type="date" /></div>
+    </div>
+  </fieldset>
+
+  <fieldset data-docs="fiche">
+    <legend>Le contenu de la fiche</legend>
+    <div class="row">
+      <div><label for="demp-f-rat">Rattaché à</label><input id="demp-f-rat" type="text" placeholder="Ex. : Gérante" /></div>
+      <div><label for="demp-f-lieu">Lieu et horaires</label><input id="demp-f-lieu" type="text" placeholder="Ex. : boutique, du mardi au samedi, 6 h 30 – 13 h 30" /></div>
+    </div>
+    <label for="demp-f-mission">Mission principale (une phrase)</label>
+    <input id="demp-f-mission" type="text" placeholder="Ex. : Accueillir les clients et assurer la vente des produits de la boulangerie." />
+    <label for="demp-f-act">Activités (une par ligne)</label>
+    <textarea id="demp-f-act" rows="4"></textarea>
+    <label for="demp-f-comp">Compétences et qualités attendues (une par ligne)</label>
+    <textarea id="demp-f-comp" rows="3"></textarea>
+    <label for="demp-f-rem">Rémunération et avantages (facultatif)</label>
+    <input id="demp-f-rem" type="text" />
+  </fieldset>
+
+  <div class="demp-actions">
+    <button type="button" class="btn" id="demp-pdf">Enregistrer en PDF</button>
+    <button type="button" class="btn btn-ghost" id="demp-copier">Copier le texte</button>
+    <span class="small" aria-live="polite" id="demp-msg"></span>
+  </div>
+  <p class="small">Modèle fourni à titre indicatif : vérifie les règles de ta convention collective et fais relire les situations particulières (licenciement, litige) par un professionnel.</p>
+  <p class="small"><strong>Aperçu</strong></p>
+  <article class="demp-doc" id="demp-doc" aria-label="Aperçu du document"></article>
+</div>
+
+<script is:inline>
+  (() => {
+    const root = document.getElementById('demp');
+    if (!root) return;
+    const $ = (id) => document.getElementById(`demp-${id}`);
+    const v = (id) => ($(id) ? $(id).value.trim() : '');
+    const STOCK = 'logimalin-employeur';
+    const lire = () => { try { return JSON.parse(localStorage.getItem(STOCK) || '{}'); } catch (e) { return {}; } };
+    const garde = lire();
+    root.querySelectorAll('[data-garde]').forEach((x) => { if (garde[x.id]) x.value = garde[x.id]; });
+    const mesurer = (e) => { try { navigator.sendBeacon(`/api/mesure/${e}`); } catch (err) { /* sans importance */ } };
+    let compte = false;
+
+    const dateFr = (iso) => { if (!iso) return '…'; const d = new Date(iso + 'T12:00:00'); const s = d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }); return s.replace(/^1 /, '1er '); };
+    const eur = (n) => Number(n).toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' });
+    const ou = (x, y) => x || y;
+    const contratLib = { CDI: 'contrat à durée indéterminée', CDD: 'contrat à durée déterminée', apprentissage: 'contrat d’apprentissage', professionnalisation: 'contrat de professionnalisation' };
+    const accord = () => (v('civ') === 'Madame' ? 'e' : '');
+    // Minuscule initiale dans une phrase (« en qualité de gérant »), sauf pour un sigle (« DRH »).
+    const min = (x) => (x && !/^[A-ZÀ-Ý]{2}/.test(x) ? x[0].toLocaleLowerCase('fr') + x.slice(1) : x);
+    const lignes = (id) => v(id).split('\n').map((l) => l.replace(/^[-•*]\s*/, '').trim()).filter(Boolean);
+
+    // Chaque document est une liste de blocs : [type, contenu]. Types : en-tete, titre, p, liste, table, signature, petit.
+    const entete = () => ['en-tete', [v('e-nom') || '[Raison sociale]', v('e-adr') || '[Adresse]', v('e-siret') ? `SIRET : ${v('e-siret')}` : '']];
+    const signature = (double) => ['signature', { lieu: `Fait à ${v('e-ville') || '…'}, le ${dateFr(new Date().toISOString().slice(0, 10))}`, gauche: `${v('e-sig') || '[Signataire]'}, ${v('e-qual') || '[qualité]'}`, droite: double || '' }];
+    const salarie = () => `${v('civ')} ${v('s-nom') || '[Prénom Nom]'}`;
+
+    const DOCS = {
+      certificat: () => {
+        const emplois = lignes('emplois');
+        const b = [entete(), ['titre', 'Certificat de travail'],
+          ['p', `Je soussigné(e) ${v('e-sig') || '[Signataire]'}, agissant en qualité de ${min(v('e-qual')) || '[qualité]'} de ${v('e-nom') || '[Raison sociale]'}, certifie que ${salarie()} a été employé${accord()} dans notre entreprise du ${dateFr(v('entree'))} au ${dateFr(v('sortie'))}, en ${contratLib[v('contrat')]}.`]];
+        if (emplois.length) b.push(['p', `${salarie()} a successivement occupé les emplois suivants :`], ['liste', emplois]);
+        else b.push(['p', `${salarie()} y a occupé l’emploi de ${min(v('poste')) || '[poste]'}.`]);
+        if ($('porta').checked) b.push(['p', `${salarie()} peut bénéficier du maintien à titre gratuit des garanties de frais de santé et de prévoyance, dans les conditions prévues à l’article L. 911-8 du Code de la sécurité sociale.`]);
+        b.push(signature());
+        return b;
+      },
+      attestation: () => [entete(), ['titre', 'Attestation de travail'],
+        ['p', `Je soussigné(e) ${v('e-sig') || '[Signataire]'}, agissant en qualité de ${min(v('e-qual')) || '[qualité]'} de ${v('e-nom') || '[Raison sociale]'}, atteste que ${salarie()} est employé${accord()} dans notre entreprise depuis le ${dateFr(v('entree'))}, en qualité de ${min(v('poste')) || '[poste]'}, en ${contratLib[v('contrat')]} à ${v('temps') === 'complet' ? 'temps complet' : 'temps partiel'}${v('heures') ? ` (${String(v('heures')).replace('.', ',')} heures par semaine)` : ''}.`],
+        ['p', `${salarie()} fait toujours partie de nos effectifs à la date de la présente attestation.`],
+        ['p', 'Cette attestation est délivrée à la demande de l’intéressé(e) pour servir et valoir ce que de droit.'], signature()],
+      solde: () => {
+        const sommes = [...root.querySelectorAll('[data-somme]')].filter((x) => parseFloat(x.value) > 0).map((x) => [x.dataset.somme, parseFloat(x.value)]);
+        const tot = sommes.reduce((t, [, m]) => t + m, 0);
+        return [entete(), ['p', `${salarie()}\n${v('s-adr') || '[Adresse]'}`], ['titre', 'Reçu pour solde de tout compte'],
+          ['p', `Je soussigné(e) ${salarie()}, employé${accord()} en qualité de ${min(v('poste')) || '[poste]'} du ${dateFr(v('entree'))} au ${dateFr(v('sortie'))}, reconnais avoir reçu de ${v('e-nom') || '[Raison sociale]'}, pour solde de tout compte, la somme de ${v('m-net') ? eur(v('m-net')) + ' net' : '[montant net]'}, versée par ${v('m-mode')}, en paiement des sommes suivantes :`],
+          ['table', [...(sommes.length ? sommes : [['[Nature de la somme]', 0]]).map(([l, m]) => [l, m ? eur(m) : '…']), ['Total brut', tot ? eur(tot) : '…']]],
+          ['p', 'Ce reçu est établi en deux exemplaires, dont un m’est remis.'],
+          ['petit', 'Ce reçu peut être dénoncé dans les six mois qui suivent sa signature, par lettre recommandée. Passé ce délai, il devient libératoire pour l’employeur pour les sommes qui y sont mentionnées (article L. 1234-20 du Code du travail).'],
+          signature(`Le salarié, ${salarie()}\n(signature précédée de la mention « Pour solde de tout compte »)`)];
+      },
+      promesse: () => {
+        const promesse = v('p-forme') === 'promesse';
+        const b = [entete(), ['p', `${salarie()}\n${v('s-adr') || '[Adresse]'}`], ['titre', promesse ? 'Promesse d’embauche' : 'Offre de contrat de travail'],
+          ['p', `${v('civ')},`],
+          ['p', promesse
+            ? `À la suite de nos échanges, nous avons le plaisir de vous confirmer notre engagement à vous embaucher, aux conditions suivantes. Cette promesse vaut contrat de travail dès votre acceptation dans le délai indiqué ci-dessous.`
+            : `À la suite de nos échanges, nous avons le plaisir de vous proposer un emploi au sein de ${v('e-nom') || '[Raison sociale]'}, aux conditions suivantes.`],
+          ['liste', [
+            `Emploi : ${v('poste') || '[poste]'}`,
+            `Contrat : ${contratLib[v('contrat')]}${v('contrat') === 'CDD' && v('p-duree') ? ` d’une durée de ${v('p-duree')}` : ''}`,
+            `Date d’entrée en fonction : ${dateFr(v('p-debut'))}`,
+            `Lieu de travail : ${v('p-lieu') || '[lieu]'}`,
+            `Durée du travail : ${String(v('heures') || '35').replace('.', ',')} heures par semaine`,
+            `Rémunération : ${v('p-salaire') ? eur(v('p-salaire')) : '[montant]'} brut par mois`,
+            ...(v('p-essai') ? [`Période d’essai : ${v('p-essai')}`] : []),
+            ...(v('p-cc') ? [`Convention collective applicable : ${v('p-cc')}`] : []),
+          ]],
+          ['p', `Nous vous remercions de nous faire part de votre réponse avant le ${dateFr(v('p-delai'))}, en nous retournant un exemplaire de ce courrier daté et signé, précédé de la mention « Bon pour accord ».${promesse ? '' : ' Sans réponse de votre part dans ce délai, cette offre sera caduque.'}`],
+          ['p', `Nous vous prions d’agréer, ${v('civ')}, l’expression de nos salutations distinguées.`],
+          signature(`Le candidat, ${salarie()}\n(date, signature et mention « Bon pour accord »)`)];
+        return b;
+      },
+      fiche: () => {
+        const act = lignes('f-act'), comp = lignes('f-comp');
+        return [['en-tete', [v('e-nom') || '[Entreprise]']], ['titre', `Fiche de poste : ${v('poste') || '[intitulé du poste]'}`],
+          ['table', [['Intitulé', v('poste') || '…'], ['Rattachement', v('f-rat') || '…'], ['Lieu et horaires', v('f-lieu') || '…'], ...(v('f-rem') ? [['Rémunération et avantages', v('f-rem')]] : [])]],
+          ['sous-titre', 'Mission principale'], ['p', v('f-mission') || '…'],
+          ['sous-titre', 'Activités'], ['liste', act.length ? act : ['…']],
+          ['sous-titre', 'Compétences et qualités attendues'], ['liste', comp.length ? comp : ['…']],
+          ['petit', `Fiche mise à jour le ${dateFr(new Date().toISOString().slice(0, 10))}.`]];
+      },
+    };
+
+    const el = (tag, cls, txt) => { const e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; };
+    const rendre = (blocs) => blocs.map(([t, c]) => {
+      if (t === 'en-tete') { const d = el('div', 'demp-ent'); c.filter(Boolean).forEach((x) => d.appendChild(el('div', null, x))); return d; }
+      if (t === 'titre') return el('h2', 'demp-titre', c);
+      if (t === 'sous-titre') return el('h3', null, c);
+      if (t === 'liste') { const u = el('ul'); c.forEach((x) => u.appendChild(el('li', null, x))); return u; }
+      if (t === 'table') { const tb = el('table', 'demp-tab'); c.forEach(([a, b], i) => { const tr = tb.insertRow(); if (i === c.length - 1 && a.startsWith('Total')) tr.className = 'tot'; tr.insertCell().textContent = a; tr.insertCell().textContent = b; }); return tb; }
+      if (t === 'signature') { const d = el('div', 'demp-sig'); d.appendChild(el('p', null, c.lieu)); const g = el('div', 'demp-sig-g'); g.appendChild(el('div', null, c.gauche)); if (c.droite) g.appendChild(el('div', null, c.droite)); d.appendChild(g); return d; }
+      return el('p', t === 'petit' ? 'demp-petit' : null, c);
+    });
+    const texte = (blocs) => blocs.map(([t, c]) => {
+      if (t === 'en-tete') return c.filter(Boolean).join('\n');
+      if (t === 'titre') return c.toUpperCase();
+      if (t === 'liste') return c.map((x) => `- ${x}`).join('\n');
+      if (t === 'table') return c.map(([a, b]) => `${a} : ${b}`).join('\n');
+      if (t === 'signature') return [c.lieu, c.gauche, c.droite].filter(Boolean).join('\n\n');
+      return c;
+    }).join('\n\n');
+
+    const maj = () => {
+      const type = $('type').value;
+      root.dataset.doc = type;
+      root.querySelectorAll('[data-docs]').forEach((x) => { x.hidden = !x.dataset.docs.split(' ').includes(type); });
+      $('doc').replaceChildren(...rendre(DOCS[type]()));
+      const g = {}; root.querySelectorAll('[data-garde]').forEach((x) => { g[x.id] = x.value; });
+      try { localStorage.setItem(STOCK, JSON.stringify(g)); } catch (e) { /* stockage indisponible */ }
+    };
+    root.addEventListener('input', (e) => { maj(); if (!compte && e.target !== $('type')) { compte = true; mesurer(`emp-${$('type').value}`); } });
+    root.addEventListener('change', maj);
+
+    $('copier').addEventListener('click', async () => {
+      try { await navigator.clipboard.writeText(texte(DOCS[$('type').value]())); $('msg').textContent = 'Copié !'; } catch (e) { $('msg').textContent = 'Copie impossible.'; }
+    });
+    $('pdf').addEventListener('click', () => {
+      mesurer(`emp-${$('type').value}-pdf`);
+      const doc = $('doc'), place = doc.nextSibling, parent = doc.parentNode;
+      document.body.appendChild(doc);
+      document.documentElement.classList.add('print-emp');
+      const remettre = () => { document.documentElement.classList.remove('print-emp'); parent.insertBefore(doc, place); window.removeEventListener('afterprint', remettre); };
+      window.addEventListener('afterprint', remettre);
+      window.print();
+    });
+    maj();
+  })();
+</script>
+
+<style>
+  #demp [hidden] { display: none !important; }
+  .demp textarea { width: 100%; font: inherit; font-size: .95rem; padding: 9px 12px; border: 1.5px solid var(--line); border-radius: 10px; background: var(--paper); color: var(--ink); }
+  .demp-check { display: flex !important; gap: 8px; align-items: flex-start; font-weight: 500 !important; }
+  .demp-check input { width: auto !important; margin-top: 4px; }
+  .demp-actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 16px; }
+  .demp-doc { background: #fff; color: #1a1a1a; border-radius: 10px; padding: 28px 30px; font-size: .92rem; line-height: 1.55; border: 1px solid var(--line); }
+  .demp-doc :global(.demp-ent) { font-size: .85rem; margin-bottom: 22px; }
+  .demp-doc :global(.demp-ent div:first-child) { font-weight: 700; }
+  .demp-doc :global(.demp-titre) { text-align: center; font-size: 1.2rem; text-transform: uppercase; letter-spacing: .04em; margin: 18px 0; color: #1a1a1a; }
+  .demp-doc :global(h3) { font-size: 1rem; margin: 16px 0 6px; color: #1a1a1a; }
+  .demp-doc :global(p) { white-space: pre-line; margin: 0 0 10px; }
+  .demp-doc :global(.demp-tab) { width: 100%; border-collapse: collapse; margin: 8px 0 14px; }
+  .demp-doc :global(.demp-tab td) { border: 1px solid #ddd; padding: 5px 8px; }
+  .demp-doc :global(.demp-tab td:last-child) { text-align: right; white-space: nowrap; }
+  .demp-doc :global(.demp-tab tr.tot td) { font-weight: 700; }
+  .demp-doc :global(.demp-petit) { font-size: .8rem; color: #555; }
+  .demp-doc :global(.demp-sig) { margin-top: 26px; }
+  .demp-doc :global(.demp-sig-g) { display: flex; justify-content: space-between; gap: 20px; margin-top: 8px; }
+  .demp-doc :global(.demp-sig-g div) { white-space: pre-line; min-height: 70px; }
+
+  @media print {
+    @page { size: A4; margin: 20mm 18mm; }
+    :global(html.print-emp body > *:not(.demp-doc)) { display: none !important; }
+    :global(html.print-emp), :global(html.print-emp body) { background: #fff !important; color: #1a1a1a !important; color-scheme: light; }
+    :global(html.print-emp .demp-doc) { border: 0; padding: 0; font-size: 11pt; }
+  }
+</style>
