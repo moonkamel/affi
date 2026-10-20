@@ -1,0 +1,104 @@
+---
+// Bilan simplifié : actif et passif, contrôle de l'équilibre, fonds de roulement, BFR, trésorerie nette,
+// autonomie financière et endettement, avec une représentation en deux colonnes.
+---
+<form class="sim" id="sim-bilan" aria-labelledby="bilan-titre" onsubmit="return false">
+  <strong id="bilan-titre">Construis ton bilan simplifié</strong>
+  <div class="bl-cols">
+    <fieldset>
+      <legend>Actif : ce que l’entreprise possède</legend>
+      <label for="bl-imm">Immobilisations nettes (€)</label><input id="bl-imm" type="number" min="0" step="1000" value="60000" inputmode="decimal" /><p class="hint">Matériel, véhicules, fonds de commerce, après amortissements.</p>
+      <label for="bl-sto">Stocks (€)</label><input id="bl-sto" type="number" min="0" step="1000" value="15000" inputmode="decimal" />
+      <label for="bl-cli">Créances clients (€)</label><input id="bl-cli" type="number" min="0" step="1000" value="30000" inputmode="decimal" /><p class="hint">Factures émises pas encore payées.</p>
+      <label for="bl-aut">Autres créances (€)</label><input id="bl-aut" type="number" min="0" step="500" value="5000" inputmode="decimal" /><p class="hint">Crédit de TVA, charges payées d’avance…</p>
+      <label for="bl-dis">Disponibilités (€)</label><input id="bl-dis" type="number" min="0" step="1000" value="20000" inputmode="decimal" /><p class="hint">Banque et caisse.</p>
+    </fieldset>
+    <fieldset>
+      <legend>Passif : comment c’est financé</legend>
+      <label for="bl-cp">Capitaux propres (€)</label><input id="bl-cp" type="number" step="1000" value="70000" inputmode="decimal" /><p class="hint">Capital, réserves et résultat de l’exercice. Négatifs si les pertes dépassent le capital.</p>
+      <label for="bl-df">Emprunts et dettes financières (€)</label><input id="bl-df" type="number" min="0" step="1000" value="35000" inputmode="decimal" /><p class="hint">Hors découvert bancaire.</p>
+      <label for="bl-four">Dettes fournisseurs (€)</label><input id="bl-four" type="number" min="0" step="1000" value="18000" inputmode="decimal" />
+      <label for="bl-fis">Dettes fiscales et sociales (€)</label><input id="bl-fis" type="number" min="0" step="500" value="7000" inputmode="decimal" /><p class="hint">TVA à payer, URSSAF, salaires dus.</p>
+      <label for="bl-dec">Découvert et concours bancaires (€)</label><input id="bl-dec" type="number" min="0" step="500" value="0" inputmode="decimal" />
+    </fieldset>
+  </div>
+  <output class="sim-out" aria-live="polite">
+    <div>Trésorerie nette</div>
+    <div class="big" id="bl-r">–</div>
+    <div id="bl-d" class="small"></div>
+  </output>
+  <div class="bl-visuel" aria-hidden="true">
+    <div class="bl-col" id="bl-actif"><span class="bl-titre">Actif</span></div>
+    <div class="bl-col" id="bl-passif"><span class="bl-titre">Passif</span></div>
+  </div>
+  <table class="sim-tab"><tbody id="bl-tab"></tbody></table>
+</form>
+
+<script is:inline>
+  (() => {
+    const f = document.getElementById('sim-bilan');
+    if (!f) return;
+    const $ = (id) => document.getElementById(`bl-${id}`);
+    const lire = (id) => parseFloat(String($(id).value).replace(/[\s  €%]/g, '').replace(/[−–]/g, '-').replace(',', '.'));
+    const num = (id) => { const x = lire(id); return Number.isFinite(x) && x >= 0 ? x : 0; };
+    const signe = (id) => { const x = lire(id); return Number.isFinite(x) ? x : 0; };
+    const eur = (n) => n.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 });
+    const pc = (n) => `${n.toLocaleString('fr-FR', { maximumFractionDigits: 1 })} %`;
+    const ligne = (k, v, cls) => { const tr = document.createElement('tr'); if (cls) tr.className = cls; const th = document.createElement('th'); th.textContent = k; const td = document.createElement('td'); td.textContent = v; tr.append(th, td); return tr; };
+    const colonne = (el, titre, parts, total, ref) => {
+      const t = document.createElement('span'); t.className = 'bl-titre'; t.textContent = `${titre} · ${eur(total)}`;
+      const blocs = parts.filter(([, v]) => v > 0).map(([k, v, c]) => {
+        const b = document.createElement('div'); b.className = `bl-bloc ${c}`; b.style.flexGrow = String(v); b.title = `${k} : ${eur(v)}`;
+        const s = document.createElement('span'); s.textContent = k; b.append(s); return b;
+      });
+      const pile = document.createElement('div'); pile.className = 'bl-pile'; pile.style.height = `${Math.max(20, total / ref * 100)}%`; pile.append(...blocs);
+      el.replaceChildren(t, pile);
+    };
+    let compte = false;
+
+    const calc = (e) => {
+      if (!compte && e && e.isTrusted) { compte = true; window.mesure?.('bilan'); }
+      const imm = num('imm'), sto = num('sto'), cli = num('cli'), aut = num('aut'), dis = num('dis');
+      const cp = signe('cp'), df = num('df'), four = num('four'), fis = num('fis'), dec = num('dec');
+      const actif = imm + sto + cli + aut + dis, passif = cp + df + four + fis + dec;
+      const ecart = actif - passif;
+      const fr = cp + df - imm;
+      const bfr = sto + cli + aut - four - fis;
+      const tn = fr - bfr;
+      $('r').textContent = eur(tn);
+      const equilibre = Math.abs(ecart) < 1;
+      $('d').textContent = (equilibre ? '' : `Attention : ton bilan n’est pas équilibré, ${ecart > 0 ? `l’actif dépasse le passif de ${eur(ecart)}` : `le passif dépasse l’actif de ${eur(-ecart)}`}. Un bilan a toujours le même total des deux côtés : vérifie tes montants. `)
+        + (tn >= 0 ? `Ton fonds de roulement (${eur(fr)}) couvre ton besoin en fonds de roulement (${eur(bfr)}) : il te reste ${eur(tn)} de trésorerie.`
+          : `Ton fonds de roulement (${eur(fr)}) ne couvre pas ton besoin en fonds de roulement (${eur(bfr)}) : il manque ${eur(-tn)}, financés par du découvert.`);
+      const ref = Math.max(actif, passif, 1);
+      colonne($('actif'), 'Actif', [['Immobilisations', imm, 'c1'], ['Stocks', sto, 'c2'], ['Créances', cli + aut, 'c3'], ['Trésorerie', dis, 'c4']], actif, ref);
+      colonne($('passif'), 'Passif', [['Capitaux propres', Math.max(0, cp), 'c1'], ['Emprunts', df, 'c2'], ['Fournisseurs et État', four + fis, 'c3'], ['Découvert', dec, 'c5']], passif, ref);
+      const t = [
+        ligne('Total de l’actif', eur(actif)), ligne('Total du passif', eur(passif)),
+        ligne(equilibre ? 'Équilibre actif = passif' : 'Écart à corriger', equilibre ? 'Oui ✓' : eur(ecart), equilibre ? '' : 'tot'),
+        ligne('Fonds de roulement (capitaux propres + emprunts − immobilisations)', eur(fr), 'tot'),
+        ligne('Besoin en fonds de roulement (stocks + créances − dettes fournisseurs, fiscales et sociales)', eur(bfr)),
+        ligne('Trésorerie nette (fonds de roulement − BFR)', eur(tn), 'tot'),
+      ];
+      if (passif > 0) t.push(ligne('Autonomie financière (capitaux propres ÷ total du passif)', pc((cp / passif) * 100)));
+      if (cp > 0) t.push(ligne('Endettement (emprunts ÷ capitaux propres)', (df / cp).toLocaleString('fr-FR', { maximumFractionDigits: 2 })));
+      else t.push(ligne('Capitaux propres', cp < 0 ? 'Négatifs : situation à régulariser' : 'Nuls'));
+      $('tab').replaceChildren(...t);
+    };
+    f.addEventListener('input', calc);
+    calc();
+  })();
+</script>
+
+<style>
+  .bl-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 0 22px; }
+  .bl-cols fieldset { margin: 6px 0 0; }
+  .bl-visuel { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; height: 240px; margin-top: 16px; align-items: end; }
+  .bl-col { display: flex; flex-direction: column; height: 100%; justify-content: flex-end; gap: 6px; }
+  .bl-col :global(.bl-titre) { font-family: var(--display); font-weight: 700; font-size: .88rem; }
+  .bl-col :global(.bl-pile) { display: flex; flex-direction: column-reverse; gap: 2px; border-radius: 10px; overflow: hidden; transition: height .4s cubic-bezier(.2, .8, .2, 1); }
+  .bl-col :global(.bl-bloc) { display: flex; align-items: center; justify-content: center; min-height: 18px; flex-basis: 0; transition: flex-grow .4s cubic-bezier(.2, .8, .2, 1); color: #10131f; font-size: .74rem; font-weight: 700; overflow: hidden; }
+  .bl-col :global(.bl-bloc span) { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 0 6px; }
+  .bl-col :global(.c1) { background: #8fa5ff; } .bl-col :global(.c2) { background: #f7c35a; } .bl-col :global(.c3) { background: #4cc98a; } .bl-col :global(.c4) { background: #c39bff; } .bl-col :global(.c5) { background: #ff7a6e; }
+  @media (max-width: 640px) { .bl-cols { grid-template-columns: 1fr; } .bl-visuel { height: 200px; } }
+</style>

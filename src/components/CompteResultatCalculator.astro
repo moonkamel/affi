@@ -1,0 +1,126 @@
+---
+// Compte de résultat simplifié avec les soldes intermédiaires de gestion (marge commerciale, valeur ajoutée,
+// EBE, résultat d'exploitation, résultat courant, résultat net) et une estimation de l'impôt sur les sociétés.
+import { IS } from '../data/fiscal';
+---
+<form class="sim" id="sim-cr" aria-labelledby="cr-titre" onsubmit="return false">
+  <strong id="cr-titre">Construis ton compte de résultat</strong>
+  <fieldset>
+    <legend>Produits</legend>
+    <div class="row">
+      <div><label for="cr-vm">Ventes de marchandises (€)</label><input id="cr-vm" type="number" min="0" step="1000" value="120000" inputmode="decimal" /><p class="hint">Produits achetés pour être revendus en l’état.</p></div>
+      <div><label for="cr-pv">Production vendue (€)</label><input id="cr-pv" type="number" min="0" step="1000" value="180000" inputmode="decimal" /><p class="hint">Services, travaux, produits fabriqués.</p></div>
+      <div><label for="cr-sub">Subventions d’exploitation (€)</label><input id="cr-sub" type="number" min="0" step="100" value="0" inputmode="decimal" /></div>
+      <div><label for="cr-pf">Produits financiers (€)</label><input id="cr-pf" type="number" min="0" step="100" value="0" inputmode="decimal" /><p class="hint">Intérêts de placements.</p></div>
+    </div>
+  </fieldset>
+  <fieldset>
+    <legend>Charges</legend>
+    <div class="row">
+      <div><label for="cr-cam">Coût d’achat des marchandises vendues (€)</label><input id="cr-cam" type="number" min="0" step="1000" value="72000" inputmode="decimal" /><p class="hint">Achats de marchandises, corrigés de la variation de stock.</p></div>
+      <div><label for="cr-mat">Matières et fournitures consommées (€)</label><input id="cr-mat" type="number" min="0" step="1000" value="18000" inputmode="decimal" /></div>
+      <div><label for="cr-ext">Autres achats et charges externes (€)</label><input id="cr-ext" type="number" min="0" step="1000" value="48000" inputmode="decimal" /><p class="hint">Loyer, énergie, assurances, honoraires, sous-traitance, publicité, logiciels.</p></div>
+      <div><label for="cr-imp">Impôts et taxes (€)</label><input id="cr-imp" type="number" min="0" step="100" value="4000" inputmode="decimal" /><p class="hint">CFE, taxe foncière. Pas l’impôt sur les bénéfices.</p></div>
+      <div><label for="cr-per">Salaires et charges sociales (€)</label><input id="cr-per" type="number" min="0" step="1000" value="95000" inputmode="decimal" /></div>
+      <div><label for="cr-dot">Dotations aux amortissements et provisions (€)</label><input id="cr-dot" type="number" min="0" step="500" value="12000" inputmode="decimal" /></div>
+      <div><label for="cr-cf">Charges financières (€)</label><input id="cr-cf" type="number" min="0" step="100" value="3000" inputmode="decimal" /><p class="hint">Intérêts d’emprunt, agios.</p></div>
+      <div><label for="cr-exc">Résultat exceptionnel (€)</label><input id="cr-exc" type="number" step="100" value="0" inputmode="decimal" /><p class="hint">Plus-value de cession, pénalité… négatif si perte.</p></div>
+    </div>
+  </fieldset>
+  <div class="row">
+    <div>
+      <label for="cr-is">Imposition des bénéfices</label>
+      <select id="cr-is">
+        <option value="pme" selected>Société à l’IS, taux réduit PME (15 % puis 25 %)</option>
+        <option value="normal">Société à l’IS, taux normal (25 %)</option>
+        <option value="ir">Entreprise individuelle ou société à l’IR</option>
+      </select>
+    </div>
+  </div>
+  <output class="sim-out" aria-live="polite">
+    <div>Résultat net de l’exercice</div>
+    <div class="big" id="cr-r">–</div>
+    <div id="cr-d" class="small"></div>
+  </output>
+  <div class="cr-cascade" id="cr-cascade" aria-hidden="true"></div>
+  <table class="sim-tab"><tbody id="cr-tab"></tbody></table>
+  <p class="hint">Impôt estimé sur le résultat comptable, sans les retraitements fiscaux (charges non déductibles, déficits reportables…) que fait ton expert-comptable.</p>
+</form>
+
+<script is:inline define:vars={{ IS }}>
+  (() => {
+    const f = document.getElementById('sim-cr');
+    if (!f) return;
+    const $ = (id) => document.getElementById(`cr-${id}`);
+    const lire = (id) => parseFloat(String($(id).value).replace(/[\s  €%]/g, '').replace(/[−–]/g, '-').replace(',', '.'));
+    const num = (id) => { const x = lire(id); return Number.isFinite(x) && x >= 0 ? x : 0; };
+    const signe = (id) => { const x = lire(id); return Number.isFinite(x) ? x : 0; };
+    const eur = (n) => n.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 });
+    const pc = (n) => `${n.toLocaleString('fr-FR', { maximumFractionDigits: 1 })} %`;
+    const ligne = (k, v, cls) => { const tr = document.createElement('tr'); if (cls) tr.className = cls; const th = document.createElement('th'); th.textContent = k; const td = document.createElement('td'); td.textContent = v; tr.append(th, td); return tr; };
+    let compte = false;
+
+    const calc = (e) => {
+      if (!compte && e && e.isTrusted) { compte = true; window.mesure?.('compte-resultat'); }
+      const vm = num('vm'), pv = num('pv'), sub = num('sub'), pf = num('pf');
+      const cam = num('cam'), mat = num('mat'), ext = num('ext'), imp = num('imp'), per = num('per'), dot = num('dot'), cf = num('cf'), exc = signe('exc');
+      const ca = vm + pv;
+      const marge = vm - cam;
+      const va = marge + pv - mat - ext;
+      const ebe = va + sub - imp - per;
+      const re = ebe - dot;
+      const rf = pf - cf;
+      const rcai = re + rf;
+      const base = rcai + exc;
+      const regime = $('is').value;
+      let is = 0;
+      if (regime !== 'ir' && base > 0) is = regime === 'pme' ? Math.min(base, IS.plafondTauxReduit) * IS.tauxReduit + Math.max(0, base - IS.plafondTauxReduit) * IS.tauxNormal : base * IS.tauxNormal;
+      const rn = base - is;
+
+      $('r').textContent = eur(rn);
+      $('d').textContent = !ca ? 'Renseigne ton chiffre d’affaires (ventes et production).'
+        : rn >= 0 ? `Bénéfice de ${eur(rn)}, soit ${pc((rn / ca) * 100)} du chiffre d’affaires.${regime === 'ir' ? ' En entreprise individuelle ou à l’IR, ce bénéfice est imposé au nom de l’exploitant ou des associés.' : is ? ` Impôt sur les sociétés estimé : ${eur(is)}.` : ''}`
+        : `Perte de ${eur(-rn)} : tes charges dépassent tes produits. Regarde d’abord la valeur ajoutée et l’EBE pour voir où ça coince.`;
+
+      const soldes = [['Chiffre d’affaires', ca], ['Valeur ajoutée', va], ['EBE', ebe], ['Résultat d’exploitation', re], ['Résultat net', rn]];
+      const ref = Math.max(ca, 1);
+      $('cascade').replaceChildren(...soldes.map(([k, v]) => {
+        const d = document.createElement('div'); d.className = 'cr-solde' + (v < 0 ? ' neg' : '');
+        const l = document.createElement('span'); l.textContent = k;
+        const b = document.createElement('i'); b.style.width = `${Math.min(100, Math.abs(v) / ref * 100)}%`;
+        const m = document.createElement('b'); m.textContent = eur(v);
+        d.append(l, b, m); return d;
+      }));
+
+      const t = [ligne('Chiffre d’affaires (ventes + production)', eur(ca))];
+      if (vm) t.push(ligne('Marge commerciale (ventes − coût d’achat des marchandises)', eur(marge)));
+      t.push(
+        ligne('− Matières consommées et charges externes', eur(mat + ext)),
+        ligne('= Valeur ajoutée', eur(va), 'tot'),
+        ligne('+ Subventions − impôts et taxes − charges de personnel', eur(sub - imp - per)),
+        ligne('= Excédent brut d’exploitation (EBE)', eur(ebe), 'tot'),
+        ligne('− Dotations aux amortissements et provisions', eur(dot)),
+        ligne('= Résultat d’exploitation', eur(re), 'tot'),
+        ligne('± Résultat financier', eur(rf)),
+        ligne('= Résultat courant avant impôt', eur(rcai), 'tot'),
+        ligne('± Résultat exceptionnel', eur(exc)),
+        ligne(regime === 'ir' ? 'Impôt sur les sociétés (non concerné)' : '− Impôt sur les sociétés (estimation)', eur(is)),
+        ligne('= Résultat net', eur(rn), 'tot'),
+      );
+      $('tab').replaceChildren(...t);
+    };
+    f.addEventListener('input', calc);
+    f.addEventListener('change', calc);
+    calc();
+  })();
+</script>
+
+<style>
+  .cr-cascade { display: grid; gap: 6px; margin-top: 14px; }
+  .cr-cascade :global(.cr-solde) { display: grid; grid-template-columns: 170px minmax(0, 1fr) 100px; gap: 10px; align-items: center; font-size: .86rem; }
+  .cr-cascade :global(.cr-solde i) { height: 12px; border-radius: 6px; background: var(--accent); transition: width .5s cubic-bezier(.2, .8, .2, 1); min-width: 2px; }
+  .cr-cascade :global(.cr-solde:last-child i) { background: var(--sun); }
+  .cr-cascade :global(.cr-solde.neg i) { background: var(--bad); }
+  .cr-cascade :global(.cr-solde b) { text-align: right; font-variant-numeric: tabular-nums; }
+  @media (max-width: 560px) { .cr-cascade :global(.cr-solde) { grid-template-columns: 110px minmax(0, 1fr) 84px; font-size: .78rem; } }
+</style>

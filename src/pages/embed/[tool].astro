@@ -26,6 +26,9 @@ import IlcCalculator from '../../components/IlcCalculator.astro';
 import IndemniteCalculator from '../../components/IndemniteCalculator.astro';
 import HeuresSupCalculator from '../../components/HeuresSupCalculator.astro';
 import GratificationCalculator from '../../components/GratificationCalculator.astro';
+import CompteResultatCalculator from '../../components/CompteResultatCalculator.astro';
+import BilanCalculator from '../../components/BilanCalculator.astro';
+import ChiffreAffairesCalculator from '../../components/ChiffreAffairesCalculator.astro';
 
 export function getStaticPaths() {
   return EMBEDS.map((e) => ({ params: { tool: e.slug }, props: { embed: e } }));
@@ -43,6 +46,9 @@ const COMPONENTS = {
   'seuil-rentabilite': SeuilCalculator,
   bfr: BfrCalculator,
   ebe: EbeCalculator,
+  'compte-de-resultat': CompteResultatCalculator,
+  bilan: BilanCalculator,
+  'chiffre-affaires': ChiffreAffairesCalculator,
   caf: CafCalculator,
   'tva-intracom': IdentifiantsEntreprise,
   swot: SwotBuilder,

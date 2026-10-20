@@ -1,0 +1,139 @@
+---
+// Chiffre d'affaires : à partir des ventes (prix × quantités, remises) ou d'un montant TTC, sur un mois,
+// un trimestre ou une année ; TVA collectée, projection annuelle et position face aux plafonds micro et TVA.
+import { MICRO } from '../data/fiscal';
+---
+<form class="sim" id="sim-ca" aria-labelledby="ca-titre" onsubmit="return false">
+  <strong id="ca-titre">Calcule ton chiffre d’affaires</strong>
+  <div class="row">
+    <div>
+      <label for="ca-mode">Je pars de</label>
+      <select id="ca-mode">
+        <option value="ventes" selected>Mes ventes (prix et quantités)</option>
+        <option value="ttc">Un total encaissé TTC</option>
+      </select>
+    </div>
+    <div>
+      <label for="ca-per">Sur une période de</label>
+      <select id="ca-per">
+        <option value="1">1 mois</option>
+        <option value="3">1 trimestre</option>
+        <option value="12" selected>1 an</option>
+      </select>
+    </div>
+  </div>
+  <fieldset data-mode="ventes">
+    <legend>Tes ventes de la période</legend>
+    <div class="ca-lignes">
+      <span aria-hidden="true">Produit ou prestation</span><span aria-hidden="true">Prix unitaire HT (€)</span><span aria-hidden="true">Quantité</span>
+      <label for="ca-n1" class="sr-only">Ligne 1</label><input id="ca-n1" type="text" value="Prestations" />
+      <input id="ca-p1" type="number" min="0" step="10" value="450" inputmode="decimal" aria-label="Prix unitaire HT, ligne 1" />
+      <input id="ca-q1" type="number" min="0" step="1" value="120" inputmode="decimal" aria-label="Quantité, ligne 1" />
+      <label for="ca-n2" class="sr-only">Ligne 2</label><input id="ca-n2" type="text" value="Ventes de produits" />
+      <input id="ca-p2" type="number" min="0" step="1" value="25" inputmode="decimal" aria-label="Prix unitaire HT, ligne 2" />
+      <input id="ca-q2" type="number" min="0" step="1" value="400" inputmode="decimal" aria-label="Quantité, ligne 2" />
+      <label for="ca-n3" class="sr-only">Ligne 3</label><input id="ca-n3" type="text" placeholder="Autre (facultatif)" />
+      <input id="ca-p3" type="number" min="0" step="1" inputmode="decimal" aria-label="Prix unitaire HT, ligne 3" />
+      <input id="ca-q3" type="number" min="0" step="1" inputmode="decimal" aria-label="Quantité, ligne 3" />
+    </div>
+    <div class="row">
+      <div><label for="ca-rem">Remises et avoirs accordés HT (€)</label><input id="ca-rem" type="number" min="0" step="100" value="1500" inputmode="decimal" /></div>
+    </div>
+  </fieldset>
+  <div class="row" data-mode="ttc" hidden>
+    <div><label for="ca-ttc">Total encaissé TTC (€)</label><input id="ca-ttc" type="number" min="0" step="100" value="72000" inputmode="decimal" /></div>
+  </div>
+  <div class="row">
+    <div>
+      <label for="ca-tva">Taux de TVA</label>
+      <select id="ca-tva">
+        <option value="20" selected>20 %</option>
+        <option value="10">10 %</option>
+        <option value="5.5">5,5 %</option>
+        <option value="0">Franchise en base (pas de TVA)</option>
+      </select>
+    </div>
+    <div>
+      <label for="ca-act">Ton activité principale</label>
+      <select id="ca-act">
+        <option value="services" selected>Prestations de services</option>
+        <option value="vente">Vente de marchandises, restauration, hébergement</option>
+      </select>
+    </div>
+  </div>
+  <output class="sim-out" aria-live="polite">
+    <div>Chiffre d’affaires HT</div>
+    <div class="big" id="ca-r">–</div>
+    <div id="ca-d" class="small"></div>
+  </output>
+  <div class="ca-jauges" id="ca-jauges" aria-hidden="true"></div>
+  <table class="sim-tab"><tbody id="ca-tab"></tbody></table>
+</form>
+
+<script is:inline define:vars={{ MICRO }}>
+  (() => {
+    const f = document.getElementById('sim-ca');
+    if (!f) return;
+    const $ = (id) => document.getElementById(`ca-${id}`);
+    const num = (id) => { const x = parseFloat(String($(id).value).replace(/[\s  €%]/g, '').replace(',', '.')); return Number.isFinite(x) && x >= 0 ? x : 0; };
+    const eur = (n) => n.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 });
+    const pc = (n) => `${n.toLocaleString('fr-FR', { maximumFractionDigits: 0 })} %`;
+    const ligne = (k, v, cls) => { const tr = document.createElement('tr'); if (cls) tr.className = cls; const th = document.createElement('th'); th.textContent = k; const td = document.createElement('td'); td.textContent = v; tr.append(th, td); return tr; };
+    let compte = false;
+
+    const calc = (e) => {
+      if (!compte && e && e.isTrusted) { compte = true; window.mesure?.('chiffre-affaires'); }
+      const mode = $('mode').value, mois = Number($('per').value), taux = Number($('tva').value) / 100, act = $('act').value;
+      f.querySelectorAll('[data-mode]').forEach((x) => { x.hidden = x.dataset.mode !== mode; });
+      let ht;
+      const t = [];
+      if (mode === 'ventes') {
+        const brut = [1, 2, 3].reduce((s, i) => s + num(`p${i}`) * num(`q${i}`), 0);
+        ht = Math.max(0, brut - num('rem'));
+        [1, 2, 3].forEach((i) => { const v = num(`p${i}`) * num(`q${i}`); if (v) t.push(ligne(`${$(`n${i}`).value || `Ligne ${i}`} (${num(`q${i}`).toLocaleString('fr-FR')} × ${eur(num(`p${i}`))})`, eur(v))); });
+        if (num('rem')) t.push(ligne('− Remises et avoirs', eur(num('rem'))));
+      } else {
+        ht = num('ttc') / (1 + taux);
+        t.push(ligne('Total encaissé TTC', eur(num('ttc'))), ligne(`÷ (1 + ${(taux * 100).toLocaleString('fr-FR')} %)`, ''));
+      }
+      const tva = ht * taux, annuel = ht * (12 / mois);
+      const plafond = MICRO.plafond[act], seuil = MICRO.franchiseTva[act];
+      t.push(ligne('= Chiffre d’affaires HT', eur(ht), 'tot'), ligne('TVA collectée', eur(tva)), ligne('Chiffre d’affaires TTC', eur(ht + tva)));
+      if (mois !== 12) t.push(ligne('Projection sur 12 mois (au même rythme)', eur(annuel), 'tot'));
+      t.push(ligne('Chiffre d’affaires mensuel moyen', eur(annuel / 12)));
+      $('tab').replaceChildren(...t);
+
+      $('r').textContent = eur(ht);
+      $('d').textContent = !ht ? 'Renseigne tes ventes ou ton total encaissé.'
+        : `Sur un an, au même rythme : ${eur(annuel)} HT. ` + (annuel > plafond
+          ? `C’est au-dessus du plafond de la micro-entreprise (${eur(plafond)}) : si tu le dépasses deux années civiles de suite, tu sors du régime micro au 1er janvier suivant.`
+          : annuel > seuil
+            ? `Tu restes sous le plafond micro (${eur(plafond)}), mais au-dessus du seuil de franchise de TVA (${eur(seuil)}) : tu factures la TVA à partir du 1er janvier suivant, ou dès le dépassement si tu passes aussi le seuil majoré (${eur(MICRO.franchiseTvaMajore[act])}).`
+            : `Tu restes sous le seuil de franchise de TVA (${eur(seuil)}) et sous le plafond micro (${eur(plafond)}).`);
+
+      $('jauges').replaceChildren(...[['Seuil de franchise de TVA', seuil], ['Plafond micro-entreprise', plafond]].map(([k, v]) => {
+        const d = document.createElement('div'); d.className = 'ca-jauge' + (annuel > v ? ' depasse' : '');
+        const l = document.createElement('span'); l.textContent = `${k} · ${eur(v)}`;
+        const b = document.createElement('i'); const r = document.createElement('b'); r.style.width = `${Math.min(100, (annuel / v) * 100)}%`; b.append(r);
+        const p = document.createElement('em'); p.textContent = pc((annuel / v) * 100);
+        d.append(l, b, p); return d;
+      }));
+    };
+    f.addEventListener('input', calc);
+    f.addEventListener('change', calc);
+    calc();
+  })();
+</script>
+
+<style>
+  .ca-lignes { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr) minmax(0, .8fr); gap: 6px 10px; align-items: end; margin-top: 8px; }
+  .ca-lignes > span { font-weight: 600; font-size: .82rem; color: var(--muted); }
+  .ca-jauges { display: grid; gap: 10px; margin-top: 14px; }
+  .ca-jauges :global(.ca-jauge) { display: grid; grid-template-columns: minmax(0, 1fr) 54px; gap: 4px 10px; align-items: center; font-size: .86rem; }
+  .ca-jauges :global(.ca-jauge span) { grid-column: 1 / -1; color: var(--muted); }
+  .ca-jauges :global(.ca-jauge i) { display: block; height: 12px; border-radius: 6px; background: var(--line); overflow: hidden; }
+  .ca-jauges :global(.ca-jauge b) { display: block; height: 100%; border-radius: 6px; background: var(--good); transition: width .5s cubic-bezier(.2, .8, .2, 1); }
+  .ca-jauges :global(.ca-jauge.depasse b) { background: var(--bad); }
+  .ca-jauges :global(.ca-jauge em) { font-style: normal; font-weight: 800; text-align: right; font-variant-numeric: tabular-nums; }
+  #sim-ca [hidden] { display: none !important; }
+</style>

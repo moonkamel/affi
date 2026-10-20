@@ -19,8 +19,8 @@ export const GROUPES_OUTILS: GroupeOutils[] = [
   {
     id: 'rentabilite',
     titre: 'Prix et rentabilité',
-    intro: 'Fixer tes prix, savoir combien vendre et suivre les indicateurs que regarde ton banquier.',
-    outils: ['outils/calcul-marge', 'outils/calcul-seuil-de-rentabilite', 'outils/calcul-bfr', 'outils/calcul-ebe', 'outils/calcul-caf', 'outils/calcul-tjm-freelance'],
+    intro: 'Fixer tes prix, lire tes comptes et suivre les indicateurs que regarde ton banquier.',
+    outils: ['comptabilite/chiffre-d-affaires', 'outils/calcul-marge', 'outils/calcul-seuil-de-rentabilite', 'comptabilite/compte-de-resultat', 'comptabilite/bilan-comptable', 'outils/calcul-bfr', 'outils/calcul-ebe', 'outils/calcul-caf', 'outils/calcul-tjm-freelance'],
   },
   {
     id: 'creer',
@@ -75,6 +75,9 @@ export const OUTILS_INFO: Record<string, { titre: string; type: TypeOutil; accro
   'outils/calcul-penalites-de-retard': { titre: 'Pénalités de retard', type: 'calculateur', accroche: 'Ce que tu peux réclamer, au taux en vigueur.', cles: 'retard impayé relance pénalités' },
   'outils/calcul-marge': { titre: 'Calcul de marge', type: 'calculateur', accroche: 'Taux de marge, de marque et coefficient.', cles: 'marge prix coefficient marque' },
   'outils/calcul-seuil-de-rentabilite': { titre: 'Seuil de rentabilité', type: 'calculateur', accroche: 'Combien vendre, et à quelle date.', cles: 'seuil rentabilité point mort' },
+  'comptabilite/chiffre-d-affaires': { titre: 'Chiffre d’affaires', type: 'calculateur', accroche: 'HT, TVA collectée, plafonds micro et seuils de TVA.', cles: 'chiffre affaires ca ventes plafond micro', nouveau: true },
+  'comptabilite/compte-de-resultat': { titre: 'Compte de résultat', type: 'calculateur', accroche: 'Du chiffre d’affaires au résultat net, avec l’impôt.', cles: 'compte résultat sig bénéfice résultat net impôt sociétés comptabilité', nouveau: true },
+  'comptabilite/bilan-comptable': { titre: 'Bilan comptable', type: 'calculateur', accroche: 'Actif, passif, fonds de roulement et trésorerie.', cles: 'bilan actif passif capitaux propres trésorerie comptabilité', nouveau: true },
   'outils/calcul-bfr': { titre: 'Calcul du BFR', type: 'calculateur', accroche: 'L’argent bloqué dans ton cycle d’activité.', cles: 'bfr fonds de roulement trésorerie' },
   'outils/calcul-ebe': { titre: 'Calcul de l’EBE', type: 'calculateur', accroche: 'Ta rentabilité d’exploitation.', cles: 'ebe excédent brut' },
   'outils/calcul-caf': { titre: 'Calcul de la CAF', type: 'calculateur', accroche: 'Ce que ton activité dégage pour investir.', cles: 'caf autofinancement' },

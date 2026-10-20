@@ -1,0 +1,82 @@
+---
+title: "Chiffre d’affaires : définition, calcul et différence avec le bénéfice"
+seoTitle: "Chiffre d’affaires : définition, calcul et simulateur"
+description: "Calcule ton chiffre d’affaires HT en 30 secondes, à partir de tes ventes ou d’un total TTC, et situe-toi face aux plafonds micro et aux seuils de TVA."
+keyword: "chiffre d'affaires"
+secondaryKeywords:
+  - "calcul chiffre d'affaires"
+  - "chiffre d'affaires définition"
+  - "chiffre d'affaires hors taxe"
+  - "chiffre d'affaires auto-entrepreneur"
+  - "chiffre d'affaires et bénéfice"
+type: outil
+published: 2026-10-20
+updated: 2026-10-20
+related:
+  - comptabilite/compte-de-resultat
+  - creer/plafond-auto-entrepreneur
+  - outils/simulateur-seuil-tva
+  - comptabilite/bilan-comptable
+tldr:
+  - "<strong>Chiffre d’affaires</strong> = total des ventes de biens et de services sur une période, hors taxes, après remises."
+  - "<strong>Ce n’est pas un bénéfice</strong> : il faut encore retirer les achats, les charges, les salaires et l’impôt."
+  - "<strong>En micro-entreprise</strong>, on retient le chiffre d’affaires encaissé, comparé au plafond de 83 600 € (services) ou 203 100 € (vente)."
+faq:
+  - q: "Comment calculer le chiffre d’affaires ?"
+    a: "Additionne le montant hors taxes de toutes tes ventes de la période (prix unitaire × quantité), puis retire les remises, rabais et avoirs accordés. À partir d’un total TTC, divise par 1 + le taux de TVA : 72 000 € TTC à 20 % donnent 60 000 € HT."
+  - q: "Le chiffre d’affaires se calcule-t-il HT ou TTC ?"
+    a: "Hors taxes. La TVA collectée n’appartient pas à l’entreprise : elle est reversée à l’État. Le chiffre d’affaires du compte de résultat, celui qui sert aux plafonds de la micro-entreprise et aux seuils de TVA, est toujours un montant hors taxes."
+  - q: "Quelle différence entre chiffre d’affaires et bénéfice ?"
+    a: "Le chiffre d’affaires est ce que tu factures. Le bénéfice est ce qui reste une fois payés les achats, les charges externes, les salaires, les cotisations, les amortissements, les intérêts et l’impôt. Une entreprise peut avoir un gros chiffre d’affaires et perdre de l’argent si ses marges sont trop faibles."
+  - q: "Auto-entrepreneur : chiffre d’affaires encaissé ou facturé ?"
+    a: "En micro-entreprise, tu déclares à l’URSSAF et tu compares aux plafonds le chiffre d’affaires encaissé, c’est-à-dire les sommes effectivement reçues sur la période. Une facture émise mais pas encore payée ne compte pas tant qu’elle n’est pas encaissée."
+  - q: "Que se passe-t-il si je dépasse le plafond de la micro-entreprise ?"
+    a: "Un dépassement sur une seule année ne fait pas sortir du régime. Si tu dépasses le plafond deux années civiles de suite, tu passes au régime réel au 1er janvier de l’année suivante. Pour la TVA, le dépassement du seuil de franchise te fait facturer la TVA dès le 1er janvier suivant, ou immédiatement si tu dépasses aussi le seuil majoré."
+---
+import ChiffreAffairesCalculator from '../../../components/ChiffreAffairesCalculator.astro';
+import Callout from '../../../components/Callout.astro';
+import EmbedCode from '../../../components/EmbedCode.astro';
+
+Le chiffre d’affaires est le premier chiffre qu’on te demande, que ce soit la banque, l’URSSAF ou un repreneur. Entre tes ventes de la période ou ton total encaissé TTC : le simulateur calcule ton chiffre d’affaires hors taxes, la TVA collectée, la projection sur un an et ta position face aux plafonds de la micro-entreprise et aux seuils de TVA.
+
+<ChiffreAffairesCalculator />
+
+## La formule
+
+> Chiffre d’affaires HT = Σ (prix unitaire HT × quantité vendue) − remises, rabais et avoirs
+
+**Exemple** : 120 prestations à 450 € HT et 400 produits à 25 € HT, avec 1 500 € de remises, donnent 54 000 + 10 000 − 1 500 = **62 500 € HT** sur l’année. Avec 20 % de TVA, tu as collecté 12 500 € de TVA, soit 75 000 € TTC.
+
+À partir d’un montant TTC : **CA HT = montant TTC ÷ (1 + taux de TVA)**. Pour toutes les conversions, utilise le <a href="/outils/calcul-ht-ttc/">convertisseur HT ↔ TTC</a>.
+
+## Chiffre d’affaires, marge et bénéfice
+
+| Indicateur | Ce qu’il mesure | Où le trouver |
+|---|---|---|
+| Chiffre d’affaires | Ce que tu factures, hors taxes | Haut du compte de résultat |
+| Marge | Chiffre d’affaires − coût d’achat de ce que tu vends | <a href="/outils/calcul-marge/">Calcul de marge</a> |
+| Valeur ajoutée et EBE | Ce que rapporte l’activité avant amortissements, frais financiers et impôt | <a href="/outils/calcul-ebe/">Calcul de l’EBE</a> |
+| Bénéfice (résultat net) | Ce qui reste après toutes les charges et l’impôt | Bas du <a href="/comptabilite/compte-de-resultat/">compte de résultat</a> |
+
+## Les seuils qui dépendent de ton chiffre d’affaires
+
+| Seuil (2026) | Prestations de services | Vente, restauration, hébergement |
+|---|---|---|
+| Franchise en base de TVA | 37 500 € (majoré : 41 250 €) | 85 000 € (majoré : 93 500 €) |
+| Plafond de la micro-entreprise | 83 600 € | 203 100 € |
+
+<Callout title="Encaissé ou facturé ?">
+  <p>En micro-entreprise, tu déclares et tu compares aux plafonds ce que tu as <strong>encaissé</strong>. Au régime réel, le chiffre d’affaires du compte de résultat est celui des ventes <strong>facturées</strong> sur l’exercice, qu’elles soient payées ou non. Le détail des plafonds et l’année de création sont expliqués dans le <a href="/creer/plafond-auto-entrepreneur/">guide du plafond auto-entrepreneur</a>.</p>
+</Callout>
+
+## Comment faire progresser ton chiffre d’affaires
+
+1. **Augmenter le panier moyen** : options, offres groupées, montée en gamme.
+2. **Ajuster tes prix** : le <a href="/outils/calcul-marge/">calcul de marge</a> montre ce que rapporte une hausse de quelques pour cent.
+3. **Être payé plus vite** : relances et <a href="/encaissement/lien-de-paiement/">lien de paiement</a> n’augmentent pas le chiffre d’affaires, mais la trésorerie qui va avec.
+
+<p data-maillage>Pour aller plus loin : le <a href="/comptabilite/compte-de-resultat/">compte de résultat</a>, le <a href="/comptabilite/bilan-comptable/">bilan comptable</a> et le <a href="/outils/simulateur-seuil-tva/">simulateur de seuil de TVA</a>. Pour suivre ton chiffre d’affaires en temps réel : un <a href="/facturation/logiciel-de-facturation/">logiciel de facturation</a>.</p>
+
+Sources : [URSSAF, auto-entrepreneur](https://www.autoentrepreneur.urssaf.fr/), [Code général des impôts](https://www.legifrance.gouv.fr/codes/texte_lc/LEGITEXT000006069577/). Plafonds et seuils vérifiés en octobre 2026.
+
+<EmbedCode tool="chiffre-affaires" />

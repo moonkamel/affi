@@ -1,0 +1,87 @@
+---
+title: "Bilan comptable : comprendre l’actif et le passif, exemple et modèle en ligne"
+seoTitle: "Bilan comptable : actif, passif, exemple et modèle gratuit"
+description: "Lire et construire un bilan comptable : actif, passif, capitaux propres, fonds de roulement, BFR et trésorerie, avec un modèle gratuit qui vérifie l’équilibre."
+keyword: "bilan comptable"
+secondaryKeywords:
+  - "bilan comptable exemple"
+  - "lire un bilan comptable"
+  - "actif passif bilan"
+  - "capitaux propres"
+  - "capitaux propres négatifs"
+  - "bilan simplifié"
+type: outil
+published: 2026-10-20
+updated: 2026-10-20
+related:
+  - comptabilite/compte-de-resultat
+  - outils/calcul-bfr
+  - comptabilite/chiffre-d-affaires
+  - creer/dossier-de-financement
+tldr:
+  - "<strong>Le bilan</strong> est une photo du patrimoine à la date de clôture : à gauche ce que l’entreprise possède (actif), à droite comment c’est financé (passif)."
+  - "<strong>Il est toujours équilibré</strong> : total de l’actif = total du passif."
+  - "<strong>Trois chiffres à regarder</strong> : le fonds de roulement, le besoin en fonds de roulement et la trésorerie nette, qui est la différence entre les deux."
+faq:
+  - q: "Qu’est-ce qu’un bilan comptable ?"
+    a: "C’est le document qui présente, à la date de clôture de l’exercice, tout ce que l’entreprise possède (l’actif : matériel, stocks, créances, trésorerie) et toutes ses ressources (le passif : capitaux propres, emprunts, dettes). Il est établi chaque année avec le compte de résultat."
+  - q: "Pourquoi l’actif est-il toujours égal au passif ?"
+    a: "Parce que chaque bien ou chaque euro de l’entreprise a forcément été financé par quelque chose : les apports des associés, les bénéfices gardés, un emprunt ou une dette fournisseur. Le passif décrit l’origine des ressources, l’actif leur utilisation : les deux totaux sont identiques par construction."
+  - q: "Que sont des capitaux propres négatifs ?"
+    a: "Les pertes accumulées dépassent le capital et les réserves. En SARL et en SAS, si les capitaux propres deviennent inférieurs à la moitié du capital social, les associés doivent décider dans les quatre mois suivant l’approbation des comptes s’ils poursuivent l’activité, puis régulariser la situation dans un délai fixé par la loi. Parles-en à ton expert-comptable dès que cela arrive."
+  - q: "Quand faut-il déposer le bilan au greffe ?"
+    a: "Les SARL et SAS déposent leurs comptes annuels au greffe dans le mois qui suit leur approbation, ou dans les deux mois s’ils sont déposés par voie électronique. En SARL, les associés approuvent les comptes dans les six mois de la clôture. En SAS, c’est le délai prévu par les statuts, six mois pour une SASU dont l’associé unique est une personne physique."
+  - q: "Comment calculer la trésorerie nette à partir du bilan ?"
+    a: "Trésorerie nette = fonds de roulement − besoin en fonds de roulement. C’est aussi les disponibilités moins les découverts bancaires. Dans l’exemple de cette page : 45 000 € de fonds de roulement − 25 000 € de BFR = 20 000 €, soit exactement les disponibilités."
+---
+import BilanCalculator from '../../../components/BilanCalculator.astro';
+import Callout from '../../../components/Callout.astro';
+import EmbedCode from '../../../components/EmbedCode.astro';
+
+Le bilan comptable dit ce que vaut ton entreprise et comment elle est financée, à une date donnée. Renseigne tes grandes masses d’actif et de passif : le modèle vérifie que ton bilan est équilibré, calcule ton fonds de roulement, ton besoin en fonds de roulement et ta trésorerie nette, et dessine les deux colonnes.
+
+<BilanCalculator />
+
+## L’actif : ce que l’entreprise possède
+
+| Poste | Ce qu’on y trouve | Exemple |
+|---|---|---|
+| Immobilisations nettes | Matériel, véhicules, agencements, fonds de commerce, logiciels, après amortissements | 60 000 € |
+| Stocks | Marchandises, matières premières, en-cours | 15 000 € |
+| Créances clients | Factures émises, pas encore encaissées | 30 000 € |
+| Autres créances | Crédit de TVA, charges payées d’avance | 5 000 € |
+| Disponibilités | Comptes bancaires et caisse | 20 000 € |
+| **Total de l’actif** | | **130 000 €** |
+
+## Le passif : comment c’est financé
+
+| Poste | Ce qu’on y trouve | Exemple |
+|---|---|---|
+| Capitaux propres | Capital apporté, réserves, report à nouveau et résultat de l’exercice | 70 000 € |
+| Emprunts et dettes financières | Prêts bancaires, comptes courants d’associés bloqués | 35 000 € |
+| Dettes fournisseurs | Factures reçues, pas encore payées | 18 000 € |
+| Dettes fiscales et sociales | TVA à reverser, cotisations URSSAF, salaires dus | 7 000 € |
+| **Total du passif** | | **130 000 €** |
+
+## Les trois chiffres à en tirer
+
+1. **Le fonds de roulement** = capitaux propres + emprunts − immobilisations. Ce sont les ressources stables qui restent une fois les investissements financés. Exemple : 70 000 + 35 000 − 60 000 = 45 000 €.
+2. **Le besoin en fonds de roulement** = stocks + créances − dettes fournisseurs, fiscales et sociales. C’est l’argent immobilisé par ton cycle d’activité. Exemple : 15 000 + 30 000 + 5 000 − 18 000 − 7 000 = 25 000 €. Calcule-le en détail avec le <a href="/outils/calcul-bfr/">calcul du BFR</a>.
+3. **La trésorerie nette** = fonds de roulement − BFR, soit 20 000 €. Positive, ton cycle est financé par des ressources stables ; négative, il l’est par du découvert.
+
+<Callout title="Deux ratios que regarde ta banque">
+  <p><strong>Autonomie financière</strong> = capitaux propres ÷ total du passif (54 % dans l’exemple). <strong>Endettement</strong> = emprunts ÷ capitaux propres (0,5 dans l’exemple). Il n’existe pas de norme légale : les banques comparent ces ratios à ceux de ton secteur et à ta capacité à rembourser, mesurée par ta <a href="/outils/calcul-caf/">capacité d’autofinancement</a>.</p>
+</Callout>
+
+## Qui fait un bilan, et quand
+
+- **Entreprises au régime réel** (entreprises individuelles et sociétés) : bilan, compte de résultat et, sauf dispense, annexe, à chaque clôture d’exercice.
+- **Micro-entreprises au sens comptable** (pas plus de deux des trois seuils suivants : 450 000 € de total de bilan, 900 000 € de chiffre d’affaires, 10 salariés) : dispense d’annexe et possibilité de garder leurs comptes confidentiels.
+- **Auto-entrepreneurs** : pas de bilan, un simple livre des recettes.
+- **Dépôt au greffe** (SARL, SAS) : dans le mois qui suit l’approbation des comptes, deux mois par voie électronique.
+
+<p data-maillage>Pour lire tes comptes en entier : le <a href="/comptabilite/compte-de-resultat/">compte de résultat</a> et le <a href="/comptabilite/chiffre-d-affaires/">chiffre d’affaires</a>. Pour présenter tes chiffres à la banque : le <a href="/creer/dossier-de-financement/">dossier de financement</a>. Pour produire ton bilan sans ressaisie : un <a href="/comptabilite/logiciel-comptabilite/">logiciel de comptabilité</a>.</p>
+
+Sources : [economie.gouv.fr, le bilan](https://www.economie.gouv.fr/facileco/le-bilan), [Code de commerce](https://www.legifrance.gouv.fr/codes/texte_lc/LEGITEXT000005634379/), [La finance pour tous](https://www.lafinancepourtous.com/decryptages/entreprise/gestion-et-comptabilite/comptes-de-l-entreprise/comprendre-le-bilan-le-compte-de-resultat-et-l-annexe/). Vérifié en octobre 2026.
+
+<EmbedCode tool="bilan" />
