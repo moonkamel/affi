@@ -1009,6 +1009,39 @@ html.out-anime .out-grille > li.vu { opacity: 1; transform: none; }
 @media (max-width: 900px) { .out-hero { grid-template-columns: minmax(0, 1fr); gap: 24px; } }
 @media (max-width: 560px) { .vit { padding: 16px; box-shadow: 8px 10px 0 -3px var(--sky); } .vit-onglets { width: 100%; } .vit-onglets button { flex: 1; padding: 0 6px; } .vit-question { font-size: 1rem; } }
 
+/* ───────── Pages de rubrique animées (scripts/rubrique-anime.ts) ───────── */
+.rub-hero { position: relative; isolation: isolate; overflow-x: clip; overflow-clip-margin: 0; display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, .75fr); gap: 40px; align-items: center; padding-block: 12px 4px; }
+.rub-mot { position: absolute; z-index: -1; left: -10px; top: -.12em; font-family: var(--display); font-weight: 800; font-size: clamp(5rem, 15vw, 12.5rem); line-height: 1; letter-spacing: -.05em; text-transform: uppercase; white-space: nowrap; color: transparent; -webkit-text-stroke: 1.5px color-mix(in srgb, var(--accent) 20%, transparent); pointer-events: none; user-select: none; }
+html.scenes .rub-mot { transform: translateX(calc((.35 - var(--p, .35)) * 260px)); }
+.rub-chiffres { display: flex; flex-wrap: wrap; gap: 12px 36px; margin-top: 8px; color: var(--muted); font-size: .92rem; }
+.rub-chiffres b { display: block; font-family: var(--display); font-size: 1.7rem; line-height: 1.1; color: var(--ink); font-variant-numeric: tabular-nums; }
+.rub-fil { padding: 18px 18px 6px; border-radius: 22px; background: var(--card); border: 1px solid var(--line); box-shadow: 12px 14px 0 -4px var(--sky); }
+.rub-fil-tete { margin-bottom: 10px; }
+.rub-fil-cadre { height: 260px; overflow: hidden; -webkit-mask-image: linear-gradient(transparent, #000 14%, #000 86%, transparent); mask-image: linear-gradient(transparent, #000 14%, #000 86%, transparent); }
+.rub-fil-liste { margin: 0; padding: 0; list-style: none; }
+.rub-fil-liste a { display: grid; gap: 2px; padding: 11px 4px; border-bottom: 1px solid var(--line); color: var(--ink); text-decoration: none; }
+.rub-fil-liste a:hover span { color: var(--accent); }
+.rub-fil-liste time { font-size: .76rem; font-weight: 700; color: var(--sun); text-transform: uppercase; letter-spacing: .04em; }
+.rub-fil-liste span { font-family: var(--display); font-weight: 700; font-size: .98rem; line-height: 1.3; transition: color .15s; }
+.rub-fil-copie { display: none; }
+@media (prefers-reduced-motion: no-preference) {
+  .rub-fil-copie { display: block; }
+  .rub-fil-cadre > ul { animation: fil 32s linear infinite; }
+  .rub-fil:hover .rub-fil-cadre > ul, .rub-fil:focus-within .rub-fil-cadre > ul { animation-play-state: paused; }
+}
+@keyframes fil { to { transform: translateY(-100%); } }
+.rub-ancres { position: sticky; top: calc(var(--h-entete, 66px) + 8px); z-index: 15; width: fit-content; max-width: 100%; padding: 6px; border-radius: 999px; background: color-mix(in srgb, var(--paper) 88%, transparent); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid var(--line); overflow-x: auto; flex-wrap: nowrap; scrollbar-width: none; transition: top .25s; }
+.rub-ancres a { flex: none; border-color: transparent; }
+.rub-ancres a[aria-current] { background: var(--ink); color: var(--paper); }
+.rub-ancres a[aria-current] span { color: color-mix(in srgb, var(--paper) 70%, transparent); }
+@media (max-width: 760px) { html.entete-cachee .rub-ancres { top: 8px; } }
+html.rub-anime .rub-liste > li { opacity: 0; transform: translateX(-18px); transition: opacity .5s ease var(--delai, 0ms), transform .55s cubic-bezier(.2, .8, .2, 1) var(--delai, 0ms); }
+html.rub-anime .rub-liste > li.vu { opacity: 1; transform: none; }
+@media (min-width: 901px) {
+  html.scenes .rub-une-liste li { --a: min(1, max(0, (var(--p, 0) - .06) * 6.5)); position: relative; z-index: calc(2 - (var(--i) - 1) * (var(--i) - 1)); transform: translateX(calc((1 - var(--a)) * (1 - var(--i)) * 102%)) rotate(calc((1 - var(--a)) * (var(--i) - 1) * 6deg)) translateY(calc((1 - var(--a)) * 16px)); }
+}
+@media (max-width: 900px) { .rub-hero { grid-template-columns: minmax(0, 1fr); gap: 24px; } .rub-fil-cadre { height: 200px; } }
+
 /* ───────── Barre de navigation mobile ───────── */
 .nav-mobile { display: none; }
 @media (max-width: 760px) {
@@ -1065,7 +1098,7 @@ kbd { font-family: var(--mono); font-size: .85em; padding: 1px 6px; border: 1px 
 /* Impression d'une page de facture ou de devis : seule la facture est imprimée, sans pages blanches.
    Limité aux pages qui contiennent le générateur (.gen), pour ne pas masquer les autres outils imprimables. */
 @media print {
-  .sim-barre, .haut-de-page, .recherche, .btn-recherche, .voisins, .sim-flottant, .nav-mobile, .aller-outil, .jr, .mm, .gm, .vit, .out-fin, .dm, .mod-gestes { display: none !important; }
+  .sim-barre, .haut-de-page, .recherche, .btn-recherche, .voisins, .sim-flottant, .nav-mobile, .aller-outil, .jr, .mm, .gm, .vit, .out-fin, .dm, .mod-gestes, .rub-fil, .rub-mot { display: none !important; }
   .site-header { transform: none !important; }
   @page { margin: 14mm; }
   body { background: #fff; }

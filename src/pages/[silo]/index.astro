@@ -80,6 +80,13 @@ const rubrique = articles;
 const aLaUne = silo === 'outils' || rubrique.length < 7 ? [] : [...rubrique].sort((a, b) => ORDRE_TYPES.indexOf(a.data.type) - ORDRE_TYPES.indexOf(b.data.type)).slice(0, 3);
 const sections = ORDRE_TYPES.map((t) => ({ id: `type-${t}`, titre: TITRES_TYPES[t], items: rubrique.filter((a) => a.data.type === t && !aLaUne.includes(a)) })).filter((x) => x.items.length);
 
+// En-tête des rubriques : chiffres, dernière mise à jour et fil des articles mis à jour récemment.
+const court = (d: Date) => d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' });
+const recents = [...articles].sort((a, b) => b.data.updated.getTime() - a.data.updated.getTime()).slice(0, 7);
+const derniereMaj = recents[0] ? court(recents[0].data.updated) : '';
+const NOMS: Record<string, [string, string]> = { comparatif: ['comparatif', 'comparatifs'], versus: ['duel', 'duels'], alternatives: ['page d’alternatives', 'pages d’alternatives'], avis: ['avis détaillé', 'avis détaillés'], guide: ['guide', 'guides'], outil: ['outil gratuit', 'outils gratuits'] };
+const chiffres = ORDRE_TYPES.map((t) => { const n = articles.filter((a) => a.data.type === t).length; return { n, label: NOMS[t][n > 1 ? 1 : 0] }; }).filter((c) => c.n > 0).slice(0, 3);
+
 const jsonLd = graph(
   {
     '@type': 'CollectionPage',
@@ -106,13 +113,37 @@ const jsonLd = graph(
         <OutilsVitrine />
       </section>
     ) : (
-      <>
-        <div class="hub-head">
-          <SiloIcon silo={silo} class="hub-icon" />
-          <h1>{info.title}</h1>
+      <section class="rub-hero" data-scene="flux">
+        <span class="rub-mot" aria-hidden="true">{info.label}</span>
+        <div class="rub-hero-texte">
+          <div class="hub-head">
+            <SiloIcon silo={silo} class="hub-icon" />
+            <h1>{info.title}</h1>
+          </div>
+          <p class="hub-intro">{intros[silo]}</p>
+          <div class="rub-chiffres">
+            {chiffres.map((c) => <span><b data-compteur={c.n}>{c.n}</b>{c.label}</span>)}
+            {derniereMaj && <span><b>{derniereMaj}</b>dernière mise à jour</span>}
+          </div>
         </div>
-        <p class="hub-intro">{intros[silo]}</p>
-      </>
+        {recents.length > 2 && (
+          <aside class="rub-fil" aria-labelledby="rub-fil-titre">
+            <div class="rub-fil-tete"><span class="vit-direct"><i aria-hidden="true"></i><span id="rub-fil-titre">Mis à jour récemment</span></span></div>
+            <div class="rub-fil-cadre">
+              <ul class="rub-fil-liste">
+                {recents.map((a) => (
+                  <li><a href={articlePath(a)}><time datetime={a.data.updated.toISOString()}>{court(a.data.updated)}</time><span>{a.data.title}</span></a></li>
+                ))}
+              </ul>
+              <ul class="rub-fil-liste rub-fil-copie" aria-hidden="true">
+                {recents.map((a) => (
+                  <li><a href={articlePath(a)} tabindex="-1"><time datetime={a.data.updated.toISOString()}>{court(a.data.updated)}</time><span>{a.data.title}</span></a></li>
+                ))}
+              </ul>
+            </div>
+          </aside>
+        )}
+      </section>
     )}
     {silo === 'outils' ? (
       <>
@@ -178,11 +209,11 @@ const jsonLd = graph(
     ) : (
       <>
         {aLaUne.length > 0 && (
-          <section class="rub-une" aria-labelledby="rub-une-titre">
+          <section class="rub-une" aria-labelledby="rub-une-titre" data-scene="flux">
             <h2 id="rub-une-titre" class="rub-titre">À lire en premier</h2>
             <ol class="rub-une-liste">
               {aLaUne.map((a, i) => (
-                <li><a href={articlePath(a)}>
+                <li style={`--i:${i}`}><a href={articlePath(a)}>
                   <span class="rub-num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
                   <span class="rub-type">{typeLabels[a.data.type]}</span>
                   <strong>{a.data.title}</strong>
@@ -215,7 +246,12 @@ const jsonLd = graph(
   </div>
 </BaseLayout>
 
-{silo === 'outils' && <script>import '../../scripts/scenes.ts'; import '../../scripts/outils-anime.ts';</script>}
+<script>
+  // Chaque module ne s'active que si ses éléments sont présents sur la page (outils ou rubrique).
+  import '../../scripts/scenes.ts';
+  import '../../scripts/outils-anime.ts';
+  import '../../scripts/rubrique-anime.ts';
+</script>
 
 {silo === 'outils' && (
   <script is:inline>
