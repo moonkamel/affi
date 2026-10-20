@@ -148,6 +148,9 @@ const activites = ACTIVITES.map((a) => a.naf.join(','));
       if (e.key === 'ArrowUp') { e.preventDefault(); (el.previousSibling || input).focus(); }
     });
 
+    // ---------- Mesure d'usage anonyme (statistiques Cloudflare) ----------
+    const mesurer = (e) => { try { navigator.sendBeacon(`/api/mesure/${e}`); } catch (err) { /* sans importance */ } };
+
     // ---------- API ----------
     const pause = (ms) => new Promise((r) => setTimeout(r, ms));
     const appel = async (params, essai = 0) => {
@@ -235,6 +238,7 @@ const activites = ACTIVITES.map((a) => a.naf.join(','));
         status.textContent = '';
         $('mk-evo-res').hidden = false;
         sauverEtude();
+        mesurer('evolution');
       } catch (err) {
         status.textContent = 'Le calcul de l’évolution n’a pas abouti (répertoire public indisponible). Relance l’analyse dans quelques minutes.';
       }
@@ -299,7 +303,7 @@ const activites = ACTIVITES.map((a) => a.naf.join(','));
         if (id === zoneEnCours) txt.textContent = 'Le calcul de la zone n’a pas abouti (répertoire public indisponible). Réessaie dans quelques minutes.';
       }
     };
-    root.querySelectorAll('.mk-rayons button').forEach((b) => b.addEventListener('click', () => calculerZone(Number(b.dataset.r))));
+    root.querySelectorAll('.mk-rayons button').forEach((b) => b.addEventListener('click', () => { mesurer('zone'); calculerZone(Number(b.dataset.r)); }));
 
     // ---------- Analyse ----------
     $('mk-go').addEventListener('click', async () => {
@@ -408,6 +412,7 @@ const activites = ACTIVITES.map((a) => a.naf.join(','));
         btn.disabled = false;
         zoneCtx = { c, naf, densFr: zFr.pop ? (zFr.n / zFr.pop) * 10000 : 0 };
         sauverEtude();
+        mesurer('etude');
         $('mk-zone').hidden = false;
         await calculerZone(c.pop >= 100000 ? 5 : 10);
         await pause(160);

@@ -19,7 +19,7 @@ Décision du 20/10/2026, après mesure des volumes (docs/recherche/volumes-outil
   - lien vers le business plan gratuit.
 - **Appel direct** à l'API depuis le navigateur ; si le navigateur le bloque (CORS), bascule automatique sur le relais Cloudflare `functions/api/entreprises.js` (seul `/api/*` passe par une fonction, voir `public/_routes.json`).
 - **Accès** : menu principal (« Étude de marché »), page Outils gratuits (section « Outils pour créer ton entreprise »), pied de page.
-- **À mesurer** dans le relevé mensuel : visites de /creer/etude-de-marche/ et appels à /api/entreprises (Cloudflare).
+- **Mesure d'usage** (anonyme, sans cookie) : `functions/api/mesure/[evenement].js` répond 204 ; chaque événement est un appel `navigator.sendBeacon` vers `/api/mesure/<événement>` : `etude` (analyse lancée), `zone` (rayon changé), `evolution` (évolution calculée), `ca-vers-bp` (chiffre d'affaires repris dans le business plan), `previsionnel` (prévisionnel modifié, une fois par visite), `dossier-apercu`, `dossier-pdf`. Relevé mensuel : requête GraphQL Cloudflare `httpRequestsAdaptiveGroups` filtrée sur `clientRequestPath_like: "/api/mesure/%"`, groupée par chemin.
 
 - **Dossier de financement PDF** sur /creer/dossier-de-financement/ (composant `DossierBuilder.astro`) :
   - l'étude de marché (`localStorage` « logimalin-etude ») et le prévisionnel (« logimalin-bp ») sont sauvegardés dans le navigateur à chaque calcul ;

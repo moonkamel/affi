@@ -260,7 +260,10 @@
       const src = document.getElementById('bp-src');
       src.textContent = `Chiffre d’affaires repris de ton étude de marché (${(qs.get('source') || '').slice(0, 120)}) : c’est le chiffre médian des concurrents installés. Ajuste-le à ta situation, la première année est souvent plus faible.`;
       src.hidden = false;
+      try { navigator.sendBeacon('/api/mesure/ca-vers-bp'); } catch (e) { /* sans importance */ }
     }
+    let mesure = false;
+    f.addEventListener('input', () => { if (!mesure) { mesure = true; try { navigator.sendBeacon('/api/mesure/previsionnel'); } catch (e) { /* sans importance */ } } });
     f.addEventListener('input', calc);
     calc();
   })();

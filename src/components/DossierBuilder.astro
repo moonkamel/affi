@@ -208,8 +208,10 @@ const sections = [
     };
     const sectionsTexte = (id) => $(`ds-${id}`).value;
 
-    $('ds-apercu').addEventListener('click', () => { construire().scrollIntoView({ behavior: 'smooth' }); });
+    const mesurer = (e) => { try { navigator.sendBeacon(`/api/mesure/${e}`); } catch (err) { /* sans importance */ } };
+    $('ds-apercu').addEventListener('click', () => { mesurer('dossier-apercu'); construire().scrollIntoView({ behavior: 'smooth' }); });
     $('ds-go').addEventListener('click', () => {
+      mesurer('dossier-pdf');
       const doc = construire();
       // Le dossier passe directement sous <body> le temps de l'impression : tout le reste est masqué (display: none),
       // ce qui laisse le navigateur découper le document en pages A4.
