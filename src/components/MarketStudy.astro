@@ -227,10 +227,11 @@ const activites = ACTIVITES.map((a) => a.naf.join(','));
         const nCohorte = actives.filter(cohorte).length + fermees.filter(cohorte).length;
         const survie = nCohorte ? actives.filter(cohorte).length / nCohorte : null;
         const tauxFerm = nActives ? (ferm / 5) / nActives : 0;
+        const nb = (n, mot) => `${fmt(n)} ${mot}${Math.abs(n) > 1 ? 's' : ''}`;
         let txt = crea - ferm > 0
-          ? `📈 Le marché grandit : ${fmt(crea)} créations pour ${fmt(ferm)} fermetures sur 5 ans (${an - 5} à ${an - 1}), soit un solde de +${fmt(crea - ferm)} entreprises.`
+          ? `📈 Le marché grandit : ${nb(crea, 'création')} pour ${nb(ferm, 'fermeture')} sur 5 ans (${an - 5} à ${an - 1}), soit un solde de +${nb(crea - ferm, 'entreprise')}.`
           : crea - ferm < 0
-            ? `📉 Le marché se contracte : ${fmt(ferm)} fermetures pour ${fmt(crea)} créations sur 5 ans (${an - 5} à ${an - 1}), soit un solde de ${fmt(crea - ferm)} entreprises.`
+            ? `📉 Le marché se contracte : ${nb(ferm, 'fermeture')} pour ${nb(crea, 'création')} sur 5 ans (${an - 5} à ${an - 1}), soit un solde de ${nb(crea - ferm, 'entreprise')}.`
             : `⚖️ Le marché est stable : autant de créations que de fermetures (${fmt(crea)}) sur 5 ans.`;
         if (nActives) txt += ` Chaque année, environ ${fmt1(tauxFerm * 100)} % des entreprises de l’activité ferment.`;
         if (survie !== null && nCohorte >= 5) txt += ` Parmi celles créées entre ${an - 5} et ${an - 3}, ${fmt(survie * 100)} % sont encore en activité.`;
