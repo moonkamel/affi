@@ -60,6 +60,13 @@ if (d.products.length) nodes.push(itemList(path, d.products.map(getSoftware)));
 if (d.review) nodes.push(review(path, getSoftware(d.review.product), d.review.rating, d.description));
 if (d.faq.length) nodes.push(faqPage(d.faq));
 
+// Temps de lecture (texte brut de l'article, à 230 mots par minute) et chapitres pour le sommaire flottant.
+const mots = (entry.body ?? '').replace(/<[^>]+>|\{[^}]*\}|[#*_>`|-]/g, ' ').split(/\s+/).filter(Boolean).length;
+// Les fiches logiciels (<ProductCard>) et les FAQ sont rendues à partir des données : environ 130 et 40 mots chacune.
+const fiches = ((entry.body ?? '').match(/<ProductCard/g) ?? []).length;
+const minutes = Math.max(1, Math.round((mots + fiches * 130 + d.faq.length * 40) / 230));
+const chapitres = headings.filter((h) => h.depth === 2);
+const suite = related[0];
 const fmt = (x: Date) => x.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
 ---
 <BaseLayout
@@ -71,6 +78,7 @@ const fmt = (x: Date) => x.toLocaleDateString('fr-FR', { day: 'numeric', month: 
   updated={d.updated}
   image={ogImage}
 >
+  <div class="lecture" aria-hidden="true" data-minutes={minutes}><i></i><span class="lecture-titre"></span></div>
   <article class="container">
     <div class="prose" data-pagefind-body>
       <div data-pagefind-ignore><Breadcrumbs items={crumbs} /></div>
@@ -80,6 +88,7 @@ const fmt = (x: Date) => x.toLocaleDateString('fr-FR', { day: 'numeric', month: 
         <div class="meta">
           <span class="who"><Avatar size={30} /><span>Par <a href={SITE.author.url} rel="author">{SITE.author.name}</a></span></span>
           <span>Mis à jour le <time datetime={d.updated.toISOString()}>{fmt(d.updated)}</time></span>
+          <span>Lecture : {minutes} min</span>
         </div>
       </header>
       {d.type === 'outil' && (
@@ -113,5 +122,20 @@ const fmt = (x: Date) => x.toLocaleDateString('fr-FR', { day: 'numeric', month: 
       <Faq items={d.faq} />
       <div data-pagefind-ignore><AuthorBox /><Related items={related} /></div>
     </div>
+    {chapitres.length >= 3 && (
+      <aside class="toc-flottant" aria-label="Dans cet article" data-pagefind-ignore>
+        <div class="toc-flottant-tete"><svg viewBox="0 0 36 36" aria-hidden="true"><circle cx="18" cy="18" r="15" fill="none" stroke="var(--line)" stroke-width="3"/><circle class="toc-anneau" cx="18" cy="18" r="15" fill="none" stroke="url(#toc-degrade)" stroke-width="3" stroke-linecap="round" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/><defs><linearGradient id="toc-degrade"><stop offset="0" stop-color="var(--accent)"/><stop offset="1" stop-color="var(--sun)"/></linearGradient></defs></svg><span><b>Dans cet article</b><span class="toc-reste">{minutes} min de lecture</span></span></div>
+        <ol>{chapitres.map((h) => <li><a href={`#${h.slug}`}>{h.text}</a></li>)}</ol>
+      </aside>
+    )}
+    {suite && (
+      <aside class="suite" data-suite hidden aria-label="À lire ensuite" data-pagefind-ignore>
+        <button type="button" class="suite-fermer" aria-label="Fermer la suggestion">×</button>
+        <span class="suite-tete">À lire ensuite</span>
+        <a href={suite.href}><strong>{suite.title}</strong><span>Lire l’article →</span></a>
+      </aside>
+    )}
   </article>
 </BaseLayout>
+
+<script>import '../scripts/article-anime.ts';</script>
