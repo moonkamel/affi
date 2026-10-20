@@ -1,0 +1,70 @@
+---
+title: "Calcul des heures supplémentaires : simulateur, majorations 25 % et 50 %"
+seoTitle: "Calcul des heures supplémentaires : simulateur gratuit"
+description: "Calcule les heures supplémentaires d’un salarié : taux horaire, majorations de 25 % et 50 % ou taux de l’accord collectif, total de la semaine et du mois."
+keyword: "calcul heures supplémentaires"
+secondaryKeywords:
+  - "heures supplémentaires"
+  - "majoration heures supplémentaires"
+  - "simulateur heures supplémentaires"
+  - "taux horaire heures supplémentaires"
+  - "contingent heures supplémentaires"
+type: outil
+published: 2026-10-20
+updated: 2026-10-20
+related:
+  - equipe/badgeuse
+  - equipe/logiciel-planning
+  - equipe/dpae
+  - equipe/rupture-conventionnelle
+tldr:
+  - "<strong>Au-delà de 35 heures</strong> par semaine, chaque heure est majorée : 25 % de la 36e à la 43e heure, 50 % à partir de la 44e."
+  - "<strong>Un accord collectif</strong> peut prévoir un autre taux, mais jamais moins de 10 %."
+  - "<strong>Taux horaire</strong> = salaire brut mensuel ÷ 151,67 heures pour un temps plein."
+faq:
+  - q: "Comment calculer les heures supplémentaires ?"
+    a: "Calcule le taux horaire (salaire brut mensuel ÷ 151,67), puis applique la majoration : 25 % pour les 8 premières heures au-delà de 35 heures dans la semaine, 50 % ensuite. Exemple : avec 2 200 € brut, le taux horaire est de 14,51 € ; 6 heures supplémentaires à 25 % rapportent 108,79 € pour la semaine."
+  - q: "Les heures supplémentaires se calculent-elles à la semaine ou au mois ?"
+    a: "À la semaine civile, du lundi 0 heure au dimanche 24 heures (sauf accord d’aménagement du temps de travail sur une période plus longue). On ne compense pas une semaine longue par une semaine courte."
+  - q: "Un accord peut-il prévoir une majoration plus faible ?"
+    a: "Oui, un accord d’entreprise ou, à défaut, de branche peut fixer un taux différent, sans descendre sous 10 %. Il peut aussi remplacer le paiement par un repos compensateur équivalent."
+  - q: "Quelle est la limite d’heures supplémentaires ?"
+    a: "La durée du travail ne peut pas dépasser 48 heures sur une même semaine, ni 44 heures en moyenne sur 12 semaines. Au-delà du contingent annuel (220 heures par salarié à défaut d’accord), chaque heure ouvre en plus droit à une contrepartie en repos."
+  - q: "Les heures supplémentaires sont-elles imposables ?"
+    a: "Elles bénéficient d’une réduction de cotisations salariales et sont exonérées d’impôt sur le revenu dans la limite de 7 500 € par an. Côté employeur, une déduction forfaitaire de cotisations s’applique dans les entreprises de moins de 250 salariés."
+---
+import HeuresSupCalculator from '../../../components/HeuresSupCalculator.astro';
+import Callout from '../../../components/Callout.astro';
+import EmbedCode from '../../../components/EmbedCode.astro';
+
+Un coup de feu, un salarié absent, une commande urgente : les heures supplémentaires font partie de la vie d’une petite entreprise. Encore faut-il les payer correctement. Renseigne le salaire et les heures de la semaine : le simulateur applique les majorations et donne le montant à ajouter sur la fiche de paie.
+
+<HeuresSupCalculator />
+
+## Les majorations légales
+
+| Heures dans la semaine | Majoration | Exemple avec 14,51 € de taux horaire |
+|---|---|---|
+| 1re à 35e heure | Aucune (salaire de base) | — |
+| 36e à 43e heure | + 25 % | 18,13 € l’heure |
+| À partir de la 44e heure | + 50 % | 21,76 € l’heure |
+
+Ces taux s’appliquent à défaut d’accord. Un accord d’entreprise ou de branche peut fixer un autre taux, d’au moins 10 %.
+
+<Callout title="Compte les heures avant de les payer">
+  <p>En cas de litige, c’est à l’employeur de justifier les horaires réellement faits. Une <a href="/equipe/badgeuse/">badgeuse</a> ou un <a href="/equipe/logiciel-planning/">logiciel de planning</a> enregistre les heures et calcule les heures supplémentaires automatiquement.</p>
+</Callout>
+
+## Les règles à connaître
+
+- **Le décompte est hebdomadaire**, du lundi au dimanche, sauf accord d’aménagement du temps de travail.
+- **Les heures sont demandées par l’employeur**, ou au moins acceptées : un salarié ne peut pas se les imposer.
+- **Les limites** : 10 heures par jour, 48 heures sur une même semaine, 44 heures en moyenne sur 12 semaines.
+- **Le contingent annuel** est de 220 heures par salarié à défaut d’accord ; au-delà, chaque heure ouvre droit à un repos supplémentaire.
+- **Pour un temps partiel**, on parle d’heures complémentaires, avec des règles et des majorations différentes (10 % puis 25 %).
+
+Sources : [Code du travail (articles L. 3121-27 et suivants)](https://www.legifrance.gouv.fr/codes/texte_lc/LEGITEXT000006072050/), [economie.gouv.fr](https://www.economie.gouv.fr/entreprises/gerer-ses-ressources-humaines-et-ses-salaries/heures-supplementaires-pour-les-salaries-du-prive-comment-ca-marche). Vérifié en octobre 2026.
+
+<p data-maillage>Les autres outils employeur : <a href="/equipe/gratification-stage/">gratification de stage</a>, <a href="/equipe/rupture-conventionnelle/">rupture conventionnelle</a> et <a href="/equipe/dpae/">DPAE</a>.</p>
+
+<EmbedCode tool="heures-supplementaires" />

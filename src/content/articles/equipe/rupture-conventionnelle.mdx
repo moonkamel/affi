@@ -1,0 +1,85 @@
+---
+title: "Rupture conventionnelle : simulateur d’indemnité et coût pour l’employeur en 2026"
+seoTitle: "Simulateur rupture conventionnelle : indemnité et coût"
+description: "Calcule l’indemnité minimale de rupture conventionnelle et son coût réel pour l’employeur (contribution de 40 % en 2026). Procédure, délais et homologation."
+keyword: "simulateur rupture conventionnelle"
+secondaryKeywords:
+  - "rupture conventionnelle"
+  - "calcul indemnité rupture conventionnelle"
+  - "indemnité rupture conventionnelle"
+  - "rupture conventionnelle calcul"
+  - "coût rupture conventionnelle employeur"
+  - "contribution patronale rupture conventionnelle"
+type: outil
+published: 2026-10-20
+updated: 2026-10-20
+related:
+  - equipe/indemnite-licenciement
+  - equipe/solde-de-tout-compte
+  - equipe/certificat-de-travail
+  - equipe/attestation-employeur
+tldr:
+  - "<strong>Indemnité minimale</strong> : au moins l’indemnité légale de licenciement, soit 1/4 de mois de salaire par année d’ancienneté jusqu’à 10 ans, puis 1/3 au-delà."
+  - "<strong>Coût employeur</strong> : depuis le 1er janvier 2026, une contribution patronale de 40 % s’ajoute sur la part de l’indemnité exonérée de cotisations (30 % auparavant)."
+  - "<strong>Délais</strong> : 15 jours calendaires de rétractation après la signature, puis 15 jours ouvrables d’instruction pour l’homologation."
+faq:
+  - q: "Comment calculer l’indemnité de rupture conventionnelle ?"
+    a: "Elle est au moins égale à l’indemnité légale de licenciement : 1/4 de mois de salaire de référence par année d’ancienneté pour les 10 premières années, puis 1/3 par année au-delà, au prorata des mois pour une année incomplète. Le salaire de référence est la moyenne la plus favorable entre les 12 et les 3 derniers mois. Si ta convention collective prévoit une indemnité de licenciement plus élevée, c’est elle le minimum."
+  - q: "Combien coûte une rupture conventionnelle à l’employeur ?"
+    a: "L’indemnité versée, plus une contribution patronale spécifique de 40 % sur la part de l’indemnité exonérée de cotisations sociales, pour les contrats qui prennent fin depuis le 1er janvier 2026. Exemple : 5 000 € d’indemnité coûtent environ 7 000 € à l’employeur."
+  - q: "Quels sont les délais d’une rupture conventionnelle ?"
+    a: "Après un ou plusieurs entretiens, la convention est signée. Chaque partie dispose ensuite de 15 jours calendaires pour se rétracter. La demande d’homologation est alors envoyée en ligne (service TéléRC) à l’administration, qui a 15 jours ouvrables pour répondre ; sans réponse, la rupture est homologuée. Le contrat prend fin au plus tôt le lendemain de l’homologation."
+  - q: "Y a-t-il une ancienneté minimale pour une rupture conventionnelle ?"
+    a: "Non, contrairement à l’indemnité de licenciement qui demande 8 mois d’ancienneté. L’indemnité de rupture conventionnelle est due quelle que soit l’ancienneté, calculée au prorata des mois travaillés."
+  - q: "Le salarié a-t-il droit au chômage après une rupture conventionnelle ?"
+    a: "Oui, s’il remplit les conditions d’affiliation de l’assurance chômage. L’employeur remet l’attestation employeur pour France Travail avec les autres documents de fin de contrat."
+---
+import IndemniteCalculator from '../../../components/IndemniteCalculator.astro';
+import Callout from '../../../components/Callout.astro';
+import EmbedCode from '../../../components/EmbedCode.astro';
+
+Les simulateurs officiels donnent l’indemnité du salarié. Côté employeur, la vraie question est le coût total : depuis 2026, une contribution patronale de 40 % s’ajoute à l’indemnité. Renseigne les dates et les salaires : le simulateur donne l’indemnité minimale et ce que la rupture te coûtera réellement.
+
+<IndemniteCalculator mode="rupture" />
+
+## Le calcul de l’indemnité minimale
+
+| Ancienneté | Indemnité par année | Exemple avec 2 600 € de salaire de référence |
+|---|---|---|
+| Jusqu’à 10 ans | 1/4 de mois de salaire | 7 ans et 10 mois : 2 600 × 1/4 × 7,83 = 5 091,67 € |
+| Au-delà de 10 ans | 1/3 de mois de salaire | 12 ans : 2 600 × (1/4 × 10 + 1/3 × 2) = 8 233,33 € |
+
+**Le salaire de référence** est la moyenne la plus favorable au salarié entre les 12 derniers mois et les 3 derniers mois. Dans ce dernier cas, une prime annuelle n’est comptée que pour un quart (sa part sur 3 mois).
+
+<Callout title="Ce que coûte vraiment une rupture conventionnelle">
+  <p>Depuis le 1er janvier 2026, la contribution patronale spécifique passe de 30 % à 40 % de la part de l’indemnité exonérée de cotisations. C’est la date de fin du contrat qui compte : une convention signée fin 2025 pour un départ en 2026 relève du taux de 40 %. Pour une indemnité au niveau du minimum légal, tout le montant est en général exonéré : prévois donc 1,4 fois l’indemnité dans ton budget.</p>
+</Callout>
+
+## La procédure, étape par étape
+
+1. **Un ou plusieurs entretiens** entre l’employeur et le salarié, qui peuvent chacun se faire assister.
+2. **La signature de la convention**, qui fixe l’indemnité et la date de fin du contrat.
+3. **15 jours calendaires de rétractation** pour chacune des parties, à partir du lendemain de la signature.
+4. **La demande d’homologation** en ligne, sur le service TéléRC du ministère du Travail.
+5. **15 jours ouvrables d’instruction** : sans réponse de l’administration à l’issue de ce délai, la rupture est homologuée.
+6. **La fin du contrat**, au plus tôt le lendemain de l’homologation, avec la remise du [certificat de travail](/equipe/certificat-de-travail/), du [reçu pour solde de tout compte](/equipe/solde-de-tout-compte/) et de l’[attestation France Travail](/equipe/attestation-employeur/).
+
+Compte au minimum un mois et demi entre la signature et le départ effectif du salarié.
+
+## Rupture conventionnelle ou licenciement ?
+
+| | Rupture conventionnelle | Licenciement |
+|---|---|---|
+| Accord | Des deux parties | Décision de l’employeur, motif à justifier |
+| Ancienneté minimale pour l’indemnité | Aucune | 8 mois |
+| Contribution patronale spécifique | 40 % de la part exonérée | Aucune |
+| Risque de contentieux | Faible une fois homologuée | Plus élevé (contestation du motif) |
+| Préavis | Pas de préavis, date fixée dans la convention | 1 ou 2 mois selon l’ancienneté |
+
+Pour un licenciement, utilise notre [calcul de l’indemnité de licenciement](/equipe/indemnite-licenciement/).
+
+Sources : [Code du travail (articles L. 1237-11 et suivants, L. 1234-9, R. 1234-2)](https://www.legifrance.gouv.fr/codes/texte_lc/LEGITEXT000006072050/), [code.travail.gouv.fr](https://code.travail.gouv.fr/outils/indemnite-rupture-conventionnelle), [France Travail, nouvelles règles 2026](https://www.francetravail.org/accueil/actualites/2026/rupture-conventionnelle-en-2026-quelles-nouvelles-regles-et-impacts-pour-employeurs-et-salaries.html?type=article). Vérifié en octobre 2026.
+
+<p data-maillage>Les autres outils employeur : <a href="/equipe/heures-supplementaires/">heures supplémentaires</a>, <a href="/equipe/dpae/">DPAE</a> et <a href="/equipe/promesse-d-embauche/">promesse d’embauche</a>. Pour suivre les heures de ton équipe : une <a href="/equipe/badgeuse/">badgeuse</a>.</p>
+
+<EmbedCode tool="rupture-conventionnelle" />

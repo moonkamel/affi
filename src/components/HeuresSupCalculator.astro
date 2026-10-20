@@ -1,0 +1,69 @@
+---
+// Heures supplémentaires d'un salarié à temps plein : majorations légales (25 % de la 36e à la 43e heure,
+// 50 % au-delà) ou taux fixé par accord collectif (10 % minimum).
+---
+<form class="sim" id="sim-hs" aria-labelledby="hs-titre" onsubmit="return false">
+  <strong id="hs-titre">Calcul des heures supplémentaires</strong>
+  <div class="row">
+    <div><label for="hs-salaire">Salaire brut mensuel de base (€, pour 35 heures)</label><input id="hs-salaire" type="number" min="0" step="10" value="2200" inputmode="decimal" /><p class="hint">Taux horaire = salaire ÷ 151,67 heures.</p></div>
+    <div><label for="hs-heures">Heures travaillées dans la semaine</label><input id="hs-heures" type="number" min="35" max="48" step="0.5" value="41" inputmode="decimal" /></div>
+    <div>
+      <label for="hs-taux">Taux de majoration</label>
+      <select id="hs-taux">
+        <option value="legal" selected>Légal : 25 % puis 50 %</option>
+        <option value="accord">Fixé par un accord collectif</option>
+      </select>
+    </div>
+    <div id="hs-accord-w" hidden><label for="hs-accord">Taux de l’accord (%, 10 minimum)</label><input id="hs-accord" type="number" min="10" max="100" step="1" value="10" inputmode="numeric" /></div>
+    <div><label for="hs-semaines">Semaines concernées dans le mois</label><input id="hs-semaines" type="number" min="0" max="5" step="0.5" value="4" inputmode="decimal" /></div>
+  </div>
+  <output class="sim-out" aria-live="polite">
+    <div>Heures supplémentaires du mois (brut)</div>
+    <div class="big" id="hs-r">–</div>
+    <div id="hs-d" class="small"></div>
+  </output>
+  <table class="sim-tab"><tbody id="hs-tab"></tbody></table>
+</form>
+
+<script is:inline>
+  (() => {
+    const f = document.getElementById('sim-hs');
+    if (!f) return;
+    const $ = (id) => document.getElementById(`hs-${id}`);
+    const num = (id) => { const x = parseFloat(String($(id).value).replace(',', '.')); return Number.isFinite(x) && x >= 0 ? x : 0; };
+    const eur = (n) => n.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR', minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    const h = (n) => `${n.toLocaleString('fr-FR', { maximumFractionDigits: 2 })} h`;
+    const ligne = (k, v, cls) => { const tr = document.createElement('tr'); if (cls) tr.className = cls; const th = document.createElement('th'); th.textContent = k; const td = document.createElement('td'); td.textContent = v; tr.append(th, td); return tr; };
+    let compte = false;
+    const calc = (e) => {
+      const accord = $('taux').value === 'accord';
+      $('accord-w').hidden = !accord;
+      const taux = num('salaire') / 151.67, hs = Math.max(0, num('heures') - 35), sem = num('semaines');
+      let lignes = [ligne('Taux horaire brut', eur(taux)), ligne('Heures supplémentaires par semaine', h(hs))], parSemaine;
+      if (accord) {
+        const t = Math.max(10, num('accord')) / 100;
+        parSemaine = hs * taux * (1 + t);
+        lignes.push(ligne(`Majoration de ${Math.round(t * 100)} %`, `${h(hs)} × ${eur(taux * (1 + t))}`));
+      } else {
+        const h25 = Math.min(hs, 8), h50 = Math.max(hs - 8, 0);
+        parSemaine = h25 * taux * 1.25 + h50 * taux * 1.5;
+        lignes.push(ligne('Heures majorées à 25 % (36e à 43e heure)', `${h(h25)} × ${eur(taux * 1.25)}`));
+        if (h50) lignes.push(ligne('Heures majorées à 50 % (à partir de la 44e)', `${h(h50)} × ${eur(taux * 1.5)}`));
+      }
+      lignes.push(ligne('Par semaine', eur(parSemaine)), ligne(`Sur le mois (${sem.toLocaleString('fr-FR')} semaines)`, eur(parSemaine * sem), 'tot'), ligne('Heures supplémentaires du mois', h(hs * sem)));
+      $('r').textContent = eur(parSemaine * sem);
+      $('d').textContent = !hs ? 'Pas d’heure supplémentaire : la durée légale est de 35 heures par semaine.'
+        : num('heures') > 48 ? 'Attention : la durée maximale est de 48 heures sur une même semaine.'
+        : `À ajouter au salaire de base. Côté salarié, ces heures bénéficient d’une réduction de cotisations et sont exonérées d’impôt sur le revenu dans une limite annuelle.`;
+      $('tab').replaceChildren(...lignes);
+      if (!compte && e) { compte = true; try { navigator.sendBeacon('/api/mesure/heures-sup'); } catch (err) { /* sans importance */ } }
+    };
+    f.addEventListener('input', calc);
+    f.addEventListener('change', calc);
+    calc();
+  })();
+</script>
+
+<style>
+  #sim-hs [hidden] { display: none !important; }
+</style>

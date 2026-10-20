@@ -27,6 +27,9 @@ export const EMBEDS: Embed[] = [
   { slug: 'qr-avis-google', title: 'Générateur de QR code avis Google', page: '/outils/lien-avis-google/', height: 760 },
   { slug: 'documents-employeur', title: 'Générateur de documents employeur', page: '/equipe/certificat-de-travail/', height: 1400 },
   { slug: 'ilc', title: 'Calcul de la révision du loyer commercial (ILC)', page: '/outils/indice-ilc/', height: 700 },
+  { slug: 'rupture-conventionnelle', title: 'Simulateur d’indemnité de rupture conventionnelle', page: '/equipe/rupture-conventionnelle/', height: 760 },
+  { slug: 'heures-supplementaires', title: 'Calcul des heures supplémentaires', page: '/equipe/heures-supplementaires/', height: 700 },
+  { slug: 'gratification-stage', title: 'Calcul de la gratification de stage', page: '/equipe/gratification-stage/', height: 720 },
   { slug: 'cout-caisse', title: 'Simulateur de coût de caisse enregistreuse', page: '/outils/simulateur-cout-caisse-enregistreuse/', height: 820 },
 ];
 

@@ -1,0 +1,60 @@
+---
+// Gratification minimale d'un stagiaire : 15 % du plafond horaire de la Sécurité sociale par heure de présence
+// (4,50 € depuis le 1er janvier 2026), obligatoire au-delà de 2 mois de stage (309e heure).
+const TAUX = 4.5;
+const SEUIL_HEURES = 308;
+---
+<form class="sim" id="sim-grat" aria-labelledby="grat-titre" onsubmit="return false">
+  <strong id="grat-titre">Calcul de la gratification de stage</strong>
+  <div class="row">
+    <div><label for="grat-debut">Début du stage</label><input id="grat-debut" type="date" value="2027-01-04" /></div>
+    <div><label for="grat-fin">Fin du stage</label><input id="grat-fin" type="date" value="2027-06-25" /></div>
+    <div><label for="grat-hj">Heures de présence par jour</label><input id="grat-hj" type="number" min="1" max="10" step="0.5" value="7" inputmode="decimal" /></div>
+    <div><label for="grat-js">Jours de présence par semaine</label><input id="grat-js" type="number" min="1" max="6" step="1" value="5" inputmode="numeric" /></div>
+    <div><label for="grat-taux">Taux horaire (€, minimum légal {String(TAUX).replace('.', ',')} €)</label><input id="grat-taux" type="number" min={TAUX} step="0.05" value={TAUX} inputmode="decimal" /></div>
+    <div><label for="grat-abs">Jours d’absence prévus (fériés, congés)</label><input id="grat-abs" type="number" min="0" step="1" value="3" inputmode="numeric" /></div>
+  </div>
+  <output class="sim-out" aria-live="polite">
+    <div>Gratification mensuelle moyenne</div>
+    <div class="big" id="grat-r">–</div>
+    <div id="grat-d" class="small"></div>
+  </output>
+  <table class="sim-tab"><tbody id="grat-tab"></tbody></table>
+</form>
+
+<script is:inline define:vars={{ TAUX, SEUIL_HEURES }}>
+  (() => {
+    const f = document.getElementById('sim-grat');
+    if (!f) return;
+    const $ = (id) => document.getElementById(`grat-${id}`);
+    const num = (id) => { const x = parseFloat(String($(id).value).replace(',', '.')); return Number.isFinite(x) && x >= 0 ? x : 0; };
+    const eur = (n) => n.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR', minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    const ligne = (k, v, cls) => { const tr = document.createElement('tr'); if (cls) tr.className = cls; const th = document.createElement('th'); th.textContent = k; const td = document.createElement('td'); td.textContent = v; tr.append(th, td); return tr; };
+    let compte = false;
+    const calc = (e) => {
+      const d = new Date($('debut').value), fi = new Date($('fin').value);
+      if (isNaN(d) || isNaN(fi) || fi < d) { $('r').textContent = '–'; $('d').textContent = 'Renseigne des dates valides.'; $('tab').replaceChildren(); return; }
+      // Jours ouvrés du stage selon le nombre de jours de présence par semaine (lundi = premier jour).
+      const js = Math.min(6, Math.max(1, Math.round(num('js'))));
+      let jours = 0;
+      for (let t = new Date(d); t <= fi; t.setDate(t.getDate() + 1)) { const w = (t.getDay() + 6) % 7; if (w < js) jours++; }
+      jours = Math.max(0, jours - num('abs'));
+      const heures = jours * num('hj'), taux = Math.max(TAUX, num('taux'));
+      const mois = Math.max(1, (fi.getFullYear() - d.getFullYear()) * 12 + fi.getMonth() - d.getMonth() + (fi.getDate() >= d.getDate() ? 1 : 0));
+      const total = heures * taux, obligatoire = heures > SEUIL_HEURES;
+      $('r').textContent = obligatoire ? eur(total / mois) : eur(0);
+      $('d').textContent = obligatoire
+        ? `Stage de plus de 2 mois (${heures.toLocaleString('fr-FR')} heures de présence) : la gratification est obligatoire. Total sur le stage : ${eur(total)}.${taux > TAUX ? ' La part au-delà du minimum est soumise à cotisations.' : ' Au niveau du minimum, elle est exonérée de cotisations.'}`
+        : `Stage de ${heures.toLocaleString('fr-FR')} heures, soit 2 mois ou moins : la gratification n’est pas obligatoire (tu peux en verser une : ${eur(total)} au taux choisi).`;
+      $('tab').replaceChildren(
+        ligne('Jours de présence', `${jours}`), ligne('Heures de présence', `${heures.toLocaleString('fr-FR')} h`),
+        ligne('Taux horaire', eur(taux)), ligne('Gratification totale', eur(obligatoire ? total : 0), 'tot'),
+        ligne(`Versement lissé sur ${mois} mois`, eur(obligatoire ? total / mois : 0)),
+      );
+      if (!compte && e) { compte = true; try { navigator.sendBeacon('/api/mesure/gratification'); } catch (err) { /* sans importance */ } }
+    };
+    f.addEventListener('input', calc);
+    f.addEventListener('change', calc);
+    calc();
+  })();
+</script>

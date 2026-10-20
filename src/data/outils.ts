@@ -37,8 +37,8 @@ export const GROUPES_OUTILS: GroupeOutils[] = [
   {
     id: 'employer',
     titre: 'Employer',
-    intro: 'Les documents à remettre à l’embauche et au départ d’un salarié, prêts en PDF.',
-    outils: ['equipe/promesse-d-embauche', 'equipe/fiche-de-poste', 'equipe/attestation-employeur', 'equipe/certificat-de-travail', 'equipe/solde-de-tout-compte'],
+    intro: 'Embaucher, payer et voir partir un salarié : les calculs et les documents, prêts en PDF.',
+    outils: ['equipe/promesse-d-embauche', 'equipe/fiche-de-poste', 'equipe/heures-supplementaires', 'equipe/gratification-stage', 'equipe/rupture-conventionnelle', 'equipe/indemnite-licenciement', 'equipe/attestation-employeur', 'equipe/certificat-de-travail', 'equipe/solde-de-tout-compte'],
   },
   {
     id: 'clients',

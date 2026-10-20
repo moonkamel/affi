@@ -1,0 +1,68 @@
+---
+title: "Calcul de l’indemnité de licenciement : simulateur gratuit et règles 2026"
+seoTitle: "Calcul indemnité de licenciement : simulateur 2026"
+description: "Calcule l’indemnité légale de licenciement d’un salarié : ancienneté, salaire de référence, formule 1/4 puis 1/3, préavis. Simulateur gratuit avec exemples."
+keyword: "calcul indemnité de licenciement"
+secondaryKeywords:
+  - "indemnité de licenciement"
+  - "calcul indemnité licenciement"
+  - "indemnité légale de licenciement"
+  - "simulateur indemnité licenciement"
+  - "préavis de licenciement"
+type: outil
+published: 2026-10-20
+updated: 2026-10-20
+related:
+  - equipe/rupture-conventionnelle
+  - equipe/solde-de-tout-compte
+  - equipe/certificat-de-travail
+  - equipe/attestation-employeur
+tldr:
+  - "<strong>Formule</strong> : 1/4 de mois de salaire par année d’ancienneté jusqu’à 10 ans, puis 1/3 par année au-delà."
+  - "<strong>Condition</strong> : 8 mois d’ancienneté ininterrompue, et pas de faute grave ou lourde."
+  - "<strong>Convention collective</strong> : si elle prévoit plus, c’est son montant qui s’applique."
+faq:
+  - q: "Comment calculer l’indemnité légale de licenciement ?"
+    a: "Multiplie le salaire de référence par 1/4 pour chaque année d’ancienneté jusqu’à 10 ans, puis par 1/3 pour chaque année au-delà. Les années incomplètes sont comptées au prorata des mois complets. Exemple : 2 500 € de salaire de référence et 6 ans d’ancienneté donnent 2 500 × 1/4 × 6 = 3 750 €."
+  - q: "Quel salaire de référence retenir ?"
+    a: "Le plus favorable au salarié entre la moyenne des 12 derniers mois de salaire brut et la moyenne des 3 derniers mois. Dans le calcul sur 3 mois, une prime annuelle n’est prise en compte qu’au prorata."
+  - q: "Quelle ancienneté pour avoir droit à l’indemnité de licenciement ?"
+    a: "8 mois d’ancienneté ininterrompue chez le même employeur. L’ancienneté s’apprécie à la date de fin du contrat, préavis compris, même si le salarié est dispensé de l’effectuer."
+  - q: "L’indemnité de licenciement est-elle due en cas de faute grave ?"
+    a: "Non. La faute grave ou lourde prive le salarié de l’indemnité de licenciement et du préavis, mais pas de l’indemnité compensatrice de congés payés."
+  - q: "Quel est le préavis de licenciement ?"
+    a: "Sauf convention ou contrat plus favorable : 1 mois pour une ancienneté entre 6 mois et 2 ans, 2 mois au-delà de 2 ans. En dessous de 6 mois, c’est la convention collective ou l’usage qui le fixe."
+---
+import IndemniteCalculator from '../../../components/IndemniteCalculator.astro';
+import Callout from '../../../components/Callout.astro';
+
+Un licenciement oblige à verser au moins l’indemnité légale, calculée selon l’ancienneté et le salaire. Renseigne les dates et les salaires : le simulateur vérifie le droit à l’indemnité, calcule le minimum légal et rappelle le préavis.
+
+<IndemniteCalculator mode="licenciement" />
+
+## La formule de l’indemnité légale
+
+| Étape | Règle | Exemple |
+|---|---|---|
+| Ancienneté | Jusqu’à la fin du préavis, en années et mois complets | 6 ans |
+| Salaire de référence | Le plus favorable : moyenne des 12 ou des 3 derniers mois | 2 500 € |
+| Jusqu’à 10 ans | 1/4 de mois par année | 2 500 × 1/4 × 6 = 3 750 € |
+| Au-delà de 10 ans | 1/3 de mois par année supplémentaire | — |
+
+<Callout title="Vérifie ta convention collective">
+  <p>Beaucoup de conventions collectives prévoient une indemnité conventionnelle plus élevée que l’indemnité légale, ou dès une ancienneté plus courte. Le salarié a droit au montant le plus favorable des deux.</p>
+</Callout>
+
+## Ce que le salarié reçoit en plus
+
+- **Le préavis**, travaillé ou payé si tu l’en dispenses : 1 mois entre 6 mois et 2 ans d’ancienneté, 2 mois au-delà.
+- **L’indemnité compensatrice de congés payés** pour les congés acquis et non pris.
+- **Le dernier salaire** et les primes dues.
+
+Toutes ces sommes figurent sur le [reçu pour solde de tout compte](/equipe/solde-de-tout-compte/), remis avec le [certificat de travail](/equipe/certificat-de-travail/) et l’[attestation France Travail](/equipe/attestation-employeur/).
+
+Si le départ se fait d’un commun accord, regarde aussi la [rupture conventionnelle](/equipe/rupture-conventionnelle/) : même indemnité minimale, mais une contribution patronale de 40 % s’y ajoute depuis 2026.
+
+Sources : [Code du travail (articles L. 1234-1, L. 1234-9 et R. 1234-2)](https://www.legifrance.gouv.fr/codes/texte_lc/LEGITEXT000006072050/), [code.travail.gouv.fr](https://code.travail.gouv.fr/). Vérifié en octobre 2026.
+
+<p data-maillage>Les autres outils employeur : <a href="/equipe/heures-supplementaires/">heures supplémentaires</a>, <a href="/equipe/gratification-stage/">gratification de stage</a> et <a href="/equipe/dpae/">DPAE</a>.</p>

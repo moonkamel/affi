@@ -23,6 +23,9 @@ import PestelBuilder from '../../components/PestelBuilder.astro';
 import QrAvisGoogle from '../../components/QrAvisGoogle.astro';
 import DocumentEmployeur from '../../components/DocumentEmployeur.astro';
 import IlcCalculator from '../../components/IlcCalculator.astro';
+import IndemniteCalculator from '../../components/IndemniteCalculator.astro';
+import HeuresSupCalculator from '../../components/HeuresSupCalculator.astro';
+import GratificationCalculator from '../../components/GratificationCalculator.astro';
 
 export function getStaticPaths() {
   return EMBEDS.map((e) => ({ params: { tool: e.slug }, props: { embed: e } }));
@@ -47,6 +50,9 @@ const COMPONENTS = {
   'qr-avis-google': QrAvisGoogle,
   'documents-employeur': DocumentEmployeur,
   ilc: IlcCalculator,
+  'rupture-conventionnelle': IndemniteCalculator,
+  'heures-supplementaires': HeuresSupCalculator,
+  'gratification-stage': GratificationCalculator,
 } as const;
 const Tool = COMPONENTS[embed.slug as keyof typeof COMPONENTS];
 ---
