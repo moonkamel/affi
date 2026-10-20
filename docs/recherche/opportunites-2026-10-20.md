@@ -40,6 +40,6 @@ Attention aux volumes : Google Ads regroupe les variantes proches. « calcul tva
 2. ✅ Calculateur de marge : /outils/calcul-marge/ (20/10/2026).
 3. ✅ Les 4 indicateurs financiers : /outils/calcul-seuil-de-rentabilite/, /outils/calcul-bfr/, /outils/calcul-ebe/, /outils/calcul-caf/ (20/10/2026).
 4. ✅ Numéro de TVA intracommunautaire : /outils/numero-tva-intracommunautaire/, guides /creer/numero-siret/ et /creer/avis-de-situation-insee/ (20/10/2026).
-5. Générateur SWOT et PESTEL exportable en PDF, en reprenant la matrice du dossier de financement.
+5. ✅ Générateurs SWOT et PESTEL : /creer/analyse-swot/ et /creer/analyse-pestel/ (20/10/2026).
 
 Ensuite : lien et QR code d'avis Google, documents d'employeur, indice ILC, Wero, prêt professionnel.

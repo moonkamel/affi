@@ -22,6 +22,8 @@ export const EMBEDS: Embed[] = [
   { slug: 'ebe', title: 'Calcul de l’EBE', page: '/outils/calcul-ebe/', height: 860 },
   { slug: 'caf', title: 'Calcul de la capacité d’autofinancement', page: '/outils/calcul-caf/', height: 900 },
   { slug: 'tva-intracom', title: 'Numéro de TVA intracommunautaire et SIRET', page: '/outils/numero-tva-intracommunautaire/', height: 640 },
+  { slug: 'swot', title: 'Générateur de matrice SWOT', page: '/creer/analyse-swot/', height: 900 },
+  { slug: 'pestel', title: 'Générateur d’analyse PESTEL', page: '/creer/analyse-pestel/', height: 900 },
   { slug: 'cout-caisse', title: 'Simulateur de coût de caisse enregistreuse', page: '/outils/simulateur-cout-caisse-enregistreuse/', height: 820 },
 ];
 

@@ -18,6 +18,8 @@ import BfrCalculator from '../../components/BfrCalculator.astro';
 import EbeCalculator from '../../components/EbeCalculator.astro';
 import CafCalculator from '../../components/CafCalculator.astro';
 import IdentifiantsEntreprise from '../../components/IdentifiantsEntreprise.astro';
+import SwotBuilder from '../../components/SwotBuilder.astro';
+import PestelBuilder from '../../components/PestelBuilder.astro';
 
 export function getStaticPaths() {
   return EMBEDS.map((e) => ({ params: { tool: e.slug }, props: { embed: e } }));
@@ -37,6 +39,8 @@ const COMPONENTS = {
   ebe: EbeCalculator,
   caf: CafCalculator,
   'tva-intracom': IdentifiantsEntreprise,
+  swot: SwotBuilder,
+  pestel: PestelBuilder,
 } as const;
 const Tool = COMPONENTS[embed.slug as keyof typeof COMPONENTS];
 ---

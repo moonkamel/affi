@@ -1,0 +1,196 @@
+---
+// Générateur de matrice SWOT ou PESTEL : cases à remplir (une idée par ligne), exemples par métier,
+// export PDF A4 paysage par la fenêtre d'impression. Brouillon gardé dans le navigateur ;
+// la matrice SWOT alimente aussi le dossier de financement (même stockage que DossierBuilder).
+interface Props { type: 'swot' | 'pestel' }
+const { type } = Astro.props;
+
+const CONFIG = {
+  swot: {
+    titre: 'Analyse SWOT',
+    stockage: 'logimalin-swot',
+    cases: [
+      { id: 'forces', titre: 'Forces', sous: 'Interne · atout', aide: 'Ce que tu fais mieux que les autres : savoir-faire, expérience, emplacement, réseau, prix, qualité…' },
+      { id: 'faiblesses', titre: 'Faiblesses', sous: 'Interne · handicap', aide: 'Ce qui te manque encore : notoriété, trésorerie, compétence, temps, dépendance à un client…' },
+      { id: 'opportunites', titre: 'Opportunités', sous: 'Externe · atout', aide: 'Ce qui joue en ta faveur autour de toi : tendance, nouveau quartier, concurrent qui ferme, aide publique…' },
+      { id: 'menaces', titre: 'Menaces', sous: 'Externe · handicap', aide: 'Ce qui peut te freiner : nouvelle concurrence, hausse des prix, réglementation, saisonnalité…' },
+    ],
+    exemples: {
+      boulangerie: { nom: 'Boulangerie de quartier', forces: 'CAP et 10 ans d’expérience en boulangerie\nPain au levain et farines locales\nEmplacement de passage près d’une école', faiblesses: 'Première création d’entreprise\nNotoriété à construire\nHoraires très lourds pour une seule personne', opportunites: 'Quartier en développement avec de nouveaux logements\nDemande croissante pour le bio et le local\nRestaurants voisins à la recherche d’un fournisseur', menaces: 'Hausse du prix de la farine et de l’énergie\nTerminal de cuisson d’une grande surface à proximité\nDifficulté à recruter un boulanger qualifié' },
+      freelance: { nom: 'Développeur web freelance', forces: 'Expertise technique reconnue\nPortfolio de projets concrets\nFrais fixes très faibles', faiblesses: 'Dépendance à deux clients principaux\nPeu de temps pour la prospection\nPas de réseau commercial établi', opportunites: 'Obligation de facture électronique : besoin d’outils sur mesure\nPME qui numérisent leurs processus\nPlateformes de mise en relation avec des clients', menaces: 'Concurrence des outils sans code et de l’IA\nBaisse des budgets en période de ralentissement\nRetards de paiement des clients' },
+      ecommerce: { nom: 'Boutique en ligne de cosmétiques', forces: 'Produits fabriqués en France\nCommunauté active sur les réseaux sociaux\nMarge brute confortable', faiblesses: 'Budget publicitaire limité\nLogistique faite à la main\nGamme encore réduite', opportunites: 'Attrait pour les cosmétiques naturels\nMarchés en ligne qui ouvrent de nouveaux canaux\nSalons et marchés de créateurs', menaces: 'Coût des publicités en ligne en hausse\nGrandes marques qui lancent des gammes naturelles\nRéglementation exigeante sur les cosmétiques' },
+      restaurant: { nom: 'Restaurant bistronomique', forces: 'Chef formé en restauration gastronomique\nCarte courte et produits de saison\nTerrasse bien exposée', faiblesses: 'Capacité de 30 couverts seulement\nPas encore d’avis en ligne\nTrésorerie de départ serrée', opportunites: 'Clientèle de bureaux le midi\nTourisme local en été\nLivraison et vente à emporter', menaces: 'Hausse du prix des matières premières\nForte concurrence dans la rue\nDifficultés de recrutement en salle' },
+    },
+  },
+  pestel: {
+    titre: 'Analyse PESTEL',
+    stockage: 'logimalin-pestel',
+    cases: [
+      { id: 'politique', titre: 'Politique', sous: 'Pouvoirs publics', aide: 'Stabilité politique, aides publiques, fiscalité, commande publique, politique locale…' },
+      { id: 'economique', titre: 'Économique', sous: 'Conjoncture', aide: 'Croissance, inflation, pouvoir d’achat, taux d’intérêt, prix des matières premières…' },
+      { id: 'socioculturel', titre: 'Socioculturel', sous: 'Société', aide: 'Démographie, modes de vie, habitudes de consommation, tendances, niveau d’éducation…' },
+      { id: 'technologique', titre: 'Technologique', sous: 'Innovation', aide: 'Innovations, numérique, intelligence artificielle, nouveaux équipements, brevets…' },
+      { id: 'ecologique', titre: 'Écologique', sous: 'Environnement', aide: 'Climat, énergie, déchets, attentes environnementales des clients, normes écologiques…' },
+      { id: 'legal', titre: 'Légal', sous: 'Réglementation', aide: 'Lois et réglementations : droit du travail, normes du secteur, protection des données, facturation…' },
+    ],
+    exemples: {
+      boulangerie: { nom: 'Boulangerie de quartier', politique: 'Aides régionales à l’installation des artisans\nSoutien des communes au commerce de centre-ville', economique: 'Hausse des prix de l’énergie et de la farine\nPouvoir d’achat sous tension : arbitrage sur les produits plaisir', socioculturel: 'Retour vers les commerces de proximité\nIntérêt pour le pain au levain et le fait maison', technologique: 'Fours plus économes en énergie\nCommande et paiement en ligne pour le retrait en boutique', ecologique: 'Attente de produits locaux et bio\nRéduction du gaspillage et des emballages', legal: 'Facture électronique obligatoire pour les ventes aux professionnels\nRègles d’hygiène et d’étiquetage des allergènes' },
+      freelance: { nom: 'Développeur web freelance', politique: 'Soutien public à la transformation numérique des PME\nCommande publique ouverte aux indépendants', economique: 'Budgets informatiques des clients sensibles à la conjoncture\nTaux journaliers sous pression sur les plateformes', socioculturel: 'Généralisation du travail à distance\nEntreprises habituées à faire appel à des indépendants', technologique: 'Outils d’IA qui accélèrent le développement\nApparition rapide de nouveaux langages et services', ecologique: 'Demande de sites plus sobres en énergie\nÉco-conception des services numériques', legal: 'Protection des données personnelles\nRisque de requalification en salariat avec un client unique' },
+    },
+  },
+};
+const c = CONFIG[type];
+const slug = type;
+---
+<div class={`sim matrice matrice-${slug}`} id={`mx-${slug}`} data-type={slug}>
+  <strong>{c.titre} : ton générateur gratuit</strong>
+  <div class="row">
+    <div><label for={`mx-${slug}-nom`}>Projet ou entreprise analysé</label><input id={`mx-${slug}-nom`} type="text" placeholder="Ex. : Boulangerie du Port" /></div>
+    <div>
+      <label for={`mx-${slug}-ex`}>Partir d’un exemple</label>
+      <select id={`mx-${slug}-ex`}>
+        <option value="">Choisir un exemple…</option>
+        {Object.entries(c.exemples).map(([k, e]) => <option value={k}>{e.nom}</option>)}
+      </select>
+    </div>
+  </div>
+  <p class="hint">Une idée par ligne. Tout reste dans ton navigateur, enregistré automatiquement.</p>
+  <div class={`mx-grille mx-grille-${slug}`}>
+    {c.cases.map((x) => (
+      <div class={`mx-case mx-${x.id}`}>
+        <label for={`mx-${slug}-${x.id}`}>{x.titre} <span>{x.sous}</span></label>
+        <textarea id={`mx-${slug}-${x.id}`} rows="5" placeholder={x.aide}></textarea>
+      </div>
+    ))}
+  </div>
+  <div class="mx-actions">
+    <button type="button" class="btn" id={`mx-${slug}-pdf`}>Enregistrer ma matrice en PDF</button>
+    <button type="button" class="btn btn-ghost" id={`mx-${slug}-copier`}>Copier en texte</button>
+    <button type="button" class="btn btn-ghost" id={`mx-${slug}-vider`}>Tout effacer</button>
+    <span class="small" aria-live="polite" id={`mx-${slug}-msg`}></span>
+  </div>
+  {slug === 'swot' && <p class="small">Ta matrice est reprise automatiquement dans ton <a href="/creer/dossier-de-financement/">dossier de financement</a>.</p>}
+</div>
+
+<article class={`mx-doc mx-doc-${slug}`} id={`mx-${slug}-doc`} hidden aria-hidden="true"></article>
+
+<script is:inline define:vars={{ c, slug }}>
+  (() => {
+    const root = document.getElementById(`mx-${slug}`);
+    if (!root) return;
+    const $ = (k) => document.getElementById(`mx-${slug}-${k}`);
+    const ids = c.cases.map((x) => x.id);
+    const lire = (k) => { try { return JSON.parse(localStorage.getItem(k) || 'null'); } catch (e) { return null; } };
+    const ecrire = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { /* stockage indisponible */ } };
+    const mesurer = (e) => { try { navigator.sendBeacon(`/api/mesure/${e}`); } catch (err) { /* sans importance */ } };
+
+    // Brouillon : stockage propre. Pour la SWOT, le dossier de financement fait foi : il est mis à jour
+    // par cette page comme par le dossier lui-même, il contient donc toujours la dernière version.
+    const dossier = slug === 'swot' ? lire('logimalin-dossier') || {} : {};
+    const b = lire(c.stockage) || {};
+    $('nom').value = b.nom || dossier.nom || '';
+    ids.forEach((id) => { $(id).value = dossier[id] ?? b[id] ?? ''; });
+    let compte = false;
+    const sauver = () => {
+      const d = { nom: $('nom').value };
+      ids.forEach((id) => { d[id] = $(id).value; });
+      ecrire(c.stockage, d);
+      if (slug === 'swot') { const ds = lire('logimalin-dossier') || {}; ids.forEach((id) => { ds[id] = d[id]; }); if (!ds.nom && d.nom) ds.nom = d.nom; ecrire('logimalin-dossier', ds); }
+      if (!compte) { compte = true; mesurer(slug); }
+    };
+    root.addEventListener('input', sauver);
+
+    $('ex').addEventListener('change', () => {
+      const e = c.exemples[$('ex').value];
+      if (!e) return;
+      const plein = ids.some((id) => $(id).value.trim());
+      if (plein && !confirm('Remplacer le contenu actuel par l’exemple ?')) { $('ex').value = ''; return; }
+      $('nom').value = e.nom; ids.forEach((id) => { $(id).value = e[id] || ''; });
+      $('ex').value = ''; sauver();
+    });
+    $('vider').addEventListener('click', () => {
+      if (!confirm('Effacer toute la matrice ?')) return;
+      $('nom').value = ''; ids.forEach((id) => { $(id).value = ''; }); sauver();
+    });
+    const items = (id) => $(id).value.split('\n').map((l) => l.replace(/^[-•*]\s*/, '').trim()).filter(Boolean);
+    $('copier').addEventListener('click', async () => {
+      const t = [`${c.titre}${$('nom').value ? ' : ' + $('nom').value : ''}`, ...c.cases.map((x) => `\n${x.titre.toUpperCase()}\n${items(x.id).map((l) => '- ' + l).join('\n') || '- (à compléter)'}`)].join('\n');
+      try { await navigator.clipboard.writeText(t); $('msg').textContent = 'Copié !'; } catch (e) { $('msg').textContent = 'Copie impossible : sélectionne le texte à la main.'; }
+    });
+
+    // Document imprimé (DOM, sans HTML injecté)
+    const el = (tag, cls, txt) => { const e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; };
+    const construire = () => {
+      const doc = $('doc');
+      doc.replaceChildren();
+      const h = el('header', 'mx-doc-h');
+      h.append(el('h1', null, `${c.titre}${$('nom').value.trim() ? ' : ' + $('nom').value.trim() : ''}`), el('p', null, `Établie le ${new Date().toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}`));
+      doc.appendChild(h);
+      const g = el('div', `mx-doc-g mx-doc-g-${slug}`);
+      c.cases.forEach((x) => {
+        const cell = el('section', `mx-doc-c mx-${x.id}`);
+        cell.append(el('h2', null, x.titre), el('p', 'mx-doc-s', x.sous));
+        const ul = el('ul'); const l = items(x.id);
+        (l.length ? l : ['À compléter']).forEach((t) => ul.appendChild(el('li', null, t)));
+        cell.appendChild(ul); g.appendChild(cell);
+      });
+      doc.appendChild(g);
+      doc.appendChild(el('p', 'mx-doc-f', 'Réalisée avec le générateur gratuit de logi-malin.fr'));
+      return doc;
+    };
+    $('pdf').addEventListener('click', () => {
+      mesurer(`${slug}-pdf`);
+      const doc = construire();
+      const place = doc.nextSibling, parent = doc.parentNode;
+      doc.hidden = false;
+      document.body.appendChild(doc);
+      document.documentElement.classList.add('print-matrice');
+      const remettre = () => {
+        document.documentElement.classList.remove('print-matrice');
+        doc.hidden = true; parent.insertBefore(doc, place);
+        window.removeEventListener('afterprint', remettre);
+      };
+      window.addEventListener('afterprint', remettre);
+      window.print();
+    });
+  })();
+</script>
+
+<style>
+  .mx-grille { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+  .mx-grille-pestel { grid-template-columns: 1fr 1fr 1fr; }
+  @media (max-width: 760px) { .mx-grille-pestel { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 560px) { .mx-grille, .mx-grille-pestel { grid-template-columns: 1fr; } }
+  .mx-case { border-radius: 12px; padding: 4px 12px 12px; border: 1.5px solid var(--line); }
+  .mx-case label span { font-weight: 500; color: var(--muted); font-size: .8rem; margin-left: 4px; }
+  .mx-case textarea { width: 100%; font: inherit; font-size: .95rem; padding: 8px 10px; border: 1.5px solid var(--line); border-radius: 10px; background: var(--paper); color: var(--ink); resize: vertical; }
+  .mx-forces { background: color-mix(in srgb, #2e9e6b 12%, transparent); }
+  .mx-faiblesses { background: color-mix(in srgb, #d64545 12%, transparent); }
+  .mx-opportunites { background: color-mix(in srgb, #5b6cff 14%, transparent); }
+  .mx-menaces { background: color-mix(in srgb, #e0861a 14%, transparent); }
+  .matrice-pestel .mx-case { background: var(--sun-soft); }
+  .mx-actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 14px; }
+  .mx-doc[hidden] { display: none !important; }
+
+  /* Impression : la matrice seule, sur une page A4 paysage */
+  @media print {
+    @page { size: A4 landscape; margin: 12mm; }
+    :global(html.print-matrice body > *:not(.mx-doc)) { display: none !important; }
+    :global(html.print-matrice), :global(html.print-matrice body) { background: #fff !important; color: #1a1a1a !important; color-scheme: light; }
+    :global(html.print-matrice .mx-doc) { display: block !important; font-family: var(--body, sans-serif); color: #1a1a1a; }
+    :global(.mx-doc-h h1) { font-size: 20pt; margin: 0; color: #1a1a1a; }
+    :global(.mx-doc-h p) { margin: 2px 0 10px; color: #666; font-size: 9pt; }
+    :global(.mx-doc-g) { display: grid; grid-template-columns: 1fr 1fr; gap: 6mm; }
+    :global(.mx-doc-g-pestel) { grid-template-columns: 1fr 1fr 1fr; }
+    :global(.mx-doc-c) { border-radius: 4mm; padding: 4mm 5mm; min-height: 70mm; border: 1px solid #ddd; -webkit-print-color-adjust: exact; print-color-adjust: exact; break-inside: avoid; }
+    :global(.mx-doc-g-pestel .mx-doc-c) { min-height: 72mm; background: #fff8e6; }
+    :global(.mx-doc-c h2) { font-size: 13pt; margin: 0; color: #1a1a1a; }
+    :global(.mx-doc-s) { margin: 0 0 2mm; font-size: 8pt; color: #666; text-transform: uppercase; letter-spacing: .05em; }
+    :global(.mx-doc-c ul) { margin: 0; padding-left: 5mm; font-size: 10.5pt; line-height: 1.45; }
+    :global(.mx-doc .mx-forces) { background: #eaf7f0; }
+    :global(.mx-doc .mx-faiblesses) { background: #fdeeee; }
+    :global(.mx-doc .mx-opportunites) { background: #eef1ff; }
+    :global(.mx-doc .mx-menaces) { background: #fff4e5; }
+    :global(.mx-doc-f) { margin-top: 4mm; font-size: 8pt; color: #888; text-align: right; }
+  }
+</style>

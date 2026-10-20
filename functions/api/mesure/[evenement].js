@@ -1,6 +1,6 @@
 // Compteur d'usage anonyme des outils (aucun cookie, aucune donnée personnelle) :
 // chaque appel apparaît dans les statistiques Cloudflare avec son chemin, par exemple /api/mesure/etude.
-const EVENEMENTS = new Set(['etude', 'zone', 'evolution', 'ca-vers-bp', 'previsionnel', 'dossier-apercu', 'dossier-pdf', 'identifiants']);
+const EVENEMENTS = new Set(['etude', 'zone', 'evolution', 'ca-vers-bp', 'previsionnel', 'dossier-apercu', 'dossier-pdf', 'identifiants', 'swot', 'swot-pdf', 'pestel', 'pestel-pdf']);
 
 export function onRequest({ params }) {
   const status = EVENEMENTS.has(params.evenement) ? 204 : 404;
