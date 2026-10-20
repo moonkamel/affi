@@ -1,28 +1,143 @@
 ---
-import PageLayout from '../layouts/PageLayout.astro';
+// Méthodologie : anneau des poids qui se dessine, simulateur de note (curseurs par critère), frise des étapes.
+// Le tableau des critères reste dans la page pour la lecture et le référencement.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
 import { SITE } from '../data/site';
+import { abs, breadcrumbs, graph } from '../lib/schema';
+
+const CRITERES = [
+  { id: 'usage', nom: 'Usage au quotidien', poids: 30, detail: 'Temps gagné, nombre d’actions par tâche, prise en main sans formation', couleur: 'var(--accent)', defaut: 8 },
+  { id: 'fiabilite', nom: 'Fiabilité', poids: 20, detail: 'Stabilité, sauvegardes, fonctionnement hors ligne quand c’est utile, sécurité des données', couleur: 'var(--sun)', defaut: 9 },
+  { id: 'prix', nom: 'Prix et transparence', poids: 20, detail: 'Coût total réel, modules, engagement, frais cachés', couleur: 'var(--good)', defaut: 7 },
+  { id: 'support', nom: 'Support', poids: 15, detail: 'Réactivité, horaires, canaux (téléphone, chat), inclus ou payant', couleur: '#ff9d7a', defaut: 6 },
+  { id: 'conformite', nom: 'Conformité et intégrations', poids: 15, detail: 'Facture électronique (plateforme agréée), NF525, RGPD, connexions avec la banque et les autres outils', couleur: '#c39bff', defaut: 8 },
+];
+let cumul = 0;
+const arcs = CRITERES.map((c, i) => { const a = { ...c, i, debut: cumul }; cumul += c.poids; return a; });
+const etapes = [
+  { titre: 'Les sources', texte: `Nous partons des informations publiques de l’éditeur (site, grilles tarifaires, documentation), des versions d’essai quand elles existent, des démonstrations commerciales et des retours d’utilisateurs. Les prix sont vérifiés régulièrement ; la dernière vérification globale date de ${SITE.pricesChecked}. Quand un prix n’est pas public, nous l’indiquons « sur devis » avec, si possible, la fourchette constatée.` },
+  { titre: 'Les critères et leur poids', texte: 'Cinq critères, toujours les mêmes, avec le même poids : c’est ce qui rend les notes comparables d’une page à l’autre.' },
+  { titre: 'L’indépendance', texte: 'Un éditeur ne peut pas payer pour être classé ou mieux noté, et nous recommandons des logiciels quel que soit notre lien avec eux (par exemple TheFork Manager ou Guestonline). Certains liens vers les sites des éditeurs sont des liens partenaires : ils n’ont aucun effet sur les notes ni sur les classements.' },
+  { titre: 'Les mises à jour', texte: 'Chaque page affiche sa date de mise à jour. Les logiciels évoluent vite : si tu repères une information dépassée, écris-nous, nous corrigeons sous 48 heures.' },
+];
+const path = '/methodologie/';
+const crumbs = [{ name: 'Accueil', path: '/' }, { name: 'Méthodologie', path }];
+const jsonLd = graph({ '@type': 'WebPage', '@id': abs(path) + '#page', name: 'Notre méthodologie : comment nous comparons les logiciels', url: abs(path), inLanguage: 'fr-FR' }, breadcrumbs(crumbs));
+const noteDefaut = CRITERES.reduce((n, c) => n + c.defaut * c.poids, 0) / 100;
+const fr = (n: number) => n.toLocaleString('fr-FR', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
 ---
-<PageLayout
-  title="Notre méthodologie : comment nous comparons les logiciels"
-  seoTitle="Méthodologie : comment nous testons et notons les logiciels"
-  description="Critères, pondération des notes, vérification des prix et indépendance éditoriale : la méthode utilisée pour classer les logiciels sur Logimalin."
->
-  <p>Chaque comparatif suit la même méthode, pour que les notes soient comparables d’une page à l’autre.</p>
-  <h2>1. Les sources</h2>
-  <p>Nous partons des informations publiques de l’éditeur (site, grilles tarifaires, documentation), des versions d’essai quand elles existent, des démonstrations commerciales et des retours d’utilisateurs. Les prix sont vérifiés régulièrement ; la dernière vérification globale date de <strong>{SITE.pricesChecked}</strong>. Quand un prix n’est pas public, nous l’indiquons « sur devis » avec, si possible, la fourchette constatée.</p>
-  <h2>2. Les critères et leur poids</h2>
-  <table>
-    <thead><tr><th>Critère</th><th>Poids</th><th>Ce que nous regardons</th></tr></thead>
-    <tbody>
-      <tr><td>Usage au quotidien</td><td>30 %</td><td>Temps gagné, nombre d’actions par tâche, prise en main sans formation</td></tr>
-      <tr><td>Fiabilité</td><td>20 %</td><td>Stabilité, sauvegardes, fonctionnement hors ligne quand c’est utile, sécurité des données</td></tr>
-      <tr><td>Prix et transparence</td><td>20 %</td><td>Coût total réel, modules, engagement, frais cachés</td></tr>
-      <tr><td>Support</td><td>15 %</td><td>Réactivité, horaires, canaux (téléphone, chat), inclus ou payant</td></tr>
-      <tr><td>Conformité et intégrations</td><td>15 %</td><td>Facture électronique (plateforme agréée), NF525, RGPD, connexions avec la banque et les autres outils</td></tr>
-    </tbody>
-  </table>
-  <h2>3. L’indépendance</h2>
-  <p>Un éditeur ne peut pas payer pour être classé ou mieux noté, et nous recommandons des logiciels quel que soit notre lien avec eux (par exemple TheFork Manager ou Guestonline). Certains liens vers les sites des éditeurs sont des liens partenaires : ils n’ont aucun effet sur les notes ni sur les classements.</p>
-  <h2>4. Les mises à jour</h2>
-  <p>Chaque page affiche sa date de mise à jour. Les logiciels évoluent vite : si tu repères une information dépassée, écris-nous à <a href={`mailto:${SITE.publisher.email}`}>{SITE.publisher.email}</a>, nous corrigeons sous 48 heures.</p>
-</PageLayout>
+<BaseLayout title="Méthodologie : comment nous testons et notons les logiciels" description="Critères, pondération des notes, vérification des prix et indépendance éditoriale : la méthode utilisée pour classer les logiciels sur Logimalin." jsonLd={jsonLd}>
+  <div class="container" data-pagefind-body>
+    <Breadcrumbs items={crumbs} />
+    <section class="me-hero">
+      <div>
+        <span class="acc-kicker">Méthodologie</span>
+        <h1>Comment nous comparons les logiciels</h1>
+        <p class="acc-lead">Chaque comparatif suit la même méthode, pour que les notes soient comparables d’une page à l’autre. Cinq critères pondérés, des prix vérifiés en {SITE.pricesChecked}, et aucune place à vendre.</p>
+      </div>
+      <figure class="me-anneau" data-anneau aria-labelledby="me-anneau-legende">
+        <svg viewBox="0 0 200 200" role="img" aria-label="Poids des critères dans la note : usage 30 %, fiabilité 20 %, prix 20 %, support 15 %, conformité 15 %">
+          <circle cx="100" cy="100" r="78" fill="none" stroke="var(--line)" stroke-width="22" />
+          {arcs.map((a) => (
+            <circle class="me-arc" data-arc={a.id} data-poids={a.poids} cx="100" cy="100" r="78" fill="none" stroke={a.couleur} stroke-width="22" pathLength="100" stroke-dasharray={`${a.poids - 0.8} ${100 - a.poids + 0.8}`} stroke-dashoffset={-a.debut} transform="rotate(-90 100 100)" style={`--i:${a.i}`} />
+          ))}
+        </svg>
+        <div class="me-centre"><b data-note-hero>{fr(noteDefaut)}</b><span>/10</span></div>
+        <figcaption id="me-anneau-legende" class="me-legende">
+          {CRITERES.map((c) => <span data-legende={c.id}><i style={`background:${c.couleur}`}></i>{c.nom} <b>{c.poids} %</b></span>)}
+        </figcaption>
+      </figure>
+    </section>
+
+    <section class="acc-section me-simu" aria-labelledby="me-simu-titre">
+      <div class="acc-tete">
+        <div><span class="acc-kicker">À toi de jouer</span><h2 id="me-simu-titre">Calcule une note comme nous</h2></div>
+        <p>Bouge les curseurs : chaque critère compte selon son poids. C’est exactement le calcul de nos notes sur 10.</p>
+      </div>
+      <form class="me-curseurs" data-sans-memoire onsubmit="return false">
+        {CRITERES.map((c) => (
+          <div class="me-curseur" style={`--c:${c.couleur}`}>
+            <label for={`me-${c.id}`}><span>{c.nom}</span><span class="me-poids">{c.poids} %</span></label>
+            <input type="range" id={`me-${c.id}`} min="0" max="10" step="0.5" value={c.defaut} data-poids={c.poids} data-critere={c.id} />
+            <output for={`me-${c.id}`} data-sortie={c.id}>{fr(c.defaut)}</output>
+          </div>
+        ))}
+        <div class="me-resultat" role="status">
+          <span>Note sur 10</span>
+          <strong data-note>{fr(noteDefaut)}</strong>
+          <span class="me-formule" data-formule>{CRITERES.map((c) => `${fr(c.defaut)} × ${c.poids} %`).join(' + ')}</span>
+        </div>
+      </form>
+    </section>
+
+    <section class="acc-section" aria-labelledby="me-criteres">
+      <h2 id="me-criteres">Les critères en détail</h2>
+      <div class="md-table me-tableau">
+        <table>
+          <thead><tr><th>Critère</th><th>Poids</th><th>Ce que nous regardons</th></tr></thead>
+          <tbody>
+            {CRITERES.map((c) => <tr style={`--c:${c.couleur};--w:${c.poids * 3.33}%`}><td>{c.nom}</td><td><span class="me-barre"><i></i></span>{c.poids} %</td><td>{c.detail}</td></tr>)}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="acc-section me-frise-zone" data-scene="flux" aria-labelledby="me-etapes-titre">
+      <span class="acc-kicker">De la source à la note</span>
+      <h2 id="me-etapes-titre">Quatre étapes, pour chaque logiciel</h2>
+      <div class="me-etapes-zone">
+      <span class="me-frise" aria-hidden="true"><i></i></span>
+      <ol class="me-etapes">
+        {etapes.map((e, k) => (
+          <li style={`--i:${k}`}>
+            <span class="me-num" aria-hidden="true">{k + 1}</span>
+            <h3>{k + 1}. {e.titre}</h3>
+            <p>{e.texte}</p>
+          </li>
+        ))}
+      </ol>
+      </div>
+    </section>
+
+    <section class="acc-bande ap-contact" aria-labelledby="me-contact-titre">
+      <div>
+        <h2 id="me-contact-titre">Une information dépassée ?</h2>
+        <p>Écris-nous à <b>{SITE.publisher.email}</b> : nous corrigeons sous 48 heures.</p>
+      </div>
+      <span class="ap-contact-btns"><a class="acc-bande-btn" href={`mailto:${SITE.publisher.email}`}>Signaler une erreur</a><a class="ap-copier" href="/a-propos/" style="display:inline-flex;align-items:center;text-decoration:none">Qui sommes-nous</a></span>
+    </section>
+  </div>
+</BaseLayout>
+
+<script is:inline>
+  (() => {
+    const fr = (n) => n.toLocaleString('fr-FR', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+    const curseurs = [...document.querySelectorAll('[data-critere]')];
+    const note = document.querySelector('[data-note]'), hero = document.querySelector('[data-note-hero]'), formule = document.querySelector('[data-formule]');
+    const calc = () => {
+      const n = curseurs.reduce((s, c) => s + Number(c.value) * Number(c.dataset.poids), 0) / 100;
+      curseurs.forEach((c) => {
+        document.querySelector(`[data-sortie="${c.dataset.critere}"]`).textContent = fr(Number(c.value));
+        c.style.setProperty('--v', `${Number(c.value) * 10}%`);
+      });
+      note.textContent = fr(n); hero.textContent = fr(n);
+      formule.textContent = curseurs.map((c) => `${fr(Number(c.value))} × ${c.dataset.poids} %`).join(' + ');
+      note.classList.remove('maj'); void note.offsetWidth; note.classList.add('maj');
+    };
+    curseurs.forEach((c) => c.addEventListener('input', calc));
+    calc();
+
+    // Survol de la légende ou d'un curseur : l'arc du critère ressort
+    const surligner = (id) => document.querySelectorAll('[data-arc]').forEach((a) => a.classList.toggle('estompe', Boolean(id) && a.dataset.arc !== id));
+    document.querySelectorAll('[data-legende]').forEach((l) => { l.addEventListener('mouseenter', () => surligner(l.dataset.legende)); l.addEventListener('mouseleave', () => surligner('')); });
+    curseurs.forEach((c) => { c.addEventListener('focus', () => surligner(c.dataset.critere)); c.addEventListener('blur', () => surligner('')); c.addEventListener('pointerenter', () => surligner(c.dataset.critere)); c.addEventListener('pointerleave', () => surligner('')); });
+
+    // Anneau et barres qui se dessinent à l'apparition
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
+    document.documentElement.classList.add('me-anime');
+    const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('vu'); io.unobserve(e.target); } }), { threshold: 0.3 });
+    document.querySelectorAll('[data-anneau], .me-tableau, .me-etapes li').forEach((el) => io.observe(el));
+  })();
+</script>
+<script>import '../scripts/scenes.ts';</script>
