@@ -8,10 +8,11 @@ const links = [
   { href: '/encaissement/', label: 'Encaissement' },
   { href: '/site-internet/', label: 'Site web' },
   { href: '/crm/', label: 'CRM' },
-  { href: '/metiers/', label: 'Par métier' },
+  { href: '/metiers/', label: 'Métiers' },
   { href: '/creer/', label: 'Créer' },
   { href: '/creer/etude-de-marche/', label: 'Étude de marché' },
-  { href: '/outils/', label: 'Outils gratuits' },
+  { href: '/outils/', label: 'Outils' },
+  { href: '/modeles/', label: 'Modèles' },
 ];
 const actif = links.filter((l) => path.startsWith(l.href)).sort((a, b) => b.href.length - a.href.length)[0]?.href;
 ---

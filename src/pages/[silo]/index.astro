@@ -102,6 +102,7 @@ const jsonLd = graph(
     <p class="hub-intro">{intros[silo]}</p>
     {silo === 'outils' ? (
       <>
+        <p class="out-modeles"><a href="/modeles/">Tu cherches un document prêt à l’emploi ? Voir la bibliothèque de modèles →</a></p>
         <section class="out-reprise" data-reprise={JSON.stringify({ titres: reprise, stockages })} hidden aria-labelledby="out-reprise-titre">
           <div class="out-reprise-tete"><h2 id="out-reprise-titre">Reprends où tu en étais</h2><span>Gardé sur cet appareil uniquement</span></div>
           <ul class="out-reprise-liste"></ul>

@@ -7,6 +7,7 @@ import { graph, organization, website } from '../lib/schema';
 import { articlePath, getArticles, siloOf } from '../lib/articles';
 import { OUTILS_INFO, SITUATIONS, TYPES_OUTIL } from '../data/outils';
 import { SOFTWARE } from '../data/software';
+import { MODELES } from '../data/modeles';
 
 const articles = await getArticles();
 const existe = (id: string) => articles.some((a) => a.id === id);
@@ -76,6 +77,7 @@ const index = Object.entries(OUTILS_INFO).filter(([id]) => existe(id)).map(([id,
     <div class="acc-chiffres">
       <a href="/outils/"><b>{nbOutils}</b>outils gratuits</a>
       <a href="/avis/"><b>{SOFTWARE.length}</b>logiciels notés</a>
+      <a href="/modeles/"><b>{MODELES.length}</b>modèles de documents</a>
       <span><b>{count}</b>guides et comparatifs</span>
       <span><b>0 €</b>aucun compte à créer</span>
     </div>
@@ -114,7 +116,7 @@ const index = Object.entries(OUTILS_INFO).filter(([id]) => existe(id)).map(([id,
     <section class="acc-section" aria-labelledby="acc-phares-titre">
       <div class="acc-tete">
         <div><span class="acc-kicker">Les plus utilisés</span><h2 id="acc-phares-titre">Les outils que les patrons gardent en favori</h2></div>
-        <a href="/outils/" class="acc-lien">Voir les {nbOutils} outils →</a>
+        <span class="acc-liens"><a href="/modeles/" class="acc-lien">Les {MODELES.length} modèles</a><a href="/outils/" class="acc-lien">Voir les {nbOutils} outils →</a></span>
       </div>
       <div class="acc-bento">
         <a href="/outils/modele-facture-gratuit/" class="acc-carte acc-grand t-modele">

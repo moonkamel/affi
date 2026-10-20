@@ -1,0 +1,122 @@
+---
+// Bibliothèque de modèles de documents pour TPE : chaque carte montre une miniature qui défile au survol
+// et renvoie vers la page qui contient le modèle (formulaire en ligne, texte à recopier ou PDF).
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import ModeleApercu from '../components/ModeleApercu.astro';
+import { SITE } from '../data/site';
+import { CATEGORIES_MODELES, FORMATS_MODELES, MODELES, type CategorieModele, type FormatModele } from '../data/modeles';
+import { abs, breadcrumbs, graph } from '../lib/schema';
+import { getArticles } from '../lib/articles';
+
+const articles = await getArticles();
+const existe = (page: string) => page.startsWith('ressources/') || articles.some((a) => a.id === page);
+const modeles = MODELES.filter((m) => existe(m.page)).map((m) => ({ ...m, href: `/${m.page}/${m.ancre ? `#${m.ancre}` : ''}` }));
+const n = modeles.length;
+const parFormat = (f: FormatModele) => modeles.filter((m) => m.format === f).length;
+const categories = (Object.keys(CATEGORIES_MODELES) as CategorieModele[]).filter((c) => modeles.some((m) => m.categorie === c));
+const path = '/modeles/';
+const crumbs = [{ name: 'Accueil', path: '/' }, { name: 'Modèles', path }];
+const titre = `${n} modèles de documents gratuits pour ta TPE`;
+const jsonLd = graph(
+  {
+    '@type': 'CollectionPage',
+    '@id': abs(path) + '#page',
+    name: titre,
+    url: abs(path),
+    inLanguage: 'fr-FR',
+    hasPart: modeles.map((m) => ({ '@type': 'DigitalDocument', name: `Modèle de ${m.titre.toLowerCase()}`, url: abs(m.href), isAccessibleForFree: true })),
+  },
+  breadcrumbs(crumbs),
+);
+---
+<BaseLayout
+  title="Modèles gratuits pour TPE : facture, devis, lettres, RH"
+  description={`${n} modèles gratuits pour TPE et indépendants : facture, devis, avoir, reçu, relance, business plan, documents employeur. À remplir en ligne ou à recopier.`}
+  jsonLd={jsonLd}
+>
+  <div class="container" data-pagefind-body>
+    <Breadcrumbs items={crumbs} />
+    <section class="mod-hero">
+      <div>
+        <span class="acc-kicker">La bibliothèque</span>
+        <h1>{titre}</h1>
+        <p class="acc-lead">Factures, devis, courriers de relance, business plan, documents d’embauche : choisis un modèle, remplis-le en ligne ou recopie-le. Gratuit, sans inscription, et tout reste dans ton navigateur.</p>
+        <div class="mod-stats">
+          <span><b>{parFormat('en-ligne')}</b>à remplir en ligne, en PDF</span>
+          <span><b>{parFormat('a-copier')}</b>prêts à recopier</span>
+          <span><b>0 €</b>aucun compte à créer</span>
+        </div>
+      </div>
+      <div class="mod-pile" aria-hidden="true">
+        <div class="mod-feuille f1"><ModeleApercu type="lettre" titre="Relance" /></div>
+        <div class="mod-feuille f2"><ModeleApercu type="devis" titre="Devis" /></div>
+        <div class="mod-feuille f3"><ModeleApercu type="facture" titre="Facture" /></div>
+      </div>
+    </section>
+
+    <div class="out-barre mod-barre">
+      <div class="out-barre-ligne">
+        <div class="out-types" role="group" aria-label="Catégorie">
+          <button type="button" aria-pressed="true" data-cat="">Tous <span>{n}</span></button>
+          {categories.map((c) => <button type="button" aria-pressed="false" data-cat={c}>{CATEGORIES_MODELES[c]} <span>{modeles.filter((m) => m.categorie === c).length}</span></button>)}
+        </div>
+        <label class="mod-bascule"><input type="checkbox" data-en-ligne /> À remplir en ligne seulement</label>
+        <span class="out-compte" aria-live="polite"></span>
+      </div>
+    </div>
+
+    <ul class="mod-grille">
+      {modeles.map((m) => (
+        <li data-modele data-cat={m.categorie} data-format={m.format}>
+          <a href={m.href} class="mod-carte">
+            <span class="mod-cadre"><span class="mod-feuille"><ModeleApercu type={m.apercu} titre={m.titre} /></span></span>
+            <span class="mod-infos">
+              <span class="out-badges">
+                <span class={`mod-format f-${m.format}`}>{FORMATS_MODELES[m.format].label}</span>
+                {m.nouveau && <span class="out-nouveau">Nouveau</span>}
+              </span>
+              <strong>{m.titre}</strong>
+              <span class="mod-accroche">{m.accroche}</span>
+              <span class="out-action">{FORMATS_MODELES[m.format].action} →</span>
+            </span>
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <section class="acc-bande mod-manque" aria-labelledby="mod-manque-titre">
+      <div>
+        <h2 id="mod-manque-titre">Il te manque un modèle ?</h2>
+        <p>Contrat de prestation, conditions générales de vente, lettre de mise en demeure : dis-nous ce dont tu as besoin, on le prépare.</p>
+      </div>
+      <a class="acc-bande-btn" href={`mailto:${SITE.publisher.email}?subject=Un%20mod%C3%A8le%20pour%20Logimalin`}>Proposer un modèle</a>
+    </section>
+  </div>
+</BaseLayout>
+
+<script is:inline>
+  (() => {
+    const items = [...document.querySelectorAll('[data-modele]')];
+    if (!items.length) return;
+    const boutons = [...document.querySelectorAll('[data-cat]')].filter((b) => b.tagName === 'BUTTON');
+    const enLigne = document.querySelector('[data-en-ligne]'), compte = document.querySelector('.out-compte');
+    let cat = '';
+    const filtrer = () => {
+      let n = 0;
+      items.forEach((li) => {
+        const ok = (!cat || li.dataset.cat === cat) && (!enLigne.checked || li.dataset.format === 'en-ligne');
+        li.hidden = !ok; if (ok) n++;
+      });
+      compte.textContent = n === items.length ? '' : `${n} modèle${n > 1 ? 's' : ''} sur ${items.length}`;
+    };
+    boutons.forEach((b) => b.addEventListener('click', () => { cat = b.dataset.cat; boutons.forEach((x) => x.setAttribute('aria-pressed', String(x === b))); filtrer(); }));
+    enLigne.addEventListener('change', filtrer);
+
+    // Apparition des cartes au défilement (désactivée si l'utilisateur limite les animations).
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
+    document.documentElement.classList.add('mod-anime');
+    const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('vu'); io.unobserve(e.target); } }), { rootMargin: '0px 0px -8% 0px' });
+    items.forEach((li, i) => { li.style.setProperty('--delai', `${(i % 3) * 70}ms`); io.observe(li); });
+  })();
+</script>

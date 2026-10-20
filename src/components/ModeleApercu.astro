@@ -1,0 +1,87 @@
+---
+// Miniature d'un modèle de document, dessinée en CSS (aucune image) : la feuille défile au survol de la carte.
+import type { ApercuModele } from '../data/modeles';
+interface Props { type: ApercuModele; titre: string }
+const { type, titre } = Astro.props;
+const l = (w: number) => `width:${w}%`;
+const signatures = /paiement/i.test(titre) ? ['Le vendeur', 'Cachet'] : ['L’employeur', type === 'certificat' ? 'Cachet' : 'Le salarié'];
+const entete: Partial<Record<ApercuModele, string>> = {
+  facture: 'FACTURE', devis: 'DEVIS', avoir: 'AVOIR', recu: 'REÇU', bon: titre.toUpperCase(), plan: 'BUSINESS PLAN',
+  dossier: 'DOSSIER DE FINANCEMENT', contrat: 'PROMESSE D’EMBAUCHE', fiche: 'FICHE DE POSTE', certificat: titre.toUpperCase(), checklist: 'CHECK-LIST',
+};
+---
+<div class={`ma ma-${type}`} aria-hidden="true">
+  {type === 'affiche' ? (
+    <div class="ma-affiche">
+      <span class="ma-etoiles">★★★★★</span>
+      <b>Ton avis compte !</b>
+      <div class="ma-qr">{[1,1,1,0,1,1,0,1,0,1,1,0,1,0,1,1,1,0,1,1,0,1,0,1,1].map((v) => <i class={v ? 'on' : ''}></i>)}</div>
+      <span class="ma-l" style={l(70)}></span>
+      <span class="ma-l" style={l(50)}></span>
+    </div>
+  ) : type === 'matrice' || type === 'pestel' ? (
+    <>
+      <b class="ma-titre">{type === 'matrice' ? 'ANALYSE SWOT' : 'ANALYSE PESTEL'}</b>
+      <div class={`ma-grille${type === 'pestel' ? ' ma-g6' : ''}`}>
+        {(type === 'matrice' ? ['Forces', 'Faiblesses', 'Opportunités', 'Menaces'] : ['Politique', 'Économique', 'Social', 'Techno', 'Écologie', 'Légal']).map((x) => (
+          <div><b>{x}</b><span class="ma-l" style={l(80)}></span><span class="ma-l" style={l(60)}></span><span class="ma-l" style={l(70)}></span></div>
+        ))}
+      </div>
+      <span class="ma-l" style={l(90)}></span><span class="ma-l" style={l(75)}></span><span class="ma-l" style={l(82)}></span>
+    </>
+  ) : type === 'lettre' ? (
+    <>
+      <span class="ma-l ma-fort" style={l(38)}></span><span class="ma-l" style={l(30)}></span><span class="ma-l" style={l(34)}></span>
+      <span class="ma-droite"><span class="ma-l" style={l(100)}></span><span class="ma-l" style={l(70)}></span></span>
+      <b class="ma-objet">Objet : facture n° 2026-042</b>
+      {[92, 96, 88, 94, 60].map((w) => <span class="ma-l" style={l(w)}></span>)}
+      <span class="ma-surligne">Montant dû : 1 800,00 €</span>
+      {[90, 95, 70].map((w) => <span class="ma-l" style={l(w)}></span>)}
+      <span class="ma-sign">Signature</span>
+      {[85, 92, 64].map((w) => <span class="ma-l" style={l(w)}></span>)}
+    </>
+  ) : type === 'checklist' ? (
+    <>
+      <b class="ma-titre">{entete.checklist}</b>
+      {[78, 64, 86, 70, 58, 80, 66, 74, 60, 82].map((w, i) => <span class="ma-coche"><i class={i < 4 ? 'on' : ''}></i><span class="ma-l" style={l(w)}></span></span>)}
+    </>
+  ) : type === 'plan' || type === 'dossier' ? (
+    <>
+      <div class="ma-bande"></div>
+      <b class="ma-titre">{entete[type]}</b>
+      <span class="ma-l" style={l(60)}></span>
+      <div class="ma-barres">{[35, 52, 46, 70, 88].map((h) => <i style={`height:${h}%`}></i>)}</div>
+      {[92, 86, 90, 70].map((w) => <span class="ma-l" style={l(w)}></span>)}
+      <div class="ma-tab">{[0, 1, 2, 3].map(() => <span><i></i><i></i><i></i></span>)}</div>
+      {[88, 94, 76].map((w) => <span class="ma-l" style={l(w)}></span>)}
+    </>
+  ) : type === 'contrat' || type === 'fiche' || type === 'certificat' ? (
+    <>
+      <b class="ma-titre ma-centre">{entete[type]}</b>
+      {type === 'certificat' && <span class="ma-sceau"></span>}
+      {[1, 2, 3].map((n) => (
+        <>
+          <b class="ma-article">{type === 'fiche' ? ['Missions', 'Compétences', 'Conditions'][n - 1] : /paiement/i.test(titre) ? ['Objet', 'Montant', 'Mode de paiement'][n - 1] : `Article ${n}`}</b>
+          {[94, 88, 72].map((w) => <span class="ma-l" style={l(w)}></span>)}
+        </>
+      ))}
+      <div class="ma-signatures"><span>{signatures[0]}</span><span>{signatures[1]}</span></div>
+    </>
+  ) : (
+    <>
+      <div class="ma-tete"><span class="ma-logo"></span><b>{entete[type]}</b></div>
+      <div class="ma-adresses"><span><span class="ma-l" style={l(90)}></span><span class="ma-l" style={l(70)}></span></span><span><span class="ma-l" style={l(80)}></span><span class="ma-l" style={l(60)}></span></span></div>
+      <div class="ma-tab">
+        {(type === 'bon' ? [0, 1, 2, 3, 4] : [0, 1, 2]).map(() => <span>{type === 'bon' ? <i class="ma-case"></i> : <i></i>}<i></i><i></i></span>)}
+      </div>
+      {type === 'avoir' ? <div class="ma-total ma-negatif"><span>Total à déduire</span><b>− 300,00 €</b></div>
+        : type === 'recu' ? <div class="ma-total"><span>Reçu la somme de</span><b>450,00 €</b></div>
+        : type === 'bon' ? <div class="ma-total"><span>Bon pour accord</span><b>✓</b></div>
+        : <div class="ma-total"><span>Total TTC</span><b>1 800,00 €</b></div>}
+      {[86, 70, 92, 60].map((w) => <span class="ma-l" style={l(w)}></span>)}
+      {type === 'devis' || type === 'bon' || type === 'recu' ? <span class="ma-sign">{type === 'devis' ? 'Bon pour accord' : 'Signature'}</span> : null}
+      {[80, 66].map((w) => <span class="ma-l" style={l(w)}></span>)}
+    </>
+  )}
+  <span class="ma-pied"><span class="ma-l" style="width:100%"></span><span class="ma-l" style="width:84%"></span><span class="ma-l" style="width:62%"></span><span class="ma-page">Page 1/1</span></span>
+</div>
