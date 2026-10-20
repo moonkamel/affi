@@ -1,0 +1,109 @@
+[
+  {
+    "title": "Déjà obligatoire depuis le 1er septembre 2026",
+    "when": "Toutes les entreprises",
+    "color": "#d64545",
+    "items": [
+      [
+        "Pouvoir recevoir des factures électroniques",
+        "via une plateforme agréée (PA), choisie seul ou avec ton logiciel de facturation."
+      ],
+      [
+        "Vérifier ton inscription à l’annuaire",
+        "ta plateforme t’y enregistre : c’est là que tes fournisseurs trouvent où t’envoyer leurs factures."
+      ],
+      [
+        "Prévenir tes fournisseurs",
+        "qu’ils doivent désormais t’adresser des factures électroniques."
+      ]
+    ]
+  },
+  {
+    "title": "Choisir tes outils",
+    "when": "Dès maintenant",
+    "color": "#3d5afe",
+    "items": [
+      [
+        "Vérifier ton logiciel de facturation",
+        "est-il plateforme agréée ou connecté à l’une d’elles ? Contrôle la liste officielle."
+      ],
+      [
+        "Changer d’outil si besoin",
+        "migre clients et articles, et démarre la nouvelle numérotation en début de mois."
+      ],
+      [
+        "Interroger ton éditeur de caisse",
+        "comment et quand transmettra-t-il l’e-reporting de tes ventes aux particuliers ?"
+      ],
+      [
+        "En parler à ton expert-comptable",
+        "quelle plateforme utilise-t-il ? Choisir la même simplifie les échanges."
+      ]
+    ]
+  },
+  {
+    "title": "Préparer tes données",
+    "when": "D’ici le printemps 2027",
+    "color": "#e2a21b",
+    "items": [
+      [
+        "Collecter le SIREN de tes clients pros",
+        "nouvelle mention obligatoire sur les factures."
+      ],
+      [
+        "Renseigner l’adresse de livraison",
+        "quand elle diffère de l’adresse de facturation."
+      ],
+      [
+        "Préciser la nature de l’opération",
+        "livraison de biens, prestation de services, ou les deux."
+      ],
+      [
+        "Indiquer l’option TVA sur les débits",
+        "si tu es prestataire et que tu l’as choisie."
+      ]
+    ]
+  },
+  {
+    "title": "Tester avant l’échéance",
+    "when": "Printemps – été 2027",
+    "color": "#2f9e6b",
+    "items": [
+      [
+        "Émettre une facture électronique test",
+        "vers un client de confiance, et suivre son statut."
+      ],
+      [
+        "Contrôler le format",
+        "Factur-X, UBL ou CII : un PDF envoyé par e-mail ne compte pas."
+      ],
+      [
+        "Vérifier l’e-reporting",
+        "ventes aux particuliers, opérations internationales, données de paiement."
+      ],
+      [
+        "Former la personne qui facture",
+        "et mettre à jour tes modèles de devis et de factures."
+      ]
+    ]
+  },
+  {
+    "title": "Le jour J : 1er septembre 2027",
+    "when": "PME, TPE, micro-entreprises",
+    "color": "#11131b",
+    "items": [
+      [
+        "Émettre toutes tes factures B2B via ta plateforme",
+        "plus de factures papier ou PDF entre entreprises françaises."
+      ],
+      [
+        "Archiver factures et données",
+        "en conservant tes justificatifs pendant les durées légales."
+      ],
+      [
+        "Garder un œil sur les rejets",
+        "une facture refusée par la plateforme doit être corrigée rapidement."
+      ]
+    ]
+  }
+]

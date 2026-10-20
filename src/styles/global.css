@@ -1144,6 +1144,76 @@ html.art-anime .tldr li:nth-child(2) { animation-delay: .12s; } html.art-anime .
 @media (max-width: 900px) { .ig-hero { grid-template-columns: minmax(0, 1fr); } .ig-scene { height: 360px; } .ig-une { width: 200px; } .ig-scene .ig-cote { width: 150px; } }
 @media (max-width: 560px) { .ig-galerie { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 12px; } .ig-galerie p:not(.ig-actions) { display: none; } .ig-galerie h2 { font-size: .95rem; } .ig-v-corps { grid-template-columns: minmax(0, 1fr); } .ig-v-nav { display: none; } .ig-scene { height: 300px; } .ig-une { width: 170px; } .ig-scene .ig-cote { width: 125px; } }
 
+/* ───────── Check-list interactive de la facture électronique ───────── */
+.cl-hero { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, .75fr); gap: 48px; align-items: center; padding-block: 24px 10px; }
+.cl-hero h1 { font-size: clamp(2.2rem, 5vw, 3.6rem); line-height: 1.02; letter-spacing: -.035em; margin: 12px 0 18px; }
+.cl-rebours { display: flex; gap: 10px; margin: 6px 0 22px; }
+.cl-rebours span { display: grid; justify-items: center; min-width: 74px; padding: 10px 8px; border-radius: 14px; background: var(--card); border: 1px solid var(--line); color: var(--muted); font-size: .78rem; text-transform: uppercase; letter-spacing: .05em; font-weight: 700; }
+.cl-rebours span:first-child { background: var(--sun); border-color: var(--sun); color: #1b1608; }
+.cl-rebours b { font-family: var(--display); font-size: clamp(1.6rem, 3.6vw, 2.3rem); line-height: 1.05; color: inherit; font-variant-numeric: tabular-nums; letter-spacing: -.02em; }
+.cl-rebours span:not(:first-child) b { color: var(--ink); }
+.cl-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.cl-apercu { position: relative; display: block; justify-self: center; width: min(300px, 80%); transform: rotate(3deg); transition: transform .4s cubic-bezier(.2, .8, .2, 1); }
+.cl-apercu:hover { transform: rotate(0) translateY(-6px); }
+.cl-apercu img { display: block; width: 100%; height: auto; border-radius: 10px; box-shadow: 0 30px 60px rgba(0, 0, 0, .5); }
+.cl-apercu-badge { position: absolute; left: -14px; bottom: 22px; padding: 6px 12px; border-radius: 10px; background: var(--good); color: #0b2a1d; font-family: var(--display); font-weight: 800; transform: rotate(-6deg); box-shadow: 0 10px 24px rgba(0, 0, 0, .4); }
+@media (prefers-reduced-motion: no-preference) { .cl-apercu { animation: flotte 6s ease-in-out infinite; } .cl-apercu:hover { animation-play-state: paused; } }
+@keyframes flotte { 50% { transform: rotate(2deg) translateY(-10px); } }
+.cl-zone { display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: 40px; align-items: start; margin-top: 72px; scroll-margin-top: calc(var(--h-entete, 66px) + 20px); }
+.cl-bilan { position: sticky; top: calc(var(--h-entete, 66px) + 24px); display: grid; justify-items: center; gap: 8px; padding: 22px; border-radius: 22px; background: var(--card); border: 1px solid var(--line); text-align: center; transition: border-color .3s, box-shadow .3s; }
+.cl-bilan.fini { border-color: var(--good); box-shadow: 0 0 0 4px color-mix(in srgb, var(--good) 25%, transparent); }
+.cl-bilan svg { width: 150px; height: 150px; transform: rotate(-90deg); }
+.cl-anneau { transition: stroke-dashoffset .6s cubic-bezier(.2, .8, .2, 1); }
+.cl-score { margin-top: -112px; height: 74px; display: grid; place-content: center; }
+.cl-score b { font-family: var(--display); font-size: 2.6rem; line-height: 1; }
+.cl-score span { color: var(--muted); font-size: .85rem; }
+.cl-message { margin: 26px 0 0; font-size: .92rem; color: var(--muted); }
+.cl-etapes { position: relative; padding-left: 28px; }
+.cl-frise { position: absolute; left: 9px; top: 10px; bottom: 10px; width: 3px; border-radius: 3px; background: var(--line); }
+.cl-frise i { position: absolute; inset: 0 0 auto; height: 100%; border-radius: 3px; background: linear-gradient(var(--accent), var(--sun), var(--good)); transform-origin: top; }
+html.scenes .cl-frise i { transform: scaleY(min(1, max(0, (var(--p, 0) - .15) * 1.6))); }
+.cl-etape { position: relative; margin-bottom: 26px; padding: 18px 20px; border-radius: 20px; background: var(--card); border: 1px solid var(--line); transition: border-color .3s; }
+.cl-etape.complete { border-color: color-mix(in srgb, var(--good) 60%, var(--line)); }
+.cl-etape-tete { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; align-items: center; margin-bottom: 6px; }
+.cl-point { position: absolute; left: -38px; top: 18px; display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--c); color: #fff; font-family: var(--display); font-weight: 800; font-size: .78rem; box-shadow: 0 0 0 4px var(--paper); }
+.cl-etape-tete h3 { margin: 0; font-size: 1.2rem; }
+.cl-quand { font-size: .78rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--c); }
+.cl-etat { font-family: var(--display); font-weight: 800; color: var(--muted); font-variant-numeric: tabular-nums; }
+.cl-etape.complete .cl-etat { color: var(--good); }
+.cl-etape.complete .cl-etat::before { content: "✓ "; }
+.cl-etape ul { margin: 0; padding: 0; list-style: none; }
+.cl-etape li { border-top: 1px dashed var(--line); }
+.cl-etape li:first-child { border-top: 0; }
+.cl-etape label { position: relative; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 12px; align-items: start; padding: 11px 4px; cursor: pointer; border-radius: 10px; transition: background .15s; }
+.cl-etape label:hover { background: var(--paper-2); }
+.cl-etape input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.cl-case { display: grid; place-items: center; width: 24px; height: 24px; margin-top: 1px; border-radius: 7px; border: 2px solid var(--muted); color: transparent; transition: background .2s, border-color .2s, color .2s, transform .2s; }
+.cl-case svg { width: 16px; height: 16px; }
+.cl-case path { stroke-dasharray: 24; stroke-dashoffset: 24; transition: stroke-dashoffset .3s .05s ease-out; }
+.cl-etape input:checked + .cl-case { background: var(--good); border-color: var(--good); color: #0b2a1d; transform: scale(1.06); }
+.cl-etape input:checked + .cl-case path { stroke-dashoffset: 0; }
+.cl-etape input:focus-visible + .cl-case { outline: 3px solid var(--sun); outline-offset: 2px; }
+.cl-etape input:checked ~ span b { text-decoration: line-through; text-decoration-color: color-mix(in srgb, var(--good) 70%, transparent); text-decoration-thickness: 2px; }
+.cl-etape input:checked ~ span { opacity: .7; }
+.cl-detail { color: var(--muted); }
+.cl-etape.bravo::after { content: "Étape terminée ✦"; position: absolute; right: 16px; top: -14px; padding: 5px 12px; border-radius: 999px; background: var(--good); color: #0b2a1d; font-family: var(--display); font-weight: 800; font-size: .85rem; animation: bravo 2.2s ease forwards; pointer-events: none; }
+@keyframes bravo { 0% { opacity: 0; transform: translateY(10px) scale(.8); } 15% { opacity: 1; transform: none; } 80% { opacity: 1; } 100% { opacity: 0; transform: translateY(-8px); } }
+html.cl-anime .cl-etape { opacity: 0; transform: translateY(26px); transition: opacity .6s ease, transform .7s cubic-bezier(.2, .8, .2, 1), border-color .3s; }
+html.cl-anime .cl-etape.vu { opacity: 1; transform: none; }
+@media (max-width: 900px) {
+  .cl-hero { grid-template-columns: minmax(0, 1fr); }
+  .cl-apercu { width: min(220px, 60%); }
+  .cl-zone { grid-template-columns: minmax(0, 1fr); gap: 20px; }
+  .cl-bilan { top: calc(var(--h-entete, 66px) + 8px); z-index: 10; grid-template-columns: auto minmax(0, 1fr) auto; justify-items: start; text-align: left; padding: 12px 16px; border-radius: 16px; gap: 4px 14px; }
+  html.entete-cachee .cl-bilan { top: 8px; }
+  .cl-bilan svg { width: 56px; height: 56px; grid-row: span 2; }
+  .cl-score { margin: 0; height: auto; place-content: start; grid-auto-flow: column; gap: 6px; align-items: baseline; }
+  .cl-score b { font-size: 1.6rem; }
+  .cl-message { margin: 0; font-size: .82rem; grid-column: 2 / 4; }
+  .cl-bilan .sim-lien { grid-row: 1; grid-column: 3; min-height: 32px; padding: 0; font-size: .8rem; }
+}
+@media (max-width: 560px) { .cl-rebours { gap: 6px; } .cl-rebours span { min-width: 0; flex: 1; padding: 8px 4px; font-size: .66rem; } .cl-etape { padding: 14px; } }
+
 /* ───────── Barre de navigation mobile ───────── */
 .nav-mobile { display: none; }
 @media (max-width: 760px) {
@@ -1200,7 +1270,7 @@ kbd { font-family: var(--mono); font-size: .85em; padding: 1px 6px; border: 1px 
 /* Impression d'une page de facture ou de devis : seule la facture est imprimée, sans pages blanches.
    Limité aux pages qui contiennent le générateur (.gen), pour ne pas masquer les autres outils imprimables. */
 @media print {
-  .sim-barre, .haut-de-page, .recherche, .btn-recherche, .voisins, .sim-flottant, .nav-mobile, .aller-outil, .jr, .mm, .gm, .vit, .out-fin, .dm, .mod-gestes, .rub-fil, .rub-mot, .lecture, .toc-flottant, .suite, .ig-scene, .ig-visionneuse { display: none !important; }
+  .sim-barre, .haut-de-page, .recherche, .btn-recherche, .voisins, .sim-flottant, .nav-mobile, .aller-outil, .jr, .mm, .gm, .vit, .out-fin, .dm, .mod-gestes, .rub-fil, .rub-mot, .lecture, .toc-flottant, .suite, .ig-scene, .ig-visionneuse, .cl-bilan, .cl-frise, .cl-rebours { display: none !important; }
   .site-header { transform: none !important; }
   @page { margin: 14mm; }
   body { background: #fff; }

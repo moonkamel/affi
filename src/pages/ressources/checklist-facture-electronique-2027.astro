@@ -1,21 +1,161 @@
 ---
-import PageLayout from '../../layouts/PageLayout.astro';
+// Check-list facture électronique 2027 : compte à rebours, check-list interactive (cases gardées sur l'appareil,
+// progression, étapes validées) et PDF à imprimer. Le contenu est partagé avec scripts/checklist-pdf.mjs.
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import NewsletterBox from '../../components/NewsletterBox.astro';
+import sections from '../../data/checklist.json';
+import { abs, breadcrumbs, graph } from '../../lib/schema';
+
+const total = sections.reduce((n, s) => n + s.items.length, 0);
+const ECHEANCE = '2027-09-01T00:00:00+02:00';
+const jours = Math.max(0, Math.ceil((new Date(ECHEANCE).getTime() - Date.now()) / 86400000));
+const pdf = '/ressources/checklist-facture-electronique-2027.pdf';
+const path = '/ressources/checklist-facture-electronique-2027/';
+const crumbs = [{ name: 'Accueil', path: '/' }, { name: 'Check-list facture électronique 2027', path }];
+const jsonLd = graph(
+  {
+    '@type': 'HowTo',
+    '@id': abs(path) + '#howto',
+    name: 'Préparer sa TPE à la facture électronique avant le 1er septembre 2027',
+    inLanguage: 'fr-FR',
+    step: sections.flatMap((s) => s.items.map(([t, d]) => ({ '@type': 'HowToStep', name: t, text: `${t} : ${d}` }))),
+  },
+  breadcrumbs(crumbs),
+);
+let n = 0;
 ---
-<PageLayout
-  title="Check-list facture électronique 2027 à télécharger"
-  seoTitle="Check-list facture électronique 2027 (PDF gratuit)"
-  description="La check-list gratuite pour préparer ta TPE à la facture électronique : 18 actions à cocher avant le 1er septembre 2027, sur une page A4 à imprimer."
+<BaseLayout
+  title="Check-list facture électronique 2027 (PDF gratuit)"
+  description="La check-list gratuite pour préparer ta TPE à la facture électronique : 18 actions à cocher avant le 1er septembre 2027, en ligne ou sur une page A4 à imprimer."
+  jsonLd={jsonLd}
 >
-  <p>La réforme de la facture électronique se joue en deux temps : la réception depuis le 1er septembre 2026, puis l’émission et l’e-reporting au <strong>1er septembre 2027</strong> pour les PME, TPE et micro-entreprises. Cette check-list résume, en une page, les 18 actions à mener pour être prêt sans stress.</p>
-  <NewsletterBox heading="Télécharge la check-list gratuite" />
-  <h2>Ce que contient la check-list</h2>
-  <ul>
-    <li><strong>Ce qui est déjà obligatoire</strong> : recevoir des factures électroniques, être inscrit à l’annuaire.</li>
-    <li><strong>Le choix des outils</strong> : logiciel de facturation, caisse, plateforme agréée, échanges avec ton expert-comptable.</li>
-    <li><strong>La préparation des données</strong> : les 4 nouvelles mentions obligatoires.</li>
-    <li><strong>Les tests</strong> à faire avant l’échéance, puis le jour J.</li>
-  </ul>
-  <h2>Pour aller plus loin</h2>
-  <p>Le calendrier détaillé est dans notre guide <a href="/facturation/facture-electronique-2026/">facture électronique 2026-2027</a>, avec l’infographie à partager. Micro-entrepreneur ? Lis <a href="/facturation/facture-electronique-auto-entrepreneur/">facture électronique auto-entrepreneur</a>. Pour choisir ton outil : <a href="/facturation/plateforme-agreee-facture-electronique/">plateformes agréées</a> et <a href="/facturation/facture-electronique-gratuite/">solutions gratuites</a>.</p>
-</PageLayout>
+  <div class="container" data-pagefind-body>
+    <Breadcrumbs items={crumbs} />
+    <section class="cl-hero">
+      <div>
+        <span class="acc-kicker">Réforme 2026-2027</span>
+        <h1>La check-list de la facture électronique</h1>
+        <p class="acc-lead">La réception est obligatoire depuis le 1er septembre 2026. L’émission et l’e-reporting arrivent le <strong>1er septembre 2027</strong> pour les PME, TPE et micro-entreprises. Voici les {total} actions à mener, à cocher ici ou sur papier.</p>
+        <div class="cl-rebours" data-echeance={ECHEANCE} aria-label={`Échéance du 1er septembre 2027 : environ ${jours} jours`}>
+          <span><b data-r="j">{jours}</b>jours</span><span><b data-r="h">–</b>heures</span><span><b data-r="m">–</b>minutes</span><span><b data-r="s">–</b>secondes</span>
+        </div>
+        <div class="cl-actions">
+          <a class="btn" href="#cl-liste">Cocher en ligne</a>
+          <a class="btn btn-ghost" href={pdf} download>Télécharger le PDF</a>
+        </div>
+      </div>
+      <a class="cl-apercu" href={pdf} download aria-label="Télécharger la check-list en PDF">
+        <img src="/ressources/checklist-facture-electronique-2027.webp" alt="Aperçu de la check-list facture électronique 2027" width="600" height="849" decoding="async" fetchpriority="high" />
+        <span class="cl-apercu-badge">PDF · A4</span>
+      </a>
+    </section>
+
+    <section class="cl-zone" id="cl-liste" aria-labelledby="cl-titre" data-scene="flux">
+      <aside class="cl-bilan" aria-live="polite">
+        <svg viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="52" fill="none" stroke="var(--line)" stroke-width="10"/><circle class="cl-anneau" cx="60" cy="60" r="52" fill="none" stroke="url(#cl-degrade)" stroke-width="10" stroke-linecap="round" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/><defs><linearGradient id="cl-degrade"><stop offset="0" stop-color="var(--accent)"/><stop offset="1" stop-color="var(--sun)"/></linearGradient></defs></svg>
+        <div class="cl-score"><b data-cl="fait">0</b><span>sur {total}</span></div>
+        <p class="cl-message" data-cl="message">Coche les actions au fur et à mesure : ta progression reste sur cet appareil.</p>
+        <button type="button" class="sim-lien" data-cl="raz" hidden>Tout décocher</button>
+      </aside>
+      <div class="cl-etapes">
+        <h2 id="cl-titre" class="sr-only">Les {total} actions</h2>
+        <div class="cl-frise" aria-hidden="true"><i></i></div>
+        {sections.map((s, i) => (
+          <section class="cl-etape" style={`--c:${s.color === '#11131b' ? 'var(--ink)' : s.color}`} data-etape={i}>
+            <div class="cl-etape-tete">
+              <span class="cl-point" aria-hidden="true">{i + 1}</span>
+              <div><h3>{s.title}</h3><span class="cl-quand">{s.when}</span></div>
+              <span class="cl-etat" data-etat={i}>0/{s.items.length}</span>
+            </div>
+            <ul>
+              {s.items.map(([t, d]) => {
+                const id = `cl-${n++}`;
+                return (
+                  <li><label for={id}>
+                    <input type="checkbox" id={id} data-case={id} />
+                    <span class="cl-case" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                    <span><b>{t}</b><span class="cl-detail"> : {d}</span></span>
+                  </label></li>
+                );
+              })}
+            </ul>
+          </section>
+        ))}
+      </div>
+    </section>
+
+    <NewsletterBox heading="Reçois la check-list et les prochaines échéances" />
+
+    <section class="acc-section" aria-labelledby="cl-plus">
+      <h2 id="cl-plus">Pour aller plus loin</h2>
+      <ul class="acc-guides">
+        <li><a href="/facturation/facture-electronique-2026/"><span class="acc-type">Le calendrier</span><strong>Facture électronique 2026-2027 : ce qui change et quand</strong></a></li>
+        <li><a href="/facturation/facture-electronique-auto-entrepreneur/"><span class="acc-type">Micro-entrepreneur</span><strong>Facture électronique auto-entrepreneur : dates et obligations</strong></a></li>
+        <li><a href="/facturation/plateforme-agreee-facture-electronique/"><span class="acc-type">Choisir son outil</span><strong>Plateforme agréée : comment choisir la sienne</strong></a></li>
+        <li><a href="/facturation/facture-electronique-gratuite/"><span class="acc-type">Sans payer</span><strong>Les solutions de facture électronique gratuites</strong></a></li>
+      </ul>
+    </section>
+  </div>
+</BaseLayout>
+
+<script is:inline>
+  (() => {
+    // Compte à rebours jusqu'au 1er septembre 2027
+    const r = document.querySelector('[data-echeance]');
+    if (r) {
+      const fin = new Date(r.dataset.echeance).getTime();
+      const $ = (k) => r.querySelector(`[data-r="${k}"]`);
+      const tic = () => {
+        let s = Math.max(0, Math.floor((fin - Date.now()) / 1000));
+        const j = Math.floor(s / 86400); s -= j * 86400;
+        const h = Math.floor(s / 3600); s -= h * 3600;
+        const m = Math.floor(s / 60); s -= m * 60;
+        $('j').textContent = j; $('h').textContent = String(h).padStart(2, '0'); $('m').textContent = String(m).padStart(2, '0'); $('s').textContent = String(s).padStart(2, '0');
+      };
+      tic(); setInterval(tic, 1000);
+    }
+
+    // Check-list : cases gardées sur l'appareil, progression, étapes terminées
+    const CLE = 'logimalin-checklist-2027';
+    const cases = [...document.querySelectorAll('[data-case]')];
+    let coches = {};
+    try { coches = JSON.parse(localStorage.getItem(CLE) || '{}'); } catch { /* stockage indisponible */ }
+    cases.forEach((c) => { c.checked = Boolean(coches[c.id]); });
+    const anneau = document.querySelector('.cl-anneau');
+    const MESSAGES = [[0, 'Coche les actions au fur et à mesure : ta progression reste sur cet appareil.'], [1, 'C’est parti ! Commence par ce qui est déjà obligatoire.'], [6, 'Bon rythme : tes outils sont en train d’être choisis.'], [11, 'Plus que les tests et le jour J.'], [18, 'Tout est coché : tu es prêt pour le 1er septembre 2027.']];
+    const maj = (anime) => {
+      const fait = cases.filter((c) => c.checked).length;
+      document.querySelector('[data-cl="fait"]').textContent = fait;
+      anneau.style.strokeDashoffset = String(100 - (fait / cases.length) * 100);
+      document.querySelector('[data-cl="message"]').textContent = MESSAGES.filter(([n]) => fait >= n).pop()[1];
+      document.querySelector('[data-cl="raz"]').hidden = fait === 0;
+      document.querySelectorAll('.cl-etape').forEach((e) => {
+        const cs = [...e.querySelectorAll('[data-case]')], n = cs.filter((c) => c.checked).length;
+        e.querySelector('.cl-etat').textContent = `${n}/${cs.length}`;
+        const complet = n === cs.length;
+        if (complet && anime && !e.classList.contains('complete')) { e.classList.remove('bravo'); void e.offsetWidth; e.classList.add('bravo'); }
+        e.classList.toggle('complete', complet);
+      });
+      document.querySelector('.cl-bilan').classList.toggle('fini', fait === cases.length);
+    };
+    cases.forEach((c) => c.addEventListener('change', () => {
+      coches[c.id] = c.checked;
+      try { localStorage.setItem(CLE, JSON.stringify(coches)); } catch { /* sans importance */ }
+      maj(true);
+    }));
+    document.querySelector('[data-cl="raz"]').addEventListener('click', () => {
+      cases.forEach((c) => { c.checked = false; }); coches = {};
+      try { localStorage.removeItem(CLE); } catch { /* sans importance */ }
+      maj(false);
+    });
+    maj(false);
+
+    // Apparition des actions au défilement
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
+    document.documentElement.classList.add('cl-anime');
+    const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('vu'); io.unobserve(e.target); } }), { rootMargin: '0px 0px -8% 0px' });
+    document.querySelectorAll('.cl-etape').forEach((e) => io.observe(e));
+  })();
+</script>
+<script>import '../../scripts/scenes.ts';</script>
