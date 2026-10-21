@@ -39,6 +39,7 @@ const ogImage = abs(image);
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="msvalidate.01" content="55C4598C8B721E07941B080753E6498E" />
     <script is:inline>
       // Mesure d'usage anonyme (sans cookie) : un appel par événement et par page vue, voir functions/api/mesure/.
       window.mesure = (ev) => { const v = (window.__mesures ||= new Set()); if (v.has(ev)) return; v.add(ev); try { navigator.sendBeacon('/api/mesure/' + ev); } catch (e) { /* sans importance */ } };
