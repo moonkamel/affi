@@ -38,11 +38,11 @@ if (scenes.length && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
 }
 
 // Enchaîne les étapes d'une scène en boucle (4 s chacune). Pause hors de l'écran, quand l'onglet est caché,
-// au survol ou au focus (pour lire et cliquer sans que le texte change), et avec le bouton [data-pause].
+// quand on y navigue au clavier (pour lire et activer un lien sans que le texte change) et avec le bouton [data-pause].
 function boucle(s: HTMLElement) {
   const n = Number(s.dataset.etapes || 1), duree = 4000;
   const bouton = s.querySelector<HTMLButtonElement>('[data-pause]');
-  let t = 0, avant = 0, visible = false, survol = false, arret = false, image = 0;
+  let t = 0, avant = 0, visible = false, clavier = false, arret = false, image = 0;
   const pose = () => {
     const p = t / (n * duree);
     s.style.setProperty('--p', p.toFixed(4));
@@ -56,16 +56,14 @@ function boucle(s: HTMLElement) {
     image = requestAnimationFrame(tourne);
   };
   const regle = () => {
-    const actif = visible && !survol && !arret && !document.hidden;
+    const actif = visible && !clavier && !arret && !document.hidden;
     if (actif && !image) { avant = performance.now(); image = requestAnimationFrame(tourne); }
     if (!actif && image) { cancelAnimationFrame(image); image = 0; }
   };
   new IntersectionObserver(([x]) => { visible = x.isIntersecting; regle(); }).observe(s);
   document.addEventListener('visibilitychange', regle);
-  s.addEventListener('pointerenter', () => { survol = true; regle(); });
-  s.addEventListener('pointerleave', () => { survol = false; regle(); });
-  s.addEventListener('focusin', () => { survol = true; regle(); });
-  s.addEventListener('focusout', () => { survol = false; regle(); });
+  s.addEventListener('focusin', (e) => { clavier = (e.target as HTMLElement).matches(':focus-visible') && e.target !== bouton; regle(); });
+  s.addEventListener('focusout', () => { clavier = false; regle(); });
   bouton?.addEventListener('click', () => {
     arret = !arret;
     bouton.setAttribute('aria-pressed', String(arret));
