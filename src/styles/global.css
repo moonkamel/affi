@@ -602,9 +602,9 @@ tbody tr:hover { background: color-mix(in srgb, var(--accent-soft) 45%, transpar
 .jr-etapes p { margin: 0 0 8px; color: var(--muted); max-width: 46ch; }
 .jr-etapes a { font-family: var(--display); font-weight: 700; text-decoration: none; display: inline-flex; min-height: 44px; align-items: center; }
 .jr-barre { display: none; }
-.jr-passer { display: none; }
-html.scenes .jr-passer { display: inline-flex; align-items: center; min-height: 40px; margin-top: 10px; font-size: .88rem; font-weight: 600; color: var(--muted); text-decoration: underline; text-underline-offset: 3px; }
-html.scenes .jr-passer:hover { color: var(--ink); }
+.jr-pause { display: none; }
+html.scenes .jr-pause { display: inline-flex; align-items: center; min-height: 40px; margin-top: 10px; padding: 0; border: 0; background: none; font: inherit; font-size: .88rem; font-weight: 600; color: var(--muted); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+html.scenes .jr-pause:hover { color: var(--ink); }
 .jr-scene { position: relative; height: 460px; }
 .jr-halo { position: absolute; inset: 8% 4%; border-radius: 50%; background: radial-gradient(closest-side, color-mix(in srgb, var(--accent) 34%, transparent), transparent); filter: blur(20px); opacity: .7; }
 .jr-doc { position: absolute; left: 50%; top: 50%; width: min(330px, 78%); padding: 22px; border-radius: 14px; background: #fbfbfd; color: #161a2b; font-size: .82rem; box-shadow: 0 30px 70px rgba(0, 0, 0, .5); transform: translate(-50%, -50%) rotate(-2deg); transition: transform .8s cubic-bezier(.2, .8, .2, 1), opacity .6s; }
@@ -641,8 +641,6 @@ html.scenes .jr-passer:hover { color: var(--ink); }
 html:not(.scenes) .jr-tampon { opacity: 1; }
 html:not(.scenes) .jr-scene { height: 380px; }
 
-html.scenes .jr { height: 300vh; margin-top: 40px; }
-html.scenes .jr-colle { position: sticky; top: 0; height: 100vh; height: 100svh; }
 html.scenes .jr-etapes { display: grid; }
 html.scenes .jr-etapes li { grid-area: 1 / 1; opacity: 0; transform: translateY(18px); transition: opacity .45s, transform .45s; pointer-events: none; }
 html.scenes .jr-horloge { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; color: var(--ink); }
@@ -674,8 +672,7 @@ html.scenes .jr[data-etape="3"] .jr-tableau { opacity: 1; transform: translate(-
 html.scenes .jr[data-etape="3"] .jr-barres i { height: var(--h); }
 @media (max-width: 900px) {
   .jr-colle { grid-template-columns: minmax(0, 1fr); gap: 20px; }
-  html.scenes .jr-colle { align-content: center; }
-  html.scenes .jr-scene { order: -1; height: 40svh; min-height: 260px; }
+  html.scenes .jr-scene { order: -1; height: 320px; }
   .jr-doc { font-size: .72rem; padding: 16px; width: min(280px, 74%); }
   .jr-tpe { width: 120px; }
   html.scenes .jr-texte h2 { font-size: 1.5rem; margin-bottom: 10px; }
