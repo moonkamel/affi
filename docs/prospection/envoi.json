@@ -120,22 +120,88 @@
   "contact@cma-paris.fr": {
    "date": "2026-10-20",
    "thread": "1a153a0c5928f95c",
-   "message": "1a158118aca594fc"
+   "message": "1a158118aca594fc",
+   "statut": "Refus",
+   "reponse": "Oui",
+   "note": "20/10 : réponse STOP de contact.75@cma-idf.fr. Plus aucun mail."
   },
   "contact@cma-auvergnerhonealpes.fr": {
    "date": "2026-10-20",
    "thread": "1a153a0d62a23e8b",
-   "message": "1a158118cf5dfde2"
+   "message": "1a158118cf5dfde2",
+   "note": "20/10 : accusé de réception automatique (ticket #880132), transmis au service concerné. Relance prévue le 26/10/2026."
   },
   "contact@cma-grand-est.com": {
    "date": "2026-10-20",
    "thread": "1a153a0f27d9c313",
-   "message": "1a1581191a3bfe75"
+   "message": "1a1581191a3bfe75",
+   "statut": "Adresse invalide",
+   "note": "20/10 : rebond, domaine cma-grand-est.com introuvable. Pas de relance."
   },
   "contact13@cmar-paca.fr": {
    "date": "2026-10-20",
    "thread": "1a153a0fb39149b0",
    "message": "1a158119376c2061"
+  },
+  "cma34@cma-herault.fr": {
+   "date": "2026-10-21",
+   "thread": "1a153a11a372e80a",
+   "message": "1a15d390f36d1791"
+  },
+  "bonjour@cma-nouvelle-aquitaine.fr": {
+   "date": "2026-10-21",
+   "thread": "1a153a12e55b7a09",
+   "message": "1a15d39102f6cccc"
+  },
+  "contact@initiative-orne.com": {
+   "date": "2026-10-21",
+   "thread": "1a153a174f402786",
+   "message": "1a15d39128400973"
+  },
+  "info@initiative-var.fr": {
+   "date": "2026-10-21",
+   "thread": "1a153a1d87b68290",
+   "message": "1a15d391765b17e9"
+  },
+  "contact@initiativeterresdevaucluse.fr": {
+   "date": "2026-10-21",
+   "thread": "1a153a1eafa39d24",
+   "message": "1a15d39182eecfee"
+  },
+  "reseau@reseau-entreprendre.org": {
+   "date": "2026-10-21",
+   "thread": "1a153a2213e6e974",
+   "message": "1a15d391b75c6550"
+  },
+  "lorraine@reseau-entreprendre.org": {
+   "date": "2026-10-21",
+   "thread": "1a153a232d2288e1",
+   "message": "1a15d391f86e3ed2"
+  },
+  "valdemarne@reseau-entreprendre.org": {
+   "date": "2026-10-21",
+   "thread": "1a153a2432c76858",
+   "message": "1a15d39220556c65"
+  },
+  "aquitaine@reseau-entreprendre.org": {
+   "date": "2026-10-21",
+   "thread": "1a153a2521b80f7a",
+   "message": "1a15d392414e9d47"
+  },
+  "yvelines@reseau-entreprendre.org": {
+   "date": "2026-10-21",
+   "thread": "1a153a2684918d61",
+   "message": "1a15d3926e615c5d"
+  },
+  "rhone-durance@reseau-entreprendre.org": {
+   "date": "2026-10-21",
+   "thread": "1a153a27bf4f2061",
+   "message": "1a15d392dc3b9237"
+  },
+  "loire@reseau-entreprendre.org": {
+   "date": "2026-10-21",
+   "thread": "1a153a288f4bed74",
+   "message": "1a15d392e0170f17"
   }
  }
 }
