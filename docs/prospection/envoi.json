@@ -156,7 +156,9 @@
   "contact@initiative-orne.com": {
    "date": "2026-10-21",
    "thread": "1a153a174f402786",
-   "message": "1a15d39128400973"
+   "message": "1a15d39128400973",
+   "statut": "Adresse invalide",
+   "note": "21/10 : rebond, domaine initiative-orne.com introuvable. Pas de relance."
   },
   "info@initiative-var.fr": {
    "date": "2026-10-21",
@@ -171,7 +173,9 @@
   "reseau@reseau-entreprendre.org": {
    "date": "2026-10-21",
    "thread": "1a153a2213e6e974",
-   "message": "1a15d391b75c6550"
+   "message": "1a15d391b75c6550",
+   "statut": "Adresse invalide",
+   "note": "21/10 : rebond, message bloqué par le serveur de Réseau Entreprendre. Pas de relance."
   },
   "lorraine@reseau-entreprendre.org": {
    "date": "2026-10-21",
@@ -202,6 +206,71 @@
    "date": "2026-10-21",
    "thread": "1a153a288f4bed74",
    "message": "1a15d392e0170f17"
+  },
+  "contact72@cma-paysdelaloire.fr": {
+   "date": "2026-10-22",
+   "thread": "1a153a15b6cf7588",
+   "message": "1a1625f466c7c6d2"
+  },
+  "contact@uniondescouveuses.com": {
+   "date": "2026-10-22",
+   "thread": "1a153a4f4fac551e",
+   "message": "1a1625f49cdba108"
+  },
+  "urnouvelleaquitaine@scop.coop": {
+   "date": "2026-10-22",
+   "thread": "1a153a537c273800",
+   "message": "1a1625f4a5ef822b"
+  },
+  "contact@coopconnexion.fr": {
+   "date": "2026-10-22",
+   "thread": "1a153a5600c786b8",
+   "message": "1a1625f4dfc53770"
+  },
+  "contact@coopetic.coop": {
+   "date": "2026-10-22",
+   "thread": "1a153a56ea8de421",
+   "message": "1a1625f5260abc77"
+  },
+  "administratif@coopilote.com": {
+   "date": "2026-10-22",
+   "thread": "1a153a597e5bb2eb",
+   "message": "1a1625f560653f47"
+  },
+  "redaction@widoobiz.com": {
+   "date": "2026-10-22",
+   "thread": "1a153a61632a001e",
+   "message": "1a1625f5934c737d"
+  },
+  "contact@espace-autoentrepreneur.com": {
+   "date": "2026-10-22",
+   "thread": "1a153a62e31da5df",
+   "message": "1a1625f5a1d22897"
+  },
+  "contact@lecourrierdesentreprises.fr": {
+   "date": "2026-10-22",
+   "thread": "1a153a6722e51dec",
+   "message": "1a1625f5e883089d"
+  },
+  "contact@sdi-pme.fr": {
+   "date": "2026-10-22",
+   "thread": "1a153a67d01bb675",
+   "message": "1a1625f614e0d1bb"
+  },
+  "contact@union-independants.fr": {
+   "date": "2026-10-22",
+   "thread": "1a153a688d06be58",
+   "message": "1a1625f630f3732d"
+  },
+  "presse@peps-syndicat.fr": {
+   "date": "2026-10-22",
+   "thread": "1a153a6924d8e125",
+   "message": "1a1625f6763cb65d"
+  },
+  "contact@60000rebonds.com": {
+   "date": "2026-10-22",
+   "thread": "1a153a69d4eb7811",
+   "message": "1a1625f6a25bac12"
   }
  }
 }
