@@ -215,7 +215,8 @@
   "contact@uniondescouveuses.com": {
    "date": "2026-10-22",
    "thread": "1a153a4f4fac551e",
-   "message": "1a1625f49cdba108"
+   "message": "1a1625f49cdba108",
+   "note": "22/10 : filtre anti-spam Mailinblack, message en attente tant que l'expéditeur n'a pas validé le lien reçu. Relance prévue le 27/10/2026."
   },
   "urnouvelleaquitaine@scop.coop": {
    "date": "2026-10-22",
@@ -240,12 +241,15 @@
   "redaction@widoobiz.com": {
    "date": "2026-10-22",
    "thread": "1a153a61632a001e",
-   "message": "1a1625f5934c737d"
+   "message": "1a1625f5934c737d",
+   "statut": "Adresse invalide",
+   "note": "22/10 : rebond, message bloqué par le serveur de Widoobiz. Pas de relance."
   },
   "contact@espace-autoentrepreneur.com": {
    "date": "2026-10-22",
    "thread": "1a153a62e31da5df",
-   "message": "1a1625f5a1d22897"
+   "message": "1a1625f5a1d22897",
+   "note": "22/10 : accusé de réception automatique (demande 487253). Relance prévue le 27/10/2026."
   },
   "contact@lecourrierdesentreprises.fr": {
    "date": "2026-10-22",
@@ -271,6 +275,71 @@
    "date": "2026-10-22",
    "thread": "1a153a69d4eb7811",
    "message": "1a1625f6a25bac12"
+  },
+  "bfc@60000rebonds.com": {
+   "date": "2026-10-23",
+   "thread": "1a153a6a73e6aa89",
+   "message": "1a16785ed960497b"
+  },
+  "creation95@cci-paris-idf.fr": {
+   "date": "2026-10-23",
+   "thread": "1a15399bf4bc6d14",
+   "message": "1a16785efacab895"
+  },
+  "ccideregion@hautsdefrance.cci.fr": {
+   "date": "2026-10-23",
+   "thread": "1a15399da2f3449e",
+   "message": "1a16785f105bc742"
+  },
+  "cci@normandie.cci.fr": {
+   "date": "2026-10-23",
+   "thread": "1a15399eabe5d1ed",
+   "message": "1a16785f3a07ab40"
+  },
+  "info-eure@normandie.cci.fr": {
+   "date": "2026-10-23",
+   "thread": "1a15399fdaecf1ac",
+   "message": "1a16785f42f946d2"
+  },
+  "contact@nouvelle-aquitaine.cci.fr": {
+   "date": "2026-10-23",
+   "thread": "1a1539a11e85047e",
+   "message": "1a16785f9473e747"
+  },
+  "conseil-creation-reprise@44.cci.fr": {
+   "date": "2026-10-23",
+   "thread": "1a1539a20f3bf202",
+   "message": "1a16785fa8951ff3"
+  },
+  "eco@cma95.fr": {
+   "date": "2026-10-23",
+   "thread": "1a1539ab98520429",
+   "message": "1a16785fcd1c6e62"
+  },
+  "contact@crma-auvergnerhonealpes.fr": {
+   "date": "2026-10-23",
+   "thread": "1a1539b04335be52",
+   "message": "1a1678601cc01027"
+  },
+  "accueil-s21@artisanat-bfc.fr": {
+   "date": "2026-10-23",
+   "thread": "1a1539b1dd60f8b9",
+   "message": "1a1678602d200ab7"
+  },
+  "accueil@cma-morbihan.fr": {
+   "date": "2026-10-23",
+   "thread": "1a1539b29c36ddfb",
+   "message": "1a16786055272a19"
+  },
+  "moovjee@twoo-mentorat.fr": {
+   "date": "2026-10-23",
+   "thread": "1a153a6b7e7d2479",
+   "message": "1a16786082927068"
+  },
+  "contact@oec-paris.fr": {
+   "date": "2026-10-23",
+   "thread": "1a153a6c269fb0a0",
+   "message": "1a167860bf1b7e1c"
   }
  }
 }
