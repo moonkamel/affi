@@ -4,3 +4,6 @@ dist/
 .env
 .DS_Store
 apercu/
+
+# Listes de créations Sirene (données personnelles)
+docs/prospection/creations*.csv
