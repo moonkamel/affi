@@ -97,22 +97,30 @@
   "entreprendre@indre.cci.fr": {
    "date": "2026-10-20",
    "thread": "1a1539ff52ffeca1",
-   "message": "1a1581176d5e7db9"
+   "message": "1a1581176d5e7db9",
+   "relance": "2026-10-26",
+   "relance_message": "1a17795aa56253db"
   },
   "entreprendre@41.cci.fr": {
    "date": "2026-10-20",
    "thread": "1a153a007b3ce444",
-   "message": "1a1581179f7b9155"
+   "message": "1a1581179f7b9155",
+   "relance": "2026-10-26",
+   "relance_message": "1a17795acaa3eccd"
   },
   "espace.creation@vendee.cci.fr": {
    "date": "2026-10-20",
    "thread": "1a153a01b710a81e",
-   "message": "1a158117828565b8"
+   "message": "1a158117828565b8",
+   "relance": "2026-10-26",
+   "relance_message": "1a17795b1d30046a"
   },
   "monprojetaveclacci@tarn.cci.fr": {
    "date": "2026-10-20",
    "thread": "1a153a02c0f64bad",
-   "message": "1a158117abdf65f7"
+   "message": "1a158117abdf65f7",
+   "relance": "2026-10-26",
+   "relance_message": "1a17795be5c0694c"
   },
   "creation@digne.cci.fr": {
    "date": "2026-10-20",
@@ -124,17 +132,23 @@
   "espace.entreprendre@mdb.cci.fr": {
    "date": "2026-10-20",
    "thread": "1a153a053839efe1",
-   "message": "1a158117f15f188f"
+   "message": "1a158117f15f188f",
+   "relance": "2026-10-26",
+   "relance_message": "1a17795b5a5c8620"
   },
   "infos@lyon-metropole.cci.fr": {
    "date": "2026-10-20",
    "thread": "1a153a0777841e93",
-   "message": "1a1581180a6a8e6b"
+   "message": "1a1581180a6a8e6b",
+   "relance": "2026-10-26",
+   "relance_message": "1a17795b98996593"
   },
   "information@paca.cci.fr": {
    "date": "2026-10-20",
    "thread": "1a153a0810c8d192",
-   "message": "1a15811835172ebe"
+   "message": "1a15811835172ebe",
+   "relance": "2026-10-26",
+   "relance_message": "1a17795b63d7a1bb"
   },
   "contact@cma66.fr": {
    "date": "2026-10-20",
@@ -175,12 +189,16 @@
   "cma34@cma-herault.fr": {
    "date": "2026-10-21",
    "thread": "1a153a11a372e80a",
-   "message": "1a15d390f36d1791"
+   "message": "1a15d390f36d1791",
+   "relance": "2026-10-26",
+   "relance_message": "1a17795c7ef2d38f"
   },
   "bonjour@cma-nouvelle-aquitaine.fr": {
    "date": "2026-10-21",
    "thread": "1a153a12e55b7a09",
-   "message": "1a15d39102f6cccc"
+   "message": "1a15d39102f6cccc",
+   "relance": "2026-10-26",
+   "relance_message": "1a17795c5fd5e0de"
   },
   "contact@initiative-orne.com": {
    "date": "2026-10-21",
@@ -192,12 +210,16 @@
   "info@initiative-var.fr": {
    "date": "2026-10-21",
    "thread": "1a153a1d87b68290",
-   "message": "1a15d391765b17e9"
+   "message": "1a15d391765b17e9",
+   "relance": "2026-10-26",
+   "relance_message": "1a17795ce3e1f116"
   },
   "contact@initiativeterresdevaucluse.fr": {
    "date": "2026-10-21",
    "thread": "1a153a1eafa39d24",
-   "message": "1a15d39182eecfee"
+   "message": "1a15d39182eecfee",
+   "relance": "2026-10-26",
+   "relance_message": "1a17795ca891df47"
   },
   "reseau@reseau-entreprendre.org": {
    "date": "2026-10-21",
@@ -209,32 +231,44 @@
   "lorraine@reseau-entreprendre.org": {
    "date": "2026-10-21",
    "thread": "1a153a232d2288e1",
-   "message": "1a15d391f86e3ed2"
+   "message": "1a15d391f86e3ed2",
+   "relance": "2026-10-26",
+   "relance_message": "1a17795d6deaf5b6"
   },
   "valdemarne@reseau-entreprendre.org": {
    "date": "2026-10-21",
    "thread": "1a153a2432c76858",
-   "message": "1a15d39220556c65"
+   "message": "1a15d39220556c65",
+   "relance": "2026-10-26",
+   "relance_message": "1a17795ddb206453"
   },
   "aquitaine@reseau-entreprendre.org": {
    "date": "2026-10-21",
    "thread": "1a153a2521b80f7a",
-   "message": "1a15d392414e9d47"
+   "message": "1a15d392414e9d47",
+   "relance": "2026-10-26",
+   "relance_message": "1a17795c1526b0a7"
   },
   "yvelines@reseau-entreprendre.org": {
    "date": "2026-10-21",
    "thread": "1a153a2684918d61",
-   "message": "1a15d3926e615c5d"
+   "message": "1a15d3926e615c5d",
+   "relance": "2026-10-26",
+   "relance_message": "1a17795de8e3c5b1"
   },
   "rhone-durance@reseau-entreprendre.org": {
    "date": "2026-10-21",
    "thread": "1a153a27bf4f2061",
-   "message": "1a15d392dc3b9237"
+   "message": "1a15d392dc3b9237",
+   "relance": "2026-10-26",
+   "relance_message": "1a17795db80123c7"
   },
   "loire@reseau-entreprendre.org": {
    "date": "2026-10-21",
    "thread": "1a153a288f4bed74",
-   "message": "1a15d392e0170f17"
+   "message": "1a15d392e0170f17",
+   "relance": "2026-10-26",
+   "relance_message": "1a17795d03e97dad"
   },
   "contact72@cma-paysdelaloire.fr": {
    "date": "2026-10-22",
