@@ -1,6 +1,6 @@
 {
  "regles": "13 envois par jour ouvré, un destinataire par mail, une seule relance à J+5 (jour ouvré suivant si week-end), répondre dans le fil d'origine.",
- "drive_file_id": "1Tp5Dr4W6jqs5f7jeX851-mGwrTY0upve6NsR0rKJ5cg",
+ "drive_file_id": "1-QzSNZSxtkB10k-WWq3odkHM_W0BN4FpW_AIcqNF_lo",
  "envoyes": {
   "redaction@maddyness.com": {
    "date": "2026-10-19",
@@ -445,12 +445,16 @@
   "contact06@cmar-paca.fr": {
    "date": "2026-10-26",
    "thread": "1a1539ba6bdfec05",
-   "message": "1a177995abb42f15"
+   "message": "1a177995abb42f15",
+   "statut": "Adresse invalide",
+   "note": "26/10 : rebond, l’adresse renvoie vers contact06@urma-paca.fr, qui n’existe pas. Pas de relance."
   },
   "contact@cma94.com": {
    "date": "2026-10-26",
    "thread": "1a153a0b233c1c1e",
-   "message": "1a177995df99abeb"
+   "message": "1a177995df99abeb",
+   "statut": "Adresse invalide",
+   "note": "26/10 : rebond, message bloqué par le serveur (Microsoft 365, « Access denied »). Pas de relance."
   },
   "contact@initiative-sarthe.fr": {
    "date": "2026-10-26",
@@ -485,7 +489,9 @@
   "contact@initiative-valleedeladromediois.fr": {
    "date": "2026-10-26",
    "thread": "1a153a1fbeea030d",
-   "message": "1a177998e04b3b54"
+   "message": "1a177998e04b3b54",
+   "statut": "Adresse invalide",
+   "note": "26/10 : rebond, adresse inexistante. Pas de relance."
   },
   "atlantique@reseau-entreprendre.org": {
    "date": "2026-10-26",
@@ -500,7 +506,9 @@
   "bretagne@cooperer.coop": {
    "date": "2026-10-26",
    "thread": "1a153a51470ae0cd",
-   "message": "1a17799b183b037c"
+   "message": "1a17799b183b037c",
+   "statut": "Adresse invalide",
+   "note": "26/10 : rebond, adresse inexistante. Pas de relance."
   },
   "les-cae@scop.coop": {
    "date": "2026-10-26",
@@ -585,7 +593,9 @@
   "contact@portesdebretagne-initiative.fr": {
    "date": "2026-10-26",
    "thread": "1a1779d1739d2f1c",
-   "message": "1a1779d1739d2f1c"
+   "message": "1a1779d1739d2f1c",
+   "statut": "Adresse invalide",
+   "note": "26/10 : rebond, domaine portesdebretagne-initiative.fr introuvable. Pas de relance."
   },
   "contact@initiative-cher.fr": {
    "date": "2026-10-26",
@@ -595,12 +605,16 @@
   "contact@initiative-aisne.com": {
    "date": "2026-10-26",
    "thread": "1a1779d18372dd58",
-   "message": "1a1779d18372dd58"
+   "message": "1a1779d18372dd58",
+   "statut": "Adresse invalide",
+   "note": "26/10 : rebond, domaine initiative-aisne.com introuvable. Pas de relance."
   },
   "initiative.mvs.sud77@camvs.com": {
    "date": "2026-10-26",
    "thread": "1a1779d1b92e36d3",
-   "message": "1a1779d1b92e36d3"
+   "message": "1a1779d1b92e36d3",
+   "statut": "Adresse invalide",
+   "note": "26/10 : rebond, message bloqué par le serveur (Microsoft 365, « Access denied »). Pas de relance."
   },
   "contact@initiative-armor.bzh": {
    "date": "2026-10-26",
@@ -700,7 +714,9 @@
   "info@apcma.fr": {
    "date": "2026-10-26",
    "thread": "1a1779f2f6f9634c",
-   "message": "1a1779f2f6f9634c"
+   "message": "1a1779f2f6f9634c",
+   "statut": "Adresse invalide",
+   "note": "26/10 : rebond, message bloqué par le serveur (Microsoft 365, « Access denied »). Pas de relance."
   },
   "redac@tpe-mag.fr": {
    "date": "2026-10-26",
