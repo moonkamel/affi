@@ -29,9 +29,9 @@ const {
 
 // URL canonique toujours absolue, avec slash final (cohérent avec trailingSlash: 'always').
 const canonical = abs(Astro.url.pathname);
-// Marque ajoutée seulement si le titre reste sous ~65 caractères (au-delà, Google tronque).
+// Marque ajoutée seulement si le titre reste sous 60 caractères (au-delà, Google tronque).
 const branded = `${title} | ${SITE.name}`;
-const fullTitle = title.includes(SITE.name) || branded.length > 65 ? title : branded;
+const fullTitle = title.includes(SITE.name) || branded.length > 60 ? title : branded;
 const ogImage = abs(image);
 ---
 <!doctype html>

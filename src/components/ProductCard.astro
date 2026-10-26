@@ -2,8 +2,10 @@
 import { getCollection } from 'astro:content';
 import { getSoftware } from '../data/software';
 import AffLink from './AffLink.astro';
-interface Props { slug: string; rank?: number; reviewHref?: string }
-const { slug, rank } = Astro.props;
+// level : 2 quand la fiche est placée avant le premier intertitre de l'article (pages avis), pour ne pas sauter de niveau.
+interface Props { slug: string; rank?: number; reviewHref?: string; level?: 2 | 3 }
+const { slug, rank, level = 3 } = Astro.props;
+const Titre = level === 2 ? 'h2' : 'h3';
 const s = getSoftware(slug);
 // Lien automatique vers notre page d'avis du logiciel, si elle existe (maillage interne).
 const review = (await getCollection('articles', (e) => !e.data.draft && e.data.review?.product === slug))[0];
@@ -13,7 +15,7 @@ const showReview = reviewHref && reviewHref !== Astro.url.pathname;
 <section class="card" id={`logiciel-${s.slug}`}>
   <div class="card-head">
     <div>
-      <h3>{rank && <span class="rank">{rank}</span>}{s.name}</h3>
+      <Titre>{rank && <span class="rank">{rank}</span>}{s.name}</Titre>
       <div class="muted small">Idéal pour : {s.bestFor}</div>
       {s.badges && <div class="badges">{s.badges.map((b) => <span class="badge">{b}</span>)}</div>}
     </div>
