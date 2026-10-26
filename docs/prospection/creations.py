@@ -1,7 +1,8 @@
 """Liste les entreprises créées récemment dans les métiers couverts par le site,
 à partir de la base Sirene de l'Insee (données publiques, Licence ouverte).
 
-Seuls les établissements sièges, actifs et à diffusion publique sont retenus :
+Retient les entreprises dont la date de création (unité légale) tombe dans la période,
+via leur siège actif. Seules les données à diffusion publique sont retenues :
 les entrepreneurs qui ont demandé à ne pas apparaître (diffusion partielle) sont exclus.
 Sirene ne contient aucune adresse e-mail.
 
@@ -37,8 +38,8 @@ METIERS = {
 
 
 def requete(debut, fin, naf, curseur):
-    q = (f'dateCreationEtablissement:[{debut} TO {fin}] AND etablissementSiege:true'
-         f' AND statutDiffusionEtablissement:O'
+    q = (f'dateCreationUniteLegale:[{debut} TO {fin}] AND etablissementSiege:true'
+         f' AND statutDiffusionEtablissement:O AND statutDiffusionUniteLegale:O'
          f' AND periode(etatAdministratifEtablissement:A AND activitePrincipaleEtablissement:{naf})')
     url = API + '?' + urllib.parse.urlencode({'q': q, 'nombre': 1000, 'curseur': curseur})
     req = urllib.request.Request(url, headers={'X-INSEE-Api-Key-Integration': os.environ['INSEE_API_KEY'],
@@ -63,17 +64,19 @@ def main(debut, fin, sortie):
                 nom = ul.get('denominationUniteLegale') or ' '.join(
                     filter(None, [ul.get('prenomUsuelUniteLegale'), ul.get('nomUniteLegale')]))
                 lignes.append({
-                    'siret': e['siret'], 'nom': nom, 'date_creation': e.get('dateCreationEtablissement'),
+                    'siret': e['siret'], 'nom': nom, 'date_creation': ul.get('dateCreationUniteLegale'),
                     'naf': naf, 'metier': metier, 'page_du_site': page,
                     'forme': 'Entreprise individuelle' if ul.get('categorieJuridiqueUniteLegale') == '1000' else 'Société',
+                    'departement': (adr.get('codePostalEtablissement') or '')[:2],
                     'code_postal': adr.get('codePostalEtablissement'), 'commune': adr.get('libelleCommuneEtablissement'),
                 })
             suivant = data['header'].get('curseurSuivant')
-            if not suivant or suivant == data['header'].get('curseur'):
+            if len(data['etablissements']) < 1000 or not suivant or suivant == data['header'].get('curseur'):
                 break
             curseur = suivant
             time.sleep(2.1)  # limite de l'API : 30 requêtes par minute
         time.sleep(2.1)
+    lignes = list({l['siret']: l for l in lignes}.values())  # le curseur peut renvoyer un doublon
     with open(sortie, 'w', newline='', encoding='utf-8') as f:
         w = csv.DictWriter(f, fieldnames=list(lignes[0]) if lignes else ['siret'])
         w.writeheader()
