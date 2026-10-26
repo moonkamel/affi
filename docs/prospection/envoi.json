@@ -722,6 +722,53 @@
    "date": "2026-10-26",
    "thread": "1a1779f31361398a",
    "message": "1a1779f31361398a"
+  },
+  "contact@paris-initiative.org": {
+   "date": "2026-10-26",
+   "thread": "1a177bceec0a3a32",
+   "message": "1a177beb3005f5cc"
+  },
+  "paris@reseau-entreprendre.org": {
+   "date": "2026-10-26",
+   "thread": "1a177bceef07ec14",
+   "message": "1a177beb56d8b786"
+  },
+  "accueil@hdsi.asso.fr": {
+   "date": "2026-10-26",
+   "thread": "1a177bcf1fa4aa62",
+   "message": "1a177beb8a0d4761"
+  },
+  "92@reseau-entreprendre.org": {
+   "date": "2026-10-26",
+   "thread": "1a177bcf2ec613b6",
+   "message": "1a177bebb3cf4c2c",
+   "statut": "Adresse invalide",
+   "note": "26/10 : rebond, message bloqué par le serveur (Microsoft 365, « Access denied »). Pas de relance."
+  },
+  "contact@initiative-terres-dazur.com": {
+   "date": "2026-10-26",
+   "thread": "1a177bcf52059264",
+   "message": "1a177bebab2f5588"
+  },
+  "financement@cote-azur.cci.fr": {
+   "date": "2026-10-26",
+   "thread": "1a177bcf76e99244",
+   "message": "1a177bebed6c7e90"
+  },
+  "contact@initiative-lmnord.fr": {
+   "date": "2026-10-26",
+   "thread": "1a177bcf90118087",
+   "message": "1a177bec1466e0e5"
+  },
+  "contact@initiative-reunion.fr": {
+   "date": "2026-10-26",
+   "thread": "1a177bcfa6925b8e",
+   "message": "1a177bec3347e22a"
+  },
+  "contact@initiative-montreuillois.fr": {
+   "date": "2026-10-26",
+   "thread": "1a177bcfde8062bf",
+   "message": "1a177bec4e79d5b1"
   }
  }
 }
