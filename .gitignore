@@ -7,3 +7,4 @@ apercu/
 
 # Listes de créations Sirene (données personnelles)
 docs/prospection/creations*.csv
+__pycache__/
