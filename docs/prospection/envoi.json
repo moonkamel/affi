@@ -5,7 +5,9 @@
   "redaction@maddyness.com": {
    "date": "2026-10-19",
    "thread": "1a1539f8e7e98309",
-   "message": "1a153b908c83f2f1"
+   "message": "1a153b908c83f2f1",
+   "relance": "2026-10-26",
+   "relance_message": "1a177334088ee15a"
   },
   "contact@leblogdudirigeant.com": {
    "date": "2026-10-19",
@@ -18,37 +20,51 @@
   "forum@compta-online.com": {
    "date": "2026-10-19",
    "thread": "1a1539725bdca51d",
-   "message": "1a153b919c323123"
+   "message": "1a153b919c323123",
+   "relance": "2026-10-26",
+   "relance_message": "1a177333edb2b89a"
   },
   "contact@portail-autoentrepreneur.fr": {
    "date": "2026-10-19",
    "thread": "1a1539732f146fa0",
-   "message": "1a153b92547a8faf"
+   "message": "1a153b92547a8faf",
+   "relance": "2026-10-26",
+   "relance_message": "1a177332f34bc8a1"
   },
   "tavor.management@gmail.com": {
    "date": "2026-10-19",
    "thread": "1a153973e46546b0",
-   "message": "1a153b92f0f019b9"
+   "message": "1a153b92f0f019b9",
+   "relance": "2026-10-26",
+   "relance_message": "1a17733461e38027"
   },
   "contact@fnae.fr": {
    "date": "2026-10-19",
    "thread": "1a15397501e18117",
-   "message": "1a153b93f2c92e0f"
+   "message": "1a153b93f2c92e0f",
+   "relance": "2026-10-26",
+   "relance_message": "1a177332a1d1ff37"
   },
   "contact@union-auto-entrepreneurs.com": {
    "date": "2026-10-19",
    "thread": "1a15397656f1e369",
-   "message": "1a153b94640ac3cf"
+   "message": "1a153b94640ac3cf",
+   "relance": "2026-10-26",
+   "relance_message": "1a177333156f6d99"
   },
   "ccir@bretagne.cci.fr": {
    "date": "2026-10-19",
    "thread": "1a15399ca1f0b41b",
-   "message": "1a153b950f65d3a7"
+   "message": "1a153b950f65d3a7",
+   "relance": "2026-10-26",
+   "relance_message": "1a1773325f22680b"
   },
   "entreprises44@cma-paysdelaloire.fr": {
    "date": "2026-10-19",
    "thread": "1a1539b9a854a28b",
-   "message": "1a153b9608144a82"
+   "message": "1a153b9608144a82",
+   "relance": "2026-10-26",
+   "relance_message": "1a17733398954ecb"
   },
   "accueil@bge.asso.fr": {
    "date": "2026-10-19",
@@ -60,17 +76,23 @@
   "conseilentreprise@reunion.cci.fr": {
    "date": "2026-10-19",
    "thread": "1a1539fbfb3a2494",
-   "message": "1a153b971f0ba285"
+   "message": "1a153b971f0ba285",
+   "relance": "2026-10-26",
+   "relance_message": "1a1773326cb8bfc7"
   },
   "entreprendre@loiret.cci.fr": {
    "date": "2026-10-19",
    "thread": "1a1539fd2214673c",
-   "message": "1a153b9785be51c3"
+   "message": "1a153b9785be51c3",
+   "relance": "2026-10-26",
+   "relance_message": "1a1773335844cd0d"
   },
   "espace-entreprendre@cher.cci.fr": {
    "date": "2026-10-19",
    "thread": "1a1539fe2f169671",
-   "message": "1a153b9829afeb4e"
+   "message": "1a153b9829afeb4e",
+   "relance": "2026-10-26",
+   "relance_message": "1a177333a2926063"
   },
   "entreprendre@indre.cci.fr": {
    "date": "2026-10-20",
@@ -95,7 +117,9 @@
   "creation@digne.cci.fr": {
    "date": "2026-10-20",
    "thread": "1a153a03e3b7a0e9",
-   "message": "1a158117d5e93ffd"
+   "message": "1a158117d5e93ffd",
+   "relance": "2026-10-26",
+   "relance_message": "1a1773354bd64f75"
   },
   "espace.entreprendre@mdb.cci.fr": {
    "date": "2026-10-20",
@@ -115,7 +139,9 @@
   "contact@cma66.fr": {
    "date": "2026-10-20",
    "thread": "1a153a0a357cecd4",
-   "message": "1a1581188db528ab"
+   "message": "1a1581188db528ab",
+   "relance": "2026-10-26",
+   "relance_message": "1a17733519a60657"
   },
   "contact@cma-paris.fr": {
    "date": "2026-10-20",
@@ -129,7 +155,8 @@
    "date": "2026-10-20",
    "thread": "1a153a0d62a23e8b",
    "message": "1a158118cf5dfde2",
-   "note": "20/10 : accusé de réception automatique (ticket #880132), transmis au service concerné. Relance prévue le 26/10/2026."
+   "relance": "2026-10-26",
+   "relance_message": "1a177334d10aa904"
   },
   "contact@cma-grand-est.com": {
    "date": "2026-10-20",
@@ -141,7 +168,9 @@
   "contact13@cmar-paca.fr": {
    "date": "2026-10-20",
    "thread": "1a153a0fb39149b0",
-   "message": "1a158119376c2061"
+   "message": "1a158119376c2061",
+   "relance": "2026-10-26",
+   "relance_message": "1a177334be0b0fd9"
   },
   "cma34@cma-herault.fr": {
    "date": "2026-10-21",
@@ -289,12 +318,16 @@
   "ccideregion@hautsdefrance.cci.fr": {
    "date": "2026-10-23",
    "thread": "1a15399da2f3449e",
-   "message": "1a16785f105bc742"
+   "message": "1a16785f105bc742",
+   "statut": "Adresse invalide",
+   "note": "23/10 : rebond, message bloqué par le serveur de CCI Hauts-de-France. Pas de relance."
   },
   "cci@normandie.cci.fr": {
    "date": "2026-10-23",
    "thread": "1a15399eabe5d1ed",
-   "message": "1a16785f3a07ab40"
+   "message": "1a16785f3a07ab40",
+   "statut": "Adresse invalide",
+   "note": "23/10 : rebond, message bloqué par le serveur de CCI Ouest Normandie. Pas de relance."
   },
   "info-eure@normandie.cci.fr": {
    "date": "2026-10-23",
@@ -314,12 +347,15 @@
   "eco@cma95.fr": {
    "date": "2026-10-23",
    "thread": "1a1539ab98520429",
-   "message": "1a16785fcd1c6e62"
+   "message": "1a16785fcd1c6e62",
+   "statut": "Adresse invalide",
+   "note": "23/10 : rebond, message bloqué par le serveur de CMA Val-d'Oise. Pas de relance."
   },
   "contact@crma-auvergnerhonealpes.fr": {
    "date": "2026-10-23",
    "thread": "1a1539b04335be52",
-   "message": "1a1678601cc01027"
+   "message": "1a1678601cc01027",
+   "note": "23/10 : réponse automatique, l'adresse n'est plus suivie : contacter la CMA départementale. Relance prévue le 28/10/2026."
   },
   "accueil-s21@artisanat-bfc.fr": {
    "date": "2026-10-23",
@@ -339,7 +375,8 @@
   "contact@oec-paris.fr": {
    "date": "2026-10-23",
    "thread": "1a153a6c269fb0a0",
-   "message": "1a167860bf1b7e1c"
+   "message": "1a167860bf1b7e1c",
+   "note": "23/10 : réponse automatique de l'Ordre (attestations, espace pro). Relance prévue le 28/10/2026."
   }
  }
 }
