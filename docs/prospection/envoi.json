@@ -423,7 +423,8 @@
    "date": "2026-10-23",
    "thread": "1a1539b04335be52",
    "message": "1a1678601cc01027",
-   "note": "23/10 : réponse automatique, l'adresse n'est plus suivie : contacter la CMA départementale. Pas de relance."
+   "note": "23/10 : réponse automatique, l'adresse n'est plus suivie : contacter la CMA départementale. Pas de relance.",
+   "statut": "Adresse invalide"
   },
   "accueil-s21@artisanat-bfc.fr": {
    "date": "2026-10-23",
