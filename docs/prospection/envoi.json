@@ -279,27 +279,37 @@
    "date": "2026-10-22",
    "thread": "1a153a4f4fac551e",
    "message": "1a1625f49cdba108",
-   "note": "22/10 : filtre anti-spam Mailinblack, expéditeur validé le 23/10, message délivré. Relance prévue le 27/10/2026."
+   "note": "22/10 : filtre anti-spam Mailinblack, expéditeur validé le 23/10, message délivré. Relance prévue le 27/10/2026.",
+   "relance": "2026-10-27",
+   "relance_message": "1a17c57422af51e4"
   },
   "urnouvelleaquitaine@scop.coop": {
    "date": "2026-10-22",
    "thread": "1a153a537c273800",
-   "message": "1a1625f4a5ef822b"
+   "message": "1a1625f4a5ef822b",
+   "relance": "2026-10-27",
+   "relance_message": "1a17c574675644ec"
   },
   "contact@coopconnexion.fr": {
    "date": "2026-10-22",
    "thread": "1a153a5600c786b8",
-   "message": "1a1625f4dfc53770"
+   "message": "1a1625f4dfc53770",
+   "relance": "2026-10-27",
+   "relance_message": "1a17c574b6774291"
   },
   "contact@coopetic.coop": {
    "date": "2026-10-22",
    "thread": "1a153a56ea8de421",
-   "message": "1a1625f5260abc77"
+   "message": "1a1625f5260abc77",
+   "relance": "2026-10-27",
+   "relance_message": "1a17c574c800488d"
   },
   "administratif@coopilote.com": {
    "date": "2026-10-22",
    "thread": "1a153a597e5bb2eb",
-   "message": "1a1625f560653f47"
+   "message": "1a1625f560653f47",
+   "relance": "2026-10-27",
+   "relance_message": "1a17c5750aefa850"
   },
   "redaction@widoobiz.com": {
    "date": "2026-10-22",
@@ -312,32 +322,44 @@
    "date": "2026-10-22",
    "thread": "1a153a62e31da5df",
    "message": "1a1625f5a1d22897",
-   "note": "22/10 : accusé de réception automatique (demande 487253). Relance prévue le 27/10/2026."
+   "note": "22/10 : accusé de réception automatique (demande 487253). Relance prévue le 27/10/2026.",
+   "relance": "2026-10-27",
+   "relance_message": "1a17c57e893d008b"
   },
   "contact@lecourrierdesentreprises.fr": {
    "date": "2026-10-22",
    "thread": "1a153a6722e51dec",
-   "message": "1a1625f5e883089d"
+   "message": "1a1625f5e883089d",
+   "relance": "2026-10-27",
+   "relance_message": "1a17c57edbd05512"
   },
   "contact@sdi-pme.fr": {
    "date": "2026-10-22",
    "thread": "1a153a67d01bb675",
-   "message": "1a1625f614e0d1bb"
+   "message": "1a1625f614e0d1bb",
+   "relance": "2026-10-27",
+   "relance_message": "1a17c57f1b9d72cc"
   },
   "contact@union-independants.fr": {
    "date": "2026-10-22",
    "thread": "1a153a688d06be58",
-   "message": "1a1625f630f3732d"
+   "message": "1a1625f630f3732d",
+   "relance": "2026-10-27",
+   "relance_message": "1a17c57f52d77aac"
   },
   "presse@peps-syndicat.fr": {
    "date": "2026-10-22",
    "thread": "1a153a6924d8e125",
-   "message": "1a1625f6763cb65d"
+   "message": "1a1625f6763cb65d",
+   "relance": "2026-10-27",
+   "relance_message": "1a17c57f90cf7c72"
   },
   "contact@60000rebonds.com": {
    "date": "2026-10-22",
    "thread": "1a153a69d4eb7811",
-   "message": "1a1625f6a25bac12"
+   "message": "1a1625f6a25bac12",
+   "relance": "2026-10-27",
+   "relance_message": "1a17c57fa5b6ab59"
   },
   "bfc@60000rebonds.com": {
    "date": "2026-10-23",
@@ -464,7 +486,8 @@
   "contact@initiative-genevois.fr": {
    "date": "2026-10-26",
    "thread": "1a153a18d38a0c29",
-   "message": "1a17799851383c83"
+   "message": "1a17799851383c83",
+   "note": "26/10 : filtre anti-spam Mailinblack, l’expéditeur doit être validé (lien dans le mail reçu). Relance prévue le 02/11/2026."
   },
   "rouen-initiative@rouen.cci.fr": {
    "date": "2026-10-26",
@@ -518,12 +541,14 @@
   "contact@cabestan.fr": {
    "date": "2026-10-26",
    "thread": "1a153a5550e2ea80",
-   "message": "1a17799b478cff2a"
+   "message": "1a17799b478cff2a",
+   "note": "26/10 : filtre anti-spam Mailinblack, l’expéditeur doit être validé (lien dans le mail reçu). Relance prévue le 02/11/2026."
   },
   "contact@lecomptoirdesentrepreneurs.fr": {
    "date": "2026-10-26",
    "thread": "1a153a5a49f4efc0",
-   "message": "1a17799b6096953e"
+   "message": "1a17799b6096953e",
+   "note": "26/10 : devenue LCE - La Coopérative pour Entreprendre, nouvelle adresse contact@lce.coop (message redirigé). Relance à envoyer à la nouvelle adresse."
   },
   "contact@coopenates.com": {
    "date": "2026-10-26",
@@ -553,7 +578,8 @@
   "contact@bge-flandrecreation.fr": {
    "date": "2026-10-26",
    "thread": "1a153c24c6460f52",
-   "message": "1a17799dee07aeb6"
+   "message": "1a17799dee07aeb6",
+   "note": "26/10 : filtre anti-spam Mailinblack, l’expéditeur doit être validé (lien dans le mail reçu). Relance prévue le 02/11/2026."
   },
   "contact@bgeauvergne.fr": {
    "date": "2026-10-26",
@@ -619,7 +645,8 @@
   "contact@initiative-armor.bzh": {
    "date": "2026-10-26",
    "thread": "1a1779d1d08bd443",
-   "message": "1a1779d1d08bd443"
+   "message": "1a1779d1d08bd443",
+   "note": "26/10 : filtre anti-spam Mailinblack, l’expéditeur doit être validé (lien dans le mail reçu). Relance prévue le 02/11/2026."
   },
   "contact@initiative-tregor.com": {
    "date": "2026-10-26",
@@ -772,6 +799,16 @@
    "date": "2026-10-26",
    "thread": "1a177bcfde8062bf",
    "message": "1a177bec4e79d5b1"
+  },
+  "contact@initiative-essonne.com": {
+   "date": "2026-10-27",
+   "thread": "1a177d060c5aa80d",
+   "message": "1a17c58512fde8cb"
+  },
+  "contact@initiative-nord77.fr": {
+   "date": "2026-10-27",
+   "thread": "1a177d0646cda26b",
+   "message": "1a17c58527fff3fc"
   }
  }
 }
