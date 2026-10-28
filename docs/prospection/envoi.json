@@ -512,7 +512,8 @@
   "rouen-initiative@rouen.cci.fr": {
    "date": "2026-10-26",
    "thread": "1a153a19696f49d8",
-   "message": "1a17799870cf4d8c"
+   "message": "1a17799870cf4d8c",
+   "note": "27/10 : avis de retard de remise (Delivery Status Notification - Delay), le serveur réessaie. Relance prévue le 02/11/2026."
   },
   "contact@initiative-sgrv.fr": {
    "date": "2026-10-26",
@@ -829,6 +830,21 @@
    "date": "2026-10-27",
    "thread": "1a177d0646cda26b",
    "message": "1a17c58527fff3fc"
+  },
+  "valdoise@reseau-entreprendre.org": {
+   "date": "2026-10-28",
+   "thread": "1a177d0631cfda93",
+   "message": "1a1817c7cd98f428"
+  },
+  "contact@oise-est.fr": {
+   "date": "2026-10-28",
+   "thread": "1a177d06bbc92905",
+   "message": "1a1817cd810a5454"
+  },
+  "contact@oise-ouest.fr": {
+   "date": "2026-10-28",
+   "thread": "1a177d06dd440492",
+   "message": "1a1817cdadcb59b9"
   }
  }
 }
