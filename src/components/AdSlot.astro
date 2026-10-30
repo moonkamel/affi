@@ -1,0 +1,21 @@
+---
+// Bloc d'annonce Google AdSense (display adaptatif). Hauteur réservée pour que la page ne bouge pas au chargement.
+// Le script AdSense est chargé une seule fois, par le premier bloc de la page.
+import { SITE } from '../data/site';
+interface Props { place: 'outil' | 'fin'; first?: boolean }
+const { place, first = false } = Astro.props;
+const { client } = SITE.ads;
+const slot = SITE.ads.slots[place];
+---
+<aside class={`pub pub-${place}`} aria-label="Publicité" data-pagefind-ignore>
+  <span class="pub-mention">Publicité</span>
+  {first && <script is:inline async src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${client}`} crossorigin="anonymous"></script>}
+  <ins class="adsbygoogle" style="display:block" data-ad-client={client} data-ad-slot={slot} data-ad-format="auto" data-full-width-responsive="true"></ins>
+  <script is:inline>(window.adsbygoogle = window.adsbygoogle || []).push({});</script>
+</aside>
+
+<style>
+  .pub { margin: 32px 0; min-height: 280px; padding: 8px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .pub-fin { min-height: 120px; }
+  .pub-mention { display: block; font-size: .72rem; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+</style>

@@ -21,6 +21,17 @@ export const SITE = {
   newsletter: {
     brevoFormAction: null as string | null,
   },
+  // Google AdSense. Les blocs ne s'affichent que si `enabled` vaut true, et seulement sur les pages outils et modèles
+  // sans lien d'affiliation (jamais sur les comparatifs, avis, rubriques ni l'accueil). Ne passer à true qu'une fois
+  // le site accepté par AdSense et le message de consentement RGPD activé (Confidentialité et messages).
+  ads: {
+    enabled: false,
+    client: 'ca-pub-3020887472641072',
+    slots: {
+      outil: '5069496756', // LogiDisplay, sous l'outil
+      fin: '1982626423', // bloc horizontal, fin d'article
+    },
+  },
   // Éditeur légal du site (mentions légales). À compléter.
   publisher: {
     legalName: 'À compléter',
