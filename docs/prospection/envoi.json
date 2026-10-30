@@ -513,7 +513,8 @@
    "date": "2026-10-26",
    "thread": "1a153a19696f49d8",
    "message": "1a17799870cf4d8c",
-   "note": "27/10 : avis de retard de remise (Delivery Status Notification - Delay), le serveur réessaie. Relance prévue le 02/11/2026."
+   "note": "29/10 : échec définitif après 48 h, serveur rouen.cci.fr injoignable. Pas de relance.",
+   "statut": "Adresse invalide"
   },
   "contact@initiative-sgrv.fr": {
    "date": "2026-10-26",
@@ -864,12 +865,31 @@
   "pfil@synergie-ceei.com": {
    "date": "2026-10-29",
    "thread": "1a177d1265966dce",
-   "message": "1a186a3d822f0cbc"
+   "message": "1a186a3d822f0cbc",
+   "statut": "Adresse invalide",
+   "note": "30/10 : rebond 550 5.4.1 (Microsoft 365, accès refusé). Pas de relance."
   },
   "guadeloupe-active@wanadoo.fr": {
    "date": "2026-10-29",
    "thread": "1a177d1296aaa7fd",
-   "message": "1a186a3da1349972"
+   "message": "1a186a3da1349972",
+   "statut": "Adresse invalide",
+   "note": "30/10 : rebond 550 5.1.1, adresse inexistante chez Orange. Pas de relance."
+  },
+  "plateforme@initiative-mvs-sud77.fr": {
+   "date": "2026-10-30",
+   "thread": "1a177d0672e4d0b9",
+   "message": "1a18bca82150db5f"
+  },
+  "contact@iboh.fr": {
+   "date": "2026-10-30",
+   "thread": "1a177d069ec9551e",
+   "message": "1a18bca85f965fbf"
+  },
+  "idvs@initiative-dombesvaldesaone.fr": {
+   "date": "2026-10-30",
+   "thread": "1a177d12dddb0a4b",
+   "message": "1a18bca86d5058df"
   }
  }
 }
