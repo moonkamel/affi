@@ -467,22 +467,31 @@
   "cma@cm-alsace.fr": {
    "date": "2026-10-26",
    "thread": "1a1539b3f11c1baf",
-   "message": "1a1779953a12823c"
+   "message": "1a1779953a12823c",
+   "relance": "2026-11-02",
+   "relance_message": "1a19b403d2d900dd"
   },
   "contact@cma-hautsdefrance.fr": {
    "date": "2026-10-26",
    "thread": "1a1539b651ab9851",
-   "message": "1a1779955938963b"
+   "message": "1a1779955938963b",
+   "statut": "Répondu",
+   "reponse": "Oui",
+   "note": "30/10 : le Pôle Relation Clients a transmis la proposition au service compétent, recontact s'il y a intérêt. Pas de relance."
   },
   "16-eco@cma-nouvelleaquitaine.fr": {
    "date": "2026-10-26",
    "thread": "1a1539b72404a206",
-   "message": "1a1779957a0e0928"
+   "message": "1a1779957a0e0928",
+   "relance": "2026-11-02",
+   "relance_message": "1a19b3ecc5ec04fc"
   },
   "86-cma-info@cma-nouvelleaquitaine.fr": {
    "date": "2026-10-26",
    "thread": "1a1539b8e041a2c4",
-   "message": "1a1779958508e6d1"
+   "message": "1a1779958508e6d1",
+   "relance": "2026-11-02",
+   "relance_message": "1a19b3f6760803cc"
   },
   "contact06@cmar-paca.fr": {
    "date": "2026-10-26",
@@ -541,7 +550,9 @@
   "atlantique@reseau-entreprendre.org": {
    "date": "2026-10-26",
    "thread": "1a153a29a631018e",
-   "message": "1a1779993285b324"
+   "message": "1a1779993285b324",
+   "relance": "2026-11-02",
+   "relance_message": "1a19b3f75bc2f48f"
   },
   "info@cooperer.coop": {
    "date": "2026-10-26",
@@ -585,17 +596,23 @@
   "contact@bge-hautsdefrance.fr": {
    "date": "2026-10-26",
    "thread": "1a153c210d845a81",
-   "message": "1a17799bd983748a"
+   "message": "1a17799bd983748a",
+   "relance": "2026-11-02",
+   "relance_message": "1a19b4040225fcab"
   },
   "contact@bge-picardie.org": {
    "date": "2026-10-26",
    "thread": "1a153c21a6c89e2e",
-   "message": "1a17799dbdacbd42"
+   "message": "1a17799dbdacbd42",
+   "relance": "2026-11-02",
+   "relance_message": "1a19b404b2ea020d"
   },
   "contact@bge-parif.com": {
    "date": "2026-10-26",
    "thread": "1a153c22cdf925fb",
-   "message": "1a17799dd16acaa7"
+   "message": "1a17799dd16acaa7",
+   "relance": "2026-11-02",
+   "relance_message": "1a19b40467d59d14"
   },
   "contact@bge-flandrecreation.fr": {
    "date": "2026-10-26",
@@ -611,17 +628,23 @@
   "contact@bge22.fr": {
    "date": "2026-10-26",
    "thread": "1a153c265cac8d07",
-   "message": "1a17799e23df780f"
+   "message": "1a17799e23df780f",
+   "relance": "2026-11-02",
+   "relance_message": "1a19b404f09ccd6a"
   },
   "contact@bge35.com": {
    "date": "2026-10-26",
    "thread": "1a153c27495b3e7e",
-   "message": "1a17799e56a72367"
+   "message": "1a17799e56a72367",
+   "relance": "2026-11-02",
+   "relance_message": "1a19b4051ef42ce3"
   },
   "contact@bge-morbihan.com": {
    "date": "2026-10-26",
    "thread": "1a153c281b67ba1a",
-   "message": "1a17799e7d34eb4f"
+   "message": "1a17799e7d34eb4f",
+   "relance": "2026-11-02",
+   "relance_message": "1a19b404231a348f"
   },
   "contact@initiative-eure.fr": {
    "date": "2026-10-26",
@@ -698,7 +721,9 @@
   "animateur@initiative-ploermel.bzh": {
    "date": "2026-10-26",
    "thread": "1a1779df0406ff2c",
-   "message": "1a1779df0406ff2c"
+   "message": "1a1779df0406ff2c",
+   "relance": "2026-11-02",
+   "relance_message": "1a19b3f6f9f921af"
   },
   "contact@initiative-occitanie.fr": {
    "date": "2026-10-26",
@@ -718,7 +743,9 @@
   "93@reseau-entreprendre.org": {
    "date": "2026-10-26",
    "thread": "1a1779ec41339670",
-   "message": "1a1779ec41339670"
+   "message": "1a1779ec41339670",
+   "relance": "2026-11-02",
+   "relance_message": "1a19b3f680155fed"
   },
   "savoie@reseau-entreprendre.org": {
    "date": "2026-10-26",
@@ -738,7 +765,9 @@
   "bretagne@reseau-entreprendre.org": {
    "date": "2026-10-26",
    "thread": "1a1779ecbd4ca8a8",
-   "message": "1a1779ecbd4ca8a8"
+   "message": "1a1779ecbd4ca8a8",
+   "relance": "2026-11-02",
+   "relance_message": "1a19b403a0df9934"
   },
   "rhone@reseau-entreprendre.org": {
    "date": "2026-10-26",
@@ -753,7 +782,9 @@
   "bge31@creer.fr": {
    "date": "2026-10-26",
    "thread": "1a1779f2a3e15d2c",
-   "message": "1a1779f2a3e15d2c"
+   "message": "1a1779f2a3e15d2c",
+   "relance": "2026-11-02",
+   "relance_message": "1a19b3f778fd2c69"
   },
   "rcp-contact@cma-gard.fr": {
    "date": "2026-10-26",
@@ -788,7 +819,9 @@
   "accueil@hdsi.asso.fr": {
    "date": "2026-10-26",
    "thread": "1a177bcf1fa4aa62",
-   "message": "1a177beb8a0d4761"
+   "message": "1a177beb8a0d4761",
+   "relance": "2026-11-02",
+   "relance_message": "1a19b3f6d4abf98f"
   },
   "92@reseau-entreprendre.org": {
    "date": "2026-10-26",
