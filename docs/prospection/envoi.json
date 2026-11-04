@@ -517,7 +517,9 @@
   "contact@initiative-sarthe.fr": {
    "date": "2026-10-26",
    "thread": "1a153a164afdfe74",
-   "message": "1a1779982a75c4ec"
+   "message": "1a1779982a75c4ec",
+   "relance": "2026-11-04",
+   "relance_message": "1a1a58a235ef0612"
   },
   "contact@initiative-genevois.fr": {
    "date": "2026-10-26",
@@ -535,7 +537,9 @@
   "contact@initiative-sgrv.fr": {
    "date": "2026-10-26",
    "thread": "1a153a1a9c301743",
-   "message": "1a177998734c335f"
+   "message": "1a177998734c335f",
+   "relance": "2026-11-04",
+   "relance_message": "1a1a58a264c91ffc"
   },
   "contact@initiative-alpesdehauteprovence.com": {
    "date": "2026-10-26",
@@ -568,7 +572,9 @@
   "info@cooperer.coop": {
    "date": "2026-10-26",
    "thread": "1a153a50378df264",
-   "message": "1a17799b1e2b3722"
+   "message": "1a17799b1e2b3722",
+   "relance": "2026-11-04",
+   "relance_message": "1a1a58af3ffcb9d2"
   },
   "bretagne@cooperer.coop": {
    "date": "2026-10-26",
@@ -580,7 +586,9 @@
   "les-cae@scop.coop": {
    "date": "2026-10-26",
    "thread": "1a153a52515727bf",
-   "message": "1a17799b28ef20b4"
+   "message": "1a17799b28ef20b4",
+   "relance": "2026-11-04",
+   "relance_message": "1a1a58af81452cb6"
   },
   "contact@cabestan.fr": {
    "date": "2026-10-26",
@@ -592,7 +600,9 @@
    "date": "2026-10-26",
    "thread": "1a153a5a49f4efc0",
    "message": "1a17799b6096953e",
-   "note": "26/10 : devenue LCE - La Coopérative pour Entreprendre, nouvelle adresse contact@lce.coop (message redirigé). Relance à envoyer à la nouvelle adresse."
+   "note": "26/10 : devenue LCE - La Coopérative pour Entreprendre. Relance du 04/11 envoyée à la nouvelle adresse contact@lce.coop.",
+   "relance": "2026-11-04",
+   "relance_message": "1a1a58a344b83be1"
   },
   "contact@coopenates.com": {
    "date": "2026-10-26",
@@ -671,7 +681,9 @@
   "contact@initiativegard.fr": {
    "date": "2026-10-26",
    "thread": "1a1779d1346a84a5",
-   "message": "1a1779d1346a84a5"
+   "message": "1a1779d1346a84a5",
+   "relance": "2026-11-04",
+   "relance_message": "1a1a58a334875cc0"
   },
   "contact@initiative-martinique.fr": {
    "date": "2026-10-26",
@@ -717,7 +729,9 @@
   "contact@initiative-tregor.com": {
    "date": "2026-10-26",
    "thread": "1a1779de7b2a571e",
-   "message": "1a1779de7b2a571e"
+   "message": "1a1779de7b2a571e",
+   "relance": "2026-11-04",
+   "relance_message": "1a1a58a2d6f36ece"
   },
   "contact@initiative-argoatgoelo.fr": {
    "date": "2026-10-26",
@@ -736,12 +750,16 @@
   "contact@initiative-vannes.fr": {
    "date": "2026-10-26",
    "thread": "1a1779ded680a330",
-   "message": "1a1779ded680a330"
+   "message": "1a1779ded680a330",
+   "relance": "2026-11-04",
+   "relance_message": "1a1a58a2fcacce8e"
   },
   "ipl@initiative-paysdelorient.com": {
    "date": "2026-10-26",
    "thread": "1a1779def3eb137d",
-   "message": "1a1779def3eb137d"
+   "message": "1a1779def3eb137d",
+   "relance": "2026-11-04",
+   "relance_message": "1a1a58af6b6b3aa3"
   },
   "animateur@initiative-ploermel.bzh": {
    "date": "2026-10-26",
@@ -767,7 +785,9 @@
   "nord@reseau-entreprendre.org": {
    "date": "2026-10-26",
    "thread": "1a1779ec35e05ce3",
-   "message": "1a1779ec35e05ce3"
+   "message": "1a1779ec35e05ce3",
+   "relance": "2026-11-04",
+   "relance_message": "1a1a58afa058fb2d"
   },
   "93@reseau-entreprendre.org": {
    "date": "2026-10-26",
@@ -806,7 +826,9 @@
   "espace.entreprendre@grenoble.cci.fr": {
    "date": "2026-10-26",
    "thread": "1a1779ed12b0a676",
-   "message": "1a1779ed12b0a676"
+   "message": "1a1779ed12b0a676",
+   "relance": "2026-11-04",
+   "relance_message": "1a1a58aef3d12a80"
   },
   "bge31@creer.fr": {
    "date": "2026-10-26",
@@ -835,7 +857,9 @@
   "contact@paris-initiative.org": {
    "date": "2026-10-26",
    "thread": "1a177bceec0a3a32",
-   "message": "1a177beb3005f5cc"
+   "message": "1a177beb3005f5cc",
+   "relance": "2026-11-04",
+   "relance_message": "1a1a58aea19ed19a"
   },
   "paris@reseau-entreprendre.org": {
    "date": "2026-10-26",
@@ -862,12 +886,16 @@
   "contact@initiative-terres-dazur.com": {
    "date": "2026-10-26",
    "thread": "1a177bcf52059264",
-   "message": "1a177bebab2f5588"
+   "message": "1a177bebab2f5588",
+   "relance": "2026-11-04",
+   "relance_message": "1a1a58a288624dac"
   },
   "financement@cote-azur.cci.fr": {
    "date": "2026-10-26",
    "thread": "1a177bcf76e99244",
-   "message": "1a177bebed6c7e90"
+   "message": "1a177bebed6c7e90",
+   "relance": "2026-11-04",
+   "relance_message": "1a1a58af1c319da8"
   },
   "contact@initiative-lmnord.fr": {
    "date": "2026-10-26",
@@ -879,7 +907,9 @@
   "contact@initiative-reunion.fr": {
    "date": "2026-10-26",
    "thread": "1a177bcfa6925b8e",
-   "message": "1a177bec3347e22a"
+   "message": "1a177bec3347e22a",
+   "relance": "2026-11-04",
+   "relance_message": "1a1a58a20bf37647"
   },
   "contact@initiative-montreuillois.fr": {
    "date": "2026-10-26",
