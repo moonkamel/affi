@@ -614,7 +614,9 @@
   "redacweb@lejournaldesentreprises.com": {
    "date": "2026-10-26",
    "thread": "1a153a6eb031c64a",
-   "message": "1a17799bbc179d31"
+   "message": "1a17799bbc179d31",
+   "relance": "2026-11-05",
+   "relance_message": "1a1aaaf4e2df5aac"
   },
   "contact@bge-hautsdefrance.fr": {
    "date": "2026-10-26",
@@ -799,17 +801,23 @@
   "savoie@reseau-entreprendre.org": {
    "date": "2026-10-26",
    "thread": "1a1779ec750625b0",
-   "message": "1a1779ec750625b0"
+   "message": "1a1779ec750625b0",
+   "relance": "2026-11-05",
+   "relance_message": "1a1aaaf54f40f1be"
   },
   "poitoucharentes@reseau-entreprendre.org": {
    "date": "2026-10-26",
    "thread": "1a1779ec8226fb9c",
-   "message": "1a1779ec8226fb9c"
+   "message": "1a1779ec8226fb9c",
+   "relance": "2026-11-05",
+   "relance_message": "1a1aaaf587403347"
   },
   "normandie-rouen@reseau-entreprendre.org": {
    "date": "2026-10-26",
    "thread": "1a1779ec8be7c1ff",
-   "message": "1a1779ec8be7c1ff"
+   "message": "1a1779ec8be7c1ff",
+   "relance": "2026-11-05",
+   "relance_message": "1a1aaaf5cfe325a4"
   },
   "bretagne@reseau-entreprendre.org": {
    "date": "2026-10-26",
@@ -821,7 +829,9 @@
   "rhone@reseau-entreprendre.org": {
    "date": "2026-10-26",
    "thread": "1a1779eccb1b3cbd",
-   "message": "1a1779eccb1b3cbd"
+   "message": "1a1779eccb1b3cbd",
+   "relance": "2026-11-05",
+   "relance_message": "1a1aaaf5e238d739"
   },
   "espace.entreprendre@grenoble.cci.fr": {
    "date": "2026-10-26",
@@ -840,7 +850,9 @@
   "rcp-contact@cma-gard.fr": {
    "date": "2026-10-26",
    "thread": "1a1779f2c9d71675",
-   "message": "1a1779f2c9d71675"
+   "message": "1a1779f2c9d71675",
+   "relance": "2026-11-05",
+   "relance_message": "1a1aaaf6326178fa"
   },
   "info@apcma.fr": {
    "date": "2026-10-26",
@@ -852,7 +864,9 @@
   "redac@tpe-mag.fr": {
    "date": "2026-10-26",
    "thread": "1a1779f31361398a",
-   "message": "1a1779f31361398a"
+   "message": "1a1779f31361398a",
+   "relance": "2026-11-05",
+   "relance_message": "1a1aaaf531aa3d99"
   },
   "contact@paris-initiative.org": {
    "date": "2026-10-26",
@@ -921,42 +935,58 @@
   "contact@initiative-essonne.com": {
    "date": "2026-10-27",
    "thread": "1a177d060c5aa80d",
-   "message": "1a17c58512fde8cb"
+   "message": "1a17c58512fde8cb",
+   "relance": "2026-11-05",
+   "relance_message": "1a1aaaf678d3c7d5"
   },
   "contact@initiative-nord77.fr": {
    "date": "2026-10-27",
    "thread": "1a177d0646cda26b",
-   "message": "1a17c58527fff3fc"
+   "message": "1a17c58527fff3fc",
+   "relance": "2026-11-05",
+   "relance_message": "1a1aab021c7f16cd"
   },
   "valdoise@reseau-entreprendre.org": {
    "date": "2026-10-28",
    "thread": "1a177d0631cfda93",
-   "message": "1a1817c7cd98f428"
+   "message": "1a1817c7cd98f428",
+   "relance": "2026-11-05",
+   "relance_message": "1a1aab0239398027"
   },
   "contact@oise-est.fr": {
    "date": "2026-10-28",
    "thread": "1a177d06bbc92905",
-   "message": "1a1817cd810a5454"
+   "message": "1a1817cd810a5454",
+   "relance": "2026-11-05",
+   "relance_message": "1a1aab027ad9726b"
   },
   "contact@oise-ouest.fr": {
    "date": "2026-10-28",
    "thread": "1a177d06dd440492",
-   "message": "1a1817cdadcb59b9"
+   "message": "1a1817cdadcb59b9",
+   "relance": "2026-11-05",
+   "relance_message": "1a1aab02aa83367c"
   },
   "contact@initiative-haute-garonne.org": {
    "date": "2026-10-29",
    "thread": "1a177d1207454b78",
-   "message": "1a186a39d7aa1f47"
+   "message": "1a186a39d7aa1f47",
+   "relance": "2026-11-05",
+   "relance_message": "1a1aab02c471ba06"
   },
   "contact@initiativeloireatlantiquenord.fr": {
    "date": "2026-10-29",
    "thread": "1a177d122f9ec49b",
-   "message": "1a186a3ca7c5f629"
+   "message": "1a186a3ca7c5f629",
+   "relance": "2026-11-05",
+   "relance_message": "1a1aab0339447d5c"
   },
   "contact@initiative-loire.fr": {
    "date": "2026-10-29",
    "thread": "1a177d1245afe7c1",
-   "message": "1a186a3d3b3f48ec"
+   "message": "1a186a3d3b3f48ec",
+   "relance": "2026-11-05",
+   "relance_message": "1a1aab0343894cf6"
   },
   "pfil@synergie-ceei.com": {
    "date": "2026-10-29",
