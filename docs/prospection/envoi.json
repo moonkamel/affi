@@ -525,7 +525,9 @@
    "date": "2026-10-26",
    "thread": "1a153a18d38a0c29",
    "message": "1a17799851383c83",
-   "note": "26/10 : filtre anti-spam Mailinblack, l’expéditeur doit être validé (lien dans le mail reçu). Relance prévue le 02/11/2026."
+   "note": "26/10 : filtre anti-spam Mailinblack, l’expéditeur doit être validé (lien dans le mail reçu). Relance prévue le 02/11/2026.",
+   "relance": "2026-11-09",
+   "relance_message": "1a1bf4830913e09b"
   },
   "rouen-initiative@rouen.cci.fr": {
    "date": "2026-10-26",
@@ -594,7 +596,9 @@
    "date": "2026-10-26",
    "thread": "1a153a5550e2ea80",
    "message": "1a17799b478cff2a",
-   "note": "26/10 : filtre anti-spam Mailinblack, l’expéditeur doit être validé (lien dans le mail reçu). Relance prévue le 02/11/2026."
+   "note": "26/10 : filtre anti-spam Mailinblack, l’expéditeur doit être validé (lien dans le mail reçu). Relance prévue le 02/11/2026.",
+   "relance": "2026-11-09",
+   "relance_message": "1a1bf4832730b5fd"
   },
   "contact@lecomptoirdesentrepreneurs.fr": {
    "date": "2026-10-26",
@@ -643,7 +647,9 @@
    "date": "2026-10-26",
    "thread": "1a153c24c6460f52",
    "message": "1a17799dee07aeb6",
-   "note": "26/10 : filtre anti-spam Mailinblack, l’expéditeur doit être validé (lien dans le mail reçu). Relance prévue le 02/11/2026."
+   "note": "26/10 : filtre anti-spam Mailinblack, l’expéditeur doit être validé (lien dans le mail reçu). Relance prévue le 02/11/2026.",
+   "relance": "2026-11-09",
+   "relance_message": "1a1bf4837c62adf2"
   },
   "contact@bgeauvergne.fr": {
    "date": "2026-10-26",
@@ -726,7 +732,9 @@
    "date": "2026-10-26",
    "thread": "1a1779d1d08bd443",
    "message": "1a1779d1d08bd443",
-   "note": "26/10 : filtre anti-spam Mailinblack, l’expéditeur doit être validé (lien dans le mail reçu). Relance prévue le 02/11/2026."
+   "note": "26/10 : filtre anti-spam Mailinblack, l’expéditeur doit être validé (lien dans le mail reçu). Relance prévue le 02/11/2026.",
+   "relance": "2026-11-09",
+   "relance_message": "1a1bf48380b02522"
   },
   "contact@initiative-tregor.com": {
    "date": "2026-10-26",
@@ -1005,17 +1013,38 @@
   "plateforme@initiative-mvs-sud77.fr": {
    "date": "2026-10-30",
    "thread": "1a177d0672e4d0b9",
-   "message": "1a18bca82150db5f"
+   "message": "1a18bca82150db5f",
+   "relance": "2026-11-09",
+   "relance_message": "1a1bf47d1d9cf7eb"
   },
   "contact@iboh.fr": {
    "date": "2026-10-30",
    "thread": "1a177d069ec9551e",
-   "message": "1a18bca85f965fbf"
+   "message": "1a18bca85f965fbf",
+   "relance": "2026-11-09",
+   "relance_message": "1a1bf47d4bd35085"
   },
   "idvs@initiative-dombesvaldesaone.fr": {
    "date": "2026-10-30",
    "thread": "1a177d12dddb0a4b",
-   "message": "1a18bca86d5058df"
+   "message": "1a18bca86d5058df",
+   "relance": "2026-11-09",
+   "relance_message": "1a1bf47d9eeaf1d3"
+  },
+  "contact@initiative-anjou.com": {
+   "date": "2026-11-09",
+   "thread": "1a177d12ba5b0342",
+   "message": "1a1bf47c923b97e7"
+  },
+  "rdi@rdi.asso.fr": {
+   "date": "2026-11-09",
+   "thread": "1a196b135aa7092d",
+   "message": "1a1bf47ccbe95b99"
+  },
+  "pfil@montpellier.cci.fr": {
+   "date": "2026-11-09",
+   "thread": "1a196b1363082d9f",
+   "message": "1a1bf47cf1c2db2e"
   }
  }
 }
