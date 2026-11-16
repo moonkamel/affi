@@ -28,8 +28,8 @@ const { entry, headings } = Astro.props;
 const d = entry.data;
 const path = articlePath(entry);
 const silo = siloOf(entry);
-// Publicité : pages outils et modèles uniquement, et jamais à côté d'un lien d'affiliation.
-const pub = SITE.ads.enabled && d.type === 'outil' && !/AffLink|ProductCard/.test(entry.body ?? '');
+// Publicité : pages outils et guides uniquement, et jamais à côté d'un lien d'affiliation (une commission rapporte plus que la pub).
+const pub = SITE.ads.enabled && (d.type === 'outil' || d.type === 'guide') && !/AffLink|ProductCard/.test(entry.body ?? '');
 
 const crumbs = [
   { name: 'Accueil', path: '/' },

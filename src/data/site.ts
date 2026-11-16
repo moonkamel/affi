@@ -21,15 +21,21 @@ export const SITE = {
   newsletter: {
     brevoFormAction: null as string | null,
   },
-  // Google AdSense. Les blocs ne s'affichent que si `enabled` vaut true, et seulement sur les pages outils et modèles
-  // sans lien d'affiliation (jamais sur les comparatifs, avis, rubriques ni l'accueil). Ne passer à true qu'une fois
-  // le site accepté par AdSense et le message de consentement RGPD activé (Confidentialité et messages).
+  // Publicité. Les blocs ne s'affichent que si `enabled` vaut true, et seulement sur les pages outils et guides
+  // sans lien d'affiliation (jamais sur les comparatifs, avis, rubriques ni l'accueil).
+  // `provider` choisit la régie : 'adsterra' (en place) ou 'adsense' (en attente de validation du compte).
   ads: {
-    enabled: false,
+    enabled: true,
+    provider: 'adsterra' as 'adsterra' | 'adsense',
+    adsterra: {
+      host: 'https://bauval.org',
+      native: '334ff7382fbaa0a0d5588189926208ec', // Native Banner, sous le contenu principal
+      banner: '4f22e7d083222b1850b4bb828bf29891', // Banner 300×250, fin d'article
+    },
     client: 'ca-pub-3020887472641072',
     slots: {
-      outil: '5069496756', // LogiDisplay, sous l'outil
-      fin: '1982626423', // bloc horizontal, fin d'article
+      outil: '5069496756', // AdSense LogiDisplay, sous l'outil
+      fin: '1982626423', // AdSense bloc horizontal, fin d'article
     },
   },
   // Éditeur légal du site (mentions légales). À compléter.
