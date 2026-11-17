@@ -1,11 +1,12 @@
 # Programmes d'affiliation — liens d'inscription
 
-## Statut (17/10/2026)
+## Statut (17/11/2026)
 - ✅ **Indy** : validé sur Affilae (partenariat 2067), lien branché.
 - ✅ **Pennylane** : validé sur Affilae (partenariat 777), lien branché.
 - ✅ **Systeme.io** : lien d'affiliation branché (17/10/2026).
 - ✅ **Axonaut** : lien partenaire branché (17/10/2026).
 - ✅ **SumUp** : accepté sur Impact, lien https://sumupeu.sjv.io/AgVnba branché (terminal et Caisse Pro). Script de vérification Impact retiré de l'accueil.
+- ✅ **Shopify** : accepté sur Impact, lien https://shopify.pxf.io/qWd2Rb branché (17/11/2026).
 - ❌ **Abby** : refusé par l'annonceur sur Affilae (15/10/2026). Recandidater quand le site aura du trafic (Search Console à l'appui).
 - ❌ **Brevo** : refusé sur PartnerStack (19/10/2026). Recandidater en janvier 2027.
 - ⏳ **Pipedrive** (PartnerStack), **Legalstart** (Affilae) et **SeDomicilier** (Awin) : demandes envoyées le 19/10/2026.
